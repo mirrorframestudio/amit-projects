@@ -1,0 +1,577 @@
+<!-- ONE ZONE - מדריך מידות אינטראקטיבי -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+.oz-size{font-family:'Rubik',sans-serif;max-width:500px;margin:0 auto;padding:16px 12px;direction:rtl;color:#f1f5f9}
+.oz-size *{margin:0;padding:0;box-sizing:border-box;font-family:'Rubik',sans-serif}
+
+/* Trigger button */
+.oz-trigger{width:100%;padding:18px 20px;background:linear-gradient(160deg,#111127 0%,#0d1b2a 100%);border:2px solid rgba(59,130,246,0.2);border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.oz-trigger:hover{border-color:rgba(245,158,11,0.4);box-shadow:0 6px 28px rgba(245,158,11,.12);transform:translateY(-2px)}
+.oz-trigger-icon{width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.oz-trigger-text{text-align:right}
+.oz-trigger-text h3{font-size:16px;font-weight:900;color:#f1f5f9;margin-bottom:2px}
+.oz-trigger-text p{font-size:12px;color:#94a3b8}
+.oz-trigger-arrow{font-size:20px;color:#64748b;transition:transform .4s cubic-bezier(.34,1.56,.64,1);margin-right:auto}
+.oz-trigger.open .oz-trigger-arrow{transform:rotate(180deg)}
+
+/* Panel */
+.oz-panel{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s;opacity:0;margin-top:0}
+.oz-panel.open{opacity:1;margin-top:14px}
+
+.oz-size-box{background:linear-gradient(160deg,#111127 0%,#0d1b2a 100%);border-radius:14px;border:1px solid rgba(59,130,246,0.15);padding:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+
+/* Category grid */
+.oz-cat-label{font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:.5px;margin-bottom:6px;display:block}
+.oz-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
+.oz-cat-btn{padding:8px 6px;background:#0a0a1a;border:2px solid rgba(59,130,246,0.1);border-radius:10px;cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.oz-cat-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;border-radius:10px}
+.oz-cat-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.oz-cat-btn.active{border-width:2px;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.oz-cat-btn .cat-icon{font-size:18px;display:block;margin-bottom:2px}
+.oz-cat-btn .cat-name{font-size:10px;font-weight:700;color:#e2e8f0;display:block;line-height:1.2}
+.oz-cat-btn .cat-sub{font-size:8px;color:#64748b;display:block;margin-top:1px}
+
+/* Category-specific colors */
+.oz-cat-btn[data-cat="player"]::before{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(217,119,6,.12))}
+.oz-cat-btn[data-cat="player"].active{border-color:#f59e0b;box-shadow:0 4px 16px rgba(245,158,11,.2)}
+.oz-cat-btn[data-cat="player"].active .cat-name{color:#fbbf24}
+
+.oz-cat-btn[data-cat="fan"]::before{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(37,99,235,.12))}
+.oz-cat-btn[data-cat="fan"].active{border-color:#3b82f6;box-shadow:0 4px 16px rgba(59,130,246,.2)}
+.oz-cat-btn[data-cat="fan"].active .cat-name{color:#60a5fa}
+
+.oz-cat-btn[data-cat="kids"]::before{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(22,163,74,.12))}
+.oz-cat-btn[data-cat="kids"].active{border-color:#22c55e;box-shadow:0 4px 16px rgba(34,197,94,.2)}
+.oz-cat-btn[data-cat="kids"].active .cat-name{color:#4ade80}
+
+.oz-cat-btn[data-cat="nba"]::before{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(220,38,38,.12))}
+.oz-cat-btn[data-cat="nba"].active{border-color:#ef4444;box-shadow:0 4px 16px rgba(239,68,68,.2)}
+.oz-cat-btn[data-cat="nba"].active .cat-name{color:#f87171}
+
+.oz-cat-btn[data-cat="winter"]::before{background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(124,58,237,.12))}
+.oz-cat-btn[data-cat="winter"].active{border-color:#8b5cf6;box-shadow:0 4px 16px rgba(139,92,246,.2)}
+.oz-cat-btn[data-cat="winter"].active .cat-name{color:#a78bfa}
+
+.oz-cat-btn[data-cat="hoodie"]::before{background:linear-gradient(135deg,rgba(236,72,153,.08),rgba(219,39,119,.12))}
+.oz-cat-btn[data-cat="hoodie"].active{border-color:#ec4899;box-shadow:0 4px 16px rgba(236,72,153,.2)}
+.oz-cat-btn[data-cat="hoodie"].active .cat-name{color:#f472b6}
+
+.oz-cat-btn.active::before{opacity:1}
+
+/* Category badge */
+.oz-cat-badge{display:inline-block;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.oz-cat-badge.player{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000}
+.oz-cat-badge.fan{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff}
+.oz-cat-badge.kids{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
+.oz-cat-badge.nba{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+.oz-cat-badge.winter{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff}
+.oz-cat-badge.hoodie{background:linear-gradient(135deg,#ec4899,#db2777);color:#fff}
+
+/* Inputs */
+.oz-inputs{display:flex;gap:10px;margin-bottom:14px}
+.oz-input-group{flex:1;position:relative}
+.oz-input-group label{display:block;font-size:11px;color:#94a3b8;margin-bottom:6px;font-weight:700;letter-spacing:.5px}
+.oz-input-group input{width:100%;padding:10px 12px;padding-left:40px;background:#0a0a1a;border:2px solid rgba(59,130,246,0.15);border-radius:12px;color:#f1f5f9;font-family:'Rubik',sans-serif;font-size:18px;font-weight:700;outline:none;transition:border-color .3s,box-shadow .3s;-webkit-appearance:none}
+.oz-input-group input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.15)}
+.oz-input-group .unit{position:absolute;left:12px;bottom:11px;font-size:13px;color:#64748b;font-weight:700;pointer-events:none}
+
+/* Measurement figure */
+.oz-measure-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;padding:10px 0}
+.oz-figure-svg{width:90px;height:180px;flex-shrink:0}
+.oz-figure-body{transition:all .5s}
+.oz-figure-body .oz-skin{transition:fill .5s}
+.oz-figure-body .oz-shirt{transition:fill .5s}
+.oz-figure-body .oz-collar{transition:stroke .5s}
+.oz-figure-body .oz-hair{transition:fill .5s}
+.oz-figure-body.active .oz-skin{fill:url(#skinActive)}
+.oz-figure-body.active .oz-shirt{fill:url(#shirtActive)}
+.oz-figure-body.active .oz-collar{stroke:#60a5fa}
+.oz-figure-body.active .oz-hair{fill:#0f2440}
+.oz-height-line{stroke:#3b82f6;stroke-width:1.5;stroke-dasharray:4 3;opacity:0;transition:opacity .5s}
+.oz-height-line.show{opacity:1}
+.oz-height-arrow{fill:#3b82f6;opacity:0;transition:opacity .5s}
+.oz-height-arrow.show{opacity:1}
+.oz-height-label{fill:#60a5fa;font-size:9px;font-weight:700;font-family:'Rubik',sans-serif;opacity:0;transition:opacity .5s}
+.oz-height-label.show{opacity:1}
+.oz-width-line{stroke:#f59e0b;stroke-width:1.5;stroke-dasharray:4 3;opacity:0;transition:opacity .5s}
+.oz-width-line.show{opacity:1}
+.oz-width-arrow{fill:#f59e0b;opacity:0;transition:opacity .5s}
+.oz-width-arrow.show{opacity:1}
+.oz-width-label{fill:#fbbf24;font-size:9px;font-weight:700;font-family:'Rubik',sans-serif;opacity:0;transition:opacity .5s}
+.oz-width-label.show{opacity:1}
+.oz-measure-pulse{animation:ozMeasurePulse 2s ease-in-out infinite}
+@keyframes ozMeasurePulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* Result */
+.oz-result{text-align:center;padding:14px;border-radius:12px;background:linear-gradient(160deg,#0a0a1a,#111127);border:1px solid rgba(59,130,246,0.1);min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .4s}
+.oz-fade-out{animation:ozFadeOut .2s ease forwards}
+.oz-fade-in{animation:ozFadeIn .3s ease forwards}
+@keyframes ozFadeOut{to{opacity:0;transform:translateY(8px)}}
+@keyframes ozFadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.oz-result.has-result{border-color:rgba(245,158,11,0.3);box-shadow:0 0 24px rgba(245,158,11,.08)}
+.oz-result-placeholder{color:#475569;font-size:13px}
+.oz-result-size{font-size:44px;font-weight:900;background:linear-gradient(135deg,#f59e0b,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;animation:ozPop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ozPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.oz-result-label{font-size:13px;color:#94a3b8;margin-top:6px}
+.oz-result-warn{font-size:11px;color:#f59e0b;margin-top:8px;padding:4px 12px;background:rgba(245,158,11,.08);border-radius:6px}
+.oz-result-tip{font-size:11px;color:#64748b;margin-top:6px}
+
+/* Exchange note */
+.oz-exchange{margin-top:10px;text-align:center;padding:10px 14px;background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(59,130,246,.06));border:1px solid rgba(34,197,94,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.oz-exchange-icon{font-size:20px;flex-shrink:0}
+.oz-exchange-text{font-size:12px;color:#94a3b8;line-height:1.5}
+.oz-exchange-text strong{color:#22c55e;font-weight:700}
+
+/* Diff button */
+.oz-diff-btn{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(245,158,11,.1));border:1px dashed rgba(59,130,246,.3);border-radius:12px;text-decoration:none;color:#e2e8f0;transition:all .3s;cursor:pointer}
+.oz-diff-btn:hover{background:linear-gradient(135deg,rgba(59,130,246,.18),rgba(245,158,11,.18));border-color:rgba(59,130,246,.5);transform:translateY(-1px);box-shadow:0 4px 16px rgba(59,130,246,.15)}
+.oz-diff-icon{font-size:14px;flex-shrink:0}
+.oz-diff-text{font-size:11px;font-weight:700}
+.oz-diff-arrow{font-size:12px;color:#60a5fa;transition:transform .3s}
+.oz-diff-btn:hover .oz-diff-arrow{transform:translateX(-4px)}
+
+/* WhatsApp button */
+.oz-wa-btn{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;padding:8px 12px;background:linear-gradient(135deg,#25d366,#128c7e);border:none;border-radius:12px;text-decoration:none;color:#fff;transition:all .3s;cursor:pointer}
+.oz-wa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,211,102,.3);background:linear-gradient(135deg,#2be673,#159e6e)}
+.oz-wa-icon{font-size:14px;flex-shrink:0}
+.oz-wa-text{font-size:11px;font-weight:700}
+.oz-wa-text strong{font-size:11px}
+.oz-wa-arrow{font-size:12px;transition:transform .3s}
+.oz-wa-btn:hover .oz-wa-arrow{transform:translateX(-4px)}
+
+@media(max-width:600px){
+  .oz-size{max-width:100%;padding:8px}
+  .oz-size-box{border-radius:12px;padding:16px}
+  .oz-result-size{font-size:44px}
+  .oz-input-group input{font-size:16px;padding:12px 12px 12px 40px}
+  .oz-cat-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+  .oz-cat-btn{padding:10px 6px}
+  .oz-cat-btn .cat-icon{font-size:20px}
+  .oz-cat-btn .cat-name{font-size:10px}
+  .oz-trigger{padding:14px 16px;gap:10px}
+  .oz-trigger-icon{width:38px;height:38px;font-size:18px}
+  .oz-trigger-text h3{font-size:14px}
+}
+</style>
+
+<div class="oz-size">
+  <!-- Trigger Button -->
+  <div class="oz-trigger" id="oz-trigger" onclick="ozToggle()">
+    <span class="oz-trigger-icon">📏</span>
+    <span class="oz-trigger-text">
+      <h3>צריכים עזרה בבחירת מידה?</h3>
+      <p>לחצו כאן ונמצא לכם את המידה המושלמת</p>
+    </span>
+    <span class="oz-trigger-arrow">▼</span>
+  </div>
+
+  <!-- Collapsible Panel -->
+  <div class="oz-panel" id="oz-panel">
+    <div class="oz-size-box">
+      <label class="oz-cat-label">בחרו סוג מוצר</label>
+      <div class="oz-cat-grid" id="oz-cat-grid">
+        <div class="oz-cat-btn active" data-cat="fan" onclick="ozPickCat(this)">
+          <span class="cat-icon">🏟️</span>
+          <span class="cat-name">גרסת אוהד</span>
+          <span class="cat-sub">גזרה רגילה</span>
+        </div>
+        <div class="oz-cat-btn" data-cat="player" onclick="ozPickCat(this)">
+          <span class="cat-icon">⚽</span>
+          <span class="cat-name">גרסת שחקן</span>
+          <span class="cat-sub">גזרה צמודה</span>
+        </div>
+        <div class="oz-cat-btn" data-cat="kids" onclick="ozPickCat(this)">
+          <span class="cat-icon">👦</span>
+          <span class="cat-name">ילדים</span>
+          <span class="cat-sub">גילאי 3-13</span>
+        </div>
+        <div class="oz-cat-btn" data-cat="nba" onclick="ozPickCat(this)">
+          <span class="cat-icon">🏀</span>
+          <span class="cat-name">NBA</span>
+          <span class="cat-sub">כדורסל</span>
+        </div>
+        <div class="oz-cat-btn" data-cat="winter" onclick="ozPickCat(this)">
+          <span class="cat-icon">❄️</span>
+          <span class="cat-name">אימונית חורף</span>
+          <span class="cat-sub">חליפה מלאה</span>
+        </div>
+        <div class="oz-cat-btn" data-cat="hoodie" onclick="ozPickCat(this)">
+          <span class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C10 3 8 4 7 6L3 10v4l3 1v6h12v-6l3-1v-4l-4-4c-1-2-3-3-5-3z"/><path d="M12 3v7"/><circle cx="12" cy="7" r="2.5"/></svg></span>
+          <span class="cat-name">קפוצ'ון</span>
+          <span class="cat-sub">סווטשירט</span>
+        </div>
+      </div>
+
+      <div class="oz-inputs" id="oz-inputs-adult">
+        <div class="oz-input-group">
+          <label>גובה</label>
+          <input type="number" id="oz-height" placeholder="—" min="150" max="210">
+          <span class="unit">ס״מ</span>
+        </div>
+        <div class="oz-input-group">
+          <label>משקל</label>
+          <input type="number" id="oz-weight" placeholder="—" min="40" max="150">
+          <span class="unit">ק״ג</span>
+        </div>
+      </div>
+
+      <div class="oz-inputs" id="oz-inputs-kids" style="display:none">
+        <div class="oz-input-group">
+          <label>גובה</label>
+          <input type="number" id="oz-height-k" placeholder="—" min="80" max="170">
+          <span class="unit">ס״מ</span>
+        </div>
+        <div class="oz-input-group">
+          <label>גיל</label>
+          <input type="number" id="oz-age" placeholder="—" min="3" max="13">
+          <span class="unit">שנים</span>
+        </div>
+      </div>
+
+      <!-- Measurement Figure -->
+      <div class="oz-measure-wrap" id="oz-measure-wrap">
+        <svg class="oz-figure-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#64748b"/>
+              <stop offset="100%" stop-color="#475569"/>
+            </linearGradient>
+            <linearGradient id="skinActive" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+            <linearGradient id="shirtGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#334155"/>
+              <stop offset="100%" stop-color="#1e293b"/>
+            </linearGradient>
+            <linearGradient id="shirtActive" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1e3a5f"/>
+              <stop offset="100%" stop-color="#0f2440"/>
+            </linearGradient>
+            <linearGradient id="pantsGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1e293b"/>
+              <stop offset="100%" stop-color="#0f172a"/>
+            </linearGradient>
+          </defs>
+
+          <g id="oz-figure" class="oz-figure-body">
+            <!-- Head -->
+            <ellipse cx="50" cy="22" rx="11" ry="13" fill="url(#skinGrad)" class="oz-skin"/>
+            <!-- Hair -->
+            <path d="M39,18 Q39,8 50,8 Q61,8 61,18" fill="#1e293b" class="oz-hair"/>
+            <!-- Neck -->
+            <rect x="45" y="34" width="10" height="8" rx="3" fill="url(#skinGrad)" class="oz-skin"/>
+
+            <!-- Torso / Jersey -->
+            <path d="M30,44 Q30,42 34,41 L46,41 L54,41 L66,41 Q70,42 70,44 L72,70 L70,105 Q70,108 67,108 L33,108 Q30,108 30,105 L28,70 Z" fill="url(#shirtGrad)" class="oz-shirt" stroke="none"/>
+            <!-- Jersey collar -->
+            <path d="M42,41 Q46,46 50,46 Q54,46 58,41" fill="none" stroke="#475569" stroke-width="1.5" class="oz-collar"/>
+            <!-- Jersey stripes -->
+            <line x1="50" y1="46" x2="50" y2="105" stroke="#475569" stroke-width="0.5" opacity="0.3"/>
+
+            <!-- Left arm -->
+            <path d="M30,44 L22,52 L18,72 L20,82 Q21,84 23,83 L27,74 L32,56" fill="url(#skinGrad)" class="oz-skin" stroke="none"/>
+            <!-- Left sleeve -->
+            <path d="M30,44 L23,52 L26,60 L33,52 Z" fill="url(#shirtGrad)" class="oz-shirt"/>
+            <!-- Left hand -->
+            <ellipse cx="21" cy="84" rx="4" ry="5" fill="url(#skinGrad)" class="oz-skin"/>
+
+            <!-- Right arm -->
+            <path d="M70,44 L78,52 L82,72 L80,82 Q79,84 77,83 L73,74 L68,56" fill="url(#skinGrad)" class="oz-skin" stroke="none"/>
+            <!-- Right sleeve -->
+            <path d="M70,44 L77,52 L74,60 L67,52 Z" fill="url(#shirtGrad)" class="oz-shirt"/>
+            <!-- Right hand -->
+            <ellipse cx="79" cy="84" rx="4" ry="5" fill="url(#skinGrad)" class="oz-skin"/>
+
+            <!-- Shorts / Pants -->
+            <path d="M33,105 L31,108 L32,140 Q32,142 35,142 L47,142 L47,108 L53,108 L53,142 L65,142 Q68,142 68,140 L69,108 L67,105 Z" fill="url(#pantsGrad)" stroke="none"/>
+
+            <!-- Left leg (below shorts) -->
+            <path d="M34,142 L33,170 Q33,172 36,172 L40,172 Q42,172 42,170 L43,142" fill="url(#skinGrad)" class="oz-skin"/>
+            <!-- Right leg (below shorts) -->
+            <path d="M56,142 L57,170 Q57,172 60,172 L64,172 Q66,172 66,170 L67,142" fill="url(#skinGrad)" class="oz-skin"/>
+
+            <!-- Left shoe -->
+            <path d="M33,170 L30,175 Q29,178 33,178 L42,178 Q44,178 44,175 L43,170" fill="#1e293b"/>
+            <!-- Right shoe -->
+            <path d="M57,170 L54,175 Q53,178 57,178 L66,178 Q68,178 68,175 L67,170" fill="#1e293b"/>
+          </g>
+
+          <!-- Height measurement line (left side) -->
+          <line class="oz-height-line" id="oz-hline" x1="8" y1="7" x2="8" y2="180"/>
+          <polygon class="oz-height-arrow" id="oz-harrow-top" points="8,7 5,13 11,13"/>
+          <polygon class="oz-height-arrow" id="oz-harrow-bot" points="8,180 5,174 11,174"/>
+          <!-- Height ticks -->
+          <line class="oz-height-line" id="oz-htick1" x1="5" y1="7" x2="11" y2="7"/>
+          <line class="oz-height-line" id="oz-htick2" x1="5" y1="180" x2="11" y2="180"/>
+          <text class="oz-height-label" id="oz-hlabel" x="8" y="95" text-anchor="middle" transform="rotate(-90,8,95)"></text>
+
+          <!-- Width measurement (bottom) -->
+          <line class="oz-width-line" id="oz-wline" x1="22" y1="190" x2="78" y2="190"/>
+          <polygon class="oz-width-arrow" id="oz-warrow-l" points="22,190 28,187 28,193"/>
+          <polygon class="oz-width-arrow" id="oz-warrow-r" points="78,190 72,187 72,193"/>
+          <line class="oz-width-line" id="oz-wtick1" x1="22" y1="187" x2="22" y2="193"/>
+          <line class="oz-width-line" id="oz-wtick2" x1="78" y1="187" x2="78" y2="193"/>
+          <text class="oz-width-label" id="oz-wlabel" x="50" y="198" text-anchor="middle"></text>
+        </svg>
+      </div>
+
+      <div class="oz-result" id="oz-result">
+        <span class="oz-result-placeholder">הזינו נתונים לקבלת המלצה</span>
+      </div>
+
+      <a href="javascript:void(0)" class="oz-diff-btn" id="oz-diff" onclick="document.querySelector('.oz-compare').scrollIntoView({behavior:'smooth',block:'start'})"
+        <span class="oz-diff-icon">🔍</span>
+        <span class="oz-diff-text">מה ההבדל בין גרסת שחקן לאוהד?</span>
+        <span class="oz-diff-arrow">←</span>
+      </a>
+
+      <div class="oz-exchange">
+        <span class="oz-exchange-icon">🔄</span>
+        <span class="oz-exchange-text"><strong>אל דאגה!</strong> ניתן להחליף מידה בכפוף לתקנון האתר</span>
+      </div>
+
+      <a href="https://wa.me/9720559662064?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A6%D7%A8%D7%99%D7%9A%20%D7%A2%D7%96%D7%A8%D7%94%20%D7%91%D7%91%D7%97%D7%99%D7%A8%D7%AA%20%D7%9E%D7%99%D7%93%D7%94" class="oz-wa-btn" target="_blank">
+        <span class="oz-wa-icon">💬</span>
+        <span class="oz-wa-text"><strong>עדיין צריכים עזרה?</strong> דברו איתנו בוואטסאפ</span>
+        <span class="oz-wa-arrow">←</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ===== FAN: 2D lookup table (height range → weight → size) ===== */
+  const fanTable=[
+    {hMin:0,hMax:159,sizes:[
+      {name:'S',wMin:0,wMax:54},{name:'M',wMin:55,wMax:64},{name:'L',wMin:65,wMax:74},{name:'XL',wMin:75,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:160,hMax:164,sizes:[
+      {name:'S',wMin:0,wMax:54},{name:'M',wMin:55,wMax:64},{name:'L',wMin:65,wMax:74},{name:'XL',wMin:75,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:165,hMax:169,sizes:[
+      {name:'S',wMin:0,wMax:54},{name:'M',wMin:55,wMax:64},{name:'L',wMin:65,wMax:74},{name:'XL',wMin:75,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:170,hMax:174,sizes:[
+      {name:'M',wMin:0,wMax:65},{name:'L',wMin:66,wMax:74},{name:'XL',wMin:75,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:175,hMax:179,sizes:[
+      {name:'M',wMin:0,wMax:54},{name:'L',wMin:55,wMax:74},{name:'XL',wMin:75,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:180,hMax:184,sizes:[
+      {name:'XL',wMin:0,wMax:84},{name:'XXL',wMin:85,wMax:999}
+    ]},
+    {hMin:185,hMax:189,sizes:[
+      {name:'XL',wMin:0,wMax:79},{name:'XXL',wMin:80,wMax:999}
+    ]},
+    {hMin:190,hMax:999,sizes:[
+      {name:'XL',wMin:0,wMax:74},{name:'XXL',wMin:75,wMax:999}
+    ]}
+  ];
+
+  /* Size order for bumping up */
+  const sizeOrder=['S','M','L','XL','XXL'];
+  function sizeUp(name){
+    var i=sizeOrder.indexOf(name);
+    return i<sizeOrder.length-1?sizeOrder[i+1]:name;
+  }
+
+  /* Fan lookup: find exact size from 2D table */
+  function fanLookup(h,w){
+    var row=fanTable[fanTable.length-1]; // default to last row
+    for(var i=0;i<fanTable.length;i++){
+      if(h>=fanTable[i].hMin&&h<=fanTable[i].hMax){row=fanTable[i];break}
+    }
+    var sz=row.sizes[row.sizes.length-1]; // default to biggest in row
+    for(var j=0;j<row.sizes.length;j++){
+      if(w>=row.sizes[j].wMin&&w<=row.sizes[j].wMax){sz=row.sizes[j];break}
+    }
+    return sz.name;
+  }
+
+  /* ===== Other categories: simple range-based ===== */
+  const sizes={
+    kids:[
+      {name:'16',hMin:95,hMax:105,aMin:3,aMax:4},
+      {name:'18',hMin:105,hMax:115,aMin:4,aMax:5},
+      {name:'20',hMin:115,hMax:125,aMin:5,aMax:6},
+      {name:'22',hMin:125,hMax:135,aMin:6,aMax:7},
+      {name:'24',hMin:135,hMax:145,aMin:8,aMax:9},
+      {name:'26',hMin:145,hMax:155,aMin:10,aMax:11},
+      {name:'28',hMin:155,hMax:165,aMin:12,aMax:13}
+    ],
+    nba:[
+      {name:'S',hMin:160,hMax:170,wMin:45,wMax:58},
+      {name:'M',hMin:170,hMax:175,wMin:58,wMax:68},
+      {name:'L',hMin:175,hMax:180,wMin:68,wMax:83},
+      {name:'XL',hMin:180,hMax:185,wMin:83,wMax:93},
+      {name:'XXL',hMin:185,hMax:200,wMin:93,wMax:105}
+    ],
+    winter:[
+      {name:'S',hMin:155,hMax:170,wMin:55,wMax:65},
+      {name:'M',hMin:165,hMax:175,wMin:60,wMax:75},
+      {name:'L',hMin:170,hMax:185,wMin:70,wMax:85},
+      {name:'XL',hMin:180,hMax:195,wMin:80,wMax:100},
+      {name:'XXL',hMin:195,hMax:210,wMin:95,wMax:115}
+    ],
+    hoodie:[
+      {name:'S',hMin:160,hMax:165,wMin:50,wMax:55},
+      {name:'M',hMin:165,hMax:170,wMin:55,wMax:60},
+      {name:'L',hMin:170,hMax:175,wMin:60,wMax:65},
+      {name:'XL',hMin:175,hMax:180,wMin:65,wMax:70},
+      {name:'XXL',hMin:180,hMax:185,wMin:70,wMax:80}
+    ]
+  };
+
+  const labels={player:'גרסת שחקן',fan:'גרסת אוהד',kids:'ילדים',nba:'NBA',winter:'אימונית חורף',hoodie:"קפוצ'ון"};
+  const badges={player:'player',fan:'fan',kids:'kids',nba:'nba',winter:'winter',hoodie:'hoodie'};
+
+  let ver='fan';
+  const panel=document.getElementById('oz-panel'),
+    trigger=document.getElementById('oz-trigger'),
+    hInput=document.getElementById('oz-height'),wInput=document.getElementById('oz-weight'),
+    hkInput=document.getElementById('oz-height-k'),ageInput=document.getElementById('oz-age'),
+    adultInputs=document.getElementById('oz-inputs-adult'),kidsInputs=document.getElementById('oz-inputs-kids'),
+    result=document.getElementById('oz-result'),diffBtn=document.getElementById('oz-diff');
+
+  // Toggle panel
+  window.ozToggle=function(){
+    const isOpen=panel.classList.contains('open');
+    if(isOpen){
+      panel.style.maxHeight='0px';
+      panel.classList.remove('open');
+      trigger.classList.remove('open');
+    }else{
+      panel.classList.add('open');
+      trigger.classList.add('open');
+      panel.style.maxHeight=panel.scrollHeight+50+'px';
+    }
+  };
+
+  // Pick category
+  window.ozPickCat=function(btn){
+    document.querySelectorAll('.oz-cat-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const newVer=btn.dataset.cat;
+    if(newVer===ver)return;
+    ver=newVer;
+
+    const els=[adultInputs,kidsInputs,result];
+    els.forEach(e=>e.classList.add('oz-fade-out'));
+    setTimeout(()=>{
+      if(ver==='kids'){adultInputs.style.display='none';kidsInputs.style.display='flex'}
+      else{adultInputs.style.display='flex';kidsInputs.style.display='none'}
+      diffBtn.style.display=(ver==='player'||ver==='fan')?'flex':'none';
+      result.innerHTML='<span class="oz-result-placeholder">הזינו נתונים לקבלת המלצה</span>';result.classList.remove('has-result');
+      els.forEach(e=>{e.classList.remove('oz-fade-out');e.classList.add('oz-fade-in')});
+      setTimeout(()=>els.forEach(e=>e.classList.remove('oz-fade-in')),300);
+      panel.style.maxHeight=panel.scrollHeight+50+'px';
+    },200);
+  };
+
+  function calcSize(){
+    /* ===== KIDS: exact match, no size-up ===== */
+    if(ver==='kids'){
+      const h=parseInt(hkInput.value),a=parseInt(ageInput.value);
+      if(!h&&!a){result.innerHTML='<span class="oz-result-placeholder">הזינו גובה וגיל לקבלת המלצה</span>';result.classList.remove('has-result');return}
+      const data=sizes.kids;
+      let bestH=0,bestHScore=999,bestA=0,bestAScore=999;
+      data.forEach((s,i)=>{
+        if(h){let sc=0;if(h>=s.hMin&&h<=s.hMax)sc=0;else sc=Math.min(Math.abs(h-s.hMin),Math.abs(h-s.hMax));if(sc<bestHScore){bestHScore=sc;bestH=i}}
+        if(a){let sc=0;if(a>=s.aMin&&a<=s.aMax)sc=0;else sc=Math.min(Math.abs(a-s.aMin),Math.abs(a-s.aMax));if(sc<bestAScore){bestAScore=sc;bestA=i}}
+      });
+      const bestIdx=Math.max(h?bestH:0,a?bestA:0);
+      const rec=data[bestIdx];
+      let info=[];if(h)info.push(h+' ס״מ');if(a)info.push('גיל '+a);
+      result.innerHTML='<div class="oz-result-size">'+rec.name+'</div><div class="oz-result-label"><span class="oz-cat-badge kids">ילדים</span> · '+info.join(' · ')+'</div>';
+      result.classList.add('has-result');
+      panel.style.maxHeight=panel.scrollHeight+50+'px';
+      return;
+    }
+
+    const h=parseInt(hInput.value),w=parseInt(wInput.value);
+    if(!h||!w){result.innerHTML='<span class="oz-result-placeholder">הזינו גובה ומשקל לקבלת המלצה</span>';result.classList.remove('has-result');return}
+
+    var recName;
+
+    /* ===== FAN: use 2D lookup table ===== */
+    if(ver==='fan'){
+      recName=fanLookup(h,w);
+    }
+    /* ===== PLAYER: use fan table + always one size up ===== */
+    else if(ver==='player'){
+      recName=sizeUp(fanLookup(h,w));
+    }
+    /* ===== NBA, WINTER, HOODIE: range-based + size-up on borderline ===== */
+    else{
+      const data=sizes[ver];
+      let bestH=0,bestHScore=999;
+      data.forEach(function(s,i){
+        var sc=0;
+        if(h>=s.hMin&&h<=s.hMax)sc=0;
+        else sc=Math.min(Math.abs(h-s.hMin),Math.abs(h-s.hMax));
+        if(sc<bestHScore){bestHScore=sc;bestH=i}
+      });
+      let bestW=0,bestWScore=999;
+      data.forEach(function(s,i){
+        var sc=0;
+        if(w>=s.wMin&&w<=s.wMax)sc=0;
+        else sc=Math.min(Math.abs(w-s.wMin),Math.abs(w-s.wMax));
+        if(sc<bestWScore){bestWScore=sc;bestW=i}
+      });
+      var bestIdx=Math.max(bestH,bestW);
+      var chosen=data[bestIdx];
+      // Borderline: if height or weight exceeds the chosen size range → go up
+      if((h>chosen.hMax||w>chosen.wMax)&&bestIdx<data.length-1)bestIdx++;
+      recName=data[bestIdx].name;
+    }
+
+    result.innerHTML='<div class="oz-result-size">'+recName+'</div><div class="oz-result-label"><span class="oz-cat-badge '+badges[ver]+'">'+labels[ver]+'</span> · '+h+' ס״מ · '+w+' ק״ג</div>';
+    result.classList.add('has-result');
+    panel.style.maxHeight=panel.scrollHeight+50+'px';
+  }
+
+  function updateFigure(){
+    const fig=document.getElementById('oz-figure');
+    const hline=document.getElementById('oz-hline');
+    const htop=document.getElementById('oz-harrow-top');
+    const hbot=document.getElementById('oz-harrow-bot');
+    const hlabel=document.getElementById('oz-hlabel');
+    const wline=document.getElementById('oz-wline');
+    const wl=document.getElementById('oz-warrow-l');
+    const wr=document.getElementById('oz-warrow-r');
+    const wlabel=document.getElementById('oz-wlabel');
+
+    const h=ver==='kids'?parseInt(hkInput.value):parseInt(hInput.value);
+    const w=ver==='kids'?parseInt(ageInput.value):parseInt(wInput.value);
+
+    if(h){
+      fig.classList.add('active');
+      [hline,htop,hbot,hlabel].forEach(el=>el.classList.add('show'));
+      hlabel.textContent=ver==='kids'?h+' ס״מ':h+' ס״מ';
+      hlabel.classList.add('oz-measure-pulse');
+    }else{
+      [hline,htop,hbot,hlabel].forEach(el=>el.classList.remove('show'));
+      hlabel.classList.remove('oz-measure-pulse');
+    }
+
+    if(w){
+      fig.classList.add('active');
+      [wline,wl,wr,wlabel].forEach(el=>el.classList.add('show'));
+      wlabel.textContent=ver==='kids'?'גיל '+w:w+' ק״ג';
+      wlabel.classList.add('oz-measure-pulse');
+    }else{
+      [wline,wl,wr,wlabel].forEach(el=>el.classList.remove('show'));
+      wlabel.classList.remove('oz-measure-pulse');
+    }
+
+    if(!h&&!w)fig.classList.remove('active');
+  }
+
+  hInput.addEventListener('input',function(){calcSize();updateFigure()});
+  wInput.addEventListener('input',function(){calcSize();updateFigure()});
+  hkInput.addEventListener('input',function(){calcSize();updateFigure()});
+  ageInput.addEventListener('input',function(){calcSize();updateFigure()});
+})();
+</script>

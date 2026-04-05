@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "email-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:/Program Files/nodejs/node_modules/npm/bin/npx-cli.js", "serve", "email-marketing", "-l", "3456"],
+      "port": 3456
+    },
+    {
+      "name": "adcampaigner",
+      "runtimeExecutable": "C:\\Users\\amith\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "runtimeArgs": ["-c", "import os; os.chdir('C:/Users/amith/ads-dashboard/adcampaigner'); import uvicorn; uvicorn.run('backend.main:app', host='0.0.0.0', port=8000)"],
+      "port": 8000
+    }
+  ]
+}

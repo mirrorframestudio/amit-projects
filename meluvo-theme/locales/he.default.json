@@ -1,0 +1,51 @@
+{
+  "general": {
+    "search": "חיפוש",
+    "close": "סגור",
+    "menu": "תפריט",
+    "cart": "עגלת קניות",
+    "loading": "טוען..."
+  },
+  "products": {
+    "add_to_cart": "הוסף להזמנה",
+    "sold_out": "אזל המלאי",
+    "quantity": "כמות",
+    "variant": "סוג",
+    "price": "מחיר",
+    "compare_at": "מחיר רגיל",
+    "sale": "מבצע",
+    "description": "תיאור",
+    "buy_now": "קנה עכשיו"
+  },
+  "cart": {
+    "title": "עגלת קניות",
+    "empty": "העגלה שלך ריקה",
+    "subtotal": "סכום ביניים",
+    "checkout": "לתשלום",
+    "continue_shopping": "המשך קנייה",
+    "remove": "הסר",
+    "note": "הערה להזמנה"
+  },
+  "collections": {
+    "title": "קטלוג המוצרים",
+    "all": "כל המוצרים",
+    "filter": "סנן",
+    "sort": "מיין"
+  },
+  "header": {
+    "home": "דף הבית",
+    "catalog": "קטלוג המוצרים",
+    "contact": "יצירת קשר"
+  },
+  "footer": {
+    "terms": "תנאי שימוש",
+    "privacy": "מדיניות פרטיות",
+    "shipping_policy": "מדיניות משלוחים",
+    "refund_policy": "מדיניות החזרות"
+  },
+  "accessibility": {
+    "skip_to_content": "דלג לתוכן",
+    "close_menu": "סגור תפריט",
+    "open_menu": "פתח תפריט"
+  }
+}

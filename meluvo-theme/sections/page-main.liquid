@@ -1,0 +1,66 @@
+{%- style -%}
+.page-main {
+  padding-top: var(--space-3xl);
+  min-height: 50vh;
+}
+
+.page-main__title {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  margin-bottom: var(--space-2xl);
+  text-align: center;
+}
+
+.page-main__content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.page-main__content h2,
+.page-main__content h3,
+.page-main__content h4 {
+  color: var(--text-primary);
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+
+.page-main__content p {
+  margin-bottom: var(--space-lg);
+}
+
+.page-main__content ul,
+.page-main__content ol {
+  padding-right: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.page-main__content li {
+  margin-bottom: var(--space-sm);
+  list-style: disc;
+}
+
+.page-main__content a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+{%- endstyle -%}
+
+<section class="section section--dark page-main">
+  <div class="container">
+    <h1 class="page-main__title">{{ page.title }}</h1>
+    <div class="page-main__content">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

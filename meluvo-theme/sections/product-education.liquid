@@ -1,0 +1,640 @@
+{%- style -%}
+.product-edu {
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Blue Light Explanation --- */
+.edu-block {
+  margin-bottom: var(--space-4xl);
+}
+
+.edu-block:last-child {
+  margin-bottom: 0;
+}
+
+.edu-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4xl);
+  align-items: center;
+}
+
+.edu-split--reverse {
+  direction: ltr;
+}
+
+.edu-split--reverse > * {
+  direction: rtl;
+}
+
+.edu-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-lg);
+}
+
+.edu-tag--blue {
+  background: rgba(var(--color-secondary-rgb), 0.1);
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.2);
+  color: var(--color-secondary);
+}
+
+.edu-tag--purple {
+  background: rgba(var(--color-primary-rgb), 0.1);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  color: var(--color-glow);
+}
+
+.edu-tag--green {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--color-success);
+}
+
+.edu-title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  line-height: 1.3;
+}
+
+.edu-text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--space-lg);
+}
+
+.edu-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.edu-highlight {
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  border-right: 3px solid;
+  margin-bottom: var(--space-lg);
+}
+
+.edu-highlight--warning {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: #ef4444;
+}
+
+.edu-highlight--warning p {
+  color: #fca5a5;
+}
+
+.edu-highlight--success {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: var(--color-success);
+}
+
+.edu-highlight--success p {
+  color: #6ee7b7;
+}
+
+.edu-visual {
+  position: relative;
+}
+
+.edu-visual__card {
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.edu-visual__icon-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.edu-icon-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-glass);
+}
+
+.edu-icon-item svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.edu-icon-item--bad svg { color: #f87171; }
+.edu-icon-item--good svg { color: var(--color-success); }
+
+.edu-icon-item__text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* --- Who Is It For --- */
+.edu-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.edu-check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  transition: all var(--transition-base);
+}
+
+.edu-check:hover {
+  border-color: var(--border-glass-hover);
+  background: var(--bg-glass-hover);
+}
+
+.edu-check__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--color-success);
+  margin-top: 2px;
+}
+
+.edu-check__text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* --- Solution Block --- */
+.edu-solution {
+  text-align: center;
+  padding: var(--space-3xl);
+  border-radius: var(--radius-2xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.edu-solution__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.08), rgba(var(--color-secondary-rgb), 0.05));
+}
+
+.edu-solution__content {
+  position: relative;
+  z-index: 1;
+}
+
+.edu-solution__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-xl);
+  border-radius: var(--radius-xl);
+  background: rgba(var(--color-primary-rgb), 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-glow);
+}
+
+.edu-solution__icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.edu-solution__title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.edu-solution__text {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--space-xl);
+  line-height: 1.7;
+}
+
+/* --- Athletes Grid --- */
+.edu-athletes {
+  margin-top: var(--space-4xl);
+}
+
+.edu-athletes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.edu-athlete {
+  padding: var(--space-xl);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.edu-athlete__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: white;
+  overflow: hidden;
+}
+
+.edu-athlete:nth-child(odd) .edu-athlete__avatar {
+  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+}
+
+.edu-athlete:nth-child(even) .edu-athlete__avatar {
+  background: linear-gradient(135deg, var(--color-secondary), #0891b2);
+}
+
+.edu-athlete__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edu-athlete__name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.edu-athlete__team {
+  font-size: var(--text-xs);
+  color: var(--color-secondary);
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+}
+
+.edu-athlete__quote {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .edu-split {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .edu-split--reverse { direction: rtl; }
+  .edu-athletes__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .edu-visual__icon-grid { grid-template-columns: 1fr; }
+  .edu-athletes__grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+}
+{%- endstyle -%}
+
+<section class="section section--darker product-edu">
+  <div class="glow-orb glow-orb--secondary" style="width: 400px; height: 400px; top: -100px; left: -150px;"></div>
+  <div class="glow-orb glow-orb--primary" style="width: 300px; height: 300px; bottom: 10%; right: -100px;"></div>
+
+  <div class="container">
+
+    {%- comment -%} Block 1: What is blue light? {%- endcomment -%}
+    <div class="edu-block">
+      <div class="edu-split">
+        <div class="reveal">
+          <div class="edu-tag edu-tag--blue">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            {{ section.settings.block1_tag | default: 'מה זה אור כחול?' }}
+          </div>
+          <h2 class="edu-title">{{ section.settings.block1_title | default: 'אז מה זה אור כחול ואיך הוא משפיע?' }}</h2>
+          <p class="edu-text">{{ section.settings.block1_text | default: 'אור כחול הוא חלק מהאור שאנחנו רואים כל יום - מהשמש, מנורות לד ובעיקר ממסכים: טלפון, מחשב, טלוויזיה וכו׳. זה לא "קרינה מפחידה", אבל בגלל האנרגיה הגבוהה שלו, חשיפה כל היום ובמיוחד בלילה המוח חושב שעדיין יום והרבה יותר קשה לו להיכנס למצב לילה.' }}</p>
+          <div class="edu-highlight edu-highlight--warning">
+            <p>{{ section.settings.block1_warning | default: 'לוקח לך יותר זמן להירדם, השינה פחות איכותית ואתה קם עייף כל בוקר.' }}</p>
+          </div>
+        </div>
+
+        <div class="edu-visual reveal">
+          <div class="edu-visual__card glass-card--static">
+            <div class="edu-visual__icon-grid">
+              <div class="edu-icon-item edu-icon-item--bad">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                <span class="edu-icon-item__text">טלפון לפני השינה</span>
+              </div>
+              <div class="edu-icon-item edu-icon-item--bad">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span class="edu-icon-item__text">עבודה מול מחשב</span>
+              </div>
+              <div class="edu-icon-item edu-icon-item--bad">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                <span class="edu-icon-item__text">צפייה בטלוויזיה</span>
+              </div>
+              <div class="edu-icon-item edu-icon-item--bad">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+                <span class="edu-icon-item__text">תאורת LED חזקה</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="glow-line">
+
+    {%- comment -%} Block 2: Blue light at night {%- endcomment -%}
+    <div class="edu-block" style="margin-top: var(--space-4xl);">
+      <div class="edu-split edu-split--reverse">
+        <div class="edu-visual reveal">
+          <div class="edu-visual__card glass-card--static">
+            <div style="text-align: center; padding: var(--space-xl) 0;">
+              <div style="display: flex; justify-content: center; gap: var(--space-3xl); flex-wrap: wrap;">
+                <div style="text-align: center;">
+                  <div style="font-size: 2.5rem; margin-bottom: var(--space-sm);">☀️</div>
+                  <p style="font-size: var(--text-sm); color: var(--text-secondary); font-weight: 600;">הרבה אור כחול</p>
+                  <p style="font-size: var(--text-xs); color: var(--text-muted);">"יום, להישאר ערני!"</p>
+                </div>
+                <div style="font-size: 2rem; align-self: center; color: var(--text-muted);">→</div>
+                <div style="text-align: center;">
+                  <div style="font-size: 2.5rem; margin-bottom: var(--space-sm);">🌙</div>
+                  <p style="font-size: var(--text-sm); color: var(--text-secondary); font-weight: 600;">פחות אור</p>
+                  <p style="font-size: var(--text-xs); color: var(--text-muted);">הגוף מפריש מלטונין</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="edu-tag edu-tag--purple">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            {{ section.settings.block2_tag | default: 'השעון הביולוגי' }}
+          </div>
+          <h2 class="edu-title">{{ section.settings.block2_title | default: 'אור כחול בלילה = הורס את השינה שלך' }}</h2>
+          <p class="edu-text">{{ section.settings.block2_text | default: 'הגוף שלנו עובד לפי שעון ביולוגי. הוא מבין מתי יום ומתי לילה לפי האור: הרבה אור כחול = "יום, להישאר ערני!" פחות אור = הגוף מתחיל להפריש מלטונין — הורמון השינה. אבל בלילה, כשאתה מול מסך בהיר, המוח מקבל אור כחול לפנים וחושב שעדיין צהריים.' }}</p>
+          <div class="edu-highlight edu-highlight--warning">
+            <p>{{ section.settings.block2_impact | default: 'התוצאה: לוקח יותר זמן להירדם, השינה שטחית ושבורה, קמים בבוקר עייפים — גם אם "ישנת 8 שעות". מחקרים מראים שחשיפה לאור כחול בערב יכולה לדחות את השינה בכמה שעות ולבלגן את כל המחזור של הגוף.' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="glow-line">
+
+    {%- comment -%} Block 3: The Solution {%- endcomment -%}
+    <div class="edu-block" style="margin-top: var(--space-4xl);">
+      <div class="edu-solution glass-card--static reveal">
+        <div class="edu-solution__bg"></div>
+        <div class="edu-solution__content">
+          <div class="edu-solution__icon floating--slow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 12 15 16 10"/></svg>
+          </div>
+          <h2 class="edu-solution__title">{{ section.settings.solution_title | default: 'הפתרון של Meluvo' }}</h2>
+          <p class="edu-solution__text">{{ section.settings.solution_text | default: 'המשקפיים האלה מסננים עד 97% מהאור הכחול ועוזרים לך לישון טוב יותר, ולקום רענן בכל בוקר מחדש.' }}</p>
+          <a href="#product-main" class="btn btn--primary btn--large">לרכישה עכשיו</a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="glow-line">
+
+    {%- comment -%} Block 4: Who is it for? {%- endcomment -%}
+    <div class="edu-block" style="margin-top: var(--space-4xl);">
+      <div class="section__header reveal">
+        <span class="section__subtitle">{{ section.settings.who_tag | default: 'למי זה מתאים?' }}</span>
+        <h2 class="section__title">{{ section.settings.who_title | default: 'למי המשקפיים מתאימים?' }}</h2>
+      </div>
+
+      <div class="edu-checklist stagger-children" style="max-width: 700px; margin: 0 auto;">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'audience' -%}
+            <div class="edu-check" {{ block.shopify_attributes }}>
+              <svg class="edu-check__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span class="edu-check__text">{{ block.settings.text }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <hr class="glow-line">
+
+    {%- comment -%} Block 5: Athletes {%- endcomment -%}
+    <div class="edu-athletes" style="margin-top: var(--space-4xl);">
+      <div class="section__header reveal">
+        <span class="section__subtitle">{{ section.settings.athletes_tag | default: 'ספורטאים בוחרים Meluvo' }}</span>
+        <h2 class="section__title">{{ section.settings.athletes_title | default: 'הבחירה של הספורטאים הטובים בישראל' }}</h2>
+      </div>
+
+      <div class="edu-athletes__grid stagger-children">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'athlete' -%}
+            <div class="edu-athlete glass-card" {{ block.shopify_attributes }}>
+              <div class="edu-athlete__avatar">
+                {%- if block.settings.image -%}
+                  <img src="{{ block.settings.image | image_url: width: 128 }}" alt="{{ block.settings.name }}" width="64" height="64" loading="lazy">
+                {%- else -%}
+                  {{ block.settings.name | slice: 0, 2 }}
+                {%- endif -%}
+              </div>
+              <h4 class="edu-athlete__name">{{ block.settings.name }}</h4>
+              <p class="edu-athlete__team">{{ block.settings.team }}</p>
+              {%- if block.settings.quote != blank -%}
+                <p class="edu-athlete__quote">"{{ block.settings.quote }}"</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Education",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Block 1: What is blue light?"
+    },
+    {
+      "type": "text",
+      "id": "block1_tag",
+      "label": "Tag",
+      "default": "מה זה אור כחול?"
+    },
+    {
+      "type": "text",
+      "id": "block1_title",
+      "label": "Title",
+      "default": "אז מה זה אור כחול ואיך הוא משפיע?"
+    },
+    {
+      "type": "textarea",
+      "id": "block1_text",
+      "label": "Text",
+      "default": "אור כחול הוא חלק מהאור שאנחנו רואים כל יום - מהשמש, מנורות לד ובעיקר ממסכים: טלפון, מחשב, טלוויזיה וכו׳. זה לא \"קרינה מפחידה\", אבל בגלל האנרגיה הגבוהה שלו, חשיפה כל היום ובמיוחד בלילה המוח חושב שעדיין יום והרבה יותר קשה לו להיכנס למצב לילה."
+    },
+    {
+      "type": "textarea",
+      "id": "block1_warning",
+      "label": "Warning text",
+      "default": "לוקח לך יותר זמן להירדם, השינה פחות איכותית ואתה קם עייף כל בוקר."
+    },
+    {
+      "type": "header",
+      "content": "Block 2: Blue light at night"
+    },
+    {
+      "type": "text",
+      "id": "block2_tag",
+      "label": "Tag",
+      "default": "השעון הביולוגי"
+    },
+    {
+      "type": "text",
+      "id": "block2_title",
+      "label": "Title",
+      "default": "אור כחול בלילה = הורס את השינה שלך"
+    },
+    {
+      "type": "textarea",
+      "id": "block2_text",
+      "label": "Text",
+      "default": "הגוף שלנו עובד לפי שעון ביולוגי. הוא מבין מתי יום ומתי לילה לפי האור: הרבה אור כחול = \"יום, להישאר ערני!\" פחות אור = הגוף מתחיל להפריש מלטונין — הורמון השינה. אבל בלילה, כשאתה מול מסך בהיר, המוח מקבל אור כחול לפנים וחושב שעדיין צהריים."
+    },
+    {
+      "type": "textarea",
+      "id": "block2_impact",
+      "label": "Impact text",
+      "default": "התוצאה: לוקח יותר זמן להירדם, השינה שטחית ושבורה, קמים בבוקר עייפים — גם אם \"ישנת 8 שעות\". מחקרים מראים שחשיפה לאור כחול בערב יכולה לדחות את השינה בכמה שעות ולבלגן את כל המחזור של הגוף."
+    },
+    {
+      "type": "header",
+      "content": "Block 3: Solution"
+    },
+    {
+      "type": "text",
+      "id": "solution_title",
+      "label": "Title",
+      "default": "הפתרון של Meluvo"
+    },
+    {
+      "type": "textarea",
+      "id": "solution_text",
+      "label": "Text",
+      "default": "המשקפיים האלה מסננים עד 97% מהאור הכחול ועוזרים לך לישון טוב יותר, ולקום רענן בכל בוקר מחדש."
+    },
+    {
+      "type": "header",
+      "content": "Block 4: Target audience"
+    },
+    {
+      "type": "text",
+      "id": "who_tag",
+      "label": "Tag",
+      "default": "למי זה מתאים?"
+    },
+    {
+      "type": "text",
+      "id": "who_title",
+      "label": "Title",
+      "default": "למי המשקפיים מתאימים?"
+    },
+    {
+      "type": "header",
+      "content": "Block 5: Athletes"
+    },
+    {
+      "type": "text",
+      "id": "athletes_tag",
+      "label": "Tag",
+      "default": "ספורטאים בוחרים Meluvo"
+    },
+    {
+      "type": "text",
+      "id": "athletes_title",
+      "label": "Title",
+      "default": "הבחירה של הספורטאים הטובים בישראל"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "audience",
+      "name": "Target audience",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "athlete",
+      "name": "Athlete",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "team",
+          "label": "Team"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Education",
+      "blocks": [
+        { "type": "audience", "settings": { "text": "אנשים שגוללים בטלפון בערב לפני השינה" } },
+        { "type": "audience", "settings": { "text": "ספורטאים שרוצים לשפר התאוששות ושינה איכותית יותר — כי שינה טובה = ביצועים טובים יותר" } },
+        { "type": "audience", "settings": { "text": "מי שמשתמש במחשב עד מאוחר ומרגיש שקשה לו להירדם" } },
+        { "type": "audience", "settings": { "text": "כל מי שלוקח לו זמן להירדם או מרגיש שהשינה לא עמוקה אחרי זמן מסך בלילה" } },
+        { "type": "athlete", "settings": { "name": "איתמר נוי", "team": "מכבי תל אביב", "quote": "מאחורי כל הופעה גדולה עומדת התאוששות חכמה" } },
+        { "type": "athlete", "settings": { "name": "עוז בילו", "team": "מכבי נתניה", "quote": "משתמש במשקפיים שלנו כל לילה לשיפור איכות השינה וההתאוששות" } },
+        { "type": "athlete", "settings": { "name": "אור אביגזר", "team": "מאמן כושר", "quote": "שימוש במשקפיים לשמירה על התאוששות מהירה והכנה ליום חדש" } },
+        { "type": "athlete", "settings": { "name": "בירם כיאל", "team": "לשעבר בריטון", "quote": "מקצוען נשאר מקצוען. גם אחרי הפרישה לא מוותר על המשקפיים שלנו" } },
+        { "type": "athlete", "settings": { "name": "איליי מדמון", "team": "הפועל ירושלים", "quote": "קפטן נבחרת ישראל במונדיאליטו בוחר במשקפיים שלנו להתאוששות" } },
+        { "type": "athlete", "settings": { "name": "דור מלול", "team": "הפועל חיפה", "quote": "קפטן הפועל חיפה משתמש במשקפיים שלנו לשמירה על שינה בריאה" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,202 @@
+{%- style -%}
+.benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xl);
+}
+
+.benefit-card {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  transition: all var(--transition-base);
+}
+
+.benefit-card__icon-wrap {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-lg);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+.benefit-card:nth-child(1) .benefit-card__icon-wrap {
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
+}
+.benefit-card:nth-child(2) .benefit-card__icon-wrap {
+  background: rgba(var(--color-secondary-rgb), 0.1);
+  color: var(--color-secondary);
+}
+.benefit-card:nth-child(3) .benefit-card__icon-wrap {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+.benefit-card:nth-child(4) .benefit-card__icon-wrap {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+}
+
+.benefit-card:hover .benefit-card__icon-wrap {
+  transform: scale(1.1);
+}
+
+.benefit-card__icon-wrap svg {
+  width: 28px;
+  height: 28px;
+}
+
+.benefit-card__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.benefit-card__text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .benefits__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .benefits__grid { grid-template-columns: 1fr; }
+}
+{%- endstyle -%}
+
+<section class="section section--darker">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__subtitle">{{ section.settings.subtitle }}</span>
+      <h2 class="section__title">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="benefits__grid stagger-children">
+      {%- for block in section.blocks -%}
+        <div class="benefit-card glass-card" {{ block.shopify_attributes }}>
+          <div class="benefit-card__icon-wrap">
+            {%- case block.settings.icon -%}
+              {%- when 'moon' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              {%- when 'eye' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              {%- when 'brain' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 22l3-5.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+              {%- when 'zap' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              {%- when 'shield' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {%- when 'heart' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            {%- endcase -%}
+          </div>
+          <h3 class="benefit-card__title">{{ block.settings.title }}</h3>
+          <p class="benefit-card__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Benefits",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "היתרונות"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "למה Meluvo?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "moon", "label": "Moon" },
+            { "value": "eye", "label": "Eye" },
+            { "value": "brain", "label": "Brain" },
+            { "value": "zap", "label": "Energy" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "heart", "label": "Heart" }
+          ],
+          "default": "moon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "שינה איכותית"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "חסימת אור כחול לפני השינה מאפשרת ייצור טבעי של מלטונין ושינה עמוקה יותר."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Benefits",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "moon",
+            "title": "שינה איכותית",
+            "text": "חסימת אור כחול לפני השינה מאפשרת ייצור טבעי של מלטונין ושינה עמוקה יותר."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "eye",
+            "title": "פחות עומס על העיניים",
+            "text": "הפחתה משמעותית בעייפות עיניים, יובש וכאבי ראש מול מסכים."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "brain",
+            "title": "ריכוז חד יותר",
+            "text": "עבודה יעילה יותר מול מסכים עם פחות הסחות תשומת לב ועייפות."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "zap",
+            "title": "ביצועים גבוהים",
+            "text": "התאוששות מהירה יותר לספורטאים ומקצועני ביצועים."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

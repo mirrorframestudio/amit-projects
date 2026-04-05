@@ -1,0 +1,62 @@
+{
+  "argentina": {
+    "name_he": "ארגנטינה",
+    "file": "nation_argentina.jpg",
+    "wp_url": null
+  },
+  "brazil": {
+    "name_he": "ברזיל",
+    "file": "nation_brazil.jpg",
+    "wp_url": null
+  },
+  "france": {
+    "name_he": "צרפת",
+    "file": "nation_france.jpg",
+    "wp_url": null
+  },
+  "spain": {
+    "name_he": "ספרד",
+    "file": "nation_spain.jpg",
+    "wp_url": null
+  },
+  "portugal": {
+    "name_he": "פורטוגל",
+    "file": "nation_portugal.jpg",
+    "wp_url": null
+  },
+  "england": {
+    "name_he": "אנגליה",
+    "file": "nation_england.jpg",
+    "wp_url": null
+  },
+  "germany": {
+    "name_he": "גרמניה",
+    "file": "nation_germany.jpg",
+    "wp_url": null
+  },
+  "italy": {
+    "name_he": "איטליה",
+    "file": "nation_italy.jpg",
+    "wp_url": null
+  },
+  "morocco": {
+    "name_he": "מרוקו",
+    "file": "nation_morocco.jpg",
+    "wp_url": null
+  },
+  "netherlands": {
+    "name_he": "הולנד",
+    "file": "nation_netherlands.jpg",
+    "wp_url": null
+  },
+  "belgium": {
+    "name_he": "בלגיה",
+    "file": "nation_belgium.jpg",
+    "wp_url": null
+  },
+  "israel": {
+    "name_he": "ישראל",
+    "file": "nation_israel.jpg",
+    "wp_url": null
+  }
+}

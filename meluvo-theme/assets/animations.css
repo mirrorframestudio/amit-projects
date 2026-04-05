@@ -1,0 +1,228 @@
+/* ============================================
+   MELUVO PREMIUM — Animations & Effects
+   ============================================ */
+
+/* --- Keyframes --- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.15); }
+  50% { box-shadow: 0 0 40px rgba(var(--color-primary-rgb), 0.3); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(var(--color-primary-rgb), 0.1); }
+  50% { border-color: rgba(var(--color-primary-rgb), 0.3); }
+}
+
+/* --- Floating Effect --- */
+.floating {
+  animation: float 4s ease-in-out infinite;
+}
+
+.floating--slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* --- Pulse Glow --- */
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* --- Shimmer Text --- */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--text-primary) 0%,
+    var(--color-glow) 25%,
+    var(--text-primary) 50%,
+    var(--color-glow) 75%,
+    var(--text-primary) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* --- Gradient Background Animation --- */
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/* --- Parallax Layer --- */
+.parallax-layer {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* --- 3D Card Tilt --- */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform var(--transition-slow);
+}
+
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
+}
+
+.tilt-card__inner {
+  transform: translateZ(20px);
+  transition: transform var(--transition-slow);
+}
+
+.tilt-card:hover .tilt-card__inner {
+  transform: translateZ(40px);
+}
+
+/* --- Hover Lift --- */
+.hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* --- Magnetic Button --- */
+.magnetic-btn {
+  transition: transform var(--transition-fast);
+}
+
+/* --- Glow Line --- */
+.glow-line {
+  height: 2px;
+  background: linear-gradient(to left, transparent, var(--color-primary), var(--color-secondary), transparent);
+  border: none;
+  opacity: 0.5;
+}
+
+/* --- Stagger Children Animation --- */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger-children.is-visible > * {
+  animation: fade-up 0.5s ease forwards;
+}
+
+.stagger-children.is-visible > *:nth-child(1) { animation-delay: 0s; }
+.stagger-children.is-visible > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children.is-visible > *:nth-child(3) { animation-delay: 0.2s; }
+.stagger-children.is-visible > *:nth-child(4) { animation-delay: 0.3s; }
+.stagger-children.is-visible > *:nth-child(5) { animation-delay: 0.4s; }
+.stagger-children.is-visible > *:nth-child(6) { animation-delay: 0.5s; }
+
+/* --- Product Image Hover --- */
+.product-image-hover {
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+}
+
+.product-image-hover img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-image-hover:hover img {
+  transform: scale(1.05);
+}
+
+/* --- Underline Hover --- */
+.underline-hover {
+  position: relative;
+}
+
+.underline-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to left, var(--color-primary), var(--color-secondary));
+  transition: width var(--transition-base);
+}
+
+.underline-hover:hover::after {
+  width: 100%;
+}
+
+/* --- Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .floating,
+  .floating--slow,
+  .pulse-glow,
+  .shimmer-text {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger-children > * {
+    opacity: 1;
+    transform: none;
+  }
+}

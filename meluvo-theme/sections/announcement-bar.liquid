@@ -1,0 +1,29 @@
+{%- if section.settings.show_announcement -%}
+<div class="announcement-bar" role="region" aria-label="הודעה">
+  <div class="announcement-bar__icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  </div>
+  <span>{{ section.settings.announcement_text }}</span>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "30 ימי ניסיון בחינם + משלוחים בחינם לכל רחבי הארץ!"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,207 @@
+{%- style -%}
+.athletes {
+  position: relative;
+  overflow: hidden;
+}
+
+.athletes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+}
+
+.athlete-card {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.athlete-card__media {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  position: relative;
+}
+
+.athlete-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.athlete-card:hover .athlete-card__media img {
+  transform: scale(1.05);
+}
+
+.athlete-card__media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 18, 0.9) 0%, transparent 60%);
+}
+
+.athlete-card__info {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: var(--space-xl);
+}
+
+.athlete-card__name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.athlete-card__team {
+  font-size: var(--text-sm);
+  color: var(--color-secondary);
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+}
+
+.athlete-card__quote {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Fallback: no image */
+.athlete-card--no-image .athlete-card__media {
+  background: linear-gradient(135deg, var(--bg-dark-secondary), var(--bg-dark-tertiary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.athlete-card--no-image .athlete-card__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .athletes__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .athletes__grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+}
+{%- endstyle -%}
+
+<section class="section section--darker athletes">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__subtitle">{{ section.settings.subtitle }}</span>
+      <h2 class="section__title">{{ section.settings.title }}</h2>
+      <p class="section__description">{{ section.settings.description }}</p>
+    </div>
+
+    <div class="athletes__grid stagger-children">
+      {%- for block in section.blocks -%}
+        <div class="athlete-card glass-card {% unless block.settings.image %}athlete-card--no-image{% endunless %}" {{ block.shopify_attributes }}>
+          <div class="athlete-card__media">
+            {%- if block.settings.image -%}
+              <img src="{{ block.settings.image | image_url: width: 500 }}" alt="{{ block.settings.name }}" width="500" height="667" loading="lazy">
+            {%- else -%}
+              <div class="athlete-card__avatar">{{ block.settings.name | slice: 0, 2 }}</div>
+            {%- endif -%}
+            <div class="athlete-card__media-overlay"></div>
+          </div>
+          <div class="athlete-card__info">
+            <h3 class="athlete-card__name">{{ block.settings.name }}</h3>
+            <p class="athlete-card__team">{{ block.settings.team }}</p>
+            {%- if block.settings.quote != blank -%}
+              <p class="athlete-card__quote">"{{ block.settings.quote }}"</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Athletes / Social Proof",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "ספורטאים בוחרים Meluvo"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "הבחירה של הספורטאים הטובים בישראל"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "ספורטאי עילית סומכים על Meluvo לשיפור איכות השינה וההתאוששות שלהם"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "athlete",
+      "name": "Athlete",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "איתמר נוי"
+        },
+        {
+          "type": "text",
+          "id": "team",
+          "label": "Team / Title",
+          "default": "מכבי תל אביב"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Athletes / Social Proof",
+      "blocks": [
+        {
+          "type": "athlete",
+          "settings": { "name": "איתמר נוי", "team": "מכבי תל אביב" }
+        },
+        {
+          "type": "athlete",
+          "settings": { "name": "עוז בילו", "team": "מכבי נתניה" }
+        },
+        {
+          "type": "athlete",
+          "settings": { "name": "אלון אביגזר", "team": "מאמן כושר" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

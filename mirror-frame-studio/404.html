@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — הדף לא נמצא | Mirror Frame Studio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪞</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Heebo',sans-serif;
+  background:#0F2540;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  position:relative;
+}
+.container{
+  position:relative;
+  z-index:2;
+  padding:40px 24px;
+}
+.mirror-float{
+  font-size:4rem;
+  display:inline-block;
+  animation:mirrorBounce 2.5s ease-in-out infinite;
+  margin-bottom:20px;
+}
+@keyframes mirrorBounce{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-12px) rotate(-5deg)}
+  50%{transform:translateY(0) rotate(0deg)}
+  75%{transform:translateY(-8px) rotate(5deg)}
+}
+.error-code{
+  font-size:clamp(8rem,20vw,14rem);
+  font-weight:900;
+  line-height:1;
+  background:linear-gradient(135deg,#C8A84B 0%,#E8D48B 40%,#C8A84B 60%,#A08030 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:16px;
+  letter-spacing:-4px;
+}
+h1{
+  font-size:clamp(1.5rem,4vw,2.2rem);
+  font-weight:700;
+  margin-bottom:12px;
+}
+.subtitle{
+  font-size:clamp(1rem,2.5vw,1.2rem);
+  color:rgba(255,255,255,.6);
+  margin-bottom:40px;
+  font-weight:400;
+}
+.btn-home{
+  display:inline-block;
+  padding:16px 40px;
+  background:linear-gradient(135deg,#C8A84B,#E8D48B);
+  color:#0F2540;
+  font-family:'Heebo',sans-serif;
+  font-size:1.1rem;
+  font-weight:700;
+  border:none;
+  border-radius:50px;
+  text-decoration:none;
+  cursor:pointer;
+  transition:all .3s ease;
+  box-shadow:0 4px 24px rgba(200,168,75,.3);
+}
+.btn-home:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(200,168,75,.45);
+}
+.btn-home:active{
+  transform:scale(.97);
+}
+/* Background decorative elements */
+.bg-glow{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.15;
+  pointer-events:none;
+}
+.bg-glow-1{
+  width:400px;height:400px;
+  background:#C8A84B;
+  top:-100px;right:-100px;
+}
+.bg-glow-2{
+  width:300px;height:300px;
+  background:#C8A84B;
+  bottom:-80px;left:-80px;
+  opacity:.1;
+}
+</style>
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="container">
+    <div class="mirror-float" aria-hidden="true">🪞</div>
+    <div class="error-code">404</div>
+    <h1>אופס! הדף לא נמצא</h1>
+    <p class="subtitle">נראה שהלכת לאיבוד... בוא נחזיר אותך</p>
+    <a href="index.html" class="btn-home">חזרה לדף הבית</a>
+  </div>
+</body>
+</html>

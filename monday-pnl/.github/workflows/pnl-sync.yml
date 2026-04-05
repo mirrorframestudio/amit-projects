@@ -1,0 +1,43 @@
+name: Daily P&L Sync
+
+on:
+  schedule:
+    # 09:00 Asia/Jerusalem = 06:00 UTC (winter) / 06:00 UTC (summer, approx)
+    - cron: "0 6 * * *"
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run P&L pipeline
+        env:
+          MONDAY_API_TOKEN: ${{ secrets.MONDAY_API_TOKEN }}
+          MONDAY_BOARD_ID: ${{ secrets.MONDAY_BOARD_ID }}
+          VAT_RATE: "0.18"
+          PAYMENT_FEE_RATE: "0.014"
+          PAYMENT_FEE_FIXED: "0"
+          DEFAULT_AD_COST: "0"
+          COGS_PICKUP: "5.70"
+          COGS_HOME: "10.20"
+          SHIP_COST_PICKUP: "0"
+          SHIP_COST_HOME: "0"
+          MODE: "INCLUDES_VAT"
+          CURRENCY: "USD"
+        run: python -m src.main
+
+      - name: Upload P&L Excel
+        uses: actions/upload-artifact@v4
+        with:
+          name: pnl-report-${{ github.run_number }}
+          path: "P&L.xlsx"
+          retention-days: 30

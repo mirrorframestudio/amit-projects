@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdCampaigner — ניתוח מודעות חכם</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LOGIN SCREEN                                   -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+    <div class="login-screen">
+        <div class="login-card">
+            <div class="login-logo">📊</div>
+            <h2>AdCampaigner</h2>
+            <p>ניתוח מודעות חכם לעסקים קטנים<br>מתחבר ל-Facebook Ads ונותן המלצות מבוססות AI</p>
+            <button class="btn btn-fb" onclick="fbLogin()">
+                התחבר עם Facebook
+            </button>
+            <div id="login-error" style="color:var(--danger);margin-top:16px;display:none"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- ONBOARDING SCREEN                                -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="screen-onboarding" class="screen">
+    <header class="header">
+        <h1>AdCampaigner <span>| ספר לנו על העסק</span></h1>
+    </header>
+    <div class="container" style="max-width:700px">
+        <div class="card">
+            <div class="card-header">
+                <h2>בוא נכיר את העסק שלך</h2>
+            </div>
+            <p style="color:var(--text-secondary);margin-bottom:24px;line-height:1.6">
+                ככל שנדע יותר על העסק, כך ההמלצות והרעיונות לקריאייטיב יהיו יותר מדויקים ורלוונטיים.
+            </p>
+
+            <div class="form-group">
+                <label>שם העסק *</label>
+                <input type="text" id="onboard-name" placeholder="למשל: OneZone Jersey">
+            </div>
+
+            <div class="form-group">
+                <label>מה העסק עושה? * (תאר ב-2-3 משפטים)</label>
+                <textarea id="onboard-description" rows="3" placeholder="למשל: חנות אונליין לחולצות כדורגל מקוריות. אנחנו מוכרים חולצות של כל הקבוצות בעולם עם משלוח לכל הארץ תוך 3 ימים."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>לינק לאתר</label>
+                <input type="text" id="onboard-website" placeholder="https://www.example.com" dir="ltr" style="text-align:left">
+            </div>
+
+            <div class="form-group">
+                <label>מה המוצרים/שירותים העיקריים?</label>
+                <textarea id="onboard-products" rows="2" placeholder="למשל: חולצות כדורגל, מכנסיים, גרביים, אביזרי ספורט"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>מי קהל היעד שלך?</label>
+                <input type="text" id="onboard-audience" placeholder="למשל: גברים בגילאי 18-40 שאוהבים כדורגל">
+            </div>
+
+            <div class="form-group">
+                <label>מה מייחד אותך מהמתחרים?</label>
+                <input type="text" id="onboard-usp" placeholder="למשל: מחירים הכי טובים בארץ, משלוח חינם מעל 200 ש״ח">
+            </div>
+
+            <div style="margin-top:24px;display:flex;gap:12px;justify-content:center">
+                <button class="btn btn-primary" style="font-size:1.1rem;padding:14px 32px" onclick="saveOnboarding()">
+                    שמור והמשך
+                </button>
+                <button class="btn btn-outline" onclick="skipOnboarding()">
+                    דלג בינתיים
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- ACCOUNT SELECT SCREEN                          -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="screen-accounts" class="screen">
+    <header class="header">
+        <h1>AdCampaigner <span>| בחירת חשבון</span></h1>
+        <div class="header-actions">
+            <span class="user-badge" id="user-name-accounts"></span>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>בחר חשבון מודעות</h2>
+            </div>
+            <div id="accounts-list" class="account-selector">
+                <div class="loading"><div class="spinner"></div>טוען חשבונות...</div>
+            </div>
+            <div style="margin-top:20px;text-align:center">
+                <button class="btn btn-primary" id="btn-select-account" disabled onclick="selectAccount()">
+                    בחר חשבון והמשך
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- MAIN DASHBOARD SCREEN                          -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen">
+    <header class="header">
+        <h1>AdCampaigner</h1>
+        <div class="header-actions">
+            <button class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.4)" onclick="runAnalysis()">
+                הרץ ניתוח חדש
+            </button>
+            <span class="user-badge" id="user-name-dashboard"></span>
+            <button class="btn" style="color:white;opacity:0.7" onclick="logout()">יציאה</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="overview" onclick="switchTab('overview', this)">סקירה כללית</button>
+            <button class="tab" data-tab="performance" onclick="switchTab('performance', this)">ביצועים</button>
+            <button class="tab" data-tab="campaigns" onclick="switchTab('campaigns', this)">קמפיינים</button>
+            <button class="tab" data-tab="ai-agent" onclick="switchTab('ai-agent', this)">סוכן AI</button>
+            <button class="tab" data-tab="creative" onclick="switchTab('creative', this)">קריאייטיב</button>
+            <button class="tab" data-tab="history" onclick="switchTab('history', this)">היסטוריה</button>
+        </div>
+
+        <!-- ── Overview Tab ────────────────────────── -->
+        <div id="tab-overview" class="tab-content fade-in">
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="stat-spend">-</div>
+                    <div class="stat-label">הוצאה כוללת</div>
+                    <div class="stat-change" id="stat-spend-change"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-value" id="stat-purchases">-</div>
+                    <div class="stat-label">רכישות</div>
+                    <div class="stat-change" id="stat-purchases-change"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="stat-roas">-</div>
+                    <div class="stat-label">ROAS</div>
+                    <div class="stat-change" id="stat-roas-change"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value" id="stat-recs">-</div>
+                    <div class="stat-label">המלצות</div>
+                </div>
+            </div>
+
+            <!-- Period Comparison -->
+            <div class="card" id="period-comparison-card" style="display:none">
+                <div class="card-header">
+                    <h2>השוואת תקופות</h2>
+                </div>
+                <div id="period-comparison-content" class="period-comparison-grid"></div>
+            </div>
+
+            <!-- Trend + Top Recommendation -->
+            <div class="overview-two-col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>מגמה</h2>
+                        <span id="trend-badge"></span>
+                    </div>
+                    <div id="trend-summary" style="color:var(--text-secondary)">
+                        הרץ ניתוח כדי לראות מגמות
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>המלצה עיקרית</h2>
+                    </div>
+                    <div id="top-recommendation" style="font-size:1.05rem;line-height:1.6">
+                        -
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations summary -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>כל ההמלצות</h2>
+                    <span id="recs-count"></span>
+                </div>
+                <ul class="rec-list" id="recs-list">
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <p>הרץ ניתוח כדי לקבל המלצות</p>
+                    </div>
+                </ul>
+            </div>
+
+            <!-- Top & Bottom Ads -->
+            <div class="card" id="top-bottom-ads" style="display:none">
+                <div class="card-header">
+                    <h2>מודעות מובילות ולשיפור</h2>
+                </div>
+                <div class="top-bottom-grid"></div>
+            </div>
+
+            <!-- Demographics Insights -->
+            <div class="card" id="demographics-card" style="display:none">
+                <div class="card-header">
+                    <h2>תובנות דמוגרפיות</h2>
+                </div>
+                <div class="demo-insights-grid"></div>
+            </div>
+
+            <!-- Business Profile Card -->
+            <div class="card" id="business-profile-card" style="display:none">
+                <div class="card-header">
+                    <h2>פרופיל העסק (מחקר אוטומטי)</h2>
+                    <button class="btn btn-outline" style="font-size:0.8rem;padding:6px 12px" onclick="refreshResearch()">רענן מחקר</button>
+                </div>
+                <div id="business-profile-content" style="white-space:pre-wrap;line-height:1.8;font-size:0.9rem">
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Performance Tab (NEW) ─────────────────── -->
+        <div id="tab-performance" class="tab-content fade-in" style="display:none">
+
+            <!-- Full Funnel Visualization -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>משפך שיווקי מלא</h2>
+                    <span class="badge badge-info" id="funnel-period"></span>
+                </div>
+                <div id="funnel-container" class="funnel-container">
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <p>הרץ ניתוח כדי לראות את המשפך</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Performance -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>ביצועים חודשיים</h2>
+                </div>
+                <div id="monthly-table-wrap">
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>הרץ ניתוח כדי לראות נתונים חודשיים</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Performance -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>ביצועים שבועיים</h2>
+                </div>
+                <div id="weekly-table-wrap">
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>הרץ ניתוח כדי לראות נתונים שבועיים</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Performance (last 14 days) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>ביצועים יומיים (14 ימים אחרונים)</h2>
+                </div>
+                <div id="daily-table-wrap">
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>הרץ ניתוח כדי לראות נתונים יומיים</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Campaigns Tab ───────────────────────── -->
+        <div id="tab-campaigns" class="tab-content fade-in" style="display:none">
+            <div class="card">
+                <div class="card-header">
+                    <h2>קמפיינים פעילים</h2>
+                    <span class="badge badge-neutral" id="campaigns-count"></span>
+                </div>
+                <div id="campaigns-table-wrap">
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <p>הרץ ניתוח כדי לראות נתוני קמפיינים</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── AI Agent Tab (NEW) ────────────────────── -->
+        <div id="tab-ai-agent" class="tab-content fade-in" style="display:none">
+            <div class="card ai-agent-panel">
+                <div class="card-header">
+                    <h2>סוכן AI — ניתוח מקצועי</h2>
+                </div>
+                <p style="color:var(--text-secondary);margin-bottom:20px;line-height:1.6">
+                    הסוכן ינתח את כל הנתונים שלך ויחזיר ניתוח מקצועי ברמת קמפיינר: מה עובד, מה לא, הקצאת תקציב, תובנות קהל, עייפות קריאייטיב, בעיות משפך, ופעולות מומלצות.
+                </p>
+                <div style="text-align:center;margin-bottom:24px">
+                    <button class="btn btn-primary btn-lg" onclick="runAIAgent()" id="btn-ai-agent">
+                        🤖 נתח את הביצועים שלי
+                    </button>
+                </div>
+                <div id="ai-agent-output" style="display:none">
+                    <div class="ai-agent-response" id="ai-agent-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Creative Tab ────────────────────────── -->
+        <div id="tab-creative" class="tab-content fade-in" style="display:none">
+            <div class="card creative-panel">
+                <div class="card-header">
+                    <h2>מחולל רעיונות קריאייטיב AI</h2>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                    <div class="form-group">
+                        <label>סוג הצעה</label>
+                        <select id="creative-type">
+                            <option value="copy">טקסט למודעה</option>
+                            <option value="hook">פתיחים לווידאו (Hooks)</option>
+                            <option value="visual">רעיונות ויזואליים</option>
+                            <option value="audience">קהלי יעד חדשים</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>שם קמפיין (אופציונלי)</label>
+                        <input type="text" id="creative-campaign" placeholder="למשל: Sales Campaign">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>תיאור העסק / הקשר</label>
+                    <textarea id="creative-context" rows="3" placeholder="למשל: חנות חולצות כדורגל, קהל יעד גברים 18-35, משלוחים לכל הארץ"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="generateCreative()" id="btn-creative">
+                    צור הצעה עם AI
+                </button>
+                <div id="creative-output" class="creative-output" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- ── History Tab ─────────────────────────── -->
+        <div id="tab-history" class="tab-content fade-in" style="display:none">
+            <div class="card">
+                <div class="card-header">
+                    <h2>היסטוריית ניתוחים</h2>
+                </div>
+                <div id="history-list">
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>אין ניתוחים קודמים</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LOADING OVERLAY                                -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;
+    display:none;justify-content:center;align-items:center">
+    <div class="card" style="text-align:center;padding:40px">
+        <div class="spinner"></div>
+        <div id="loading-text">מריץ ניתוח...</div>
+    </div>
+</div>
+
+<!-- Facebook SDK -->
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '{{ fb_app_id }}',
+            cookie: true,
+            xfbml: false,
+            version: 'v22.0'
+        });
+    };
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

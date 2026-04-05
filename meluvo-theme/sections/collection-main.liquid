@@ -1,0 +1,223 @@
+{%- style -%}
+.collection-main {
+  padding-top: var(--space-3xl);
+}
+
+.collection-header {
+  text-align: center;
+  margin-bottom: var(--space-4xl);
+}
+
+.collection-header__title {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  margin-bottom: var(--space-md);
+}
+
+.collection-header__description {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.collection-header__count {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-md);
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+.collection-product {
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  padding: var(--space-md);
+}
+
+.collection-product:hover {
+  transform: translateY(-6px);
+}
+
+.collection-product__media {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+  background: var(--bg-dark-tertiary);
+}
+
+.collection-product__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.collection-product:hover .collection-product__media img {
+  transform: scale(1.05);
+}
+
+.collection-product__badge {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+}
+
+.collection-product__info {
+  padding: var(--space-sm);
+}
+
+.collection-product__title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.collection-product__title a {
+  transition: color var(--transition-fast);
+}
+
+.collection-product__title a:hover {
+  color: var(--color-primary);
+}
+
+.collection-product__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  direction: ltr;
+  justify-content: flex-end;
+  margin-bottom: var(--space-md);
+}
+
+.collection-product__price {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.collection-product__compare {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.collection-product__atc {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: var(--text-sm);
+}
+
+.collection-empty {
+  text-align: center;
+  padding: var(--space-5xl) var(--space-xl);
+  color: var(--text-secondary);
+}
+
+.collection-empty svg {
+  width: 48px;
+  height: 48px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .collection-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+{%- endstyle -%}
+
+<section class="section section--dark collection-main">
+  <div class="container">
+    <div class="collection-header reveal">
+      <h1 class="collection-header__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="collection-header__description">{{ collection.description }}</p>
+      {%- endif -%}
+      <p class="collection-header__count">{{ collection.products_count }} מוצרים</p>
+    </div>
+
+    {%- if collection.products.size > 0 -%}
+      <div class="collection-grid stagger-children">
+        {%- for product in collection.products -%}
+          <div class="collection-product glass-card">
+            <div class="collection-product__media">
+              {%- if product.compare_at_price > product.price -%}
+                {%- assign save_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+                <span class="badge badge--sale collection-product__badge">{{ save_pct }}% הנחה</span>
+              {%- endif -%}
+
+              <a href="{{ product.url }}">
+                {%- if product.featured_image -%}
+                  <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="500" height="500" loading="lazy">
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </a>
+            </div>
+
+            <div class="collection-product__info">
+              <h3 class="collection-product__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+
+              <div class="collection-product__price-row">
+                <span class="collection-product__price">{{ product.price | money }}</span>
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="collection-product__compare">{{ product.compare_at_price | money }}</span>
+                {%- endif -%}
+              </div>
+
+              {%- if product.available -%}
+                <a href="{{ product.url }}" class="btn btn--secondary collection-product__atc">לרכישה</a>
+              {%- else -%}
+                <button class="btn btn--secondary collection-product__atc" disabled>אזל המלאי</button>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div style="text-align: center; margin-top: var(--space-3xl);">
+          {{ paginate | default_pagination }}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="collection-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <p>אין מוצרים בקטגוריה הזו כרגע.</p>
+        <a href="/" class="btn btn--primary" style="margin-top: var(--space-lg);">חזרה לדף הבית</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Main",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Main"
+    }
+  ]
+}
+{% endschema %}

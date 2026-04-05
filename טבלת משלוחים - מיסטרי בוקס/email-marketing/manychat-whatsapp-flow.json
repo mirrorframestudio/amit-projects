@@ -1,0 +1,169 @@
+{
+  "name": "OneZone Jersey - WhatsApp Welcome Flow",
+  "trigger": {
+    "type": "new_conversation",
+    "channel": "whatsapp",
+    "condition": "subscriber_is_new"
+  },
+  "custom_fields": [
+    { "name": "category", "type": "text", "description": "קטגוריית חולצה" },
+    { "name": "team", "type": "text", "description": "קבוצה/שחקן" }
+  ],
+  "keywords": {
+    "human_agent": {
+      "words": ["נציג", "אנושי", "עזרה", "help", "מענה אנושי"],
+      "action": "go_to_step_handoff"
+    },
+    "shipping": {
+      "words": ["משלוח", "כמה זמן", "מתי מגיע", "shipping", "delivery", "זמן משלוח"],
+      "action": "go_to_step_shipping"
+    }
+  },
+  "flow": {
+    "step_1_welcome": {
+      "name": "הודעת פתיחה + תפריט",
+      "type": "send_message",
+      "message": {
+        "text": "היי! ברוכים הבאים ל-OneZone Jersey \ud83c\udfc6\u26bd\nהחנות המובילה לחולצות כדורגל!\n\nאיך נוכל לעזור לך?",
+        "buttons": [
+          { "label": "\ud83d\udc55 חולצות עונת 25/26", "action": "go_to", "target": "step_2_leagues", "save_field": { "category": "חולצות עונת 25/26" } },
+          { "label": "\ud83d\udd70\ufe0f חולצות רטרו", "action": "go_to", "target": "step_2_leagues", "save_field": { "category": "חולצות רטרו" } },
+          { "label": "\ud83d\udc76 חליפות ילדים", "action": "go_to", "target": "step_2_leagues_kids", "save_field": { "category": "חליפות ילדים" } },
+          { "label": "\ud83c\udfc0 NBA", "action": "go_to", "target": "step_2_nba" },
+          { "label": "\ud83e\udde5 קולקציית חורף", "action": "go_to", "target": "step_2_winter" },
+          { "label": "\ud83c\udf81 מוצרים נוספים", "action": "go_to", "target": "step_2_extras" },
+          { "label": "\ud83d\ude9a זמני משלוח", "action": "go_to", "target": "step_shipping" },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_2_leagues": {
+      "name": "בחירת ליגה (חולצות/רטרו)",
+      "type": "send_message",
+      "message": {
+        "text": "מעולה! מאיזו ליגה? \u26bd",
+        "buttons": [
+          { "label": "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f ליגה אנגלית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - ליגה אנגלית" } },
+          { "label": "\ud83c\uddea\ud83c\uddf8 ליגה ספרדית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - ליגה ספרדית" } },
+          { "label": "\ud83c\udde9\ud83c\uddea ליגה גרמנית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - ליגה גרמנית" } },
+          { "label": "\ud83c\uddee\ud83c\uddf9 ליגה איטלקית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - ליגה איטלקית" } },
+          { "label": "\ud83c\uddeb\ud83c\uddf7 ליגה צרפתית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - ליגה צרפתית" } },
+          { "label": "\ud83c\udf0d שאר העולם / נבחרות", "action": "go_to", "target": "step_3_team", "save_field": { "category": "{category} - שאר העולם" } },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_2_leagues_kids": {
+      "name": "בחירת ליגה (ילדים)",
+      "type": "send_message",
+      "message": {
+        "text": "חליפות ילדים! מאיזו ליגה? \ud83d\udc66\u26bd",
+        "buttons": [
+          { "label": "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f ליגה אנגלית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - ליגה אנגלית" } },
+          { "label": "\ud83c\uddea\ud83c\uddf8 ליגה ספרדית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - ליגה ספרדית" } },
+          { "label": "\ud83c\udde9\ud83c\uddea ליגה גרמנית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - ליגה גרמנית" } },
+          { "label": "\ud83c\uddee\ud83c\uddf9 ליגה איטלקית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - ליגה איטלקית" } },
+          { "label": "\ud83c\uddeb\ud83c\uddf7 ליגה צרפתית", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - ליגה צרפתית" } },
+          { "label": "\ud83c\udf0d שאר העולם / נבחרות", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חליפות ילדים - שאר העולם" } },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_2_nba": {
+      "name": "NBA - בחירת סוג",
+      "type": "send_message",
+      "message": {
+        "text": "NBA! \ud83c\udfc0 מה מעניין אותך?",
+        "buttons": [
+          { "label": "גופיות NBA", "action": "go_to", "target": "step_3_team", "save_field": { "category": "NBA - גופיות" } },
+          { "label": "מכנסי NBA", "action": "go_to", "target": "step_3_team", "save_field": { "category": "NBA - מכנסיים" } },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_2_winter": {
+      "name": "קולקציית חורף - בחירת סוג",
+      "type": "send_message",
+      "message": {
+        "text": "קולקציית חורף! \ud83e\udde5 מה מעניין אותך?",
+        "buttons": [
+          { "label": "חליפות ארוכות", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חורף - חליפות ארוכות" } },
+          { "label": "קפוצ'ונים", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חורף - קפוצ'ונים" } },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_2_extras": {
+      "name": "מוצרים נוספים",
+      "type": "send_message",
+      "message": {
+        "text": "מה מעניין אותך? \u2728",
+        "buttons": [
+          { "label": "\ud83c\udf81 מיסטרי בוקס", "action": "go_to", "target": "step_handoff_summary", "save_field": { "category": "מיסטרי בוקס", "team": "מיסטרי בוקס" } },
+          { "label": "\u2728 חולצות ספיישל", "action": "go_to", "target": "step_3_team", "save_field": { "category": "חולצות ספיישל" } },
+          { "label": "\ud83c\udfc6 מונדיאל 2026", "action": "go_to", "target": "step_3_team", "save_field": { "category": "מונדיאל 2026" } },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    },
+
+    "step_3_team": {
+      "name": "בחירת קבוצה/שחקן (טקסט חופשי)",
+      "type": "user_input",
+      "message": {
+        "text": "אחלה בחירה! \ud83d\udd25\nכתוב לי את שם הקבוצה או השחקן שאתה מחפש:"
+      },
+      "save_to_field": "team",
+      "validation": {
+        "timeout_seconds": 86400,
+        "timeout_message": "היי! ראינו שהתעניינת בחולצה \ud83d\udc55\nעדיין מחפש? נשמח לעזור!"
+      },
+      "next": "step_handoff_summary"
+    },
+
+    "step_handoff_summary": {
+      "name": "סיכום + העברה לנציג",
+      "type": "send_message",
+      "message": {
+        "text": "תודה! \ud83d\ude4f הנה סיכום מה שחיפשת:\n\n\ud83d\udcc2 קטגוריה: {category}\n\u26bd קבוצה/שחקן: {team}\n\nנציג שלנו יחזור אליך בהקדם עם מחיר וזמינות! \u23f3"
+      },
+      "actions": [
+        { "type": "assign_live_chat" },
+        { "type": "notify_admin", "message": "\ud83d\udd14 לקוח חדש מחכה!\nקטגוריה: {category}\nקבוצה: {team}" },
+        { "type": "add_tag", "tag": "waiting_for_reply" },
+        { "type": "stop_automation" }
+      ]
+    },
+
+    "step_handoff_direct": {
+      "name": "מענה אנושי ישיר",
+      "type": "send_message",
+      "message": {
+        "text": "בוודאי! \ud83d\ude0a נציג שלנו יחזור אליך בהקדם.\nבינתיים, אם תרצה לספר מה אתה מחפש - זה יעזור לנו לחזור אליך מהר יותר!"
+      },
+      "actions": [
+        { "type": "assign_live_chat" },
+        { "type": "notify_admin", "message": "\ud83d\udd14 לקוח ביקש מענה אנושי!" },
+        { "type": "add_tag", "tag": "waiting_for_reply" },
+        { "type": "stop_automation" }
+      ]
+    },
+
+    "step_shipping": {
+      "name": "זמני משלוח - תשובה אוטומטית",
+      "type": "send_message",
+      "message": {
+        "text": "\ud83d\ude9a זמני משלוח:\n\nמשלוחים מגיעים תוך 7-21 ימי עסקים.\n\n\u26a0\ufe0f בעקבות מצב המלחמה יתכנו עיכובים מסוימים, אבל אנחנו נדאג לעדכן אותך לאורך כל הדרך!\n\nיש לך שאלה נוספת? \ud83d\udc47",
+        "buttons": [
+          { "label": "\ud83d\udc55 רוצה להזמין חולצה", "action": "go_to", "target": "step_1_welcome" },
+          { "label": "\ud83d\udcac מענה אנושי", "action": "go_to", "target": "step_handoff_direct" }
+        ]
+      }
+    }
+  }
+}

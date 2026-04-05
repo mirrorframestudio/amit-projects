@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where node:*)",
+      "Bash(where npx:*)",
+      "Bash(ls *.html)",
+      "Bash(start http://localhost:61691)",
+      "Bash(start http://localhost:51632)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(start \"\" \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\mirror-frame-studio\\\\index.html\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://mirrorframestudio.github.io/mirror-frame-studio/)",
+      "Bash(grep -E \"\\\\.html$\")",
+      "Bash(wc -l \"C:/Users/amith/ads-dashboard/mirror-frame-studio/\"*.html)",
+      "Bash(ls images/*.png)",
+      "Bash(npm install:*)",
+      "Bash(node create_presentation.js)",
+      "Bash(where soffice:*)",
+      "Bash(where libreoffice:*)",
+      "Bash(python -m markitdown \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\mirror-frame-studio\\\\Mirror_Frame_Studio_Presentation.pptx\")",
+      "Bash(start \"\" \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\mirror-frame-studio\\\\Mirror_Frame_Studio_Presentation.pptx\")",
+      "Bash(python create_pricing_spreadsheet.py)",
+      "Bash(start \"\" \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\mirror-frame-studio\\\\Mirror_Frame_Studio_Pricing_Calculator.xlsx\")",
+      "WebFetch(domain:www.notion.so)",
+      "WebFetch(domain:tenfoldmarc.notion.site)",
+      "Bash(mv \"WhatsApp Image 2026-03-29 at 22.34.17.jpeg\" flex-gym-1.jpg)",
+      "Bash(mv \"WhatsApp Image 2026-03-29 at 22.34.17 \\(1\\).jpeg\" flex-gym-2.jpg)",
+      "Bash(ls -la flex-gym*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:drive.google.com)",
+      "Bash(npm init:*)",
+      "Bash(start http://localhost:3457)"
+    ]
+  }
+}

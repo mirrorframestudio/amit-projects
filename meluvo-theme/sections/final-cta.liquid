@@ -1,0 +1,160 @@
+{%- style -%}
+.final-cta {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.final-cta__inner {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-5xl) var(--space-xl);
+}
+
+.final-cta__glow-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: -200px;
+  right: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.12), transparent 70%);
+  filter: blur(60px);
+}
+
+.final-cta__glow-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  bottom: -150px;
+  left: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--color-secondary-rgb), 0.1), transparent 70%);
+  filter: blur(60px);
+}
+
+.final-cta__title {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--space-lg);
+  line-height: 1.2;
+}
+
+.final-cta__text {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--space-2xl);
+  line-height: 1.7;
+}
+
+.final-cta__buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2xl);
+}
+
+.final-cta__badges {
+  display: flex;
+  gap: var(--space-xl);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.final-cta__badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.final-cta__badge svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-success);
+}
+{%- endstyle -%}
+
+<section class="section section--dark final-cta">
+  <div class="final-cta__glow-1"></div>
+  <div class="final-cta__glow-2"></div>
+
+  <div class="container">
+    <div class="final-cta__inner reveal">
+      <h2 class="final-cta__title">
+        {{ section.settings.title_line1 }}<br>
+        <span class="gradient-text">{{ section.settings.title_highlight }}</span>
+      </h2>
+
+      <p class="final-cta__text">{{ section.settings.text }}</p>
+
+      <div class="final-cta__buttons">
+        <a href="{{ section.settings.cta_url }}" class="btn btn--primary btn--large pulse-glow">
+          {{ section.settings.cta_text }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </a>
+      </div>
+
+      <div class="final-cta__badges">
+        <span class="final-cta__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          30 ימי ניסיון
+        </span>
+        <span class="final-cta__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          משלוח חינם
+        </span>
+        <span class="final-cta__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          החזר כספי מלא
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Final CTA",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_line1",
+      "label": "Title line 1",
+      "default": "מוכנים לשינה טובה יותר?"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight",
+      "label": "Title highlighted",
+      "default": "תתחילו הלילה."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "הצטרפו לאלפי ישראלים שכבר שיפרו את איכות השינה, הריכוז והביצועים שלהם עם Meluvo."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "לרכישה עכשיו"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Final CTA"
+    }
+  ]
+}
+{% endschema %}

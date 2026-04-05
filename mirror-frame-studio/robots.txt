@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mirrorframestudio.github.io/mirror-frame-studio/sitemap.xml

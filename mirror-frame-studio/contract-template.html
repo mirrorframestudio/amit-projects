@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הסכם התקשרות — Mirror Frame Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:0}
+@media print{
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .no-print{display:none!important}
+  .page{box-shadow:none!important;margin:0!important;border-radius:0!important}
+  .page-break{page-break-before:always}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Heebo',sans-serif;background:#e8e8e8;color:#2c2c2c;line-height:1.7;font-size:13.5px}
+
+/* Toolbar */
+.toolbar{position:fixed;top:0;left:0;right:0;background:#0F2540;color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100;font-size:.9rem;direction:rtl}
+.toolbar-title{font-weight:700;font-size:1rem}
+.toolbar-actions{display:flex;gap:10px}
+.toolbar-btn{padding:8px 20px;border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s}
+.btn-print{background:#C8A84B;color:#0F2540}
+.btn-print:hover{background:#d4b85e}
+.btn-help{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-help:hover{background:rgba(255,255,255,.2)}
+.toolbar-hint{position:fixed;top:56px;left:20px;background:#fff;color:#333;padding:16px 20px;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.15);font-size:.85rem;line-height:1.8;max-width:320px;display:none;z-index:101;direction:rtl}
+.toolbar-hint.show{display:block}
+
+/* Page */
+.page{width:210mm;min-height:297mm;background:#fff;margin:60px auto 40px;box-shadow:0 4px 30px rgba(0,0,0,.12);border-radius:4px;position:relative;overflow:hidden;padding:0}
+
+/* Header */
+.header{background:linear-gradient(135deg,#0F2540 0%,#1a3354 100%);color:#fff;padding:36px 48px 32px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:-40%;right:-10%;width:50%;height:200%;background:radial-gradient(ellipse,rgba(200,168,75,.08),transparent 70%);pointer-events:none}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start}
+.logo-area{display:flex;align-items:center;gap:14px}
+.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,#C8A84B,#d4b85e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.logo-text h1{font-size:1.3rem;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.logo-text p{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:1px}
+.doc-badge{background:linear-gradient(135deg,#C8A84B,#d4b85e);color:#0F2540;padding:8px 22px;border-radius:50px;font-weight:800;font-size:1rem;letter-spacing:1px}
+.header-meta{display:flex;gap:32px;margin-top:20px;font-size:.82rem;color:rgba(255,255,255,.6)}
+.header-meta span{display:flex;align-items:center;gap:6px}
+.header-meta strong{color:#fff;font-weight:600}
+
+/* Content */
+.content{padding:32px 48px}
+[contenteditable]{outline:none;border-bottom:1px dashed rgba(200,168,75,.4);padding-bottom:1px;min-width:60px;display:inline-block}
+[contenteditable]:focus{border-bottom-color:#C8A84B;background:rgba(200,168,75,.06)}
+@media print{[contenteditable]{border-bottom:none}}
+
+/* Parties */
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.party-box{background:#f8f7f5;border-radius:12px;padding:18px 22px;border:1px solid #eee}
+.party-box h3{font-size:.85rem;font-weight:700;color:#0F2540;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #C8A84B;display:inline-block}
+.party-field{margin-bottom:6px;font-size:.85rem}
+.party-field label{color:#999;font-weight:500;font-size:.75rem}
+.party-field .val{font-weight:600;color:#2c2c2c}
+
+/* Sections */
+.section{margin-bottom:22px}
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#0F2540;color:#C8A84B;border-radius:8px;font-size:.8rem;font-weight:800;margin-left:10px;flex-shrink:0}
+.section h2{font-size:1.05rem;font-weight:700;color:#0F2540;margin-bottom:10px;display:flex;align-items:center}
+.section p,.section li{font-size:.88rem;color:#444;line-height:1.8}
+.section ol{padding-right:20px;margin:0}
+.section ol li{margin-bottom:4px}
+.section ul{list-style:none;padding:0}
+.section ul li{padding-right:16px;position:relative;margin-bottom:4px}
+.section ul li::before{content:'•';position:absolute;right:0;color:#C8A84B;font-weight:700}
+.highlight{background:rgba(200,168,75,.08);border-right:3px solid #C8A84B;padding:10px 16px;border-radius:0 8px 8px 0;margin:8px 0;font-size:.85rem;color:#333}
+
+/* Order details table */
+.order-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid #e8e4dc;margin:12px 0}
+.order-table th{background:#0F2540;color:#C8A84B;padding:10px 14px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:right}
+.order-table td{padding:10px 14px;border-bottom:1px solid #f0eeea;font-size:.85rem}
+.order-table tr:last-child td{border-bottom:none}
+.order-table tr:nth-child(even){background:#faf9f7}
+
+/* Signatures */
+.signatures{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px;padding-top:24px;border-top:2px solid #e8e4dc}
+.sig-box{text-align:center}
+.sig-box h4{font-size:.85rem;font-weight:700;color:#0F2540;margin-bottom:4px}
+.sig-box p{font-size:.75rem;color:#999;margin-bottom:12px}
+.sig-line{border-bottom:1px solid #ccc;height:50px;margin-bottom:6px}
+.sig-label{font-size:.7rem;color:#bbb}
+
+/* Footer */
+.footer{padding:16px 48px;background:#f8f7f5;border-top:1px solid #eee;display:flex;justify-content:space-between;font-size:.72rem;color:#999}
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar no-print">
+  <span class="toolbar-title">הסכם התקשרות — Mirror Frame Studio</span>
+  <div class="toolbar-actions">
+    <button class="toolbar-btn btn-help" onclick="document.querySelector('.toolbar-hint').classList.toggle('show')">? איך לערוך</button>
+    <button class="toolbar-btn btn-print" onclick="window.print()">שמור PDF / הדפס</button>
+  </div>
+</div>
+<div class="toolbar-hint no-print">
+  <strong>איך לערוך:</strong><br>
+  לחצו על כל טקסט <span style="color:#C8A84B;font-weight:700">עם קו תחתון מקווקו</span> כדי לערוך.<br>
+  שדות: שמות, תאריכים, מחירים, פרטי הזמנה.<br><br>
+  <strong>לשמור כ-PDF:</strong><br>
+  לחצו "שמור PDF" → "Save as PDF" → שמרו.
+</div>
+
+<!-- ========== PAGE 1 ========== -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-area">
+        <div class="logo-icon">🪞</div>
+        <div class="logo-text">
+          <h1>Mirror Frame Studio</h1>
+          <p>BRANDED ACRYLIC MIRRORS</p>
+        </div>
+      </div>
+      <div class="doc-badge">הסכם התקשרות</div>
+    </div>
+    <div class="header-meta">
+      <span>מספר הסכם: <strong contenteditable="true">MFS-C001</strong></span>
+      <span>תאריך: <strong contenteditable="true">14/03/2026</strong></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Intro -->
+    <p style="font-size:.9rem;color:#666;margin-bottom:24px;text-align:center">
+      הסכם זה נערך ונחתם ביום <strong contenteditable="true">___/___/2026</strong> בין הצדדים המפורטים להלן:
+    </p>
+
+    <!-- Parties -->
+    <div class="parties">
+      <div class="party-box">
+        <h3>נותן השירות ("הספק")</h3>
+        <div class="party-field">
+          <label>שם העסק:</label>
+          <div class="val">Mirror Frame Studio</div>
+        </div>
+        <div class="party-field">
+          <label>מספר עוסק מורשה:</label>
+          <div class="val">324082478</div>
+        </div>
+        <div class="party-field">
+          <label>כתובת:</label>
+          <div class="val" contenteditable="true">ישראל</div>
+        </div>
+        <div class="party-field">
+          <label>טלפון:</label>
+          <div class="val" dir="ltr">050-375-5705</div>
+        </div>
+        <div class="party-field">
+          <label>אימייל:</label>
+          <div class="val" dir="ltr">Mirrorframe17@gmail.com</div>
+        </div>
+      </div>
+      <div class="party-box">
+        <h3>מזמין השירות ("הלקוח")</h3>
+        <div class="party-field">
+          <label>שם העסק:</label>
+          <div class="val" contenteditable="true">__________________</div>
+        </div>
+        <div class="party-field">
+          <label>ח.פ / ע.מ:</label>
+          <div class="val" contenteditable="true">__________________</div>
+        </div>
+        <div class="party-field">
+          <label>איש קשר:</label>
+          <div class="val" contenteditable="true">__________________</div>
+        </div>
+        <div class="party-field">
+          <label>טלפון:</label>
+          <div class="val" contenteditable="true" dir="ltr">__________________</div>
+        </div>
+        <div class="party-field">
+          <label>אימייל:</label>
+          <div class="val" contenteditable="true" dir="ltr">__________________</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section">
+      <h2><span class="section-num">1</span>מהות ההסכם</h2>
+      <p>הספק יספק ללקוח מראה/ות אקריליק ממותגות בעיצוב אינסטגרם, בהתאם למפרט המפורט בסעיף 2 להלן. ההסכם כולל עיצוב גרפי, ייצור, ואספקה של המוצר/ים.</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+      <h2><span class="section-num">2</span>פירוט ההזמנה</h2>
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th style="width:40%">מוצר</th>
+            <th>גודל</th>
+            <th>כמות</th>
+            <th>מחיר ליח׳</th>
+            <th>סה״כ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td contenteditable="true">מראה ממותגת בעיצוב אינסטגרם + ערכת תלייה</td>
+            <td contenteditable="true">50×60 ס״מ</td>
+            <td contenteditable="true">1</td>
+            <td contenteditable="true">₪350</td>
+            <td><strong contenteditable="true">₪350</strong></td>
+          </tr>
+          <tr>
+            <td contenteditable="true">תאורת LED היקפית</td>
+            <td contenteditable="true">—</td>
+            <td contenteditable="true">1</td>
+            <td contenteditable="true">₪80</td>
+            <td><strong contenteditable="true">₪80</strong></td>
+          </tr>
+          <tr>
+            <td contenteditable="true">משלוח</td>
+            <td contenteditable="true">—</td>
+            <td contenteditable="true">1</td>
+            <td contenteditable="true">₪40</td>
+            <td><strong contenteditable="true">₪40</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="highlight">
+        <strong>סה״כ לפני מע״מ:</strong> ₪<span contenteditable="true">470</span> &nbsp;|&nbsp;
+        <strong>מע״מ (18%):</strong> ₪<span contenteditable="true">84.60</span> &nbsp;|&nbsp;
+        <strong>סה״כ כולל מע״מ:</strong> ₪<span contenteditable="true">554.60</span>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+      <h2><span class="section-num">3</span>תנאי תשלום</h2>
+      <ol>
+        <li><strong>מקדמה:</strong> 50% מסכום ההזמנה (₪<span contenteditable="true">277.30</span>) תשולם עם חתימת ההסכם ואישור העיצוב.</li>
+        <li><strong>יתרה:</strong> 50% (₪<span contenteditable="true">277.30</span>) תשולם עם אספקת המוצר, לפני המסירה ללקוח.</li>
+        <li>אמצעי תשלום: העברה בנקאית, אשראי, ביט, או פייבוקס.</li>
+        <li>איחור בתשלום מעל 7 ימים יחייב הצמדה + ריבית חוקית.</li>
+      </ol>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+      <h2><span class="section-num">4</span>תהליך העבודה ולוחות זמנים</h2>
+      <ol>
+        <li><strong>קבלת חומרים:</strong> הלקוח ימסור לוגו, תמונות וטקסטים תוך <span contenteditable="true">3</span> ימי עסקים מחתימת ההסכם.</li>
+        <li><strong>הגשת עיצוב:</strong> הספק יגיש הדמיה ראשונה תוך <span contenteditable="true">3</span> ימי עסקים מקבלת החומרים.</li>
+        <li><strong>סבבי תיקונים:</strong> כלולים עד <span contenteditable="true">2</span> סבבי תיקונים. תיקונים נוספים יחויבו ב-₪<span contenteditable="true">50</span> לסבב.</li>
+        <li><strong>אישור עיצוב:</strong> הלקוח יאשר את העיצוב הסופי בכתב (וואטסאפ/אימייל).</li>
+        <li><strong>ייצור:</strong> <span contenteditable="true">5–7</span> ימי עסקים מאישור העיצוב.</li>
+        <li><strong>אספקה:</strong> משלוח/איסוף עצמי בתיאום מראש.</li>
+      </ol>
+      <div class="highlight">
+        זמן אספקה משוער כולל: <strong><span contenteditable="true">10–14</span> ימי עסקים</strong> מחתימת ההסכם (בכפוף לשיתוף פעולה מצד הלקוח).
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section">
+      <h2><span class="section-num">5</span>אחריות</h2>
+      <ul>
+        <li>הספק מעניק אחריות על <strong>פגמי ייצור</strong> — סדקים, פגמים בהדפסה, או עיוותים שנגרמו בתהליך הייצור.</li>
+        <li>האחריות תקפה ל-<span contenteditable="true">90</span> יום מיום האספקה.</li>
+        <li>במקרה של פגם ייצור, הספק יחליף את המוצר ללא עלות.</li>
+        <li>האחריות <strong>אינה</strong> מכסה: נזק מכוון, נפילה, חשיפה ממושכת לשמש ישירה, או שימוש לא סביר.</li>
+        <li>התקנה לא נכונה שגרמה לנזק אינה באחריות הספק.</li>
+        <li><strong>נזק במשלוח:</strong> נזק שנגרם במהלך המשלוח — הלקוח חייב לדווח תוך 24 שעות מקבלת המוצר, אחרת לא תינתן אחריות על נזק זה.</li>
+      </ul>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section">
+      <h2><span class="section-num">6</span>ביטולים והחזרות</h2>
+      <ol>
+        <li><strong>ביטול לפני אישור עיצוב:</strong> החזר מלא של המקדמה בניכוי ₪<span contenteditable="true">100</span> דמי עיצוב.</li>
+        <li><strong>ביטול לאחר אישור עיצוב ולפני ייצור:</strong> החזר 50% מהמקדמה.</li>
+        <li><strong>ביטול לאחר תחילת ייצור:</strong> לא ניתן לבטל. המוצר מותאם אישית ולא ניתן להחזרה.</li>
+        <li>שינויים בעיצוב לאחר אישור ותחילת ייצור יחויבו בעלות ייצור מחדש.</li>
+      </ol>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section">
+      <h2><span class="section-num">7</span>קניין רוחני</h2>
+      <ul>
+        <li>הלקוח מצהיר כי הוא בעל הזכויות בלוגו ובחומרים הגרפיים שמסר לספק.</li>
+        <li>הספק רשאי להשתמש בתמונות המוצר המוגמר לצורך פרסום ושיווק (פורטפוליו, אתר, רשתות חברתיות), אלא אם הלקוח ביקש אחרת בכתב.</li>
+        <li>העיצוב הגרפי של המראה הוא קניינו של הספק עד לתשלום מלא.</li>
+      </ul>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section">
+      <h2><span class="section-num">8</span>אחריות הלקוח</h2>
+      <ul>
+        <li>למסור חומרים (לוגו, תמונות, טקסטים) באיכות מספקת ובזמן.</li>
+        <li>לאשר/לדחות את העיצוב תוך <span contenteditable="true">3</span> ימי עסקים מהגשתו. אי מתן מענה ייחשב כאישור.</li>
+        <li>לוודא שהקיר/משטח מתאים לתלייה של המוצר.</li>
+      </ul>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section">
+      <h2><span class="section-num">9</span>כללי</h2>
+      <ul>
+        <li>הסכם זה ממצה את כל ההסכמות בין הצדדים ומחליף כל הסכם או הבנה קודמים.</li>
+        <li>שינויים בהסכם יהיו בתוקף רק אם נעשו בכתב ונחתמו על ידי שני הצדדים.</li>
+        <li>סמכות שיפוט בלעדית בבתי המשפט המוסמכים ב<span contenteditable="true">תל אביב-יפו</span>.</li>
+        <li>כתובות הצדדים לצורך הסכם זה הן כמפורט בראש ההסכם.</li>
+      </ul>
+    </div>
+
+    <!-- Signatures -->
+    <div class="signatures">
+      <div class="sig-box">
+        <h4>הספק — Mirror Frame Studio</h4>
+        <p>עמית שכטר</p>
+        <div class="sig-line"></div>
+        <div class="sig-label">חתימה + תאריך</div>
+      </div>
+      <div class="sig-box">
+        <h4>הלקוח</h4>
+        <p contenteditable="true">שם מלא</p>
+        <div class="sig-line"></div>
+        <div class="sig-label">חתימה + תאריך</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Mirror Frame Studio | ע.מ 324082478 | 050-375-5705</span>
+    <span>הסכם התקשרות — עמוד 1 מתוך 1</span>
+  </div>
+
+</div>
+
+</body>
+</html>

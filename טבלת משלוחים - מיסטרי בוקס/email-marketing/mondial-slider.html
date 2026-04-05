@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.mondial-slider {
+  width: 100%;
+  max-width: 1920px;
+  height: 550px;
+  margin: 0 auto;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.mondial-slider::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+  z-index: 10;
+}
+
+.bg-pattern {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(255,215,0,0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 50%, rgba(255,215,0,0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(26,26,46,0.03) 0%, transparent 40%);
+}
+
+.text-section {
+  position: absolute;
+  z-index: 5;
+  text-align: center;
+  width: 100%;
+  top: 20px;
+  pointer-events: none;
+}
+
+.mondial-badge {
+  display: inline-block;
+  background: #1a1a2e;
+  color: #FFD700;
+  padding: 8px 30px;
+  border-radius: 30px;
+  font-size: 14px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.main-title {
+  font-size: 48px;
+  font-weight: 900;
+  color: #1a1a2e;
+  margin: 8px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.sub-title {
+  font-size: 20px;
+  color: #888;
+  margin-bottom: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #1a1a2e;
+  color: #FFD700;
+  padding: 12px 36px;
+  font-size: 17px;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: 50px;
+  pointer-events: all;
+  transition: all 0.3s;
+  border: 2px solid #1a1a2e;
+}
+
+.cta-button:hover {
+  background: #FFD700;
+  color: #1a1a2e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Jersey images */
+.jersey {
+  position: absolute;
+  bottom: 30px;
+  opacity: 0;
+  transition: none;
+}
+
+.jersey img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.12));
+}
+
+/* 5 positions for group view */
+.pos-1 { left: 2%; height: 55%; }
+.pos-2 { left: 20%; height: 65%; }
+.pos-3 { left: 50%; transform: translateX(-50%); height: 75%; }
+.pos-4 { right: 20%; height: 65%; }
+.pos-5 { right: 2%; height: 55%; }
+
+/* Solo center */
+.pos-solo {
+  left: 50%;
+  transform: translateX(-50%);
+  height: 80%;
+}
+
+/* Slide in animations */
+.anim-in-1 { animation: slideIn1 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-in-2 { animation: slideIn2 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-in-3 { animation: slideIn3 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-in-4 { animation: slideIn4 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-in-5 { animation: slideIn5 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-in-solo { animation: slideInSolo 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+.visible-jersey { opacity: 1 !important; }
+.float-1 { animation: float 3s ease-in-out infinite !important; opacity: 1 !important; }
+.float-2 { animation: float 3s ease-in-out 0.3s infinite !important; opacity: 1 !important; }
+.float-3 { animation: float 3s ease-in-out 0.6s infinite !important; opacity: 1 !important; }
+.float-4 { animation: float 3s ease-in-out 0.9s infinite !important; opacity: 1 !important; }
+.float-5 { animation: float 3s ease-in-out 1.2s infinite !important; opacity: 1 !important; }
+
+@keyframes slideIn1 {
+  from { opacity:0; transform: translateX(-120px) rotate(-12deg) scale(0.7); }
+  to { opacity:1; transform: translateX(0) rotate(0) scale(1); }
+}
+@keyframes slideIn2 {
+  from { opacity:0; transform: translateX(-80px) rotate(-8deg) scale(0.7); }
+  to { opacity:1; transform: translateX(0) rotate(0) scale(1); }
+}
+@keyframes slideIn3 {
+  from { opacity:0; transform: translateX(-50%) translateY(60px) scale(0.6); }
+  to { opacity:1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes slideIn4 {
+  from { opacity:0; transform: translateX(80px) rotate(8deg) scale(0.7); }
+  to { opacity:1; transform: translateX(0) rotate(0) scale(1); }
+}
+@keyframes slideIn5 {
+  from { opacity:0; transform: translateX(120px) rotate(12deg) scale(0.7); }
+  to { opacity:1; transform: translateX(0) rotate(0) scale(1); }
+}
+@keyframes slideInSolo {
+  from { opacity:0; transform: translateX(-50%) translateY(80px) scale(0.6) rotate(5deg); }
+  to { opacity:1; transform: translateX(-50%) translateY(0) scale(1) rotate(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Country name */
+.country-name {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  color: #aaa;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 10;
+}
+.country-name.visible { opacity: 1; }
+
+/* Dots */
+.flags-bar {
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+}
+
+.flag-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.flag-dot.active {
+  background: #1a1a2e;
+  transform: scale(1.4);
+}
+
+@media (max-width: 768px) {
+  .mondial-slider { height: 400px; }
+  .main-title { font-size: 30px; }
+  .sub-title { font-size: 14px; }
+  .pos-1, .pos-5 { display: none; }
+  .pos-2 { left: 5%; height: 50%; }
+  .pos-3 { height: 60%; }
+  .pos-4 { right: 5%; height: 50%; }
+  .pos-solo { height: 65%; }
+}
+</style>
+</head>
+<body>
+
+<div class="mondial-slider">
+  <div class="bg-pattern"></div>
+
+  <div class="text-section">
+    <div class="mondial-badge">🏆 WORLD CUP 2026 🏆</div>
+    <h1 class="main-title">מונדיאל 2026</h1>
+    <p class="sub-title">ארגנטינה · ספרד · פורטוגל · איטליה · ברזיל</p>
+    <a href="https://onezonejersey.com/product-category/%d7%9e%d7%95%d7%a0%d7%93%d7%99%d7%90%d7%9c-2026/" class="cta-button">⚽ לקולקציה המלאה</a>
+  </div>
+
+  <div class="jersey" id="j0"><img src="https://onezonejersey.com/wp-content/uploads/2026/03/ארגנטינה-חוץ-מסי.png" alt="ארגנטינה"></div>
+  <div class="jersey" id="j1"><img src="https://onezonejersey.com/wp-content/uploads/2026/03/ספרד-חוץ-ילדים.png" alt="ספרד"></div>
+  <div class="jersey" id="j2"><img src="https://onezonejersey.com/wp-content/uploads/2026/03/פורטוגל-חוץ.png" alt="פורטוגל"></div>
+  <div class="jersey" id="j3"><img src="https://onezonejersey.com/wp-content/uploads/2025/11/italy2.png" alt="איטליה"></div>
+  <div class="jersey" id="j4"><img src="https://onezonejersey.com/wp-content/uploads/2026/03/brazil-away.webp" alt="ברזיל"></div>
+
+  <div class="country-name" id="countryName"></div>
+
+  <div class="flags-bar">
+    <div class="flag-dot active" data-index="0"></div>
+    <div class="flag-dot" data-index="1"></div>
+    <div class="flag-dot" data-index="2"></div>
+    <div class="flag-dot" data-index="3"></div>
+    <div class="flag-dot" data-index="4"></div>
+    <div class="flag-dot" data-index="5"></div>
+  </div>
+</div>
+
+<script>
+const J = [
+  document.getElementById('j0'),
+  document.getElementById('j1'),
+  document.getElementById('j2'),
+  document.getElementById('j3'),
+  document.getElementById('j4')
+];
+const dots = document.querySelectorAll('.flag-dot');
+const cName = document.getElementById('countryName');
+const names = ['ARGENTINA','SPAIN','PORTUGAL','ITALY','BRAZIL'];
+let phase = 0;
+const totalPhases = 6; // 0=all, 1-5=solo
+
+function resetAll() {
+  J.forEach(j => {
+    j.className = 'jersey';
+    j.style.opacity = '0';
+  });
+  cName.classList.remove('visible');
+  cName.textContent = '';
+}
+
+function showAll() {
+  resetAll();
+  const positions = ['pos-1','pos-2','pos-3','pos-4','pos-5'];
+  const anims = ['anim-in-1','anim-in-2','anim-in-3','anim-in-4','anim-in-5'];
+  const floats = ['float-1','float-2','float-3','float-4','float-5'];
+
+  J.forEach((j, i) => {
+    j.classList.add(positions[i]);
+    setTimeout(() => {
+      j.classList.add(anims[i]);
+      j.style.opacity = '1';
+    }, i * 80);
+    setTimeout(() => {
+      j.style.opacity = '1';
+      j.classList.add('visible-jersey');
+      j.classList.add(floats[i]);
+    }, 700 + i * 80);
+  });
+
+  updateDots(0);
+}
+
+function showSolo(index) {
+  resetAll();
+  J[index].classList.add('pos-solo');
+  setTimeout(() => {
+    J[index].classList.add('anim-in-solo');
+    J[index].style.opacity = '1';
+  }, 50);
+  setTimeout(() => {
+    J[index].style.opacity = '1';
+    J[index].classList.add('visible-jersey');
+    J[index].classList.add('float-1');
+  }, 650);
+
+  cName.textContent = names[index];
+  cName.classList.add('visible');
+  updateDots(index + 1);
+}
+
+function updateDots(idx) {
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function next() {
+  phase = (phase + 1) % totalPhases;
+  if (phase === 0) showAll();
+  else showSolo(phase - 1);
+}
+
+// Init
+showAll();
+setInterval(next, 2800);
+
+// Click dots
+dots.forEach((d, i) => {
+  d.addEventListener('click', () => {
+    phase = i;
+    if (i === 0) showAll();
+    else showSolo(i - 1);
+  });
+});
+</script>
+
+</body>
+</html>

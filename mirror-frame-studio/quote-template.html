@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הצעת מחיר — Mirror Frame Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ========== PRINT / PDF SETTINGS ========== */
+@page{size:A4;margin:0}
+@media print{
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .no-print{display:none!important}
+  .page{box-shadow:none!important;margin:0!important;border-radius:0!important}
+}
+
+/* ========== BASE ========== */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Heebo',sans-serif;background:#e8e8e8;color:#2c2c2c;line-height:1.6;font-size:14px}
+
+/* ========== TOOLBAR (not printed) ========== */
+.toolbar{position:fixed;top:0;left:0;right:0;background:#0F2540;color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100;font-size:.9rem;direction:rtl}
+.toolbar-title{font-weight:700;font-size:1rem}
+.toolbar-actions{display:flex;gap:10px}
+.toolbar-btn{padding:8px 20px;border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s}
+.btn-print{background:#C8A84B;color:#0F2540}
+.btn-print:hover{background:#d4b85e}
+.btn-help{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-help:hover{background:rgba(255,255,255,.2)}
+.toolbar-hint{position:fixed;top:56px;left:20px;background:#fff;color:#333;padding:16px 20px;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.15);font-size:.85rem;line-height:1.8;max-width:320px;display:none;z-index:101;direction:rtl}
+.toolbar-hint.show{display:block}
+
+/* ========== PAGE ========== */
+.page{width:210mm;min-height:297mm;background:#fff;margin:60px auto 40px;box-shadow:0 4px 30px rgba(0,0,0,.12);border-radius:4px;position:relative;overflow:hidden}
+
+/* ========== HEADER ========== */
+.header{background:linear-gradient(135deg,#0F2540 0%,#1a3354 100%);color:#fff;padding:40px 48px 36px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:-40%;right:-10%;width:50%;height:200%;background:radial-gradient(ellipse,rgba(200,168,75,.08),transparent 70%);pointer-events:none}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
+.logo-area{display:flex;align-items:center;gap:14px}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,#C8A84B,#d4b85e);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.logo-text h1{font-size:1.4rem;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.logo-text p{font-size:.75rem;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:1px}
+.quote-badge{background:linear-gradient(135deg,#C8A84B,#d4b85e);color:#0F2540;padding:8px 22px;border-radius:50px;font-weight:800;font-size:1.1rem;letter-spacing:1px}
+.header-details{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.detail-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 20px}
+.detail-box label{font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;display:block;margin-bottom:4px}
+.detail-box .value{font-size:.95rem;font-weight:600;color:#fff}
+[contenteditable]{outline:none;border-bottom:1px dashed rgba(200,168,75,.3);padding-bottom:1px;min-width:60px;display:inline-block}
+[contenteditable]:focus{border-bottom-color:#C8A84B;background:rgba(200,168,75,.05)}
+@media print{[contenteditable]{border-bottom:none}}
+
+/* ========== CLIENT INFO ========== */
+.client-section{padding:32px 48px 0}
+.section-label{font-size:.7rem;color:#999;text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#e8e4dc}
+.client-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.client-field{padding:12px 16px;background:#f8f7f5;border-radius:10px;border:1px solid #eee}
+.client-field label{font-size:.7rem;color:#999;font-weight:600;display:block;margin-bottom:2px}
+.client-field .value{font-size:.95rem;font-weight:600;color:#2c2c2c}
+
+/* ========== PRODUCTS TABLE ========== */
+.products-section{padding:28px 48px 0}
+.products-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;border:1px solid #e8e4dc}
+.products-table thead th{background:#0F2540;color:#C8A84B;padding:14px 16px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:right}
+.products-table thead th:last-child,.products-table thead th:nth-child(4),.products-table thead th:nth-child(3){text-align:center}
+.products-table tbody td{padding:14px 16px;border-bottom:1px solid #f0eeea;font-size:.9rem;vertical-align:top}
+.products-table tbody tr:last-child td{border-bottom:none}
+.products-table tbody tr:nth-child(even){background:#faf9f7}
+.products-table tbody td:last-child,.products-table tbody td:nth-child(4),.products-table tbody td:nth-child(3){text-align:center}
+.product-name{font-weight:700;color:#0F2540;margin-bottom:2px}
+.product-desc{font-size:.78rem;color:#888;line-height:1.5}
+
+/* ========== TOTALS ========== */
+.totals-section{padding:20px 48px 0;display:flex;justify-content:flex-start}
+.totals-box{min-width:280px;border:2px solid #e8e4dc;border-radius:12px;overflow:hidden}
+.total-row{display:flex;justify-content:space-between;padding:10px 20px;font-size:.9rem}
+.total-row:not(:last-child){border-bottom:1px solid #f0eeea}
+.total-row.grand{background:#0F2540;color:#fff;padding:14px 20px}
+.total-row.grand .total-label{font-weight:700;font-size:.95rem}
+.total-row.grand .total-value{font-weight:800;font-size:1.15rem;color:#C8A84B}
+.total-label{color:#666;font-weight:500}
+.total-value{font-weight:700;color:#2c2c2c}
+
+/* ========== NOTES ========== */
+.notes-section{padding:28px 48px 0}
+.notes-box{background:#f8f7f5;border-radius:12px;padding:20px 24px;border:1px solid #eee}
+.notes-box h4{font-size:.85rem;font-weight:700;color:#0F2540;margin-bottom:8px}
+.notes-list{list-style:none;padding:0}
+.notes-list li{font-size:.82rem;color:#555;padding:4px 0;padding-right:16px;position:relative;line-height:1.7}
+.notes-list li::before{content:'•';position:absolute;right:0;color:#C8A84B;font-weight:700}
+
+/* ========== TERMS ========== */
+.terms-section{padding:24px 48px 0}
+.terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.term-card{text-align:center;padding:16px;background:#f8f7f5;border-radius:10px;border:1px solid #eee}
+.term-icon{font-size:1.5rem;margin-bottom:6px}
+.term-card h5{font-size:.8rem;font-weight:700;color:#0F2540;margin-bottom:2px}
+.term-card p{font-size:.72rem;color:#888;line-height:1.5}
+
+/* ========== FOOTER ========== */
+.footer{margin-top:32px;padding:20px 48px;background:#f8f7f5;border-top:2px solid #C8A84B;display:flex;justify-content:space-between;align-items:center}
+.footer-contact{font-size:.78rem;color:#666;line-height:1.8}
+.footer-contact strong{color:#0F2540}
+.footer-sign{text-align:center}
+.footer-sign p{font-size:.75rem;color:#999;margin-bottom:4px}
+.sign-line{width:160px;border-bottom:1px solid #ccc;height:40px}
+.footer-stamp{font-size:.65rem;color:#bbb;margin-top:20px;text-align:center;padding-bottom:16px}
+
+/* ========== VALIDITY RIBBON ========== */
+.validity{position:absolute;top:20px;left:-36px;background:#C8A84B;color:#0F2540;padding:6px 40px;font-size:.7rem;font-weight:700;transform:rotate(-45deg);letter-spacing:1px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+</style>
+</head>
+<body>
+
+<!-- ========== TOOLBAR (won't print) ========== -->
+<div class="toolbar no-print">
+  <span class="toolbar-title">הצעת מחיר — Mirror Frame Studio</span>
+  <div class="toolbar-actions">
+    <button class="toolbar-btn btn-help" onclick="document.querySelector('.toolbar-hint').classList.toggle('show')">? איך לערוך</button>
+    <button class="toolbar-btn btn-print" onclick="window.print()">שמור PDF / הדפס</button>
+  </div>
+</div>
+<div class="toolbar-hint no-print">
+  <strong>איך לערוך:</strong><br>
+  לחצו על כל טקסט <span style="color:#C8A84B;font-weight:700">מודגש בזהב</span> כדי לערוך אותו.<br>
+  שדות ניתנים לעריכה: שם לקוח, טלפון, מוצרים, מחירים, הערות...<br><br>
+  <strong>לשמור כ-PDF:</strong><br>
+  לחצו "שמור PDF" → בחרו "Save as PDF" כמדפסת → שמרו.<br><br>
+  <strong>טיפ:</strong> ניתן להוסיף/למחוק שורות בטבלה ישירות.
+</div>
+
+<!-- ========== PAGE ========== -->
+<div class="page">
+
+  <!-- Validity ribbon -->
+  <div class="validity">בתוקף 14 יום</div>
+
+  <!-- ========== HEADER ========== -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-area">
+        <div class="logo-icon">🪞</div>
+        <div class="logo-text">
+          <h1>Mirror Frame Studio</h1>
+          <p>BRANDED ACRYLIC MIRRORS</p>
+        </div>
+      </div>
+      <div class="quote-badge">הצעת מחיר</div>
+    </div>
+    <div class="header-details">
+      <div class="detail-box">
+        <label>מספר הצעה</label>
+        <div class="value"><span contenteditable="true">MFS-001</span></div>
+      </div>
+      <div class="detail-box">
+        <label>תאריך</label>
+        <div class="value"><span contenteditable="true">14/03/2026</span></div>
+      </div>
+      <div class="detail-box">
+        <label>תוקף</label>
+        <div class="value"><span contenteditable="true">28/03/2026</span></div>
+      </div>
+      <div class="detail-box">
+        <label>איש קשר</label>
+        <div class="value"><span contenteditable="true">עמית — Mirror Frame Studio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CLIENT INFO ========== -->
+  <div class="client-section">
+    <div class="section-label">פרטי הלקוח</div>
+    <div class="client-grid">
+      <div class="client-field">
+        <label>שם העסק</label>
+        <div class="value"><span contenteditable="true">שם העסק של הלקוח</span></div>
+      </div>
+      <div class="client-field">
+        <label>איש קשר</label>
+        <div class="value"><span contenteditable="true">שם מלא</span></div>
+      </div>
+      <div class="client-field">
+        <label>טלפון</label>
+        <div class="value"><span contenteditable="true" dir="ltr">050-000-0000</span></div>
+      </div>
+      <div class="client-field">
+        <label>אימייל</label>
+        <div class="value"><span contenteditable="true" dir="ltr">email@example.com</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== PRODUCTS TABLE ========== -->
+  <div class="products-section">
+    <div class="section-label">פירוט המוצרים</div>
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th style="width:45%">מוצר</th>
+          <th>גודל</th>
+          <th>כמות</th>
+          <th>מחיר ליח׳</th>
+          <th>סה״כ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="product-name" contenteditable="true">מראה ממותגת בעיצוב אינסטגרם</div>
+            <div class="product-desc" contenteditable="true">אקריליק שקוף 3 מ״מ, הדפסה UV צבעונית, עיצוב פוסט אינסטגרם מותאם אישית עם לוגו, שם העסק ומיקום. כולל ערכת תלייה.</div>
+          </td>
+          <td><span contenteditable="true">50×60</span> ס״מ</td>
+          <td><span contenteditable="true">1</span></td>
+          <td>₪<span contenteditable="true">350</span></td>
+          <td><strong>₪<span contenteditable="true">350</span></strong></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="product-name" contenteditable="true">תאורת LED היקפית</div>
+            <div class="product-desc" contenteditable="true">רצועת LED חמה/קרה/ניטרלית מותקנת מאחורי המראה, מתג מגע, חיבור USB.</div>
+          </td>
+          <td><span contenteditable="true">—</span></td>
+          <td><span contenteditable="true">1</span></td>
+          <td>₪<span contenteditable="true">80</span></td>
+          <td><strong>₪<span contenteditable="true">80</span></strong></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="product-name" contenteditable="true">עיצוב גרפי מותאם</div>
+            <div class="product-desc" contenteditable="true">עיצוב ייחודי לפי המיתוג של העסק — לוגו, צבעים, פונטים, וטקסטים בהתאמה אישית. כולל 2 סבבי תיקונים.</div>
+          </td>
+          <td><span contenteditable="true">—</span></td>
+          <td><span contenteditable="true">1</span></td>
+          <td><span contenteditable="true">חינם</span></td>
+          <td><strong><span contenteditable="true">₪0</span></strong></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="product-name" contenteditable="true">משלוח והתקנה</div>
+            <div class="product-desc" contenteditable="true">משלוח עד הבית/העסק באריזה מוגנת. התקנה עצמית פשוטה (ערכת תלייה כלולה).</div>
+          </td>
+          <td><span contenteditable="true">—</span></td>
+          <td><span contenteditable="true">1</span></td>
+          <td>₪<span contenteditable="true">40</span></td>
+          <td><strong>₪<span contenteditable="true">40</span></strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ========== TOTALS ========== -->
+  <div class="totals-section">
+    <div class="totals-box">
+      <div class="total-row">
+        <span class="total-label">סכום ביניים</span>
+        <span class="total-value">₪<span contenteditable="true">470</span></span>
+      </div>
+      <div class="total-row">
+        <span class="total-label">מע״מ (18%)</span>
+        <span class="total-value">₪<span contenteditable="true">84.60</span></span>
+      </div>
+      <div class="total-row grand">
+        <span class="total-label">סה״כ לתשלום</span>
+        <span class="total-value">₪<span contenteditable="true">554.60</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== NOTES ========== -->
+  <div class="notes-section">
+    <div class="section-label">הערות</div>
+    <div class="notes-box">
+      <ul class="notes-list" contenteditable="true">
+        <li>זמן אספקה: 5–7 ימי עסקים מאישור העיצוב</li>
+        <li>העיצוב יישלח לאישור הלקוח לפני הייצור</li>
+        <li>התשלום: 50% מקדמה בהזמנה, 50% באספקה</li>
+        <li>ניתן לשלם באשראי, ביט, או העברה בנקאית</li>
+        <li>אחריות על פגמי ייצור — החלפה מלאה</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========== TERMS ========== -->
+  <div class="terms-section">
+    <div class="section-label">למה Mirror Frame Studio?</div>
+    <div class="terms-grid">
+      <div class="term-card">
+        <div class="term-icon">🎨</div>
+        <h5>עיצוב מותאם אישית</h5>
+        <p>כל מראה מעוצבת לפי המיתוג הייחודי שלכם — לוגו, צבעים ושפה עיצובית</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">📸</div>
+        <h5>שיווק אורגני</h5>
+        <p>כל סלפי של לקוח = פוסט שמשווק את העסק שלכם בחינם</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">💎</div>
+        <h5>חומרים פרימיום</h5>
+        <p>אקריליק איכותי, הדפסה UV עמידה, ערכת תלייה מקצועית</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <div class="footer">
+    <div class="footer-contact">
+      <strong>Mirror Frame Studio</strong><br>
+      ע.מ: 324082478<br>
+      טלפון: <span dir="ltr">050-375-5705</span><br>
+      אימייל: <span dir="ltr">Mirrorframe17@gmail.com</span><br>
+      אינסטגרם: <span dir="ltr">@mirror_frameil</span>
+    </div>
+    <div class="footer-sign">
+      <p>חתימה</p>
+      <div class="sign-line"></div>
+    </div>
+  </div>
+
+  <div class="footer-stamp">
+    המחירים אינם כוללים מע״מ (18%) · הצעה זו בתוקף ל-14 יום מתאריך ההנפקה
+  </div>
+
+</div>
+
+</body>
+</html>

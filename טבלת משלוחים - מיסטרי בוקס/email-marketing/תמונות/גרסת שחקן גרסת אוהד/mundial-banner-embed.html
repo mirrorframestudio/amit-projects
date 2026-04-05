@@ -1,0 +1,128 @@
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Force parent Elementor container to have no padding */
+.oz-mundial-wrap,
+.oz-mundial-wrap > .elementor-widget-wrap,
+.oz-mundial-wrap > .elementor-widget-container,
+.elementor-widget-container:has(.oz-mundial),
+.elementor-element:has(.oz-mundial) > .elementor-widget-container,
+.elementor-section:has(.oz-mundial),
+.e-con:has(.oz-mundial){
+  padding:0 !important;margin:0 !important;max-width:100vw !important;width:100vw !important;overflow:hidden !important;
+}
+.oz-mundial{
+  width:100vw;max-width:100vw;margin-left:calc(-50vw + 50%);position:relative;overflow:hidden;
+  background:url('https://onezonejersey.com/wp-content/uploads/2026/03/IMG_9450-scaled.jpg') center/cover no-repeat;
+  border-radius:0;padding:0;font-family:'Rubik',sans-serif;
+}
+.oz-mundial *{margin:0;padding:0;box-sizing:border-box;font-family:'Rubik',sans-serif}
+.oz-mundial::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(10,22,40,0.55) 0%,rgba(13,31,60,0.5) 40%,rgba(26,10,46,0.55) 100%);
+  z-index:1;
+}
+@media(max-width:600px){
+  .oz-mundial{background-image:url('https://onezonejersey.com/wp-content/uploads/2026/03/IMG_9451.jpg');margin-left:0;width:100%}
+}
+.oz-particle{position:absolute;border-radius:50%;z-index:1;opacity:0.15;animation:ozFloat 8s ease-in-out infinite}
+.oz-particle:nth-child(1){width:120px;height:120px;background:radial-gradient(circle,#c8a44e,transparent);top:10%;right:-20px;animation-delay:0s}
+.oz-particle:nth-child(2){width:80px;height:80px;background:radial-gradient(circle,#3b82f6,transparent);bottom:20%;left:-10px;animation-delay:2s}
+.oz-particle:nth-child(3){width:60px;height:60px;background:radial-gradient(circle,#ef4444,transparent);top:30%;left:30%;animation-delay:4s}
+@keyframes ozFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.1)}}
+.oz-mundial-inner{position:relative;z-index:2;padding:32px 24px 28px}
+.oz-mundial-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(200,164,78,0.15),rgba(200,164,78,0.05));border:1px solid rgba(200,164,78,0.25);border-radius:50px;padding:6px 16px;margin-bottom:16px}
+.oz-mundial-badge-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;animation:ozPulse 2s ease-in-out infinite}
+.oz-mundial-badge span{font-size:12px;font-weight:700;color:#c8a44e;letter-spacing:0.5px}
+@keyframes ozPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.oz-mundial-title{margin-bottom:6px}
+.oz-mundial-title h2{font-size:32px;font-weight:900;line-height:1.15;color:#fff}
+.oz-mundial-title h2 .gold{background:linear-gradient(135deg,#c8a44e,#e8c96a,#c8a44e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.oz-mundial-sub{font-size:14px;color:#94a3b8;margin-bottom:24px;line-height:1.6}
+.oz-countdown-label{font-size:12px;color:#64748b;font-weight:700;letter-spacing:1px;margin-bottom:10px;text-transform:uppercase}
+.oz-countdown{display:flex;gap:10px;margin-bottom:24px;direction:ltr;justify-content:center}
+.oz-count-box{text-align:center;min-width:64px;background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 8px;position:relative;overflow:hidden}
+.oz-count-box::after{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(255,255,255,0.04)}
+.oz-count-num{font-size:28px;font-weight:900;color:#fff;line-height:1;display:block;margin-bottom:4px}
+.oz-count-label{font-size:9px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.oz-coupon{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;padding:12px 20px;background:rgba(200,164,78,0.1);border:2px dashed rgba(200,164,78,0.5);border-radius:12px;cursor:pointer;transition:all 0.3s}
+.oz-coupon:hover{background:rgba(200,164,78,0.15);border-color:#c8a44e}
+.oz-coupon-label{font-size:13px;color:#94a3b8;font-weight:600}
+.oz-coupon-code{font-size:22px;font-weight:900;letter-spacing:3px;color:#c8a44e;background:linear-gradient(135deg,#c8a44e,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.oz-coupon-copy{font-size:10px;color:#64748b;font-weight:600}
+.oz-mundial-cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#c8a44e,#d4a843,#e8c96a);color:#0a0a0a;font-size:16px;font-weight:800;padding:14px 32px;border-radius:14px;border:none;cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:0 4px 20px rgba(200,164,78,0.3)}
+.oz-mundial-cta:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(200,164,78,0.4)}
+.oz-mundial-cta svg{width:20px;height:20px;transition:transform 0.3s}
+.oz-mundial-cta:hover svg{transform:translateX(-4px)}
+.oz-mundial-stats{display:flex;gap:0;margin-top:24px;border-top:1px solid rgba(255,255,255,0.06);padding-top:20px}
+.oz-stat{flex:1;text-align:center;position:relative}
+.oz-stat:not(:last-child)::after{content:'';position:absolute;left:0;top:10%;height:80%;width:1px;background:rgba(255,255,255,0.06)}
+.oz-stat-num{font-size:22px;font-weight:900;color:#c8a44e;display:block}
+.oz-stat-label{font-size:10px;color:#64748b;font-weight:600}
+@media(max-width:600px){
+  .oz-mundial-inner{padding:24px 16px 20px}
+  .oz-mundial-title h2{font-size:24px}
+  .oz-mundial-sub{font-size:13px}
+  .oz-count-box{min-width:56px;padding:10px 6px}
+  .oz-count-num{font-size:24px}
+  .oz-mundial-cta{width:100%;justify-content:center;font-size:15px;padding:14px 24px}
+  .oz-mundial-stats{flex-wrap:wrap;gap:12px}
+  .oz-stat{flex:none;width:calc(50% - 6px)}
+  .oz-stat:not(:last-child)::after{display:none}
+  .oz-stat-num{font-size:18px}
+}
+@media(min-width:601px){.oz-mundial-inner{text-align:center}}
+</style>
+
+<div class="oz-mundial">
+  <div class="oz-particle"></div>
+  <div class="oz-particle"></div>
+  <div class="oz-particle"></div>
+  <div class="oz-mundial-inner">
+    <div class="oz-mundial-badge">
+      <span class="oz-mundial-badge-dot"></span>
+      <span>קולקציית מונדיאל 2026</span>
+    </div>
+    <div class="oz-mundial-title">
+      <h2>המונדיאל מגיע 🏆<br><span class="gold">אתם מוכנים?</span></h2>
+    </div>
+    <p class="oz-mundial-sub">
+      חולצות נבחרות מכל העולם כבר באתר!<br>
+      הזמינו עכשיו והגיעו מוכנים ליום הפתיחה
+    </p>
+    <div class="oz-countdown-label">ספירה לאחור ליום הפתיחה</div>
+    <div class="oz-countdown" id="ozCountdown">
+      <div class="oz-count-box"><span class="oz-count-num" id="ozDays">--</span><span class="oz-count-label">ימים</span></div>
+      <div class="oz-count-box"><span class="oz-count-num" id="ozHours">--</span><span class="oz-count-label">שעות</span></div>
+      <div class="oz-count-box"><span class="oz-count-num" id="ozMins">--</span><span class="oz-count-label">דקות</span></div>
+      <div class="oz-count-box"><span class="oz-count-num" id="ozSecs">--</span><span class="oz-count-label">שניות</span></div>
+    </div>
+    <div class="oz-coupon" onclick="navigator.clipboard.writeText('SALE10');this.querySelector('.oz-coupon-copy').textContent='הועתק! ✓'">
+      <span class="oz-coupon-label">קוד הנחה</span>
+      <span class="oz-coupon-code">SALE10</span>
+      <span class="oz-coupon-copy">לחצו להעתקה</span>
+    </div>
+    <a href="https://onezonejersey.com/product-category/%d7%9e%d7%95%d7%a0%d7%93%d7%99%d7%90%d7%9c-2026/" class="oz-mundial-cta">
+      לקולקציה המלאה
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </a>
+    <div class="oz-mundial-stats">
+      <div class="oz-stat"><span class="oz-stat-num">59+</span><span class="oz-stat-label">חולצות נבחרות</span></div>
+      <div class="oz-stat"><span class="oz-stat-num">32</span><span class="oz-stat-label">נבחרות</span></div>
+      <div class="oz-stat"><span class="oz-stat-num">3</span><span class="oz-stat-label">מדינות מארחות</span></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var target=new Date('2026-06-11T18:00:00+03:00').getTime();
+  function update(){
+    var now=Date.now(),diff=target-now;if(diff<0)diff=0;
+    var d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('ozDays').textContent=d<10?'0'+d:d;
+    document.getElementById('ozHours').textContent=h<10?'0'+h:h;
+    document.getElementById('ozMins').textContent=m<10?'0'+m:m;
+    document.getElementById('ozSecs').textContent=s<10?'0'+s:s;
+  }
+  update();setInterval(update,1000);
+})();
+</script>

@@ -1,0 +1,223 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "tag_text": "טכנולוגיה מתקדמת לעיניים",
+        "title_line1": "שינה טובה יותר",
+        "title_highlight": "מתחילה הלילה",
+        "subtitle": "משקפי Meluvo חוסמים עד 97% מהאור הכחול המזיק, משפרים את איכות השינה, מפחיתים עומס על העיניים ומגבירים את הריכוז.",
+        "cta_text": "לרכישה עכשיו",
+        "secondary_cta_text": "למידע נוסף"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "subtitle": "המוצרים שלנו",
+        "title": "בחר את המשקפיים שלך",
+        "description": "משקפי יום לעבודה מול מסך ומשקפי לילה לשינה טובה יותר"
+      },
+      "blocks": {
+        "night": {
+          "type": "product",
+          "settings": {
+            "card_style": "night",
+            "badge_text": "משקפי לילה",
+            "custom_description": "חוסמים 97% מהאור הכחול. מושלמים לשימוש בערב לפני השינה."
+          }
+        },
+        "day": {
+          "type": "product",
+          "settings": {
+            "card_style": "day",
+            "badge_text": "משקפי יום",
+            "custom_description": "הגנה אופטימלית מול מסכים. לריכוז חד יותר ופחות עומס על העיניים."
+          }
+        }
+      },
+      "block_order": ["night", "day"]
+    },
+    "benefits": {
+      "type": "benefits",
+      "settings": {
+        "subtitle": "היתרונות",
+        "title": "למה Meluvo?"
+      },
+      "blocks": {
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "moon",
+            "title": "שינה איכותית",
+            "text": "חסימת אור כחול לפני השינה מאפשרת ייצור טבעי של מלטונין ושינה עמוקה יותר."
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "eye",
+            "title": "פחות עומס על העיניים",
+            "text": "הפחתה משמעותית בעייפות עיניים, יובש וכאבי ראש מול מסכים."
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "brain",
+            "title": "ריכוז חד יותר",
+            "text": "עבודה יעילה יותר מול מסכים עם פחות הסחות תשומת לב ועייפות."
+          }
+        },
+        "b4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "zap",
+            "title": "ביצועים גבוהים",
+            "text": "התאוששות מהירה יותר לספורטאים ומקצועני ביצועים."
+          }
+        }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"]
+    },
+    "stats": {
+      "type": "stats",
+      "settings": {
+        "subtitle": "תוצאות מוכחות",
+        "title": "המספרים מדברים"
+      },
+      "blocks": {
+        "s1": {
+          "type": "stat",
+          "settings": { "number": "94", "suffix": "%", "label": "דיווחו על הירדמות מהירה יותר אחרי 3 שעות של שימוש לפני השינה" }
+        },
+        "s2": {
+          "type": "stat",
+          "settings": { "number": "91", "suffix": "%", "label": "ציינו שיפור בריכוז במהלך העבודה או הלימודים" }
+        },
+        "s3": {
+          "type": "stat",
+          "settings": { "number": "88", "suffix": "%", "label": "חוו היעלמות כאבי ראש הנגרמים ממסכים" }
+        }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "education": {
+      "type": "blue-light-education",
+      "settings": {
+        "tag": "המדע שמאחורי המשקפיים",
+        "title": "מה אור כחול עושה לגוף שלך?",
+        "text": "מסכים מודרניים פולטים כמויות גדולות של אור כחול שגורם למוח שלך לחשוב שעכשיו יום. זה מדכא את ייצור המלטונין — ההורמון שאחראי על השינה שלך."
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "icon": "alert",
+            "title": "עייפות עיניים וכאבי ראש",
+            "text": "חשיפה ממושכת לאור כחול גורמת לעומס על שרירי העיניים, מה שמוביל לעייפות, יובש וכאבי ראש."
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "icon": "clock",
+            "title": "שיבוש שעון ביולוגי",
+            "text": "אור כחול בערב מרמה את המוח לחשוב שעכשיו יום, מה שדוחה את ההירדמות בשעות."
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "icon": "shield",
+            "title": "הפתרון של Meluvo",
+            "text": "העדשות שלנו חוסמות עד 97% מהאור הכחול המזיק, מאפשרות לגוף שלך לייצר מלטונין באופן טבעי."
+          }
+        }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "subtitle": "ביקורות",
+        "title": "מה הלקוחות שלנו אומרים",
+        "description": "אלפי לקוחות מרוצים ברחבי הארץ"
+      },
+      "blocks": {
+        "t1": { "type": "testimonial", "settings": { "quote": "מאז שהתחלתי להשתמש במשקפי הלילה, אני נרדם הרבה יותר מהר. כאילו המוח פשוט נכבה כמו שצריך. ממליץ בחום!", "name": "איתי ר.", "location": "רמת גן" } },
+        "t2": { "type": "testimonial", "settings": { "quote": "עובדת שעות מול מחשב ותמיד סבלתי מכאבי ראש נוראיים בסוף היום. מאז שיש לי את משקפי היום — כמעט ונעלמו לגמרי.", "name": "שני ל.", "location": "חיפה" } },
+        "t3": { "type": "testimonial", "settings": { "quote": "בתור ספורטאי, שינה היא חלק קריטי מההתאוששות שלי. המשקפיים האלה שינו את השגרת ערב שלי.", "name": "דניאל כ.", "location": "באר שבע" } },
+        "t4": { "type": "testimonial", "settings": { "quote": "קניתי לבן שלי כי הוא מרבה להיות מול מסכים. ההבדל ביכולת הריכוז שלו הוא מטורף.", "name": "מיכל א.", "location": "רמת השרון" } },
+        "t5": { "type": "testimonial", "settings": { "quote": "הזמנתי עם ספקנות, אבל אחרי שבוע ראשון כבר הרגשתי שיפור. העיניים הרבה פחות יבשות ועייפות.", "name": "יוסי מ.", "location": "זכרון יעקב" } },
+        "t6": { "type": "testimonial", "settings": { "quote": "העיצוב מדהים. נראים כמו משקפיים רגילים ואף אחד לא יודע שיש להם טכנולוגיה בפנים.", "name": "נועה ש.", "location": "מודיעין" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+    },
+    "athletes": {
+      "type": "athletes",
+      "settings": {
+        "subtitle": "ספורטאים בוחרים Meluvo",
+        "title": "הבחירה של הספורטאים הטובים בישראל",
+        "description": "ספורטאי עילית סומכים על Meluvo לשיפור איכות השינה וההתאוששות שלהם"
+      },
+      "blocks": {
+        "a1": { "type": "athlete", "settings": { "name": "איתמר נוי", "team": "מכבי תל אביב" } },
+        "a2": { "type": "athlete", "settings": { "name": "עוז בילו", "team": "מכבי נתניה" } },
+        "a3": { "type": "athlete", "settings": { "name": "אלון אביגזר", "team": "מאמן כושר" } }
+      },
+      "block_order": ["a1", "a2", "a3"]
+    },
+    "trust": {
+      "type": "trust-guarantee",
+      "settings": {
+        "subtitle": "קנייה בטוחה",
+        "title": "אנחנו עומדים מאחורי המוצר שלנו",
+        "description": "קנייה ללא סיכון עם ערבויות מלאות"
+      },
+      "blocks": {
+        "g1": { "type": "trust_item", "settings": { "icon": "refund", "title": "30 ימי ניסיון", "text": "לא מרוצה? החזר את המשקפיים תוך 30 יום וקבל החזר כספי מלא. בלי שאלות." } },
+        "g2": { "type": "trust_item", "settings": { "icon": "shipping", "title": "משלוח חינם", "text": "משלוח חינם לכל רחבי הארץ. לנקודת איסוף או עד הבית שלך." } },
+        "g3": { "type": "trust_item", "settings": { "icon": "secure", "title": "תשלום מאובטח", "text": "כל התשלומים מאובטחים ומוצפנים. תומכים בכל כרטיסי האשראי." } }
+      },
+      "block_order": ["g1", "g2", "g3"]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "tag": "שאלות נפוצות",
+        "title": "שאלות ותשובות",
+        "description": "לא מצאת תשובה? דברו איתנו ונשמח לעזור.",
+        "cta_text": "צרו קשר"
+      },
+      "blocks": {
+        "q1": { "type": "question", "settings": { "question": "למי מתאימים המשקפיים?", "answer": "לכל מי שמבלה זמן מול מסכים — עובדים מרחוק, סטודנטים, גיימרים, ספורטאים, וכל מי שרוצה לשפר את איכות השינה שלו." } },
+        "q2": { "type": "question", "settings": { "question": "מה ההבדל בין משקפי יום למשקפי לילה?", "answer": "משקפי יום חוסמים חלק מהאור הכחול ומאפשרים עבודה נוחה מול מסך. משקפי לילה חוסמים עד 97% ומיועדים לשימוש בערב לפני השינה." } },
+        "q3": { "type": "question", "settings": { "question": "מה אם אני לא מרוצה?", "answer": "יש לנו מדיניות של 30 ימי ניסיון. אם אתה לא מרוצה מכל סיבה, תקבל החזר כספי מלא." } },
+        "q4": { "type": "question", "settings": { "question": "כמה זמן לוקח המשלוח?", "answer": "משלוח חינם! 7-14 ימי עסקים לנקודת איסוף או עד הבית." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    },
+    "final-cta": {
+      "type": "final-cta",
+      "settings": {
+        "title_line1": "מוכנים לשינה טובה יותר?",
+        "title_highlight": "תתחילו הלילה.",
+        "text": "הצטרפו לאלפי ישראלים שכבר שיפרו את איכות השינה, הריכוז והביצועים שלהם עם Meluvo.",
+        "cta_text": "לרכישה עכשיו"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured-products",
+    "benefits",
+    "stats",
+    "education",
+    "testimonials",
+    "athletes",
+    "trust",
+    "faq",
+    "final-cta"
+  ]
+}

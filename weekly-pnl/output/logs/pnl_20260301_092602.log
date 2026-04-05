@@ -1,0 +1,7 @@
+2026-03-01 09:26:02 [INFO] weekly_pnl: Log file: ./output/logs\pnl_20260301_092602.log
+2026-03-01 09:26:02 [INFO] weekly_pnl: ═══ Weekly P&L Report: 2026-02-16 to 2026-02-22 ═══
+2026-03-01 09:26:02 [INFO] src.marketing: Marketing spend for week: $350.00
+2026-03-01 09:26:02 [INFO] weekly_pnl: Marketing spend: $350.00 (found=True)
+2026-03-01 09:26:02 [WARNING] weekly_pnl: ═══ SHOPIFY CREDENTIALS MISSING — using MOCK DATA ═══
+2026-03-01 09:26:02 [INFO] weekly_pnl: Generated 25 mock orders
+2026-03-01 09:26:02 [INFO] src.excel_report: Report saved to ./output\pnl_week_2026-02-16_to_2026-02-22.xlsx

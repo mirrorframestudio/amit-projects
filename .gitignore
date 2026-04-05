@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+**/.env
+
+# Node
+node_modules/
+.next/
+.env.local
+
+# Docker
+.postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db
+~$*
+
+# Sensitive tokens & credentials
+**/token_*.json
+**/shopify_token.json
+**/credentials.json
+
+# Large/generated files
+*.zip
+daily_run_log.txt

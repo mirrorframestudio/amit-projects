@@ -1,0 +1,13 @@
+# Secrets - NEVER commit
+.env
+drive_token.json
+credentials.json
+
+# Reports & logs
+reports/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

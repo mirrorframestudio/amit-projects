@@ -1,0 +1,187 @@
+{%- style -%}
+.faq__layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-4xl);
+  align-items: flex-start;
+}
+
+.faq__sidebar {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-2xl));
+}
+
+.faq__sidebar-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  color: var(--color-glow);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: var(--space-lg);
+}
+
+.faq__sidebar-title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-lg);
+}
+
+.faq__sidebar-text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: 1.7;
+}
+
+.faq__list {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .faq__layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .faq__sidebar { position: static; text-align: center; }
+}
+{%- endstyle -%}
+
+<section class="section section--dark" id="faq">
+  <div class="container">
+    <div class="faq__layout">
+      <div class="faq__sidebar reveal">
+        <div class="faq__sidebar-tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          {{ section.settings.tag }}
+        </div>
+        <h2 class="faq__sidebar-title">{{ section.settings.title }}</h2>
+        <p class="faq__sidebar-text">{{ section.settings.description }}</p>
+
+        {%- if section.settings.cta_text != blank -%}
+          <a href="{{ section.settings.cta_url }}" class="btn btn--secondary">
+            {{ section.settings.cta_text }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="faq__list glass-card--static reveal" style="padding: var(--space-xl); border-radius: var(--radius-xl);">
+        {%- for block in section.blocks -%}
+          <div class="faq-item" data-faq-item {{ block.shopify_attributes }}>
+            <button class="faq-item__question" data-faq-toggle aria-expanded="false">
+              <span>{{ block.settings.question }}</span>
+              <svg class="faq-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="faq-item__answer" aria-hidden="true">
+              <p>{{ block.settings.answer }}</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "שאלות נפוצות"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "שאלות ותשובות"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "לא מצאת תשובה? דברו איתנו ונשמח לעזור."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "צרו קשר"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "למי מתאימים המשקפיים?",
+            "answer": "לכל מי שמבלה זמן מול מסכים — עובדים מרחוק, סטודנטים, גיימרים, ספורטאים, וכל מי שרוצה לשפר את איכות השינה שלו. יש דגמי יום ודגמי לילה לשימושים שונים."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "מה ההבדל בין משקפי יום למשקפי לילה?",
+            "answer": "משקפי יום חוסמים חלק מהאור הכחול ומאפשרים עבודה נוחה מול מסך ללא עייפות. משקפי לילה חוסמים עד 97% מהאור הכחול ומיועדים לשימוש בערב לפני השינה כדי לאפשר ייצור טבעי של מלטונין."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "מה אם אני לא מרוצה?",
+            "answer": "יש לנו מדיניות של 30 ימי ניסיון. אם אתה לא מרוצה מכל סיבה שהיא, אתה יכול להחזיר את המשקפיים ולקבל החזר כספי מלא."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "כמה זמן לוקח המשלוח?",
+            "answer": "משלוח חינם לכל רחבי הארץ! זמן אספקה 7-14 ימי עסקים לנקודת איסוף או עד הבית."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "האם אפשר לשים עדשות מרשם?",
+            "answer": "כרגע המשקפיים מגיעים עם עדשות חסימת אור כחול ללא מרשם. אנחנו עובדים על אפשרות לעדשות מרשם בעתיד."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

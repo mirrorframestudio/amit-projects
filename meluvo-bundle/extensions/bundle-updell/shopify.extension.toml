@@ -1,0 +1,14 @@
+api_version = "2026-01"
+
+[[extensions]]
+name = "bundle-updell"
+handle = "bundle-updell"
+type = "ui_extension"
+uid = "085f82dc-d402-4e77-be42-1ae7f4cff53f6f3fa4c3"
+
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.block.render"
+
+[extensions.capabilities]
+api_access = true

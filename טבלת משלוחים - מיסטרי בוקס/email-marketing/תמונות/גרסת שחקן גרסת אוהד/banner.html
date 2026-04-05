@@ -1,0 +1,126 @@
+<!-- ONE ZONE - באנר השוואת גרסאות - להטמעה בדף מוצר -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+.oz-compare{font-family:'Rubik',sans-serif;max-width:900px;margin:0 auto;padding:16px 12px;direction:rtl;color:#f1f5f9}
+.oz-compare *{margin:0;padding:0;box-sizing:border-box;font-family:'Rubik',sans-serif}
+.oz-compare-title{text-align:center;margin-bottom:14px}
+.oz-compare-title h2{font-size:clamp(20px,3.5vw,28px);font-weight:900;background:linear-gradient(135deg,#fff,#60a5fa,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.oz-compare-title p{font-size:13px;color:#94a3b8}
+.oz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.oz-card{background:#111127;border-radius:14px;overflow:hidden;border:1px solid rgba(59,130,246,0.15)}
+.oz-card-head{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(59,130,246,0.1);font-size:13px;font-weight:700;color:#e2e8f0}
+.oz-card-head span:last-child{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,0.1);border-radius:6px;font-size:11px;color:#60a5fa}
+.oz-slider{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;cursor:col-resize;user-select:none;-webkit-user-select:none}
+.oz-slider img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:1}
+.oz-slider .bl,.oz-slider .br{position:absolute;top:0;left:0;width:100%;height:100%;z-index:3;pointer-events:none;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px)}
+.oz-slider .bl{clip-path:inset(0 50% 0 0)}.oz-slider .br{clip-path:inset(0 0 0 50%)}
+.oz-slider .dl,.oz-slider .dr{position:absolute;top:0;left:0;width:100%;height:100%;z-index:4;pointer-events:none;background:rgba(0,0,0,0)}
+.oz-slider .dl{clip-path:inset(0 50% 0 0)}.oz-slider .dr{clip-path:inset(0 0 0 50%)}
+.oz-lbl{position:absolute;bottom:10px;z-index:8;padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;pointer-events:none;transition:opacity .3s}
+.oz-lbl.lp{left:10px;background:rgba(245,158,11,0.9);color:#000}.oz-lbl.lf{right:10px;background:rgba(59,130,246,0.9);color:#fff}
+.oz-handle{position:absolute;top:0;left:50%;width:2px;height:100%;z-index:10;transform:translateX(-50%);pointer-events:none;background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.7) 10%,rgba(255,255,255,.7) 90%,transparent 100%);opacity:0;transition:opacity .3s}
+.oz-handle.on{opacity:1}
+.oz-handle::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:rgba(255,255,255,.95);border-radius:50%;box-shadow:0 3px 16px rgba(0,0,0,.5);pointer-events:auto;cursor:col-resize}
+.oz-handle::after{content:'◀ ▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;color:#333;white-space:nowrap;font-weight:900;pointer-events:none;z-index:11}
+.oz-card-foot{padding:8px 14px;display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;border-top:1px solid rgba(59,130,246,0.1)}
+.oz-card-foot .d{width:6px;height:6px;border-radius:50%;display:inline-block;margin-left:4px;vertical-align:middle}
+.oz-card-foot .dg{background:#f59e0b}.oz-card-foot .db{background:#3b82f6}
+.oz-card.fw{grid-column:1/-1;max-width:500px;margin:0 auto;width:100%}
+.oz-cta{text-align:center;margin-top:16px}
+.oz-cta a{display:inline-block;padding:12px 36px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;font-size:15px;font-weight:900;border-radius:10px;text-decoration:none;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+.oz-cta a:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(245,158,11,0.4)}
+.oz-table{margin-top:16px;width:100%;border-collapse:collapse;font-size:13px;background:#111127;border-radius:14px;overflow:hidden;border:1px solid rgba(59,130,246,0.15)}
+.oz-table{opacity:1}
+.oz-table th{padding:10px 14px;font-weight:900;font-size:12px;letter-spacing:1px}
+.oz-table th:first-child{text-align:right;color:#94a3b8}
+.oz-table th:nth-child(2){background:rgba(59,130,246,0.1);color:#60a5fa}
+.oz-table th:nth-child(3){background:rgba(245,158,11,0.1);color:#f59e0b}
+.oz-table td{padding:8px 14px;border-top:1px solid rgba(59,130,246,0.08);text-align:center;color:#cbd5e1}
+.oz-table td:first-child{text-align:right;color:#94a3b8;font-weight:700}
+.oz-table tr:hover td{background:rgba(59,130,246,0.04)}
+.oz-card{opacity:1}
+@media(max-width:600px){.oz-grid{grid-template-columns:1fr}.oz-handle::before{width:34px;height:34px}.oz-cta a{padding:10px 28px;font-size:14px}}
+</style>
+
+<div class="oz-compare">
+  <div class="oz-compare-title">
+    <h2>גרסת שחקן VS גרסת אוהד</h2>
+    <p>גררו את הסליידר כדי להתמקד בכל גרסה</p>
+  </div>
+
+  <div class="oz-grid">
+    <div class="oz-card fw">
+      <div class="oz-card-head"><span>סמלים ותפירות</span><span>1</span></div>
+      <div class="oz-slider" data-img="https://onezonejersey.com/wp-content/uploads/2026/03/Gemini_Generated_Image_doeqqzdoeqqzdoeq.png">
+        <img alt=""><div class="bl"></div><div class="br"></div><div class="dl"></div><div class="dr"></div>
+        <div class="oz-handle"></div><span class="oz-lbl lp">שחקן</span><span class="oz-lbl lf">אוהד</span>
+      </div>
+      <div class="oz-card-foot"><span><span class="d dg"></span>שחקן - מודפס</span><span><span class="d db"></span>אוהד - תפור</span></div>
+    </div>
+  </div>
+
+  <table class="oz-table">
+    <tr><th></th><th>גרסת אוהד</th><th>גרסת שחקן</th></tr>
+    <tr><td>סמלים</td><td>רקמה תפורה (תפור)</td><td>הדפסה תרמית (מודפס)</td></tr>
+    <tr><td>חומר</td><td>Dri-Fit</td><td>Aero-Fit</td></tr>
+    <tr><td>התאמה</td><td>רגיל - גזרת אוהד</td><td>צמוד - גזרת שחקן</td></tr>
+    <tr><td>משקל</td><td>סטנדרטי</td><td>קל יותר</td></tr>
+  </table>
+
+  <div class="oz-cta">
+    <a href="#">הזמינו עכשיו</a>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.oz-slider').forEach(s=>{
+  const img=s.querySelector('img'),bl=s.querySelector('.bl'),br=s.querySelector('.br'),
+    dl=s.querySelector('.dl'),dr=s.querySelector('.dr'),h=s.querySelector('.oz-handle'),
+    lp=s.querySelector('.lp'),lf=s.querySelector('.lf');
+  img.src=s.dataset.img;
+  let drag=false;
+  const MB=14,MD=.3;
+  function upd(x){
+    const r=s.getBoundingClientRect();let p=(x-r.left)/r.width;p=Math.max(.05,Math.min(.95,p));
+    const d=Math.abs(p-.5)*2,b=Math.round(d*MB),dk=d*MD;
+    h.style.left=p*100+'%';
+    if(p<.48){
+      br.style.backdropFilter=br.style.webkitBackdropFilter=`blur(${b}px)`;
+      bl.style.backdropFilter=bl.style.webkitBackdropFilter='blur(0px)';
+      dr.style.background=`rgba(0,0,0,${dk})`;dl.style.background='rgba(0,0,0,0)';
+      h.classList.add('on');
+      if(lp)lp.style.opacity='1';if(lf)lf.style.opacity=d>.3?'.4':'1';
+    }else if(p>.52){
+      bl.style.backdropFilter=bl.style.webkitBackdropFilter=`blur(${b}px)`;
+      br.style.backdropFilter=br.style.webkitBackdropFilter='blur(0px)';
+      dl.style.background=`rgba(0,0,0,${dk})`;dr.style.background='rgba(0,0,0,0)';
+      h.classList.add('on');
+      if(lf)lf.style.opacity='1';if(lp)lp.style.opacity=d>.3?'.4':'1';
+    }else{
+      bl.style.backdropFilter=bl.style.webkitBackdropFilter=br.style.backdropFilter=br.style.webkitBackdropFilter='blur(0px)';
+      dl.style.background=dr.style.background='rgba(0,0,0,0)';
+      h.classList.remove('on');if(lp)lp.style.opacity='1';if(lf)lf.style.opacity='1';
+    }
+  }
+  function snap(){
+    const r=s.getBoundingClientRect(),c=r.left+r.width*.5,cl=parseFloat(h.style.left)||50,
+      sx=r.left+(cl/100)*r.width;let st=null;
+    function an(t){if(drag)return;if(!st)st=t;const pr=Math.min((t-st)/400,1),
+      e=1-Math.pow(1-pr,3);upd(sx+(c-sx)*e);if(pr<1)requestAnimationFrame(an)}
+    requestAnimationFrame(an);
+  }
+  s.addEventListener('mousedown',e=>{drag=true;upd(e.clientX);e.preventDefault()});
+  document.addEventListener('mousemove',e=>{if(drag){upd(e.clientX);e.preventDefault()}});
+  document.addEventListener('mouseup',()=>{if(drag){drag=false;snap()}});
+  s.addEventListener('touchstart',e=>{drag=true;upd(e.touches[0].clientX);e.preventDefault()},{passive:false});
+  s.addEventListener('touchmove',e=>{if(drag){upd(e.touches[0].clientX);e.preventDefault()}},{passive:false});
+  s.addEventListener('touchend',()=>{if(drag){drag=false;snap()}});
+  // Auto hint
+  const io=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){
+    setTimeout(()=>{const r=s.getBoundingClientRect(),c=r.left+r.width*.5;let st=null;
+      function a(t){if(drag)return;if(!st)st=t;const pr=(t-st)/2000;
+        if(pr<1){upd(c+Math.sin(pr*Math.PI*2)*r.width*.3);requestAnimationFrame(a)}else upd(c)}
+      requestAnimationFrame(a)},400);io.unobserve(e.target)}})},{threshold:.5});
+  io.observe(s);
+});
+</script>

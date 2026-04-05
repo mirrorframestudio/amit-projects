@@ -1,0 +1,13 @@
+{
+  "current": {
+    "color_primary": "#6366f1",
+    "color_secondary": "#06b6d4",
+    "color_bg_dark": "#0a0a12",
+    "color_bg_light": "#f8f9fc",
+    "color_text_light": "#ffffff",
+    "color_text_dark": "#1a1a2e",
+    "color_glow": "#818cf8",
+    "sections": {},
+    "content_for_index": []
+  }
+}

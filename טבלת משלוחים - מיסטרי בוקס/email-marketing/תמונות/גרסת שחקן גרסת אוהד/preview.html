@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ONE ZONE - באנר השוואה</title>
+<style>body{margin:0;background:#0a0a1a;min-height:100vh}</style>
+</head>
+<body>
+<div id="banner"></div>
+<script>
+fetch('banner.html').then(r=>r.text()).then(html=>{
+  document.getElementById('banner').innerHTML=html;
+  const scripts=document.getElementById('banner').querySelectorAll('script');
+  scripts.forEach(s=>{const n=document.createElement('script');n.textContent=s.textContent;document.body.appendChild(n)});
+});
+</script>
+</body>
+</html>

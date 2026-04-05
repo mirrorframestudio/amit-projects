@@ -1,0 +1,26 @@
+2026-03-01 11:43:44 [INFO] weekly_pnl: Log file: ./output/logs\pnl_20260301_114344.log
+2026-03-01 11:43:44 [INFO] weekly_pnl: ═══ Weekly P&L Report: 2026-02-01 to 2026-02-28 ═══
+2026-03-01 11:43:45 [INFO] googleapiclient.discovery_cache: file_cache is only supported with oauth2client<4.0.0
+2026-03-01 11:43:45 [INFO] src.meta_gmail: Gmail search query: from:(facebookmail.com OR meta.com) subject:(receipt OR invoice OR חשבונית OR קבלה OR חיוב) after:2026/01/25 before:2026/03/15 has:attachment
+2026-03-01 11:43:45 [DEBUG] googleapiclient.discovery: URL being requested: GET https://gmail.googleapis.com/gmail/v1/users/me/messages?q=from%3A%28facebookmail.com+OR+meta.com%29+subject%3A%28receipt+OR+invoice+OR+%D7%97%D7%A9%D7%91%D7%95%D7%A0%D7%99%D7%AA+OR+%D7%A7%D7%91%D7%9C%D7%94+OR+%D7%97%D7%99%D7%95%D7%91%29+after%3A2026%2F01%2F25+before%3A2026%2F03%2F15+has%3Aattachment&maxResults=50&alt=json
+2026-03-01 11:43:46 [INFO] src.meta_gmail: Found 0 Meta emails
+2026-03-01 11:43:46 [WARNING] src.meta_gmail: No Meta Ads emails found in Gmail
+2026-03-01 11:43:46 [INFO] src.marketing: No Meta spend found in Gmail, trying local folder...
+2026-03-01 11:43:46 [INFO] src.meta_gmail: Parsed 10 transactions from Meta CSV
+2026-03-01 11:43:46 [INFO] src.meta_gmail: Week 2026-02-01–2026-02-28: 10 transactions, 7603.86 ILS
+2026-03-01 11:43:46 [INFO] src.marketing: Marketing from local Meta CSVs: $7603.86
+2026-03-01 11:43:46 [INFO] weekly_pnl: Marketing spend: ₪7603.86 (found=True, source=Meta CSV (local))
+2026-03-01 11:43:46 [INFO] weekly_pnl: Fetching orders from Shopify API...
+2026-03-01 11:43:46 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): ymy9ur-n2.myshopify.com:443
+2026-03-01 11:43:47 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/orders.json?status=any&created_at_min=2026-02-01T00%3A00%3A00Z&created_at_max=2026-02-28T23%3A59%3A59Z&limit=250&fields=id%2Cname%2Ccreated_at%2Cfinancial_status%2Cfulfillment_status%2Ccancelled_at%2Ctest%2Ccurrency%2Csubtotal_price%2Ctotal_discounts%2Ctotal_tax%2Ctotal_shipping_price_set%2Ctotal_price%2Cshipping_lines%2Cline_items%2Crefunds%2Csubtotal_price_set%2Ctotal_discounts_set%2Ctotal_tax_set%2Ctotal_price_set HTTP/1.1" 200 None
+2026-03-01 11:43:47 [INFO] src.shopify_client: Fetched 43 orders (total so far: 43)
+2026-03-01 11:43:47 [INFO] weekly_pnl: Fetched 43 orders from Shopify
+2026-03-01 11:43:47 [INFO] weekly_pnl: Fetching costs for 6 variants...
+2026-03-01 11:43:47 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47425758167178.json HTTP/1.1" 200 None
+2026-03-01 11:43:48 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47390301618314.json HTTP/1.1" 200 None
+2026-03-01 11:43:48 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47652631380106.json HTTP/1.1" 200 None
+2026-03-01 11:43:49 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47425758199946.json HTTP/1.1" 200 None
+2026-03-01 11:43:49 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47640474845322.json HTTP/1.1" 200 None
+2026-03-01 11:43:49 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47458382479498.json HTTP/1.1" 200 None
+2026-03-01 11:43:50 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/inventory_items.json?ids=48793205342346%2C48756835745930%2C49030829015178%2C48793205375114%2C49018240368778%2C48826488520842&limit=100 HTTP/1.1" 200 None
+2026-03-01 11:43:50 [INFO] src.excel_report: Report saved to ./output\pnl_week_2026-02-01_to_2026-02-28.xlsx

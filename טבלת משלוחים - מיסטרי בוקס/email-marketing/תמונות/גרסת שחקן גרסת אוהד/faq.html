@@ -1,0 +1,252 @@
+<!-- ONE ZONE - שאלות נפוצות -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+.oz-faq{font-family:'Rubik',sans-serif;max-width:600px;margin:0 auto;padding:16px 12px;direction:rtl;color:#f1f5f9}
+.oz-faq *{margin:0;padding:0;box-sizing:border-box;font-family:'Rubik',sans-serif}
+.oz-faq-title{text-align:center;margin-bottom:12px}
+.oz-faq-title h2{font-size:clamp(20px,3.5vw,28px);font-weight:900;background:linear-gradient(135deg,#fff,#60a5fa,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.oz-faq-title p{font-size:13px;color:#94a3b8}
+/* Categories */
+.oz-faq-cats{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.oz-faq-cats::-webkit-scrollbar{display:none}
+.oz-faq-cat{padding:6px 12px;border-radius:16px;font-size:11px;font-weight:700;border:1px solid rgba(59,130,246,.2);background:transparent;color:#94a3b8;cursor:pointer;white-space:nowrap;transition:all .3s;font-family:'Rubik',sans-serif}
+.oz-faq-cat.active{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;border-color:transparent;box-shadow:0 4px 12px rgba(245,158,11,.25)}
+/* Items */
+.oz-faq-list{display:flex;flex-direction:column;gap:6px}
+.oz-faq-item{background:linear-gradient(160deg,#111127,#0d1b2a);border-radius:10px;border:1px solid rgba(59,130,246,.1);overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.oz-faq-item.open{border-color:rgba(245,158,11,.25);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.oz-faq-q{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;transition:background .2s;user-select:none;-webkit-user-select:none}
+.oz-faq-q:hover{background:rgba(59,130,246,.04)}
+.oz-faq-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:all .4s}
+.oz-faq-item:not(.open) .oz-faq-icon{background:rgba(59,130,246,.1);color:#60a5fa}
+.oz-faq-item.open .oz-faq-icon{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;transform:rotate(45deg)}
+.oz-faq-q-text{flex:1;font-size:12px;font-weight:700;color:#e2e8f0;line-height:1.5}
+.oz-faq-arrow{width:20px;height:20px;flex-shrink:0;transition:transform .3s;color:#64748b}
+.oz-faq-item.open .oz-faq-arrow{transform:rotate(180deg);color:#f59e0b}
+.oz-faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.25,.8,.25,1)}
+.oz-faq-item.open .oz-faq-a{max-height:300px}
+.oz-faq-a-inner{padding:0 12px 12px 12px;padding-right:46px;font-size:12px;color:#94a3b8;line-height:1.8}
+.oz-faq-a-inner strong{color:#e2e8f0}
+.oz-faq-a-inner .oz-highlight{color:#f59e0b;font-weight:700}
+.oz-faq-a-inner a{color:#60a5fa;text-decoration:none;font-weight:700}
+.oz-faq-a-inner a:hover{text-decoration:underline}
+/* Tags */
+.oz-faq-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;margin-right:8px;vertical-align:middle}
+.oz-faq-tag.shipping{background:rgba(59,130,246,.1);color:#60a5fa}
+.oz-faq-tag.payment{background:rgba(34,197,94,.1);color:#22c55e}
+.oz-faq-tag.order{background:rgba(245,158,11,.1);color:#f59e0b}
+.oz-faq-tag.product{background:rgba(168,85,247,.1);color:#a855f7}
+.oz-faq-tag.returns{background:rgba(239,68,68,.1);color:#ef4444}
+/* Contact bar */
+.oz-faq-contact{margin-top:12px;padding:10px 14px;background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(59,130,246,.06));border:1px solid rgba(34,197,94,.15);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.oz-faq-contact-text{font-size:13px;color:#94a3b8}
+.oz-faq-contact-text strong{color:#e2e8f0}
+.oz-faq-wa{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:13px;font-weight:700;border-radius:10px;text-decoration:none;transition:transform .2s,box-shadow .2s;flex-shrink:0}
+.oz-faq-wa:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(34,197,94,.3)}
+.oz-faq-wa svg{width:18px;height:18px;fill:#fff}
+/* Search */
+.oz-faq-search{position:relative;margin-bottom:8px}
+.oz-faq-search input{width:100%;padding:8px 12px;padding-right:36px;background:#0a0a1a;border:2px solid rgba(59,130,246,.15);border-radius:12px;color:#f1f5f9;font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;outline:none;transition:border-color .3s;-webkit-appearance:none}
+.oz-faq-search input:focus{border-color:#60a5fa}
+.oz-faq-search input::placeholder{color:#475569;font-weight:400}
+.oz-faq-search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#64748b;font-size:18px;pointer-events:none}
+.oz-faq-empty{text-align:center;padding:30px;color:#475569;font-size:13px}
+@media(max-width:600px){.oz-faq{max-width:100%;padding:8px}.oz-faq-q{padding:14px 14px}.oz-faq-a-inner{padding-right:14px}.oz-faq-q-text{font-size:13px}.oz-faq-contact{flex-direction:column;text-align:center}}
+</style>
+
+<div class="oz-faq">
+  <div class="oz-faq-title">
+    <h2>שאלות נפוצות</h2>
+    <p>כל מה שצריך לדעת לפני ההזמנה</p>
+  </div>
+
+  <div class="oz-faq-search">
+    <span class="oz-faq-search-icon">&#x1F50D;</span>
+    <input type="text" id="oz-faq-search" placeholder="חפשו שאלה...">
+  </div>
+
+  <div class="oz-faq-cats">
+    <button class="oz-faq-cat active" data-cat="all">הכל</button>
+    <button class="oz-faq-cat" data-cat="shipping">משלוחים</button>
+    <button class="oz-faq-cat" data-cat="payment">תשלום</button>
+    <button class="oz-faq-cat" data-cat="order">הזמנות</button>
+    <button class="oz-faq-cat" data-cat="product">מוצרים</button>
+    <button class="oz-faq-cat" data-cat="returns">החזרות</button>
+  </div>
+
+  <div class="oz-faq-list" id="oz-faq-list">
+
+    <div class="oz-faq-item" data-cat="shipping">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag shipping">משלוחים</span>תוך כמה זמן הזמנה מגיעה?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">זמן המשלוח הוא <span class="oz-highlight">7-21 ימי עסקים</span>, הממוצע הוא 14 ימי עסקים.<br><strong>*זמן ההכנה הוא 1-5 ימי עסקים</strong> ואינו חלק מזמן השילוח.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="shipping">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag shipping">משלוחים</span>האם אתם שולחים לכל העולם?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">אנחנו מגיעים <span class="oz-highlight">לכל היישובים בישראל</span> ובנוסף לרוב המדינות בעולם.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="order">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag order">הזמנות</span>האם יש אופציה למעקב אחר ההזמנה?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">כן!</span> ברגע שההזמנה מוכנה למשלוח, יישלח ללקוח הודעה עם <strong>מספר מעקב וקישור</strong> למעקב אחר ההזמנה.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="order">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag order">הזמנות</span>האם ניתן לשנות / לבטל את ההזמנה אחרי שבוצעה?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">ניתן לשנות/לבטל את ההזמנה <span class="oz-highlight">עד 6 שעות מרגע ביצועה</span>. לאחר מכן ההזמנה עוברת לעיבוד ואין אופציה לשנות אותה.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="payment">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag payment">תשלום</span>מה הן אופציות התשלום?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">האתר מכבד את אופציות התשלום הבאות:<br><span class="oz-highlight">כרטיס אשראי, ביט, אפל פיי, גוגל פיי.</span></div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="product">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag product">מוצרים</span>האם יש אחריות על המוצרים?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">כן</span>, יש אחריות מלאה על פגמים בייצור או נזק שהתרחש במשלוח. במידה וקיבלת מוצר פגום – צרו איתנו קשר <strong>תוך 7 ימי עסקים</strong> מקבלת המוצר.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="returns">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag returns">החזרות</span>האם ניתן להחזיר מוצר?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">כן, ניתן להחזיר מוצרים <strong>שלא נעשה בהם שימוש</strong> תוך <span class="oz-highlight">14 ימים</span> מקבלתם, בהתאם לתקנון ההחזרות שלנו.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="returns">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag returns">החזרות</span>האם ניתן להחליף מידה?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">בוודאי!</span> ניתן להחליף מידה בכפוף לתקנון האתר. פשוט פנו אלינו בוואטסאפ ונסדר לכם החלפה מהירה.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="product">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag product">מוצרים</span>מה ההבדל בין גרסת שחקן לגרסת אוהד?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">גרסת שחקן</span> – גזרה צמודה, בד Aero-Fit קל, סמלים ולוגו מודפסים תרמית.<br><span class="oz-highlight">גרסת אוהד</span> – גזרה רגילה ונוחה, בד Dri-Fit, סמלים ולוגו תפורים ורקומים.<br><a href="https://onezonejersey.com/player-vs-fan">לחצו כאן להשוואה מלאה</a></div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="product">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag product">מוצרים</span>האם ניתן להוסיף שם וסמלים על החולצה?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">כן, בחינם!</span> ניתן להוסיף שם, מספר וסמלים (כגון סמלי ליגה, סמלי גביע) <strong>ללא עלות נוספת</strong> בעמוד המוצר.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="shipping">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag shipping">משלוחים</span>כמה עולה משלוח?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner">המשלוח מגיע <span class="oz-highlight">עד הבית חינם!</span> ללא עלות נוספת על כל הזמנה מהאתר.</div></div>
+    </div>
+
+    <div class="oz-faq-item" data-cat="payment">
+      <div class="oz-faq-q">
+        <div class="oz-faq-icon">+</div>
+        <span class="oz-faq-q-text"><span class="oz-faq-tag payment">תשלום</span>האם האתר מאובטח?</span>
+        <svg class="oz-faq-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="oz-faq-a"><div class="oz-faq-a-inner"><span class="oz-highlight">בהחלט!</span> האתר מאובטח בתקן <strong>SSL</strong> וכל הנתונים מוצפנים. התשלומים מעובדים דרך ספקי סליקה מאושרים ומאובטחים.</div></div>
+    </div>
+
+  </div>
+
+  <div class="oz-faq-empty" id="oz-faq-empty" style="display:none">לא נמצאו תוצאות. נסו לחפש משהו אחר.</div>
+
+  <div class="oz-faq-contact">
+    <span class="oz-faq-contact-text"><strong>לא מצאתם תשובה?</strong><br>אנחנו כאן בשבילכם 24/6</span>
+    <a href="https://wa.me/9720559662064" class="oz-faq-wa" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.214l-.252-.149-2.868.852.852-2.868-.168-.268A8 8 0 1112 20z"/></svg>
+      שלחו הודעה
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const items=document.querySelectorAll('.oz-faq-item'),
+    cats=document.querySelectorAll('.oz-faq-cat'),
+    searchInput=document.getElementById('oz-faq-search'),
+    emptyMsg=document.getElementById('oz-faq-empty');
+  let activeCat='all';
+
+  // Toggle open/close
+  items.forEach(item=>{
+    item.querySelector('.oz-faq-q').addEventListener('click',()=>{
+      const wasOpen=item.classList.contains('open');
+      // Close all
+      items.forEach(i=>i.classList.remove('open'));
+      // Open clicked if wasn't open
+      if(!wasOpen)item.classList.add('open');
+    });
+  });
+
+  // Category filter
+  cats.forEach(c=>{
+    c.addEventListener('click',()=>{
+      activeCat=c.dataset.cat;
+      cats.forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      searchInput.value='';
+      filterItems();
+    });
+  });
+
+  // Search
+  searchInput.addEventListener('input',()=>{
+    cats.forEach(x=>x.classList.remove('active'));
+    document.querySelector('[data-cat="all"]').classList.add('active');
+    activeCat='all';
+    filterItems();
+  });
+
+  function filterItems(){
+    const q=searchInput.value.trim().toLowerCase();
+    let visible=0;
+    items.forEach(item=>{
+      const cat=item.dataset.cat;
+      const text=item.querySelector('.oz-faq-q-text').textContent.toLowerCase()+' '+item.querySelector('.oz-faq-a-inner').textContent.toLowerCase();
+      const catMatch=activeCat==='all'||cat===activeCat;
+      const searchMatch=!q||text.includes(q);
+      if(catMatch&&searchMatch){item.style.display='';visible++}
+      else{item.style.display='none';item.classList.remove('open')}
+    });
+    emptyMsg.style.display=visible===0?'block':'none';
+  }
+})();
+</script>

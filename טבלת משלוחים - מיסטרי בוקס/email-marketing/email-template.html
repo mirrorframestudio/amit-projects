@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneZone Jersey - חזור למגרש</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background-color: #1a1a2e;
+      color: #ffffff;
+      direction: rtl;
+    }
+
+    .email-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #040b12;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #040b12 0%, #0a1628 100%);
+      padding: 24px 30px;
+      text-align: center;
+      border-bottom: 3px solid #ffdd00;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg, #0a1628 0%, #040b12 100%);
+      padding: 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-image-container {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(135deg, #0d2137 0%, #1a0a2e 50%, #0d2137 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-image-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, rgba(255,221,0,0.1) 0%, transparent 70%);
+    }
+
+    .hero-placeholder {
+      color: #ffdd00;
+      font-size: 16px;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    .hero-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-text {
+      padding: 30px 30px 10px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: #ffdd00;
+      color: #040b12;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .hero h1 span {
+      color: #ffdd00;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #a0aec0;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding: 0 10px;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffdd00 0%, #f5c400 100%);
+      color: #040b12 !important;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 16px 48px;
+      border-radius: 50px;
+      margin-bottom: 30px;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 20px rgba(255,221,0,0.3);
+    }
+
+    /* Offer Banner */
+    .offer-banner {
+      background: linear-gradient(135deg, #ffdd00 0%, #f5c400 100%);
+      padding: 20px 30px;
+      text-align: center;
+    }
+
+    .offer-banner h2 {
+      font-size: 26px;
+      font-weight: 900;
+      color: #040b12;
+      margin-bottom: 4px;
+    }
+
+    .offer-banner p {
+      font-size: 14px;
+      color: #333;
+      font-weight: 700;
+    }
+
+    /* Products Section */
+    .products {
+      padding: 30px 20px;
+      background: #040b12;
+      text-align: center;
+    }
+
+    .products h2 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .products .subtitle {
+      font-size: 14px;
+      color: #a0aec0;
+      margin-bottom: 24px;
+    }
+
+    .products-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .product-card {
+      width: 170px;
+      background: linear-gradient(180deg, #0d1b2a 0%, #0a1628 100%);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,221,0,0.15);
+      transition: transform 0.2s;
+    }
+
+    .product-image {
+      width: 170px;
+      height: 170px;
+      background: linear-gradient(135deg, #1a2740 0%, #0d1b2a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-placeholder {
+      color: #4a5568;
+      font-size: 12px;
+    }
+
+    .product-info {
+      padding: 12px;
+      text-align: center;
+    }
+
+    .product-info h3 {
+      font-size: 14px;
+      color: #ffffff;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .product-info .price {
+      font-size: 16px;
+      color: #ffdd00;
+      font-weight: 900;
+    }
+
+    /* Coupon Section */
+    .coupon-section {
+      padding: 30px;
+      text-align: center;
+      background: linear-gradient(180deg, #0a1628 0%, #0d1b2a 100%);
+    }
+
+    .coupon-box {
+      border: 2px dashed #ffdd00;
+      border-radius: 12px;
+      padding: 24px;
+      background: rgba(255,221,0,0.05);
+    }
+
+    .coupon-box p {
+      font-size: 14px;
+      color: #a0aec0;
+      margin-bottom: 10px;
+    }
+
+    .coupon-code {
+      display: inline-block;
+      background: #ffdd00;
+      color: #040b12;
+      font-size: 28px;
+      font-weight: 900;
+      padding: 10px 36px;
+      border-radius: 8px;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+    }
+
+    .coupon-box .note {
+      font-size: 12px;
+      color: #718096;
+    }
+
+    /* Free Shipping Banner */
+    .shipping-banner {
+      background: #0d1b2a;
+      padding: 16px 30px;
+      text-align: center;
+      border-top: 1px solid rgba(255,221,0,0.1);
+      border-bottom: 1px solid rgba(255,221,0,0.1);
+    }
+
+    .shipping-banner p {
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .shipping-banner span {
+      color: #ffdd00;
+    }
+
+    /* Footer */
+    .footer {
+      background: #020610;
+      padding: 30px;
+      text-align: center;
+      border-top: 3px solid #ffdd00;
+    }
+
+    .footer-logo {
+      width: 80px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .social-links {
+      margin-bottom: 16px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,221,0,0.1);
+      border-radius: 50%;
+      margin: 0 6px;
+      line-height: 40px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #ffdd00;
+      border: 1px solid rgba(255,221,0,0.2);
+    }
+
+    .footer p {
+      font-size: 12px;
+      color: #4a5568;
+      line-height: 1.8;
+    }
+
+    .footer a {
+      color: #ffdd00;
+      text-decoration: none;
+    }
+
+    .unsubscribe {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #4a5568;
+    }
+
+    .unsubscribe a {
+      color: #718096;
+      text-decoration: underline;
+    }
+
+    /* Stadium pattern overlay */
+    .stadium-pattern {
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(255,221,0,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255,221,0,0.03) 0%, transparent 50%);
+    }
+
+    /* Football field lines decoration */
+    .field-divider {
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 10px,
+        #ffdd00 10px,
+        #ffdd00 20px
+      );
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+
+    <!-- Header -->
+    <div class="header">
+      <img src="https://onezonejersey.com/wp-content/uploads/2025/05/67a8790f-3129-42da-896b-bf86c3d1b784.jpg" alt="OneZone Jersey" class="logo">
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero stadium-pattern">
+      <div class="hero-image-container">
+        <img src="תמונות/hero_clean.png" alt="חולצות רטרו - ריאל מדריד, ברצלונה, ברזיל">
+      </div>
+      <div class="hero-text">
+        <div class="hero-badge">⚽ קולקציית 25/26</div>
+        <h1>המגרש <span>מחכה לך</span></h1>
+        <p>חולצות הכדורגל החמות של העונה כבר כאן. קבוצות מהליגות הגדולות בעולם — ברמת גימור שלא תמצא במקום אחר.</p>
+        <a href="https://onezonejersey.com" class="cta-button">🛒 לקולקציה המלאה</a>
+      </div>
+    </div>
+
+    <div class="field-divider"></div>
+
+    <!-- Offer Banner -->
+    <div class="offer-banner">
+      <h2>🔥 קנה 3 קבל 1 מתנה!</h2>
+      <p>המבצע הכי שווה — תפוס את ההזדמנות עכשיו</p>
+    </div>
+
+    <div class="field-divider"></div>
+
+    <!-- Products Section -->
+    <div class="products">
+      <h2>⭐ הבסטסלרים שלנו</h2>
+      <p class="subtitle">החולצות שכולם רוצים</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-image">
+            <img src="תמונות/pomelli-image.png" alt="חולצת ארגנטינה - מסי 10">
+          </div>
+          <div class="product-info">
+            <h3>חולצת ארגנטינה - מסי 10</h3>
+            <div class="price">₪149</div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">
+            <img src="תמונות/pomelli-image (2).png" alt="חולצת ספרד בית">
+          </div>
+          <div class="product-info">
+            <h3>חולצת ספרד בית</h3>
+            <div class="price">₪149</div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">
+            <img src="תמונות/pomelli-image (5).png" alt="חולצת ברצלונה רטרו">
+          </div>
+          <div class="product-info">
+            <h3>חולצת ברצלונה רטרו</h3>
+            <div class="price">₪159</div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">
+            <img src="תמונות/Streetwear_Redefined_version_1.png" alt="חולצת אייאקס חוץ">
+          </div>
+          <div class="product-info">
+            <h3>חולצת אייאקס חוץ</h3>
+            <div class="price">₪149</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-divider"></div>
+
+    <!-- Coupon Section -->
+    <div class="coupon-section">
+      <div class="coupon-box">
+        <p>🎁 קוד הנחה בלעדי ללקוחות שלנו</p>
+        <div class="coupon-code">SALE15</div>
+        <p class="note">15% הנחה על כל האתר • תקף לזמן מוגבל</p>
+      </div>
+    </div>
+
+    <!-- Free Shipping -->
+    <div class="shipping-banner">
+      <p>🚚 משלוח <span>חינם</span> בהזמנה מעל ₪499</p>
+    </div>
+
+    <!-- Secondary CTA -->
+    <div style="background: #040b12; padding: 30px; text-align: center;">
+      <a href="https://onezonejersey.com" class="cta-button">⚽ בוא לראות מה חדש</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <img src="https://onezonejersey.com/wp-content/uploads/2025/05/67a8790f-3129-42da-896b-bf86c3d1b784.jpg" alt="OneZone Jersey" class="footer-logo">
+      <div class="social-links">
+        <a href="#">📷</a>
+        <a href="#">📘</a>
+        <a href="#">💬</a>
+      </div>
+      <p>
+        OneZone Jersey<br>
+        חולצות כדורגל מכל הליגות בעולם<br>
+        <a href="https://onezonejersey.com">onezonejersey.com</a>
+      </p>
+      <div class="unsubscribe">
+        <a href="#">להסרה מרשימת התפוצה</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

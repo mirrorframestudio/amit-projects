@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Rubik',sans-serif}
+
+.oz-footer{
+  background:#111;
+  color:#ccc;position:relative;overflow:hidden;
+}
+.oz-footer::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,#c8a44e,#e8c96a,#c8a44e,transparent);
+}
+
+.oz-ft-inner{max-width:1100px;margin:0 auto;padding:48px 24px 0;position:relative;z-index:1}
+
+/* Top section - logo + form */
+.oz-ft-top{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.oz-ft-brand{}
+.oz-ft-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.oz-ft-logo img{width:48px;height:48px;border-radius:12px}
+.oz-ft-logo-text{font-size:24px;font-weight:800;font-style:italic;letter-spacing:1px}
+.oz-ft-logo-text .one{
+  background:linear-gradient(135deg,#1a4a8e,#3b7ddd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.oz-ft-logo-text .zone{
+  background:linear-gradient(135deg,#3b7ddd,#5a9fee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.oz-ft-logo-text .jersey{
+  font-size:13px;font-weight:600;font-style:italic;
+  color:#777;display:block;letter-spacing:3px;margin-top:-2px;
+}
+.oz-ft-desc{font-size:13px;line-height:1.7;color:#888;margin-bottom:20px;max-width:340px}
+.oz-ft-socials{display:flex;gap:10px}
+.oz-ft-social{
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;cursor:pointer;text-decoration:none;
+}
+.oz-ft-social:hover{
+  background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25);
+  transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.oz-ft-social svg{width:18px;height:18px;fill:#aaa;transition:fill 0.3s}
+.oz-ft-social:hover svg{fill:#fff}
+
+/* Contact form */
+.oz-ft-form-wrap{}
+.oz-ft-form-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px}
+.oz-ft-form-sub{font-size:12px;color:#888;margin-bottom:16px}
+.oz-ft-form{display:flex;flex-direction:column;gap:10px}
+.oz-ft-row{display:flex;gap:10px}
+.oz-ft-input{
+  flex:1;padding:11px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.06);color:#fff;font-family:'Rubik',sans-serif;
+  font-size:13px;outline:none;transition:all 0.3s;
+}
+.oz-ft-input::placeholder{color:#666}
+.oz-ft-input:focus{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.1);box-shadow:0 0 0 3px rgba(255,255,255,0.05)}
+.oz-ft-check{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:#888;cursor:pointer}
+.oz-ft-check input{accent-color:#fff;margin-top:2px;cursor:pointer}
+.oz-ft-check a{color:#ccc;text-decoration:underline}
+.oz-ft-check a:hover{color:#fff}
+.oz-ft-submit{
+  padding:12px;border:none;border-radius:10px;cursor:pointer;
+  background:#fff;color:#111;
+  font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;
+  transition:all 0.3s;letter-spacing:0.5px;
+}
+.oz-ft-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,255,255,0.15);background:#eee}
+
+/* Middle section - links grid */
+.oz-ft-mid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+  padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.oz-ft-col-title{
+  font-size:13px;font-weight:700;color:#fff;margin-bottom:14px;
+  padding-bottom:8px;position:relative;
+}
+.oz-ft-col-title::after{
+  content:'';position:absolute;bottom:0;right:0;width:24px;height:2px;
+  background:linear-gradient(90deg,#fff,transparent);border-radius:2px;
+}
+.oz-ft-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.oz-ft-links li a{
+  font-size:13px;color:#888;text-decoration:none;
+  transition:all 0.25s;display:inline-flex;align-items:center;gap:4px;
+}
+.oz-ft-links li a::before{content:'';width:0;height:1px;background:#fff;transition:width 0.25s;display:inline-block}
+.oz-ft-links li a:hover{color:#fff;padding-right:4px}
+.oz-ft-links li a:hover::before{width:12px}
+
+/* Contact info column */
+.oz-ft-contact{display:flex;flex-direction:column;gap:12px}
+.oz-ft-contact-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#888}
+.oz-ft-contact-icon{
+  width:34px;height:34px;border-radius:8px;flex-shrink:0;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+}
+.oz-ft-contact-icon svg{width:15px;height:15px;fill:#aaa}
+.oz-ft-contact-item a{color:#888;text-decoration:none;transition:color 0.25s;direction:ltr;display:inline-block}
+.oz-ft-contact-item a:hover{color:#fff}
+
+/* Payment methods */
+.oz-ft-pay{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.oz-ft-pay-badge{
+  padding:6px 10px;border-radius:6px;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  height:36px;min-width:54px;
+}
+.oz-ft-pay-badge img{height:24px;width:auto;object-fit:contain}
+
+/* Bottom bar */
+.oz-ft-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0;font-size:11px;color:#555;
+}
+.oz-ft-bottom-links{display:flex;gap:16px}
+.oz-ft-bottom-links a{color:#555;text-decoration:none;transition:color 0.25s}
+.oz-ft-bottom-links a:hover{color:#fff}
+
+/* Responsive */
+@media(max-width:768px){
+  .oz-ft-top{grid-template-columns:1fr;gap:32px}
+  .oz-ft-mid{grid-template-columns:repeat(2,1fr);gap:24px}
+  .oz-ft-inner{padding:36px 16px 0}
+  .oz-ft-bottom{flex-direction:column;gap:10px;text-align:center}
+}
+@media(max-width:480px){
+  .oz-ft-mid{grid-template-columns:1fr 1fr;gap:20px}
+  .oz-ft-row{flex-direction:column}
+  .oz-ft-logo-text{font-size:20px}
+  .oz-ft-form-title{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<footer class="oz-footer">
+  <div class="oz-ft-inner">
+
+    <!-- Top: Brand + Form -->
+    <div class="oz-ft-top">
+      <div class="oz-ft-brand">
+        <div class="oz-ft-logo">
+          <div class="oz-ft-logo-text">
+            <span class="one">ONE</span><span class="zone">ZONE</span>
+            <span class="jersey">JERSEY</span>
+          </div>
+        </div>
+        <p class="oz-ft-desc">חנות חולצות הכדורגל המובילה בישראל. גרסת שחקן, גרסת אוהד, רטרו, NBA ועוד. איכות ללא פשרות, משלוח מהיר לכל הארץ.</p>
+        <div class="oz-ft-socials">
+          <a href="https://www.instagram.com/onezone_jersey/" target="_blank" class="oz-ft-social" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@onezone_jersey" target="_blank" class="oz-ft-social" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.53v-3.4a4.85 4.85 0 01-.81-.06l-.38-.05z"/></svg>
+          </a>
+          <a href="https://wa.me/972559662064" target="_blank" class="oz-ft-social" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="oz-ft-form-wrap">
+        <div class="oz-ft-form-title">השארו מעודכנים</div>
+        <div class="oz-ft-form-sub">קבלו מבצעים והנחות בלעדיות ישירות למייל</div>
+        <form class="oz-ft-form" onsubmit="return false">
+          <div class="oz-ft-row">
+            <input class="oz-ft-input" type="text" placeholder="שם מלא">
+            <input class="oz-ft-input" type="tel" placeholder="טלפון" dir="ltr">
+          </div>
+          <input class="oz-ft-input" type="email" placeholder="אימייל" dir="ltr">
+          <label class="oz-ft-check">
+            <input type="checkbox">
+            <span>אני מעוניין/ת לקבל דיוור שיווקי, הצעות ועדכונים בכפוף ל<a href="https://onezonejersey.com/%d7%9e%d7%93%d7%99%d7%a0%d7%99%d7%95%d7%aa-%d7%a4%d7%a8%d7%98%d7%99%d7%95%d7%aa/">מדיניות הפרטיות</a>.</span>
+          </label>
+          <button class="oz-ft-submit" type="submit">שליחה</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Middle: Links Grid -->
+    <div class="oz-ft-mid">
+      <div>
+        <div class="oz-ft-col-title">קטגוריות</div>
+        <ul class="oz-ft-links">
+          <li><a href="https://onezonejersey.com/product-category/%d7%9c%d7%99%d7%92%d7%95%d7%aa-%d7%a0%d7%95%d7%a1%d7%a4%d7%95%d7%aa/">עונת 25/26</a></li>
+          <li><a href="https://onezonejersey.com/product-category/%d7%97%d7%95%d7%9c%d7%a6%d7%95%d7%aa-%d7%a8%d7%98%d7%a8%d7%95-%d7%9c%d7%a4%d7%99-%d7%9c%d7%99%d7%92%d7%95%d7%aa/">קולקציית רטרו</a></li>
+          <li><a href="https://onezonejersey.com/product/%d7%9e%d7%99%d7%a1%d7%98%d7%a8%d7%99-%d7%91%d7%95%d7%a7%d7%a1/">מיסטרי בוקס</a></li>
+          <li><a href="https://onezonejersey.com/product-category/%d7%9e%d7%95%d7%a0%d7%93%d7%99%d7%90%d7%9c-2026/">מונדיאל 2026</a></li>
+          <li><a href="https://onezonejersey.com/product-category/nba/">NBA</a></li>
+          <li><a href="https://onezonejersey.com/product-category/%d7%9e%d7%a9%d7%9c%d7%95%d7%97-%d7%90%d7%a7%d7%a1%d7%a4%d7%a8%d7%a1/">משלוח אקספרס</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="oz-ft-col-title">ניווט מהיר</div>
+        <ul class="oz-ft-links">
+          <li><a href="https://onezonejersey.com/">עמוד הבית</a></li>
+          <li><a href="https://onezonejersey.com/%d7%aa%d7%a7%d7%a0%d7%95%d7%9f/">תקנון</a></li>
+          <li><a href="https://onezonejersey.com/%d7%9e%d7%93%d7%99%d7%a0%d7%99%d7%95%d7%aa-%d7%a4%d7%a8%d7%98%d7%99%d7%95%d7%aa/">מדיניות פרטיות</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="oz-ft-col-title">צור קשר</div>
+        <div class="oz-ft-contact">
+          <div class="oz-ft-contact-item">
+            <div class="oz-ft-contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <a href="tel:0559662064">055-966-2064</a>
+          </div>
+          <div class="oz-ft-contact-item">
+            <div class="oz-ft-contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <a href="mailto:Onezonejersey@gmail.com">Onezonejersey@gmail.com</a>
+          </div>
+          <div class="oz-ft-contact-item">
+            <div class="oz-ft-contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 00-1.38-3.56A8.03 8.03 0 0118.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 015.08 16zm2.95-8H5.08a7.987 7.987 0 014.33-3.56A15.65 15.65 0 008.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 01-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+            </div>
+            <a href="https://onezonejersey.com" target="_blank">onezonejersey.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="oz-ft-bottom">
+      <span>© 2024-2026 ONE ZONE JERSEY. כל הזכויות שמורות.</span>
+      <div class="oz-ft-bottom-links">
+        <a href="https://onezonejersey.com/%d7%9e%d7%93%d7%99%d7%a0%d7%99%d7%95%d7%aa-%d7%a4%d7%a8%d7%98%d7%99%d7%95%d7%aa/">מדיניות פרטיות</a>
+        <a href="https://onezonejersey.com/%d7%aa%d7%a7%d7%a0%d7%95%d7%9f/">תקנון</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

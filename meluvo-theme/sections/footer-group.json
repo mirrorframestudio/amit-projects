@@ -1,0 +1,21 @@
+{
+  "name": "Footer group",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {},
+      "blocks": {
+        "menu-1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "קישורים מהירים",
+            "menu": "main-menu"
+          }
+        }
+      },
+      "block_order": ["menu-1"]
+    }
+  },
+  "order": ["footer"]
+}

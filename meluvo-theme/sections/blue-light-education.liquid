@@ -1,0 +1,324 @@
+{%- style -%}
+.education {
+  position: relative;
+  overflow: hidden;
+}
+
+.education__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4xl);
+  align-items: center;
+}
+
+.education__visual {
+  position: relative;
+}
+
+.education__diagram {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+
+.education__diagram img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.education__diagram-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1), rgba(var(--color-secondary-rgb), 0.1));
+}
+
+.education__spectrum {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+}
+
+.education__spectrum-bar {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(to left,
+    #ff0000, #ff7700, #ffff00, #00ff00, #0077ff, #4400ff, #8b00ff
+  );
+  margin-bottom: var(--space-sm);
+  position: relative;
+}
+
+.education__spectrum-marker {
+  position: absolute;
+  top: -8px;
+  right: 55%;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary);
+  box-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.5);
+  transform: translateX(50%);
+}
+
+.education__spectrum-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.education__content {
+  position: relative;
+  z-index: 1;
+}
+
+.education__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--color-secondary-rgb), 0.1);
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.2);
+  color: var(--color-secondary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xl);
+}
+
+.education__title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-xl);
+  line-height: 1.3;
+}
+
+.education__text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--space-xl);
+}
+
+.education__points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.education__point {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.education__point-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.education__point:nth-child(1) .education__point-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.education__point:nth-child(2) .education__point-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.education__point:nth-child(3) .education__point-icon {
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
+}
+
+.education__point-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.education__point-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+.education__point-text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .education__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .education__visual { order: -1; max-width: 600px; margin: 0 auto; }
+}
+{%- endstyle -%}
+
+<section class="section section--darker education">
+  <div class="glow-orb glow-orb--secondary" style="width: 350px; height: 350px; top: 10%; left: -100px;"></div>
+
+  <div class="container">
+    <div class="education__grid">
+      <div class="education__visual reveal">
+        <div class="education__diagram glass-card--static">
+          {%- if section.settings.image -%}
+            <img src="{{ section.settings.image | image_url: width: 700 }}" alt="אור כחול והשפעתו" width="700" height="525" loading="lazy">
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+          <div class="education__diagram-overlay"></div>
+        </div>
+
+        <div class="education__spectrum glass-card--static">
+          <div class="education__spectrum-bar">
+            <div class="education__spectrum-marker floating"></div>
+          </div>
+          <div class="education__spectrum-labels">
+            <span>אינפרא אדום</span>
+            <span>אור כחול מזיק</span>
+            <span>אולטרה סגול</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="education__content reveal">
+        <div class="education__tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          {{ section.settings.tag }}
+        </div>
+
+        <h2 class="education__title">{{ section.settings.title }}</h2>
+        <p class="education__text">{{ section.settings.text }}</p>
+
+        <div class="education__points">
+          {%- for block in section.blocks -%}
+            <div class="education__point" {{ block.shopify_attributes }}>
+              <div class="education__point-icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'alert' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  {%- when 'clock' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- when 'shield' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 12 15 16 10"/></svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {%- endcase -%}
+              </div>
+              <div>
+                <h4 class="education__point-title">{{ block.settings.title }}</h4>
+                <p class="education__point-text">{{ block.settings.text }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blue Light Education",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "default": "המדע שמאחורי המשקפיים"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "מה אור כחול עושה לגוף שלך?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "מסכים מודרניים פולטים כמויות גדולות של אור כחול שגורם למוח שלך לחשוב שעכשיו יום. זה מדכא את ייצור המלטונין — ההורמון שאחראי על השינה שלך."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Diagram image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Key point",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "alert", "label": "Alert" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "shield", "label": "Shield" }
+          ],
+          "default": "alert"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Blue Light Education",
+      "blocks": [
+        {
+          "type": "point",
+          "settings": {
+            "icon": "alert",
+            "title": "עייפות עיניים וכאבי ראש",
+            "text": "חשיפה ממושכת לאור כחול גורמת לעומס על שרירי העיניים, מה שמוביל לעייפות, יובש וכאבי ראש."
+          }
+        },
+        {
+          "type": "point",
+          "settings": {
+            "icon": "clock",
+            "title": "שיבוש שעון ביולוגי",
+            "text": "אור כחול בערב מרמה את המוח לחשוב שעכשיו יום, מה שדוחה את ההירדמות בשעות."
+          }
+        },
+        {
+          "type": "point",
+          "settings": {
+            "icon": "shield",
+            "title": "הפתרון של Meluvo",
+            "text": "העדשות שלנו חוסמות עד 97% מהאור הכחול המזיק, מאפשרות לגוף שלך לייצר מלטונין באופן טבעי."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,44 @@
+{%- style -%}
+.error-404 {
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-404__number {
+  font-size: clamp(5rem, 15vw, 10rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: var(--space-lg);
+}
+
+.error-404__title {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-md);
+}
+
+.error-404__text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2xl);
+}
+{%- endstyle -%}
+
+<section class="section section--dark error-404">
+  <div class="container">
+    <div class="error-404__number gradient-text">404</div>
+    <h1 class="error-404__title">הדף לא נמצא</h1>
+    <p class="error-404__text">הדף שחיפשת לא קיים או הועבר.</p>
+    <a href="/" class="btn btn--primary btn--large">חזרה לדף הבית</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,324 @@
+{%- style -%}
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(var(--color-primary-rgb), 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 60%, rgba(var(--color-secondary-rgb), 0.08) 0%, transparent 70%);
+}
+
+.hero__grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.5;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4xl);
+  align-items: center;
+  width: 100%;
+}
+
+.hero__text {
+  animation: fade-up 0.8s ease both;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-glow);
+  margin-bottom: var(--space-xl);
+}
+
+.hero__tag-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: var(--space-xl);
+}
+
+.hero__subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-2xl);
+  max-width: 520px;
+}
+
+.hero__cta-group {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3xl);
+}
+
+.hero__trust-items {
+  display: flex;
+  gap: var(--space-2xl);
+  flex-wrap: wrap;
+}
+
+.hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.hero__trust-item svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.hero__media {
+  position: relative;
+  animation: fade-up 0.8s ease 0.2s both;
+}
+
+.hero__image-wrapper {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.hero__image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__image-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.15) 0%, transparent 70%);
+  z-index: -1;
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.hero__floating-badge {
+  position: absolute;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-xl);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero__floating-badge--top {
+  top: 10%;
+  left: -10%;
+  background: rgba(var(--color-primary-rgb), 0.15);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  color: var(--color-glow);
+  backdrop-filter: blur(10px);
+}
+
+.hero__floating-badge--bottom {
+  bottom: 15%;
+  right: -5%;
+  background: rgba(var(--color-secondary-rgb), 0.15);
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.2);
+  color: var(--color-secondary);
+  backdrop-filter: blur(10px);
+  animation-delay: 1s;
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    min-height: auto;
+    padding: var(--space-4xl) 0;
+  }
+  .hero__content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero__subtitle { margin-right: auto; margin-left: auto; }
+  .hero__cta-group { justify-content: center; }
+  .hero__trust-items { justify-content: center; }
+  .hero__media { max-width: 500px; margin: 0 auto; }
+  .hero__floating-badge { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero__cta-group { flex-direction: column; }
+  .hero__cta-group .btn { width: 100%; }
+}
+{%- endstyle -%}
+
+<section class="hero">
+  <div class="hero__bg">
+    <div class="hero__bg-gradient"></div>
+    <div class="hero__grid-pattern"></div>
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__text">
+      <div class="hero__tag">
+        <span class="hero__tag-dot"></span>
+        {{ section.settings.tag_text }}
+      </div>
+
+      <h1 class="hero__title">
+        {{ section.settings.title_line1 }}<br>
+        <span class="gradient-text">{{ section.settings.title_highlight }}</span>
+      </h1>
+
+      <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+
+      <div class="hero__cta-group">
+        <a href="{{ section.settings.cta_url }}" class="btn btn--primary btn--large">
+          {{ section.settings.cta_text }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </a>
+        {%- if section.settings.secondary_cta_text != blank -%}
+          <a href="{{ section.settings.secondary_cta_url }}" class="btn btn--secondary btn--large">
+            {{ section.settings.secondary_cta_text }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="hero__trust-items">
+        <div class="hero__trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>30 ימי ניסיון</span>
+        </div>
+        <div class="hero__trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>משלוח חינם</span>
+        </div>
+        <div class="hero__trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>חסימת 97% אור כחול</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__media">
+      <div class="hero__image-glow"></div>
+      <div class="hero__image-wrapper">
+        {%- if section.settings.hero_image -%}
+          <img src="{{ section.settings.hero_image | image_url: width: 800 }}" alt="{{ section.settings.hero_image.alt | default: 'Meluvo Glasses' }}" width="800" height="800" loading="eager" fetchpriority="high">
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      <div class="hero__floating-badge hero__floating-badge--top">
+        חסימת אור כחול 97%
+      </div>
+      <div class="hero__floating-badge hero__floating-badge--bottom">
+        שינה טובה יותר
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag text",
+      "default": "טכנולוגיה מתקדמת לעיניים"
+    },
+    {
+      "type": "text",
+      "id": "title_line1",
+      "label": "Title line 1",
+      "default": "שינה טובה יותר"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight",
+      "label": "Title highlighted text",
+      "default": "מתחילה הלילה"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "משקפי Meluvo חוסמים עד 97% מהאור הכחול המזיק, משפרים את איכות השינה, מפחיתים עומס על העיניים ומגבירים את הריכוז."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Primary CTA text",
+      "default": "לרכישה עכשיו"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA text",
+      "default": "למידע נוסף"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_url",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

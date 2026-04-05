@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Rubik',sans-serif;background:#fff}
+
+.oz-reviews{
+  max-width:900px;margin:0 auto;padding:24px 0;
+  background:#fff;overflow:hidden;position:relative;
+}
+
+.oz-rev-header{text-align:center;padding:0 16px 20px}
+.oz-rev-title{font-size:24px;font-weight:800;color:#1a1a1a;margin-bottom:6px}
+.oz-rev-title span{
+  background:linear-gradient(135deg,#c8a44e,#e8c96a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.oz-rev-summary{display:flex;align-items:center;justify-content:center;gap:8px}
+.oz-rev-stars-big{color:#c8a44e;font-size:20px;letter-spacing:2px}
+.oz-rev-score{font-size:13px;color:#666}
+
+.oz-slider-wrap{position:relative;padding:0}
+.oz-slider-track{
+  display:flex;gap:12px;padding:0 16px 12px;
+  overflow-x:auto;scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;direction:ltr;
+}
+.oz-slider-track::-webkit-scrollbar{display:none}
+
+.oz-rev-card{
+  min-width:210px;max-width:210px;
+  background:#f8f8f8;border:1px solid #e8e8e8;border-radius:14px;
+  overflow:hidden;flex-shrink:0;
+  transition:transform 0.3s,box-shadow 0.3s;direction:rtl;
+}
+.oz-rev-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.oz-rev-img{width:100%;height:220px;object-fit:cover;display:block}
+.oz-rev-body{padding:10px 12px 12px}
+.oz-rev-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.oz-rev-name{font-size:14px;font-weight:700;color:#1a1a1a}
+.oz-rev-card-stars{color:#c8a44e;font-size:11px;letter-spacing:1px}
+.oz-rev-text{font-size:12px;color:#555;line-height:1.55;margin-bottom:4px}
+.oz-rev-date{font-size:10px;color:#999}
+
+.oz-rev-nav{
+  position:absolute;top:130px;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.92);border:1px solid #ddd;
+  color:#c8a44e;font-size:18px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.oz-rev-nav:hover{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.oz-nav-right{right:6px}
+.oz-nav-left{left:6px}
+
+@media(min-width:768px){
+  .oz-rev-card{min-width:230px;max-width:230px}
+  .oz-rev-img{height:240px}
+  .oz-rev-title{font-size:28px}
+  .oz-rev-nav{top:140px;width:38px;height:38px;font-size:20px}
+}
+@media(max-width:520px){
+  .oz-reviews{max-width:100%}
+  .oz-rev-card{min-width:190px;max-width:190px}
+  .oz-rev-img{height:200px}
+  .oz-rev-title{font-size:20px}
+  .oz-rev-nav{width:30px;height:30px;font-size:15px;top:120px}
+}
+</style>
+</head>
+<body>
+<div class="oz-reviews">
+  <div class="oz-rev-header">
+    <div class="oz-rev-title">הלקוחות שלנו <span>מדברים</span></div>
+    <div class="oz-rev-summary">
+      <span class="oz-rev-stars-big">★★★★★</span>
+      <span class="oz-rev-score">4.9 מתוך 5 | 1,000+ ביקורות</span>
+    </div>
+  </div>
+  <div class="oz-slider-wrap">
+    <div class="oz-slider-track" id="revTrack">
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/נועם-איכות-מטורפת-בטוח-שאזמין-שוב-01_02_2026.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">נועם</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">איכות מטורפת, בטוח שאזמין שוב!</div><div class="oz-rev-date">01.02.2026</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עידן-הזמנתי-ל2-הבנים-שלי-חליפות-אהבו-ממש-ולא-מפסיקים-ללבוש-אותם-22_05_2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עידן</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">הזמנתי ל-2 הבנים שלי חליפות, אהבו ממש ולא מפסיקים ללבוש אותם!</div><div class="oz-rev-date">22.05.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עידן-הכל-הגיע-ארוז-טוב-האיכות-מעולה-ממליץ-בחום-21_03_2026.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עידן</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">הכל הגיע ארוז טוב, האיכות מעולה, ממליץ בחום!</div><div class="oz-rev-date">21.03.2026</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עמית-הזמנתי-כמה-חולצות-לפני-החג-בגרמניה-הכל-הגיע-בזמן-וכמות-האנשים-שפירגנו-לי-שם-במשחקים-הייתה-פסיכית-ממליץ-10_2_2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עמית</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">הזמנתי כמה חולצות לפני החג בגרמניה, הכל הגיע בזמן וכמות האנשים שפירגנו לי שם במשחקים הייתה פסיכית. ממליץ!</div><div class="oz-rev-date">10.02.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/אלעד-אהבתי-ממש-שהכל-רקום-בחולצת-רטרו-ויש-אחלה-של-מגוון-באתר-07_05_2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">אלעד</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">אהבתי ממש שהכל רקום בחולצת רטרו, ויש אחלה של מגוון באתר!</div><div class="oz-rev-date">07.05.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/ראזי-לקוח-קבוע-שלכם-תמיד-מבסוט-ואוהב-את-החולצות-17_03_2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">ראזי</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">לקוח קבוע שלכם! תמיד מבסוט ואוהב את החולצות</div><div class="oz-rev-date">17.03.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/דניאל-הגיע-מהר-ובאיכות-טיל-תודה-לכם-05_12_2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">דניאל</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">הגיע מהר ובאיכות טיל, תודה לכם!</div><div class="oz-rev-date">05.12.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/גל-קניתי-למשחקים-של-צרפת-בחול-הגיע-מהר-ובדיוק-במידה-03_02_2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">גל</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">קניתי למשחקים של צרפת בחו״ל, הגיע מהר ובדיוק במידה!</div><div class="oz-rev-date">03.02.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/שליו-איכות-מטורפת-שווה-להזמין-ממכם-6.2.2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">שליו</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">איכות מטורפת, שווה להזמין ממכם!</div><div class="oz-rev-date">06.02.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/שוהם-מלך-שירות-פצצה-ואיכות-אמלה-5.5.2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">שוהם</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">מלך! שירות פצצה ואיכות אמיתית</div><div class="oz-rev-date">05.05.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/רז-תשמע-איזה-חולצה-מלחיצהה-והאיכות-מטורפת-מבטיח-לך-הרבה-זמן-לא-נתקלתי-בכזאת-סחורה-איכותית-🔥🔥🔥-15.2.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">רז</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">תשמע איזה חולצה מלחיצה! והאיכות מטורפת, מבטיח לך הרבה זמן לא נתקלתי בכזאת סחורה איכותית 🔥🔥🔥</div><div class="oz-rev-date">15.02.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עילאי-איכות-ממש-טובה-תודה🙏🙏❤️-21.8.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עילאי</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">איכות ממש טובה, תודה! 🙏❤️</div><div class="oz-rev-date">21.08.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עידו-החולצות-הגיעו-איכות-מטורפת🔥🔥🔥-12.11.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עידו</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">החולצות הגיעו, איכות מטורפת! 🔥🔥🔥</div><div class="oz-rev-date">12.11.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עומר-שמע-איזה-איכות-אש-תודה-.pngרבה-12.7.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עומר</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">שמע איזה איכות אש, תודה רבה!</div><div class="oz-rev-date">12.07.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/עומר-אשששששש-10.7.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">עומר</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">אשששששש! 🔥</div><div class="oz-rev-date">10.07.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/נועם-אש-אחי-הגיע-איכות-מטורפת-וחולצה-עוד-יותר-אין-עליכם-👌-2.7.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">נועם</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">אש אחי! הגיע איכות מטורפת וחולצה עוד יותר, אין עליכם 👌</div><div class="oz-rev-date">02.07.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/נהוראי-המשלוח-הגיע-איכות-מטורפת-תודה-רבה❤️🙏-22.1.2026.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">נהוראי</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">המשלוח הגיע, איכות מטורפת! תודה רבה ❤️🙏</div><div class="oz-rev-date">22.01.2026</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/ינון-וואו-אחי-תודה-רבה-👑-חולצה-ברמה-וגם-השירות-.pngמטורף🔥-.png5_.3.2025.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">ינון</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">וואו אחי תודה רבה! 👑 חולצה ברמה וגם השירות מטורף 🔥</div><div class="oz-rev-date">05.03.2025</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/אלון-תודה-אח-איכות-מטורפת🔥-10.05.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">אלון</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">תודה אח, איכות מטורפת! 🔥</div><div class="oz-rev-date">10.05.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/איתי-רמה-גבוהה-מאוד-אח-תודה-רבה-אין-עלייך-06.05.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">איתי</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">רמה גבוהה מאוד אח, תודה רבה! אין עלייך</div><div class="oz-rev-date">06.05.2024</div></div></div>
+
+      <div class="oz-rev-card"><img class="oz-rev-img" src="https://onezonejersey.com/wp-content/uploads/2026/03/איתמר-איכות-נדירה🔥🔥🔥🔥-17.7.2024.jpg" alt=""><div class="oz-rev-body"><div class="oz-rev-top"><span class="oz-rev-name">איתמר</span><span class="oz-rev-card-stars">★★★★★</span></div><div class="oz-rev-text">איכות נדירה! 🔥🔥🔥🔥</div><div class="oz-rev-date">17.07.2024</div></div></div>
+
+    </div>
+    <button class="oz-rev-nav oz-nav-right" id="navRight">›</button>
+    <button class="oz-rev-nav oz-nav-left" id="navLeft">‹</button>
+  </div>
+</div>
+<script>
+(function(){
+  var track = document.getElementById('revTrack');
+  var btnRight = document.getElementById('navRight');
+  var btnLeft = document.getElementById('navLeft');
+  var scrollAmount = 240;
+  btnRight.addEventListener('click', function(){
+    track.scrollBy({left: -scrollAmount, behavior:'smooth'});
+  });
+  btnLeft.addEventListener('click', function(){
+    track.scrollBy({left: scrollAmount, behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>

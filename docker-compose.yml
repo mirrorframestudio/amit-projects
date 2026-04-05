@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: ads_db
+    environment:
+      POSTGRES_USER: ads_user
+      POSTGRES_PASSWORD: ads_password
+      POSTGRES_DB: ads_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./backend
+    container_name: ads_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://ads_user:ads_password@db:5432/ads_db
+      # Meta Ads credentials — copy .env.example to .env and fill these in.
+      # Leave blank here; Docker Compose will read them from the .env file.
+      META_ACCESS_TOKEN: ${META_ACCESS_TOKEN:-}
+      META_AD_ACCOUNT_ID: ${META_AD_ACCOUNT_ID:-}
+      SHOPIFY_STORE_URL: ${SHOPIFY_STORE_URL:-}
+      SHOPIFY_ACCESS_TOKEN: ${SHOPIFY_ACCESS_TOKEN:-}
+      PLATFORM_FEE_RATE: ${PLATFORM_FEE_RATE:-0.026}
+      PLATFORM_FEE_FIXED: ${PLATFORM_FEE_FIXED:-0.30}
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: ads_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

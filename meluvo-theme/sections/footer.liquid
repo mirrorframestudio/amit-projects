@@ -1,0 +1,110 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <!-- Brand -->
+      <div>
+        <a href="/" class="header__logo" aria-label="{{ shop.name }}">
+          {%- if section.settings.logo -%}
+            <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="120" height="36" loading="lazy">
+          {%- else -%}
+            <span class="header__logo-text gradient-text">MELUVO</span>
+          {%- endif -%}
+        </a>
+        <p class="footer__brand-description">{{ section.settings.description | default: 'טכנולוגיה מתקדמת לחסימת אור כחול. שינה טובה יותר, ריכוז חד יותר, חיים בריאים יותר.' }}</p>
+
+        <div class="footer__social">
+          {%- if settings.social_instagram != blank -%}
+            <a href="{{ settings.social_instagram }}" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook != blank -%}
+            <a href="{{ settings.social_facebook }}" class="footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_tiktok != blank -%}
+            <a href="{{ settings.social_tiktok }}" class="footer__social-link" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78 2.92 2.92 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.57 6.33 6.33 0 0 0 9.37 22a6.33 6.33 0 0 0 6.33-6.33V9.14a8.16 8.16 0 0 0 3.89 1v-3.45z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_list' -%}
+          <div>
+            <h4 class="footer__heading">{{ block.settings.heading }}</h4>
+            {%- for link in linklists[block.settings.menu].links -%}
+              <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <!-- Policies -->
+      <div>
+        <h4 class="footer__heading">מידע</h4>
+        {%- if shop.privacy_policy -%}
+          <a href="{{ shop.privacy_policy.url }}" class="footer__link">{{ 'footer.privacy' | t }}</a>
+        {%- endif -%}
+        {%- if shop.terms_of_service -%}
+          <a href="{{ shop.terms_of_service.url }}" class="footer__link">{{ 'footer.terms' | t }}</a>
+        {%- endif -%}
+        {%- if shop.refund_policy -%}
+          <a href="{{ shop.refund_policy.url }}" class="footer__link">{{ 'footer.refund_policy' | t }}</a>
+        {%- endif -%}
+        {%- if shop.shipping_policy -%}
+          <a href="{{ shop.shipping_policy.url }}" class="footer__link">{{ 'footer.shipping_policy' | t }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. כל הזכויות שמורות.</span>
+      <div class="footer__payment-icons">
+        {{ shop.enabled_payment_types | payment_type_svg_tag }}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Brand description",
+      "default": "טכנולוגיה מתקדמת לחסימת אור כחול. שינה טובה יותר, ריכוז חד יותר, חיים בריאים יותר."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Link list",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "קישורים מהירים"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+{
+  "name": "OneZone Remarketing 21 Day",
+  "flow": [
+    {
+      "id": 1,
+      "module": "monday:searchItemsByColumnValues",
+      "version": 2,
+      "mapper": {
+        "boardId": "2131896795",
+        "columnId": "status",
+        "columnValue": "Sent",
+        "limit": 50
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0 }
+      }
+    },
+    {
+      "id": 2,
+      "module": "monday:updateColumnValues",
+      "version": 2,
+      "mapper": {
+        "boardId": "2131896795",
+        "itemId": "{{1.id}}",
+        "columnValues": {
+          "color_mm15qwdh": "Ready to Send"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 400, "y": 0 }
+      },
+      "filter": {
+        "name": "Eligible",
+        "conditions": [
+          [
+            {
+              "a": "{{1.mappable_column_values.color_mm15qwdh.text}}",
+              "b": "Messaged",
+              "o": "text:notequal",
+              "note": "Remarketing Status is not Messaged"
+            },
+            {
+              "a": "{{1.mappable_column_values.color_mm15qwdh.text}}",
+              "b": "Ready to Send",
+              "o": "text:notequal",
+              "note": "Remarketing Status is not Ready to Send"
+            },
+            {
+              "a": "{{1.mappable_column_values.Date.date}}",
+              "b": "{{addDays(now; -21)}}",
+              "o": "numeric:lessOrEqual",
+              "note": "Sent Date is 21+ days ago (use Numeric operator, not Date)"
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "scheduling": {
+    "type": "daily",
+    "time": "18:00",
+    "timezone": "Asia/Jerusalem"
+  },
+  "metadata": {
+    "version": 1,
+    "notes": [
+      "Board: Orders (ID: 2131896795)",
+      "Remarketing Status column ID: color_mm15qwdh",
+      "Sent Date column: Date (mappable)",
+      "Schedule: Daily 18:00 Asia/Jerusalem",
+      "JONI is a Chrome extension — WhatsApp sending is manual"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+2026-03-29 10:10:24 [INFO] weekly_pnl: Log file: ./output/logs\pnl_20260329_101024.log
+2026-03-29 10:10:25 [INFO] weekly_pnl: ═══ Weekly P&L Report: 2026-03-01 to 2026-03-31 ═══
+2026-03-29 10:10:26 [DEBUG] google.auth.transport.requests: Making request: POST https://oauth2.googleapis.com/token
+2026-03-29 10:10:26 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): oauth2.googleapis.com:443
+2026-03-29 10:10:27 [DEBUG] urllib3.connectionpool: https://oauth2.googleapis.com:443 "POST /token HTTP/1.1" 400 None
+2026-03-29 10:10:27 [ERROR] src.meta_gmail: Failed to connect to Gmail: ('invalid_grant: Bad Request', {'error': 'invalid_grant', 'error_description': 'Bad Request'})
+2026-03-29 10:10:27 [INFO] src.marketing: No Meta spend found in Gmail, trying local folder...
+2026-03-29 10:10:27 [INFO] src.meta_gmail: Parsed 10 transactions from Meta CSV
+2026-03-29 10:10:27 [INFO] src.meta_gmail: Week 2026-03-01–2026-03-31: 0 transactions, 0.00 ILS
+2026-03-29 10:10:27 [WARNING] src.marketing: No marketing row for 2026-03-01 – 2026-03-31
+2026-03-29 10:10:27 [INFO] weekly_pnl: Marketing spend: ₪0.00 (found=False, source=none)
+2026-03-29 10:10:27 [INFO] weekly_pnl: Fetching orders from Shopify API...
+2026-03-29 10:10:27 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): ymy9ur-n2.myshopify.com:443
+2026-03-29 10:10:28 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/orders.json?status=any&created_at_min=2026-03-01T00%3A00%3A00Z&created_at_max=2026-03-31T23%3A59%3A59Z&limit=250&fields=id%2Cname%2Ccreated_at%2Cfinancial_status%2Cfulfillment_status%2Ccancelled_at%2Ctest%2Ccurrency%2Csubtotal_price%2Ctotal_discounts%2Ctotal_tax%2Ctotal_shipping_price_set%2Ctotal_price%2Cshipping_lines%2Cline_items%2Crefunds%2Csubtotal_price_set%2Ctotal_discounts_set%2Ctotal_tax_set%2Ctotal_price_set HTTP/1.1" 200 None
+2026-03-29 10:10:28 [INFO] src.shopify_client: Fetched 9 orders (total so far: 9)
+2026-03-29 10:10:28 [INFO] weekly_pnl: Fetched 9 orders from Shopify
+2026-03-29 10:10:28 [INFO] weekly_pnl: Fetching costs for 4 variants...
+2026-03-29 10:10:28 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47425758167178.json HTTP/1.1" 200 None
+2026-03-29 10:10:28 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47640474845322.json HTTP/1.1" 200 None
+2026-03-29 10:10:28 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47652631380106.json HTTP/1.1" 200 None
+2026-03-29 10:10:29 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47390301618314.json HTTP/1.1" 200 None
+2026-03-29 10:10:29 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/inventory_items.json?ids=48793205342346%2C49018240368778%2C49030829015178%2C48756835745930&limit=100 HTTP/1.1" 200 None
+2026-03-29 10:10:29 [INFO] src.excel_report: Report saved to ./output\pnl_week_2026-03-01_to_2026-03-31.xlsx

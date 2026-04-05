@@ -1,0 +1,16 @@
+2026-03-01 10:41:41 [INFO] weekly_pnl: Log file: ./output/logs\pnl_20260301_104141.log
+2026-03-01 10:41:41 [INFO] weekly_pnl: ═══ Weekly P&L Report: 2026-02-16 to 2026-02-22 ═══
+2026-03-01 10:41:41 [INFO] src.marketing: Marketing spend for week: $350.00
+2026-03-01 10:41:41 [INFO] weekly_pnl: Marketing spend: $350.00 (found=True)
+2026-03-01 10:41:41 [INFO] weekly_pnl: Fetching orders from Shopify API...
+2026-03-01 10:41:41 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): ymy9ur-n2.myshopify.com:443
+2026-03-01 10:41:43 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/orders.json?status=any&created_at_min=2026-02-16T00%3A00%3A00Z&created_at_max=2026-02-22T23%3A59%3A59Z&limit=250&fields=id%2Cname%2Ccreated_at%2Cfinancial_status%2Cfulfillment_status%2Ccancelled_at%2Ctest%2Ccurrency%2Csubtotal_price%2Ctotal_discounts%2Ctotal_tax%2Ctotal_shipping_price_set%2Ctotal_price%2Cshipping_lines%2Cline_items%2Crefunds%2Csubtotal_price_set%2Ctotal_discounts_set%2Ctotal_tax_set%2Ctotal_price_set HTTP/1.1" 200 None
+2026-03-01 10:41:43 [INFO] src.shopify_client: Fetched 8 orders (total so far: 8)
+2026-03-01 10:41:43 [INFO] weekly_pnl: Fetched 8 orders from Shopify
+2026-03-01 10:41:43 [INFO] weekly_pnl: Fetching costs for 5 variants...
+2026-03-01 10:41:43 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47425758167178.json HTTP/1.1" 200 None
+2026-03-01 10:41:44 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47640474845322.json HTTP/1.1" 200 None
+2026-03-01 10:41:44 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47652631380106.json HTTP/1.1" 200 None
+2026-03-01 10:41:45 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47425758199946.json HTTP/1.1" 200 None
+2026-03-01 10:41:45 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/variants/47390301618314.json HTTP/1.1" 200 None
+2026-03-01 10:41:45 [DEBUG] urllib3.connectionpool: https://ymy9ur-n2.myshopify.com:443 "GET /admin/api/2024-01/inventory_items.json?ids=48793205342346%2C49018240368778%2C49030829015178%2C48793205375114%2C48756835745930&limit=100 HTTP/1.1" 200 None

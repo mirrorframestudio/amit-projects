@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONE ZONE | גרסת שחקן VS גרסת אוהד</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a0a1a;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --surface: #111127;
+            --surface-light: #1a1a3e;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(59, 130, 246, 0.2);
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px 60px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 50%, rgba(245,158,11,0.05) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        .hero-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-light);
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .hero h1 {
+            position: relative;
+            font-size: clamp(36px, 7vw, 72px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h2 {
+            position: relative;
+            font-size: clamp(18px, 3vw, 28px);
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .hero-labels {
+            position: relative;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-label .tag {
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero-label.player .tag {
+            background: linear-gradient(135deg, var(--gold), #d97706);
+            color: #000;
+        }
+
+        .hero-label.fan .tag {
+            background: linear-gradient(135deg, var(--accent), #2563eb);
+            color: #fff;
+        }
+
+        .hero-label span:last-child {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .hero-vs {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* ===== INSTRUCTION ===== */
+        .instruction {
+            text-align: center;
+            padding: 20px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .instruction p {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        .instruction .arrow {
+            display: inline-block;
+            animation: slideArrow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes slideArrow {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-8px); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== COMPARISONS GRID ===== */
+        .comparisons {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+            gap: 32px;
+        }
+
+        .comparison-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .comparison-card:nth-child(1) { animation-delay: 0.1s; }
+        .comparison-card:nth-child(2) { animation-delay: 0.2s; }
+        .comparison-card:nth-child(3) { animation-delay: 0.3s; }
+        .comparison-card:nth-child(4) { animation-delay: 0.4s; }
+        .comparison-card:nth-child(5) { animation-delay: 0.5s; }
+        .comparison-card:nth-child(6) { animation-delay: 0.6s; }
+        .comparison-card:nth-child(7) { animation-delay: 0.7s; }
+
+        .comparison-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(59,130,246,0.15);
+        }
+
+        .comparison-card .card-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-card .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .comparison-card .card-number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59,130,246,0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-light);
+        }
+
+        /* ===== SLIDER COMPONENT ===== */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            cursor: col-resize;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .slider-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .slider-container .img-base {
+            z-index: 1;
+        }
+
+        /* Two blur overlays: one for each side */
+        .slider-container .blur-left,
+        .slider-container .blur-right {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: backdrop-filter 0.1s ease-out, -webkit-backdrop-filter 0.1s ease-out;
+        }
+
+        .slider-container .blur-left {
+            clip-path: inset(0 50% 0 0);
+        }
+
+        .slider-container .blur-right {
+            clip-path: inset(0 0 0 50%);
+        }
+
+        /* Darkening overlay on the blurred side */
+        .slider-container .dark-left,
+        .slider-container .dark-right {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+            background: rgba(0,0,0,0);
+            transition: background 0.15s ease-out;
+        }
+
+        .slider-container .dark-left {
+            clip-path: inset(0 50% 0 0);
+        }
+
+        .slider-container .dark-right {
+            clip-path: inset(0 0 0 50%);
+        }
+
+        /* Labels */
+        .slider-label {
+            position: absolute;
+            bottom: 16px;
+            z-index: 8;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .slider-label.label-right {
+            left: 16px;
+            background: rgba(245,158,11,0.9);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(245,158,11,0.4);
+        }
+
+        .slider-label.label-left {
+            right: 16px;
+            background: rgba(59,130,246,0.9);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.4);
+        }
+
+        /* "In focus" indicator */
+        .slider-container .focus-badge {
+            position: absolute;
+            top: 16px;
+            z-index: 8;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .focus-badge.badge-left {
+            left: 16px;
+            background: rgba(245,158,11,0.25);
+            color: var(--gold-light);
+            border: 1px solid rgba(245,158,11,0.4);
+        }
+
+        .focus-badge.badge-right {
+            right: 16px;
+            background: rgba(59,130,246,0.25);
+            color: var(--accent-light);
+            border: 1px solid rgba(59,130,246,0.4);
+        }
+
+        /* Center indicator */
+        .slider-container .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background: rgba(255,255,255,0.08);
+            z-index: 2;
+            pointer-events: none;
+            transform: translateX(-50%);
+        }
+
+        /* Slider Handle */
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            z-index: 10;
+            transform: translateX(-50%);
+            pointer-events: none;
+            background: linear-gradient(to bottom,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.8) 10%,
+                rgba(255,255,255,0.8) 90%,
+                rgba(255,255,255,0) 100%
+            );
+            box-shadow: 0 0 20px rgba(255,255,255,0.15);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .slider-handle.active {
+            opacity: 1;
+        }
+
+        .slider-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 52px;
+            height: 52px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.5),
+                        0 0 0 3px rgba(255,255,255,0.3);
+            pointer-events: auto;
+            cursor: col-resize;
+            opacity: 1;
+        }
+
+        .slider-handle::after {
+            content: '◀  ▶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 13px;
+            color: #333;
+            white-space: nowrap;
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 11;
+            letter-spacing: 2px;
+        }
+
+        /* ===== CARD FOOTER ===== */
+        .card-footer {
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .card-footer .side {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-footer .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .card-footer .dot.gold { background: var(--gold); }
+        .card-footer .dot.blue { background: var(--accent); }
+
+        /* ===== FEATURES SECTION ===== */
+        .features {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 900;
+            margin-bottom: 48px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 0;
+            align-items: start;
+        }
+
+        .features-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .features-col-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .features-col.player .features-col-title {
+            background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.05));
+            color: var(--gold-light);
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+
+        .features-col.fan .features-col-title {
+            background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(37,99,235,0.05));
+            color: var(--accent-light);
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+
+        .feature-item {
+            padding: 14px 18px;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .features-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 70px;
+            gap: 16px;
+        }
+
+        .features-divider .line {
+            width: 2px;
+            height: 100%;
+            min-height: 300px;
+            background: linear-gradient(to bottom, var(--gold), var(--accent));
+            border-radius: 2px;
+        }
+
+        .vs-badge {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            font-weight: 900;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px 100px;
+        }
+
+        .cta-box {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 48px 32px;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .cta-box h3 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .cta-code {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, var(--gold), #d97706);
+            color: #000;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .cta-discount {
+            font-size: 14px;
+            color: var(--gold-light);
+        }
+
+        /* ===== FULL-WIDTH CARD ===== */
+        .comparison-card.full-width {
+            grid-column: 1 / -1;
+            max-width: 700px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+                padding: 60px 16px 40px;
+            }
+
+            .hero-labels {
+                gap: 20px;
+            }
+
+            .comparisons {
+                padding: 24px 16px 60px;
+                gap: 20px;
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-card.full-width {
+                max-width: 100%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .features-divider {
+                flex-direction: row;
+                padding-top: 0;
+                gap: 12px;
+            }
+
+            .features-divider .line {
+                width: 100%;
+                height: 2px;
+                min-height: unset;
+                background: linear-gradient(to right, var(--gold), var(--accent));
+            }
+
+            .slider-handle::before {
+                width: 40px;
+                height: 40px;
+            }
+
+            .slider-handle::after {
+                font-size: 12px;
+            }
+
+            .cta-box {
+                padding: 32px 20px;
+            }
+
+            .cta-code {
+                font-size: 20px;
+                letter-spacing: 3px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .slider-label {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--primary); }
+        ::-webkit-scrollbar-thumb { background: var(--surface-light); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">מדריך השוואה מקיף</div>
+        <h1>גרסת שחקן VS גרסת אוהד</h1>
+        <h2>מה באמת ההבדל? גלו בעצמכם עם ההשוואה האינטראקטיבית שלנו</h2>
+        <div class="hero-labels">
+            <div class="hero-label player">
+                <span class="tag">AERO-FIT</span>
+                <span>גרסת שחקן</span>
+            </div>
+            <span class="hero-vs">VS</span>
+            <div class="hero-label fan">
+                <span class="tag">DRI-FIT</span>
+                <span>גרסת אוהד</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTRUCTION -->
+    <div class="instruction">
+        <p><span class="arrow">👈</span> גררו את הסליידר כדי להשוות בין הגרסאות <span class="arrow" style="animation-direction: reverse;">👉</span></p>
+    </div>
+
+    <!-- COMPARISONS -->
+    <section class="comparisons">
+
+        <!-- Card 1 - Full overview -->
+        <div class="comparison-card full-width">
+            <div class="card-header">
+                <span class="card-title">סקירה כללית - מבט על שתי החולצות</span>
+                <span class="card-number">1</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.13.20.jpeg">
+                <img class="img-base" alt="השוואה כללית">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> AERO-FIT - הדפסה תרמית</div>
+                <div class="side"><span class="dot blue"></span> DRI-FIT - רקמה תפורה</div>
+            </div>
+        </div>
+
+        <!-- Card 2 - Badge/Emblem -->
+        <div class="comparison-card">
+            <div class="card-header">
+                <span class="card-title">סמל הנבחרת - איכות הרקמה</span>
+                <span class="card-number">2</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.13.34.jpeg">
+                <img class="img-base" alt="סמל">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> סמל מודפס תרמית</div>
+                <div class="side"><span class="dot blue"></span> סמל תפור ורקום</div>
+            </div>
+        </div>
+
+        <!-- Card 3 - Brand logo -->
+        <div class="comparison-card">
+            <div class="card-header">
+                <span class="card-title">לוגו המותג - פרטי העיצוב</span>
+                <span class="card-number">3</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.13.45.jpeg">
+                <img class="img-base" alt="לוגו">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> לוגו מודפס תרמית</div>
+                <div class="side"><span class="dot blue"></span> לוגו תפור ורקום</div>
+            </div>
+        </div>
+
+        <!-- Card 4 - Inner label -->
+        <div class="comparison-card">
+            <div class="card-header">
+                <span class="card-title">תווית פנימית - סימון הגרסה</span>
+                <span class="card-number">4</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.13.57.jpeg">
+                <img class="img-base" alt="תווית">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> AERO-FIT - תווית מודפסת</div>
+                <div class="side"><span class="dot blue"></span> DRI-FIT - תווית תפורה</div>
+            </div>
+        </div>
+
+        <!-- Card 5 - Side panel -->
+        <div class="comparison-card">
+            <div class="card-header">
+                <span class="card-title">פאנל צידי - טכנולוגיית האוורור</span>
+                <span class="card-number">5</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.14.08.jpeg">
+                <img class="img-base" alt="צד">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> פס צידי מודפס</div>
+                <div class="side"><span class="dot blue"></span> פס צידי תפור</div>
+            </div>
+        </div>
+
+        <!-- Card 6 - Full body -->
+        <div class="comparison-card">
+            <div class="card-header">
+                <span class="card-title">מבט מלא - הבדלי הגזרה</span>
+                <span class="card-number">6</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.14.19.jpeg">
+                <img class="img-base" alt="מבט מלא">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> פרטים מודפסים תרמית</div>
+                <div class="side"><span class="dot blue"></span> פרטים תפורים ורקומים</div>
+            </div>
+        </div>
+
+        <!-- Card 7 - Bottom details -->
+        <div class="comparison-card full-width">
+            <div class="card-header">
+                <span class="card-title">תחתית החולצה - גימורים ותפרים</span>
+                <span class="card-number">7</span>
+            </div>
+            <div class="slider-container" data-image="WhatsApp Image 2026-03-22 at 13.14.35.jpeg">
+                <img class="img-base" alt="תחתית">
+                <div class="blur-left"></div>
+                <div class="blur-right"></div>
+                <div class="dark-left"></div>
+                <div class="dark-right"></div>
+                <div class="center-line"></div>
+                <div class="slider-handle"></div>
+                <span class="focus-badge badge-left">👁️ בפוקוס</span>
+                <span class="focus-badge badge-right">👁️ בפוקוס</span>
+                <span class="slider-label label-right">גרסת שחקן</span>
+                <span class="slider-label label-left">גרסת אוהד</span>
+            </div>
+            <div class="card-footer">
+                <div class="side"><span class="dot gold"></span> גימור מודפס</div>
+                <div class="side"><span class="dot blue"></span> גימור תפור</div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <h2 class="features-title">השוואה מפורטת</h2>
+        <div class="features-grid">
+            <div class="features-col player">
+                <div class="features-col-title">⭐ גרסת שחקן — AERO-FIT</div>
+                <div class="feature-item">🏟️ אותה חולצה שהשחקנים לובשים על המגרש</div>
+                <div class="feature-item">🖨️ הכל מודפס — לוגו, סמלים, תוויות ופרטים בהדפסה תרמית</div>
+                <div class="feature-item">✂️ גזרה צמודה ואתלטית המותאמת לתנועה מקצועית</div>
+                <div class="feature-item">⚡ ללא תפרים מיותרים — משקל קליל ונוחות מקסימלית</div>
+                <div class="feature-item">💨 טכנולוגיית AERO-FIT מתקדמת לניהול חום ולחות</div>
+                <div class="feature-item">🔥 גימור חלק ואחיד — מראה פרימיום מקצועי</div>
+            </div>
+            <div class="features-divider">
+                <div class="vs-badge">VS</div>
+                <div class="line"></div>
+            </div>
+            <div class="features-col fan">
+                <div class="features-col-title">💙 גרסת אוהד — DRI-FIT</div>
+                <div class="feature-item">👕 עיצוב זהה עם התאמה לשימוש יומיומי</div>
+                <div class="feature-item">🧵 הכל תפור — לוגו, סמלים, תוויות ופרטים ברקמה ותפירה</div>
+                <div class="feature-item">📐 גזרה רגילה ונוחה ללבישה קז'ואלית</div>
+                <div class="feature-item">🧶 תפרים ורקמות עמידים — איכות לאורך זמן</div>
+                <div class="feature-item">💧 טכנולוגיית DRI-FIT לספיגת זיעה ויובש</div>
+                <div class="feature-item">👛 מחיר נגיש יותר — יחס איכות-מחיר מעולה</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-box">
+            <h3>🔥 מוכנים להזמין?</h3>
+            <p>קבלו 10% הנחה על כל חולצות הכדורגל — גרסת שחקן וגרסת אוהד</p>
+            <div class="cta-code">SALE10</div>
+            <div class="cta-discount">הזינו את הקוד בקופה וקבלו 10% הנחה מיידית</div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize all sliders
+        document.querySelectorAll('.slider-container').forEach(container => {
+            const imageName = container.dataset.image;
+            const imgBase = container.querySelector('.img-base');
+            const blurLeft = container.querySelector('.blur-left');
+            const blurRight = container.querySelector('.blur-right');
+            const darkLeft = container.querySelector('.dark-left');
+            const darkRight = container.querySelector('.dark-right');
+            const handle = container.querySelector('.slider-handle');
+            const badgeLeft = container.querySelector('.badge-left');
+            const badgeRight = container.querySelector('.badge-right');
+            const labelPlayer = container.querySelector('.label-right');
+            const labelFan = container.querySelector('.label-left');
+
+            // Set image source
+            imgBase.src = imageName;
+
+            let isDragging = false;
+            const MAX_BLUR = 14; // max blur in px
+            const MAX_DARK = 0.3; // max darkening opacity
+
+            function updateSlider(x) {
+                const rect = container.getBoundingClientRect();
+                let pos = (x - rect.left) / rect.width;
+                pos = Math.max(0.05, Math.min(0.95, pos));
+
+                // How far from center (0 = at center, 1 = at edge)
+                const distFromCenter = Math.abs(pos - 0.5) * 2;
+                const blurAmount = Math.round(distFromCenter * MAX_BLUR);
+                const darkAmount = distFromCenter * MAX_DARK;
+
+                handle.style.left = `${pos * 100}%`;
+
+                if (pos < 0.48) {
+                    // Slider moved LEFT → user focuses on LEFT (player) → blur RIGHT side
+                    blurRight.style.backdropFilter = `blur(${blurAmount}px)`;
+                    blurRight.style.webkitBackdropFilter = `blur(${blurAmount}px)`;
+                    blurLeft.style.backdropFilter = 'blur(0px)';
+                    blurLeft.style.webkitBackdropFilter = 'blur(0px)';
+
+                    darkRight.style.background = `rgba(0,0,0,${darkAmount})`;
+                    darkLeft.style.background = 'rgba(0,0,0,0)';
+
+                    // Show handle line
+                    handle.classList.add('active');
+
+                    // Badges
+                    if (badgeLeft) badgeLeft.style.opacity = distFromCenter > 0.15 ? '1' : '0';
+                    if (badgeRight) badgeRight.style.opacity = '0';
+
+                    // Labels
+                    if (labelPlayer) labelPlayer.style.opacity = '1';
+                    if (labelFan) labelFan.style.opacity = distFromCenter > 0.3 ? '0.4' : '1';
+
+                } else if (pos > 0.52) {
+                    // Slider moved RIGHT → user focuses on RIGHT (fan) → blur LEFT side
+                    blurLeft.style.backdropFilter = `blur(${blurAmount}px)`;
+                    blurLeft.style.webkitBackdropFilter = `blur(${blurAmount}px)`;
+                    blurRight.style.backdropFilter = 'blur(0px)';
+                    blurRight.style.webkitBackdropFilter = 'blur(0px)';
+
+                    darkLeft.style.background = `rgba(0,0,0,${darkAmount})`;
+                    darkRight.style.background = 'rgba(0,0,0,0)';
+
+                    handle.classList.add('active');
+
+                    if (badgeRight) badgeRight.style.opacity = distFromCenter > 0.15 ? '1' : '0';
+                    if (badgeLeft) badgeLeft.style.opacity = '0';
+
+                    if (labelFan) labelFan.style.opacity = '1';
+                    if (labelPlayer) labelPlayer.style.opacity = distFromCenter > 0.3 ? '0.4' : '1';
+
+                } else {
+                    // At center → everything clear!
+                    blurLeft.style.backdropFilter = 'blur(0px)';
+                    blurLeft.style.webkitBackdropFilter = 'blur(0px)';
+                    blurRight.style.backdropFilter = 'blur(0px)';
+                    blurRight.style.webkitBackdropFilter = 'blur(0px)';
+
+                    darkLeft.style.background = 'rgba(0,0,0,0)';
+                    darkRight.style.background = 'rgba(0,0,0,0)';
+
+                    handle.classList.remove('active');
+
+                    if (badgeLeft) badgeLeft.style.opacity = '0';
+                    if (badgeRight) badgeRight.style.opacity = '0';
+
+                    if (labelPlayer) labelPlayer.style.opacity = '1';
+                    if (labelFan) labelFan.style.opacity = '1';
+                }
+            }
+
+            // Mouse events
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateSlider(e.clientX);
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    updateSlider(e.clientX);
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    // Snap back to center with animation
+                    snapToCenter();
+                }
+            });
+
+            // Touch events
+            container.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                updateSlider(e.touches[0].clientX);
+                e.preventDefault();
+            }, { passive: false });
+
+            container.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    updateSlider(e.touches[0].clientX);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            container.addEventListener('touchend', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    snapToCenter();
+                }
+            });
+
+            // Smooth snap back to center when releasing
+            function snapToCenter() {
+                const rect = container.getBoundingClientRect();
+                const center = rect.left + rect.width * 0.5;
+                const currentLeft = parseFloat(handle.style.left) || 50;
+                const currentX = rect.left + (currentLeft / 100) * rect.width;
+                const startX = currentX;
+                let startTime = null;
+                const duration = 400;
+
+                function animateSnap(timestamp) {
+                    if (isDragging) return; // stop if user grabs again
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    // Ease out cubic
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    const x = startX + (center - startX) * ease;
+                    updateSlider(x);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateSnap);
+                    }
+                }
+
+                requestAnimationFrame(animateSnap);
+            }
+
+            // Auto-animate hint on first view
+            const autoAnimate = () => {
+                const rect = container.getBoundingClientRect();
+                const center = rect.left + rect.width * 0.5;
+                let start = null;
+                const duration = 2000;
+
+                function animate(timestamp) {
+                    if (isDragging) return;
+                    if (!start) start = timestamp;
+                    const progress = (timestamp - start) / duration;
+
+                    if (progress < 1) {
+                        const offset = Math.sin(progress * Math.PI * 2) * rect.width * 0.3;
+                        updateSlider(center + offset);
+                        requestAnimationFrame(animate);
+                    } else {
+                        updateSlider(center);
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            };
+
+            // Trigger auto-animate when card comes into view
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(autoAnimate, 400);
+                        cardObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            cardObserver.observe(container);
+        });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.comparison-card, .feature-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "banner-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "require('http').createServer((q,r)=>{const fs=require('fs'),p=require('path'),u=decodeURIComponent(q.url==='/'?'/preview.html':q.url),f=p.join('גרסת שחקן גרסת אוהד',u),ext=p.extname(f).toLowerCase(),ct={'html':'text/html;charset=utf-8','css':'text/css','js':'text/javascript','jpeg':'image/jpeg','jpg':'image/jpeg','png':'image/png'}[ext.slice(1)]||'application/octet-stream';fs.readFile(f,(e,d)=>{if(e){r.writeHead(404);r.end('Not found')}else{r.writeHead(200,{'Content-Type':ct});r.end(d)}})}).listen(8090)"],
+      "port": 8090
+    }
+  ]
+}
