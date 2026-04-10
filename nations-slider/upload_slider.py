@@ -14,10 +14,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Config ───────────────────────────────────────────────────────────────────
 SITE          = "https://onezonejersey.com"
-WP_USER       = "Model Images"
-WP_APP_PASS   = "4Zch eHfk bHZL zJDX hq3J wv9G"
-PROCESSED_DIR = Path(r"C:\Users\amith\ads-dashboard\nations-slider\processed")
-URLS_FILE     = Path(r"C:\Users\amith\ads-dashboard\nations-slider\uploaded_urls.json")
+WP_USER       = "AMIT"
+WP_APP_PASS   = "VsBI FDeI GA9S ke4v Vpoy zvNt"
+PROCESSED_DIR = Path(__file__).parent / "processed"
+URLS_FILE     = Path(__file__).parent / "uploaded_urls.json"
 
 TEAMS = ["ארגנטינה", "ברזיל", "גרמניה", "הולנד", "ספרד", "פורטוגל", "צרפת", "אנגליה"]
 
@@ -196,13 +196,29 @@ def main():
     URLS_FILE.write_text(json.dumps(saved, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f"\nURLs saved → {URLS_FILE}")
 
-    # Build slider JS
-    slider_js = build_slider_js(saved)
-    js_file   = Path(r"C:\Users\amith\ads-dashboard\nations-slider\slider_code.js")
-    js_file.write_text(slider_js, encoding='utf-8')
-    print(f"Slider JS saved → {js_file}")
-    print(f"\nSlider JS length: {len(slider_js)} chars")
-    print("\nNext: paste slider_code.js content at the END of WoodMart Theme Settings → Custom JS")
+    # Inject TEAMS into existing slider_code.js (replace only the array)
+    js_file = Path(__file__).parent / "slider_code.js"
+    if not js_file.exists():
+        print(f"  ✗ slider_code.js not found at {js_file}")
+        return
+
+    cards_js = ",\n    ".join([
+        f'{{ name: "{t}", url: "{d["url"]}", href: "/?s={t}" }}'
+        for t, d in saved.items()
+    ])
+    teams_block = f"  var TEAMS = [\n    {cards_js}\n  ];"
+
+    import re
+    content = js_file.read_text(encoding='utf-8')
+    content = re.sub(
+        r'var TEAMS\s*=\s*\[[\s\S]*?\];',
+        teams_block,
+        content,
+        count=1
+    )
+    js_file.write_text(content, encoding='utf-8')
+    print(f"Slider JS updated → {js_file} ({len(content)} chars)")
+    print("\nNext: copy slider_code.js content into the Elementor HTML widget")
 
 if __name__ == "__main__":
     main()

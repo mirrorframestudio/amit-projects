@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nations Slider — Widget Preview</title>
+<style>
+  body { margin: 0; font-family: 'Rubik', sans-serif; background: #fff; }
+  .fake-hero { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 100%); height: 120px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: 700; }
+  .fake-content { max-width: 1180px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; direction: rtl; }
+  .fake-product { background: #f7f8fa; border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; border: 1px solid #eee; }
+</style>
+</head>
+<body>
+
+<div class="fake-hero">⚽ מונדיאל 2026 — Hero Banner</div>
+
+<script>
+(function() {
+  var _script = document.currentScript;
+
+  var NATIONS = [
+    {name:'\u05d0\u05e8\u05d2\u05e0\u05d8\u05d9\u05e0\u05d4', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-argentina-2.png', href:'https://onezonejersey.com/?s=%D7%90%D7%A8%D7%92%D7%A0%D7%98%D7%99%D7%A0%D7%94&post_type=product'},
+    {name:'\u05d1\u05e8\u05d6\u05d9\u05dc', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-brazil.png', href:'https://onezonejersey.com/?s=%D7%91%D7%A8%D7%96%D7%99%D7%9C&post_type=product'},
+    {name:'\u05d2\u05e8\u05de\u05e0\u05d9\u05d4', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-germany.png', href:'https://onezonejersey.com/?s=%D7%92%D7%A8%D7%9E%D7%A0%D7%99%D7%94&post_type=product'},
+    {name:'\u05d4\u05d5\u05dc\u05e0\u05d3', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-netherlands.png', href:'https://onezonejersey.com/?s=%D7%94%D7%95%D7%9C%D7%A0%D7%93&post_type=product'},
+    {name:'\u05e1\u05e4\u05e8\u05d3', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-spain.png', href:'https://onezonejersey.com/?s=%D7%A1%D7%A4%D7%A8%D7%93&post_type=product'},
+    {name:'\u05e4\u05d5\u05e8\u05d8\u05d5\u05d2\u05dc', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-portugal.png', href:'https://onezonejersey.com/?s=%D7%A4%D7%95%D7%A8%D7%98%D7%95%D7%92%D7%9C&post_type=product'},
+    {name:'\u05e6\u05e8\u05e4\u05ea', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-france.png', href:'https://onezonejersey.com/?s=%D7%A6%D7%A8%D7%A4%D7%AA&post_type=product'},
+    {name:'\u05d0\u05e0\u05d2\u05dc\u05d9\u05d4', img:'https://onezonejersey.com/wp-content/uploads/2026/04/nations-england.png', href:'https://onezonejersey.com/?s=%D7%90%D7%A0%D7%92%D7%9C%D7%99%D7%94&post_type=product'}
+  ];
+
+  if (document.getElementById('oz-nations-style')) {
+    document.getElementById('oz-nations-style').remove();
+  }
+  var style = document.createElement('style');
+  style.id = 'oz-nations-style';
+  style.textContent = [
+    '#oz-nations{background:#fff;padding:32px 0 40px;direction:rtl;text-align:center}',
+    '#oz-nations h2{font-size:22px;font-weight:700;color:#111;margin:0 0 24px;font-family:inherit}',
+    '#oz-nations .nz-wrap{position:relative;max-width:1180px;margin:0 auto;padding:0 48px}',
+    '#oz-nations .nz-viewport{overflow:hidden}',
+    '#oz-nations .nz-track{display:flex;gap:18px;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;touch-action:pan-y}',
+    '#oz-nations .nz-card{flex:0 0 calc(25% - 14px);border-radius:14px;overflow:hidden;text-decoration:none;display:block;transition:transform .18s,box-shadow .18s;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #eee}',
+    '#oz-nations .nz-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.13)}',
+    '#oz-nations .nz-img{aspect-ratio:3/4;overflow:hidden;background:#fff}',
+    '#oz-nations .nz-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}',
+    '#oz-nations .nz-card:hover .nz-img img{transform:scale(1.04)}',
+    '#oz-nations .nz-arrow{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;z-index:10!important;width:40px!important;height:40px!important;min-width:0!important;min-height:0!important;border:none!important;border-radius:50%!important;background:rgba(0,0,0,.55)!important;color:#fff!important;font-size:20px!important;line-height:1!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;margin:0!important;transition:background .2s,transform .2s!important;box-shadow:0 2px 8px rgba(0,0,0,.25)!important}',
+    '#oz-nations .nz-arrow:hover{background:rgba(230,57,70,.9)!important;transform:translateY(-50%) scale(1.1)!important}',
+    '#oz-nations .nz-arrow:active{transform:translateY(-50%) scale(0.95)!important}',
+    '#oz-nations .nz-arrow:disabled{opacity:0!important;pointer-events:none!important}',
+    '#oz-nations .nz-arrow-right{right:4px!important;left:auto!important}',
+    '#oz-nations .nz-arrow-left{left:4px!important;right:auto!important}',
+    '@media(max-width:768px){#oz-nations{padding:20px 0 28px}#oz-nations h2{font-size:18px}#oz-nations .nz-wrap{padding:0 36px}#oz-nations .nz-card{flex:0 0 calc(50% - 9px)}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  var sec = document.createElement('div');
+  sec.id = 'oz-nations';
+  sec.innerHTML = '<h2>\u05d1\u05d7\u05e8\u05d5 <span style="color:#e63946">\u05e0\u05d1\u05d7\u05e8\u05ea</span></h2>' +
+    '<div class="nz-wrap">' +
+    '<button class="nz-arrow nz-arrow-right" id="nz-next">&#8250;</button>' +
+    '<button class="nz-arrow nz-arrow-left" id="nz-prev">&#8249;</button>' +
+    '<div class="nz-viewport"><div class="nz-track">' +
+    NATIONS.map(function(n) {
+      return '<a class="nz-card" href="' + n.href + '">' +
+        '<div class="nz-img"><img src="' + n.img + '" alt="' + n.name + '" loading="lazy"></div></a>';
+    }).join('') +
+    '</div></div></div>';
+  _script.insertAdjacentElement('afterend', sec);
+
+  var track   = sec.querySelector('.nz-track');
+  var prevBtn = sec.querySelector('#nz-prev');
+  var nextBtn = sec.querySelector('#nz-next');
+  var cards   = sec.querySelectorAll('.nz-card');
+  var visible = window.innerWidth <= 768 ? 2 : 4;
+  var total   = cards.length;
+  var idx     = 0;
+  var maxIdx  = total - visible;
+
+  function getW() { return cards[0].getBoundingClientRect().width + 18; }
+  function update() {
+    track.style.transform = 'translateX(' + (idx * getW()) + 'px)';
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx >= maxIdx;
+  }
+
+  prevBtn.addEventListener('click', function() { if (idx > 0) { idx--; update(); } });
+  nextBtn.addEventListener('click', function() { if (idx < maxIdx) { idx++; update(); } });
+  window.addEventListener('resize', function() {
+    visible = window.innerWidth <= 768 ? 2 : 4;
+    maxIdx = total - visible;
+    if (idx > maxIdx) idx = maxIdx;
+    update();
+  });
+
+  var tx = 0, ty = 0, td = 0, isH = null, t0 = 0;
+  track.addEventListener('touchstart', function(e) {
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+    td = 0; isH = null; t0 = Date.now();
+    track.style.transition = 'none';
+  }, {passive:true});
+  track.addEventListener('touchmove', function(e) {
+    var dx = e.touches[0].clientX - tx, dy = e.touches[0].clientY - ty;
+    if (isH === null) isH = Math.abs(dx) > Math.abs(dy);
+    if (!isH) return;
+    e.preventDefault();
+    td = dx;
+    var base = idx * getW();
+    var tgt = base - td;
+    if (tgt < 0) tgt *= 0.3;
+    if (tgt > maxIdx * getW()) tgt = maxIdx * getW() + (tgt - maxIdx * getW()) * 0.3;
+    track.style.transform = 'translateX(' + tgt + 'px)';
+  }, {passive:false});
+  track.addEventListener('touchend', function() {
+    track.style.transition = '';
+    if (!isH) { update(); return; }
+    var elapsed = Math.max(1, Date.now() - t0);
+    var vel = td / elapsed;
+    var fast = Math.abs(vel) > 0.3;
+    if ((td > 40 || (fast && td > 5)) && idx > 0) { idx--; update(); }
+    else if ((td < -40 || (fast && td < -5)) && idx < maxIdx) { idx++; update(); }
+    else { update(); }
+  });
+
+  update();
+})();
+</script>
+
+<div class="fake-content">
+  <div class="fake-product">מוצר 1</div>
+  <div class="fake-product">מוצר 2</div>
+  <div class="fake-product">מוצר 3</div>
+  <div class="fake-product">מוצר 4</div>
+</div>
+
+</body>
+</html>
