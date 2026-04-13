@@ -1,0 +1,174 @@
+{
+  "id": "TrackingMorePolling01",
+  "name": "HFD TrackingMore Polling → JONI WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "hours", "hoursInterval": 2 }]
+        }
+      },
+      "id": "node-schedule",
+      "name": "Every 2 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ"
+            },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "API-Version", "value": "2023-10" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: '{ boards(ids: [2131896795]) { items_page(limit: 200) { items { id name column_values { id text } } } } }' }) }}",
+        "options": {}
+      },
+      "id": "node-get-monday",
+      "name": "Get Monday Orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Monday board items — extract tracking, phone, postal code\nconst data = $input.first().json.data || {};\nconst items = data.boards?.[0]?.items_page?.items || [];\n\nconst orders = [];\n\nfor (const item of items) {\n  const cols = {};\n  (item.column_values || []).forEach(c => { cols[c.id] = (c.text || '').trim(); });\n\n  const trackingNumber = cols['text__1'];\n  if (!trackingNumber) continue;\n\n  const rawPhone = cols['phone__1'];\n  if (!rawPhone) continue;\n  const phone = rawPhone.replace(/[^0-9]/g, '');\n  if (phone.length < 9) continue;\n\n  // Extract 7-digit Israeli postal code from any column\n  let postalCode = '';\n  for (const text of Object.values(cols)) {\n    const m = text.match(/\\b\\d{7}\\b/);\n    if (m) { postalCode = m[0]; break; }\n  }\n\n  orders.push({\n    item_id: item.id,\n    customer_name: item.name,\n    tracking_number: trackingNumber,\n    phone,\n    postal_code: postalCode\n  });\n}\n\nreturn orders.map(o => ({ json: o }));"
+      },
+      "id": "node-parse-orders",
+      "name": "Parse Orders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.trackingmore.com/v4/trackings/create",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Tracking-Api-Key", "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ tracking_number: $json.tracking_number, courier_code: 'hfd', tracking_postal_code: $json.postal_code || undefined }) }}",
+        "options": {
+          "response": { "response": { "neverError": true } }
+        }
+      },
+      "id": "node-register-tracking",
+      "name": "Register on TrackingMore",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.trackingmore.com/v4/trackings/hfd/{{ $('Parse Orders').item.json.tracking_number }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Tracking-Api-Key", "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b" }
+          ]
+        },
+        "options": {
+          "response": { "response": { "neverError": true } }
+        }
+      },
+      "id": "node-get-status",
+      "name": "Get TrackingMore Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if status changed; update static data\nconst staticData = $getWorkflowStaticData('global');\nconst order = $('Parse Orders').item.json;\nconst tracking = order.tracking_number;\n\nconst tmResponse = $input.first().json;\nconst trackInfo = tmResponse.data?.[0]?.track_info || {};\nconst currentStatus = trackInfo.latest_status?.status || '';\n\n// Only act on meaningful statuses\nconst KEY_STATUSES = ['InTransit', 'OutForDelivery', 'Delivered', 'Exception', 'AvailableForPickup', 'Undelivered'];\nif (!currentStatus || !KEY_STATUSES.includes(currentStatus)) return [];\n\nconst lastKnown = staticData[tracking] || null;\nif (currentStatus === lastKnown) return []; // No change\n\n// Save new status\nstaticData[tracking] = currentStatus;\n\nconst lastEvent = trackInfo.latest_event || {};\nconst eta = trackInfo.time_metrics?.estimated_delivery_date || {};\n\nreturn [{ json: {\n  phone: order.phone,\n  customer_name: order.customer_name,\n  tracking_number: tracking,\n  status: currentStatus,\n  sub_status: trackInfo.latest_status?.sub_status || '',\n  last_message: lastEvent.description || '',\n  last_location: lastEvent.location || '',\n  eta_from: eta.from || '',\n  eta_to: eta.to || ''\n}}];"
+      },
+      "id": "node-check-status",
+      "name": "Status Changed?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { status, last_message, last_location, eta_from, eta_to, phone, tracking_number } = $input.first().json;\n\nconst statusMap = {\n  InTransit: 'בדרך אליך 🚚',\n  OutForDelivery: 'יוצא למשלוח עכשיו 📦',\n  Delivered: 'נמסר בהצלחה ✅',\n  Exception: 'בעיה בתהליך המשלוח ⚠️',\n  AvailableForPickup: 'ממתין לאיסוף בנקודת חלוקה 📍',\n  Undelivered: 'ניסיון מסירה נכשל ⚠️'\n};\n\nconst statusHebrew = statusMap[status] || status;\n\nlet etaLine = '';\nif (eta_from) {\n  try {\n    const d = new Date(eta_from);\n    const formatted = d.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });\n    etaLine = `\\nצפי הגעה: ${formatted}`;\n  } catch(e) {\n    etaLine = `\\nצפי הגעה: ${eta_from}`;\n  }\n}\n\nconst locationLine = last_location ? `\\nמיקום: ${last_location}` : '';\nconst msgLine = last_message ? `\\nעדכון: ${last_message}` : '';\n\nconst message = `*OneZone - עדכון משלוח* 🏆\\n\\nסטטוס: ${statusHebrew}${locationLine}${msgLine}${etaLine}\\n\\nמס' מעקב: ${tracking_number}\\n\\nמעקב מלא: https://t.17track.net/he#nums=${tracking_number}`;\n\nreturn [{ json: { phone, message } }];"
+      },
+      "id": "node-format-message",
+      "name": "Format Hebrew Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://joni-e746b-default-rtdb.europe-west1.firebasedatabase.app//joni/send.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ to: $json.phone, text: $json.message }) }}",
+        "options": {}
+      },
+      "id": "node-send-joni",
+      "name": "Send via JONI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 300]
+    }
+  ],
+  "connections": {
+    "Every 2 Hours": {
+      "main": [[{ "node": "Get Monday Orders", "type": "main", "index": 0 }]]
+    },
+    "Get Monday Orders": {
+      "main": [[{ "node": "Parse Orders", "type": "main", "index": 0 }]]
+    },
+    "Parse Orders": {
+      "main": [[{ "node": "Register on TrackingMore", "type": "main", "index": 0 }]]
+    },
+    "Register on TrackingMore": {
+      "main": [[{ "node": "Get TrackingMore Status", "type": "main", "index": 0 }]]
+    },
+    "Get TrackingMore Status": {
+      "main": [[{ "node": "Status Changed?", "type": "main", "index": 0 }]]
+    },
+    "Status Changed?": {
+      "main": [[{ "node": "Format Hebrew Message", "type": "main", "index": 0 }]]
+    },
+    "Format Hebrew Message": {
+      "main": [[{ "node": "Send via JONI", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveStaticData": true
+  },
+  "staticData": null,
+  "meta": { "templateCredsSetupCompleted": true },
+  "pinData": {},
+  "versionId": "1",
+  "triggerCount": 0,
+  "active": false
+}
