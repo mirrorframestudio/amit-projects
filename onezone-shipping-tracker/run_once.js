@@ -160,7 +160,7 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
 
   // Parse & filter
   const now = Date.now();
-  const MS_30 = 30 * 24 * 60 * 60 * 1000;
+  const START_DATE = new Date('2026-03-01').getTime();
   const MS_24 = 86400000;
 
   const parseDate = (s) => {
@@ -179,8 +179,9 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     (item.column_values||[]).forEach(c => { cols[c.id] = (c.text||'').trim(); });
     const d = parseDate(cols['date__1']);
     if (!d || isNaN(d)) continue;
-    const age = now - d.getTime();
-    if (age > MS_30 || age < MS_24) continue;
+    const ts = d.getTime();
+    if (ts < START_DATE) continue;       // before March 1 — skip
+    if (now - ts < MS_24) continue;      // less than 24h old — skip
     const tracking = (cols['text__1']||'').replace(/\s/g,'');
     if (!tracking) continue;
     const phone = (cols['phone__1']||'').replace(/[^0-9]/g,'');
