@@ -1,1 +1,34 @@
-{}
+{
+  "ארגנטינה": {
+    "id": 210479,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-argentina-2.png"
+  },
+  "ברזיל": {
+    "id": 210480,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-brazil.png"
+  },
+  "גרמניה": {
+    "id": 210481,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-germany.png"
+  },
+  "הולנד": {
+    "id": 210482,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-netherlands.png"
+  },
+  "ספרד": {
+    "id": 210483,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-spain.png"
+  },
+  "פורטוגל": {
+    "id": 210484,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-portugal.png"
+  },
+  "צרפת": {
+    "id": 210485,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-france.png"
+  },
+  "אנגליה": {
+    "id": 210486,
+    "url": "https://onezonejersey.com/wp-content/uploads/2026/04/nations-england.png"
+  }
+}
