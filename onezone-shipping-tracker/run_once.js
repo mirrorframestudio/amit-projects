@@ -258,7 +258,9 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     const firstName = toHebrewFirstName(hfdName || order.name);
     const greeting = firstName ? `שלום ${firstName}! 👋\n\n` : '';
 
-    const message = `*עדכון משלוח | OneZone* 🏆\n\n${greeting}*סטטוס:* ${info.h}\n\n${detail}${dateLine}\n\n${warNotice}\n\n*מס׳ מעקב:* ${order.tracking}\n\n🔍 *למעקב:* https://www.hfd.co.il/איתור-חבילה/\n_(יש להקליד את מספר המעקב ידנית)_\n\n_להפסקת עדכונים שלח STOP_`;
+    const war = (code !== '99') ? `\n\n${warNotice}` : '';
+    const trackingLine = (code !== '99') ? `\n\n🔍 *למעקב:* https://www.hfd.co.il/איתור-חבילה/\n_(יש להקליד את מספר המעקב ידנית)_` : '';
+    const message = `*עדכון משלוח | OneZone* 🏆\n\n${greeting}*סטטוס:* ${info.h}\n\n${detail}${dateLine}${war}\n\n*מס׳ מעקב:* ${order.tracking}${trackingLine}\n\n_להפסקת עדכונים שלח STOP_`;
 
     try {
       const resp = await sendJoni(order.phone, message);
