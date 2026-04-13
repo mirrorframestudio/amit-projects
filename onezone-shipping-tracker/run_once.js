@@ -9,9 +9,10 @@ const fs = require('fs');
 const path = require('path');
 
 const LIMIT = parseInt(process.argv[2]) || 0;
-const STATE_FILE = path.join(__dirname, 'sent_state.json');
+const STATE_FILE   = path.join(__dirname, 'sent_state.json');
+const OPT_OUT_FILE = path.join(__dirname, 'opt_out.json');
 const MONDAY_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ';
-const JONI_URL = 'https://joni-e746b-default-rtdb.europe-west1.firebasedatabase.app//joni/send.json';
+const OWNER_PHONE  = '972559662064';
 
 // Load state
 let state = {};
@@ -19,6 +20,16 @@ if (fs.existsSync(STATE_FILE)) {
   try { state = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')); } catch(e) {}
 }
 const saveState = () => fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8');
+
+// Load opt-out list
+let optOut = new Set();
+if (fs.existsSync(OPT_OUT_FILE)) {
+  try { optOut = new Set(JSON.parse(fs.readFileSync(OPT_OUT_FILE, 'utf8'))); } catch(e) {}
+}
+const addOptOut = (phone) => {
+  optOut.add(phone);
+  fs.writeFileSync(OPT_OUT_FILE, JSON.stringify([...optOut], null, 2), 'utf8');
+};
 
 // Time check: 09:00-20:00 Israel (UTC+3)
 const israelHour = (new Date().getUTCHours() + 3) % 24;
@@ -235,6 +246,24 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     }
 
     if (state[order.tracking] === code) { console.log(` [NO CHANGE code=${code}]`); skipped++; continue; }
+
+    // Opt-out check
+    if (optOut.has(order.phone)) { console.log(` [OPT-OUT]`); skipped++; continue; }
+
+    // Owner alert for stuck packages
+    if (code === 'STUCK') {
+      const stuckKey = order.tracking + '_owner_alert';
+      if (!state[stuckKey]) {
+        let days = '25+';
+        try {
+          const [d,m,y] = regDate.trim().split('/');
+          const regD = new Date(`20${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`);
+          days = Math.floor((Date.now() - regD.getTime()) / 86400000);
+        } catch(e) {}
+        const ownerMsg = `\u26a0\ufe0f *OneZone - \u05d7\u05d1\u05d9\u05dc\u05d4 \u05ea\u05e7\u05d5\u05e2\u05d4*\n\n\u05dc\u05e7\u05d5\u05d7: ${order.name}\n\u05de\u05e2\u05e7\u05d1: ${order.tracking}\n\u05d9\u05de\u05d9\u05dd \u05d1\u05d3\u05e8\u05da: ${days}\n\u05d8\u05dc\u05e4\u05d5\u05df: ${order.phone}\n\n\u05d9\u05e9 \u05dc\u05d1\u05d3\u05d5\u05e7 \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05e2\u05dd \u05d4\u05de\u05e9\u05dc\u05d5\u05d7.`;
+        try { await sendJoni(OWNER_PHONE, ownerMsg); state[stuckKey] = true; saveState(); console.log(' [OWNER ALERT SENT]'); } catch(e) {}
+      }
+    }
 
     const info = stageMessages[code];
     if (!info) { console.log(` [UNKNOWN code=${code}]`); skipped++; continue; }
