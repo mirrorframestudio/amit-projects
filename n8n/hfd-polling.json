@@ -1,0 +1,154 @@
+{
+  "id": "HFDPolling02",
+  "name": "HFD Direct Polling - JONI WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "hours", "hoursInterval": 2 }]
+        }
+      },
+      "id": "node-schedule",
+      "name": "Every 2 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const MONDAY_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ';\nconst BOARD_ID = 2131896795;\n\nasync function fetchPage(cursor) {\n  const cursorPart = cursor ? `, cursor: \"${cursor}\"` : '';\n  const query = `{ boards(ids: [${BOARD_ID}]) { items_page(limit: 500${cursorPart}) { cursor items { id name column_values { id text } } } } }`;\n  const resp = await fetch('https://api.monday.com/v2', {\n    method: 'POST',\n    headers: { 'Authorization': MONDAY_TOKEN, 'Content-Type': 'application/json', 'API-Version': '2023-10' },\n    body: JSON.stringify({ query })\n  });\n  return resp.json();\n}\n\nconst page1 = await fetchPage(null);\nconst page1Data = page1.data?.boards?.[0]?.items_page || {};\nconst items1 = page1Data.items || [];\nconst cursor = page1Data.cursor;\n\nlet items2 = [];\nif (cursor) {\n  const page2 = await fetchPage(cursor);\n  items2 = page2.data?.boards?.[0]?.items_page?.items || [];\n}\n\nreturn [{ json: { items: [...items1, ...items2] } }];"
+      },
+      "id": "node-get-monday",
+      "name": "Get All Monday Orders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json.items || [];\nconst now = Date.now();\nconst MS_30_DAYS = 30 * 24 * 60 * 60 * 1000;\nconst MS_24_HOURS = 86400000;\n\nconst parseDate = (dateStr) => {\n  if (!dateStr) return null;\n  if (dateStr.includes('-') && dateStr.split('-')[0].length === 4) return new Date(dateStr);\n  if (dateStr.includes('/')) {\n    const [day, month, year] = dateStr.split('/');\n    const y = year.length === 2 ? '20' + year : year;\n    return new Date(`${y}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`);\n  }\n  return null;\n};\n\nconst orders = [];\nfor (const item of items) {\n  const cols = {};\n  (item.column_values || []).forEach(c => { cols[c.id] = (c.text || '').trim(); });\n\n  const d = parseDate(cols['date__1']);\n  if (!d || isNaN(d.getTime())) continue;\n  const age = now - d.getTime();\n  if (age > MS_30_DAYS) continue;\n  if (age < MS_24_HOURS) continue;\n\n  const trackingNumber = (cols['text__1'] || '').replace(/\\s/g, '');\n  if (!trackingNumber) continue;\n\n  const phone = (cols['phone__1'] || '').replace(/[^0-9]/g, '');\n  if (phone.length < 9) continue;\n\n  if (item.name.match(/TEST/i)) continue;\n\n  orders.push({ item_id: item.id, customer_name: item.name, tracking_number: trackingNumber, phone });\n}\n\nreturn orders.map(o => ({ json: o }));"
+      },
+      "id": "node-parse-orders",
+      "name": "Parse & Filter Orders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ws.hfd.co.il/Epost-Tracking/service.php",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "client_id", "value": "8260" },
+            { "name": "tracking_id", "value": "={{ $json.tracking_number }}" },
+            { "name": "ref", "value": "ALL" },
+            { "name": "lang", "value": "he" }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "node-hfd-api",
+      "name": "HFD Status API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = $getWorkflowStaticData('global');\nconst order = $('Parse & Filter Orders').item.json;\nconst tracking = order.tracking_number;\n\n// [1] TIME: only send 09:00-20:00 Israel time (UTC+3)\nconst israelHour = (new Date().getUTCHours() + 3) % 24;\nif (israelHour < 9 || israelHour >= 20) return [];\n\n// Get XML text\nconst xmlStr = (() => {\n  const r = $input.first().json;\n  if (typeof r === 'string') return r;\n  if (typeof r.data === 'string') return r.data;\n  if (typeof r.body === 'string') return r.body;\n  return JSON.stringify(r);\n})();\n\nconst getTag = (str, tag) => {\n  const m = str.match(new RegExp('<' + tag + '[^>]*>([\\\\s\\\\S]*?)<\\\\/' + tag + '>', 'i'));\n  return m ? m[1].trim() : '';\n};\n\nconst note = getTag(xmlStr, 'note');\nif (note && (note.includes('error') || note.includes('Error'))) return [];\n\nconst shipStagesXml = getTag(xmlStr, 'ship_stages');\nif (!shipStagesXml) return [];\n\nconst stageMatches = [...shipStagesXml.matchAll(/<stage>([\\s\\S]*?)<\\/stage>/gi)];\nif (!stageMatches.length) return [];\n\nconst lastStageXml = stageMatches[stageMatches.length - 1][1];\nlet stageCode = getTag(lastStageXml, 'code');\nconst stageDesc = getTag(lastStageXml, 'description');\nconst stageDate = getTag(lastStageXml, 'date');\nconst stageTime = getTag(lastStageXml, 'time');\nconst regDateStr = getTag(xmlStr, 'reg_date');\n\nif (!stageCode) return [];\n\nconst SKIP_CODES = new Set(['4', '5', '6']);\nif (SKIP_CODES.has(stageCode)) return [];\n\n// [4] STUCK: in-transit more than 25 days\nconst TRANSIT_CODES = new Set(['10', '21', '103']);\nif (TRANSIT_CODES.has(stageCode) && regDateStr) {\n  try {\n    const [d, m, y] = regDateStr.trim().split('/');\n    const regD = new Date('20' + y + '-' + m.padStart(2,'0') + '-' + d.padStart(2,'0'));\n    const daysSince = Math.floor((Date.now() - regD.getTime()) / 86400000);\n    if (daysSince > 25) {\n      const stuckKey = tracking + '_stuck';\n      if (staticData[stuckKey]) return [];\n      staticData[stuckKey] = true;\n      stageCode = 'STUCK';\n    }\n  } catch(e) {}\n}\n\n// [3] ONE MESSAGE PER STAGE\nif (stageCode === (staticData[tracking] || null)) return [];\nstaticData[tracking] = stageCode;\n\nreturn [{ json: {\n  phone: order.phone,\n  customer_name: order.customer_name,\n  tracking_number: tracking,\n  stage_code: stageCode,\n  stage_date: stageDate,\n  stage_time: stageTime\n}}];"
+      },
+      "id": "node-check-status",
+      "name": "Parse HFD & Status Changed?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { stage_code, stage_date, stage_time, phone, tracking_number, customer_name } = $input.first().json;\n\nconst warNotice = '\u05d1\u05e2\u05e7\u05d1\u05d5\u05ea \u05de\u05d1\u05e6\u05e2 \u05e9\u05d0\u05d2\u05ea \u05d4\u05d0\u05e8\u05d9 \u05e6\u05e4\u05d5\u05d9\u05d9\u05dd \u05e2\u05d9\u05db\u05d5\u05d1\u05d9\u05dd \u05e7\u05dc\u05d9\u05dd \u05d1\u05de\u05e9\u05dc\u05d5\u05d7\u05d9\u05dd, \u05d0\u05e0\u05d7\u05e0\u05d5 \u05e2\u05dd \u05d9\u05d3 \u05e2\u05dc \u05d4\u05d3\u05d5\u05e4\u05e7 \u05d5\u05d1\u05d5\u05d3\u05e7\u05d9\u05dd \u05de\u05d4 \u05e2\u05dd \u05d4\u05de\u05e9\u05dc\u05d5\u05d7 \u05e9\u05dc\u05da \u05d1\u05db\u05dc \u05d9\u05d5\u05dd \u05d5\u05d9\u05d5\u05dd.\\n\u05e0\u05d0 \u05dc\u05d4\u05d9\u05d5\u05ea \u05e1\u05d1\u05dc\u05e0\u05d9\u05d9\u05dd \ud83d\ude4f';\n\nconst stageInfo = {\n  '10':  {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '21':  {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '103': {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '18':  {\n    headline: '\u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05d9\u05e9\u05e8\u05d0\u05dc! \ud83d\udec3',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05d9\u05e9\u05e8\u05d0\u05dc \u05d5\u05e2\u05d5\u05d1\u05e8\u05ea \u05d1\u05d3\u05d9\u05e7\u05ea \u05de\u05db\u05e1.\\n\u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc \u05dc\u05d5\u05e7\u05d7 2-5 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd.'\n  },\n  '13':  {\n    headline: '\u05e2\u05d1\u05e8\u05d4 \u05de\u05db\u05e1 \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4! \u2705',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05e2\u05d1\u05e8\u05d4 \u05d0\u05ea \u05d4\u05de\u05db\u05e1 \u05d5\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05de\u05e8\u05db\u05d6 \u05de\u05d9\u05d5\u05df.'\n  },\n  '521': {\n    headline: '\u05d1\u05de\u05e8\u05db\u05d6 \u05de\u05d9\u05d5\u05df \u05d1\u05d9\u05e9\u05e8\u05d0\u05dc \ud83d\udce6',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05de\u05e8\u05db\u05d6 \u05d4\u05de\u05d9\u05d5\u05df \u2014 \u05d1\u05e7\u05e8\u05d5\u05d1 \u05ea\u05d9\u05e9\u05dc\u05d7 \u05dc\u05d0\u05d9\u05d6\u05d5\u05e8\u05da!'\n  },\n  '23':  {\n    headline: '\u05d1\u05d3\u05e8\u05da \u05d0\u05dc\u05d9\u05da \ud83d\ude9a',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d0\u05e8\u05d5\u05d6\u05d4 \u05d5\u05de\u05d5\u05db\u05e0\u05d4 \u05dc\u05de\u05e1\u05d9\u05e8\u05d4.'\n  },\n  '48':  {\n    headline: '\u05d1\u05d3\u05e8\u05da \u05d0\u05dc\u05d9\u05da \ud83d\ude9a',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d1\u05d3\u05e8\u05db\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '27':  {\n    headline: '\u05d9\u05d5\u05e6\u05d0\u05ea \u05dc\u05de\u05e1\u05d9\u05e8\u05d4 \u05e2\u05db\u05e9\u05d9\u05d5! \ud83d\ude9a',\n    detail: '\u05d4\u05e9\u05dc\u05d9\u05d7 \u05d1\u05d3\u05e8\u05db\u05d5 \u05d0\u05dc\u05d9\u05da \u05d4\u05d9\u05d5\u05dd \u2014 \u05e9\u05de\u05d5\u05e8 \u05e2\u05dc \u05d4\u05d8\u05dc\u05e4\u05d5\u05df \u05e4\u05ea\u05d5\u05d7!'\n  },\n  '29':  {\n    headline: '\u05de\u05d7\u05db\u05d4 \u05dc\u05da \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d7\u05dc\u05d5\u05e7\u05d4 \ud83d\udccd',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05de\u05d7\u05db\u05d4 \u05dc\u05d0\u05d9\u05e1\u05d5\u05e3 \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d4\u05d7\u05dc\u05d5\u05e7\u05d4 \u05d4\u05e7\u05e8\u05d5\u05d1\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '429': {\n    headline: '\u05de\u05d7\u05db\u05d4 \u05dc\u05da \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d7\u05dc\u05d5\u05e7\u05d4 \ud83d\udccd',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05de\u05d7\u05db\u05d4 \u05dc\u05d0\u05d9\u05e1\u05d5\u05e3 \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d4\u05d7\u05dc\u05d5\u05e7\u05d4 \u05d4\u05e7\u05e8\u05d5\u05d1\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '19':  {\n    headline: '\u05e2\u05d3\u05db\u05d5\u05df \u05e4\u05e8\u05d8\u05d9 \u05de\u05e9\u05dc\u05d5\u05d7 \ud83d\udcdd',\n    detail: '\u05d1\u05d5\u05e6\u05e2 \u05e2\u05d3\u05db\u05d5\u05df \u05db\u05ea\u05d5\u05d1\u05ea/\u05e4\u05e8\u05d8\u05d9\u05dd \u05dc\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da.'\n  },\n  '99':  {\n    headline: '\u05e0\u05de\u05e1\u05e8\u05d4! \ud83c\udf89',\n    detail: '\u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u05e0\u05de\u05e1\u05e8\u05d4 \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4!\\n\u05e0\u05e9\u05de\u05d7 \u05dc\u05e9\u05de\u05d5\u05e2 \u05e9\u05d4\u05d2\u05d9\u05e2\u05d4 \u2014 \u05ea\u05d4\u05e0\u05d4 \u05de\u05d4\u05de\u05d5\u05e6\u05e8! \u26bd'\n  },\n  'STUCK': {\n    headline: '\u05e2\u05d3\u05db\u05d5\u05df \u05e2\u05dc \u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u23f3',\n    detail: '\u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u05de\u05ea\u05e2\u05db\u05d1\u05ea \u05de\u05e2\u05d8 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d4\u05e6\u05e4\u05d5\u05d9.\\n\u05d0\u05e0\u05d7\u05e0\u05d5 \u05d1\u05d5\u05d3\u05e7\u05d9\u05dd \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05d5\u05e0\u05d7\u05d6\u05d5\u05e8 \u05d0\u05dc\u05d9\u05da \u05d1\u05d4\u05e7\u05d3\u05dd.\\n\u05de\u05ea\u05e0\u05e6\u05dc\u05d9\u05dd \u05e2\u05dc \u05d4\u05d0\u05d9\u05d7\u05d5\u05e8 \ud83d\ude4f'\n  }\n};\n\nconst info = stageInfo[stage_code];\nif (!info) return [];\n\nconst REALTIME_CODES = new Set(['18','13','521','23','27','29','429','48','99','19']);\nlet dateLine = '';\nif (stage_date && REALTIME_CODES.has(stage_code)) {\n  dateLine = '\\n' + '\u05e2\u05d3\u05db\u05d5\u05df \u05d0\u05d7\u05e8\u05d5\u05df: ' + stage_date + (stage_time ? ' ' + stage_time : '');\n}\n\nconst firstName = (customer_name || '').split(' ')[0];\nconst greeting = firstName ? '\u05e9\u05dc\u05d5\u05dd ' + firstName + '! \ud83d\udc4b\\n\\n' : '';\n\nconst message = '*\u05e2\u05d3\u05db\u05d5\u05df \u05de\u05e9\u05dc\u05d5\u05d7 | OneZone* \ud83c\udfc6\\n\\n' + greeting + '*\u05e1\u05d8\u05d8\u05d5\u05e1:* ' + info.headline + '\\n\\n' + info.detail + dateLine + '\\n\\n' + warNotice + '\\n\\n*\u05de\u05e1\\u05f3 \u05de\u05e2\u05e7\u05d1:* ' + tracking_number + '\\n\\n\ud83d\udd0d *\u05dc\u05de\u05e2\u05e7\u05d1:* https://www.hfd.co.il/\u05d0\u05d9\u05ea\u05d5\u05e8-\u05d7\u05d1\u05d9\u05dc\u05d4/\\n_(\u05d9\u05e9 \u05dc\u05d4\u05e7\u05dc\u05d9\u05d3 \u05d0\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1 \u05d9\u05d3\u05e0\u05d9\u05ea)_\\n\\n_\u05dc\u05d4\u05e4\u05e1\u05e7\u05ea \u05e2\u05d3\u05db\u05d5\u05e0\u05d9\u05dd \u05e9\u05dc\u05d7 STOP_';\n\nreturn [{ json: { phone, message } }];"
+      },
+      "id": "node-format-message",
+      "name": "Format Hebrew Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "amount": 34,
+        "unit": "seconds"
+      },
+      "id": "node-wait",
+      "name": "Wait 34s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1560, 300],
+      "webhookId": "hfd-wait-01"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://joni-e746b-default-rtdb.europe-west1.firebasedatabase.app//joni/send.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ to: $json.phone, text: $json.message }) }}",
+        "options": {}
+      },
+      "id": "node-send-joni",
+      "name": "Send via JONI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 300]
+    }
+  ],
+  "connections": {
+    "Every 2 Hours": {
+      "main": [[{ "node": "Get All Monday Orders", "type": "main", "index": 0 }]]
+    },
+    "Get All Monday Orders": {
+      "main": [[{ "node": "Parse & Filter Orders", "type": "main", "index": 0 }]]
+    },
+    "Parse & Filter Orders": {
+      "main": [[{ "node": "HFD Status API", "type": "main", "index": 0 }]]
+    },
+    "HFD Status API": {
+      "main": [[{ "node": "Parse HFD & Status Changed?", "type": "main", "index": 0 }]]
+    },
+    "Parse HFD & Status Changed?": {
+      "main": [[{ "node": "Format Hebrew Message", "type": "main", "index": 0 }]]
+    },
+    "Format Hebrew Message": {
+      "main": [[{ "node": "Wait 34s", "type": "main", "index": 0 }]]
+    },
+    "Wait 34s": {
+      "main": [[{ "node": "Send via JONI", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveStaticData": true
+  },
+  "staticData": null,
+  "meta": { "templateCredsSetupCompleted": true },
+  "pinData": {},
+  "versionId": "1",
+  "triggerCount": 0,
+  "active": false
+}

@@ -1,0 +1,176 @@
+{
+  "id": "AfterShipJoniProactive01",
+  "name": "AfterShip → JONI Proactive Tracking Updates",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aftership-tracking",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "node-aftership-webhook",
+      "name": "AfterShip Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "aftership-joni-tracking"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract AfterShip payload and filter to key statuses only\nconst body = $input.first().json.body || $input.first().json;\nconst msg = body.msg || {};\nconst tag = msg.tag || '';\n\n// Only send updates for these statuses\nconst KEY_STATUSES = ['InTransit', 'OutForDelivery', 'Delivered', 'AttemptFail', 'Exception', 'AvailableForPickup'];\n\nif (!KEY_STATUSES.includes(tag)) {\n  // Not a key status — stop processing silently\n  return [];\n}\n\nconst trackingNumber = (msg.tracking_number || '').toString().trim();\nif (!trackingNumber) return [];\n\nconst checkpoint = msg.last_checkpoint || {};\nconst eta = msg.estimated_delivery_date?.datetime || '';\n\nreturn [{\n  json: {\n    tracking_number: trackingNumber,\n    tag: tag,\n    last_message: checkpoint.message || '',\n    last_location: checkpoint.location || '',\n    last_time: checkpoint.checkpoint_time || '',\n    eta: eta\n  }\n}];"
+      },
+      "id": "node-extract-filter",
+      "name": "Extract & Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "API-Version",
+              "value": "2023-10"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: '{ items_page_by_column_values(board_id: 2131896795, columns: [{column_id: \"text__1\", column_values: [\"' + $json.tracking_number + '\"]}]) { items { id name column_values { id text } } } }' }) }}",
+        "options": {}
+      },
+      "id": "node-monday-search",
+      "name": "Search Monday by Tracking",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract customer phone from Monday result\nconst data = $input.first().json.data || {};\nconst items = data.items_page_by_column_values?.items || [];\n\nif (!items.length) return []; // Order not found\n\nconst item = items[0];\nconst phoneCol = (item.column_values || []).filter(c => c.id === 'phone__1')[0];\nconst rawPhone = phoneCol?.text || '';\n\n// Normalize phone: strip everything except digits\nconst phone = rawPhone.replace(/[^0-9]/g, '');\nif (!phone) return []; // No phone on record\n\n// Get tracking context from previous node\nconst tracking = $('Extract & Filter').first().json;\n\nreturn [{\n  json: {\n    phone: phone,\n    customer_name: item.name,\n    tracking_number: tracking.tracking_number,\n    tag: tracking.tag,\n    last_message: tracking.last_message,\n    last_location: tracking.last_location,\n    eta: tracking.eta\n  }\n}];"
+      },
+      "id": "node-extract-phone",
+      "name": "Extract Phone",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format a clear Hebrew WhatsApp message\nconst { tag, last_message, last_location, eta, phone, tracking_number } = $input.first().json;\n\nconst statusMap = {\n  InTransit: 'בדרך אליך 🚚',\n  OutForDelivery: 'יוצא למשלוח עכשיו 📦',\n  Delivered: 'נמסר בהצלחה ✅',\n  AttemptFail: 'ניסיון מסירה נכשל - יצרו קשר עם השליח ⚠️',\n  Exception: 'בעיה בתהליך המשלוח ⚠️',\n  AvailableForPickup: 'ממתין לאיסוף בנקודת חלוקה 📍'\n};\n\nconst statusHebrew = statusMap[tag] || tag;\n\n// Format ETA nicely\nlet etaLine = '';\nif (eta) {\n  try {\n    const d = new Date(eta);\n    const formatted = d.toLocaleDateString('he-IL', {\n      weekday: 'long',\n      day: 'numeric',\n      month: 'long'\n    });\n    etaLine = `\\nצפי הגעה: ${formatted}`;\n  } catch(e) {\n    etaLine = `\\nצפי הגעה: ${eta}`;\n  }\n}\n\nconst locationLine = last_location ? `\\nמיקום נוכחי: ${last_location}` : '';\n\nconst message = `*OneZone - עדכון משלוח* 🏆\\n\\nסטטוס: ${statusHebrew}${locationLine}${etaLine}\\n\\nמס' מעקב: ${tracking_number}\\n\\nלמעקב מפורט: https://t.17track.net/he#nums=${tracking_number}`;\n\nreturn [{ json: { phone, message } }];"
+      },
+      "id": "node-format-message",
+      "name": "Format Hebrew Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://joni-e746b-default-rtdb.europe-west1.firebasedatabase.app//joni/send.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ to: $json.phone, text: $json.message }) }}",
+        "options": {}
+      },
+      "id": "node-joni-send",
+      "name": "Send via JONI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "AfterShip Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract & Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract & Filter": {
+      "main": [
+        [
+          {
+            "node": "Search Monday by Tracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Monday by Tracking": {
+      "main": [
+        [
+          {
+            "node": "Extract Phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Phone": {
+      "main": [
+        [
+          {
+            "node": "Format Hebrew Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Hebrew Message": {
+      "main": [
+        [
+          {
+            "node": "Send via JONI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1",
+  "triggerCount": 0,
+  "active": false
+}

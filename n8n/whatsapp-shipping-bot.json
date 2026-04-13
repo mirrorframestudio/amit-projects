@@ -1,0 +1,683 @@
+{
+  "id": "AnDGII7nyXdqm0VM",
+  "name": "WhatsApp Shipping Status Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "whatsapp-shipping",
+        "httpMethod": "GET",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-verify",
+      "name": "Meta Webhook Verification",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 140],
+      "webhookId": "whatsapp-shipping-verify"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "hub_mode",
+              "name": "hub_mode",
+              "value": "={{ $json.query['hub.mode'] }}",
+              "type": "string"
+            },
+            {
+              "id": "hub_verify_token",
+              "name": "hub_verify_token",
+              "value": "={{ $json.query['hub.verify_token'] }}",
+              "type": "string"
+            },
+            {
+              "id": "hub_challenge",
+              "name": "hub_challenge",
+              "value": "={{ $json.query['hub.challenge'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-extract-verify",
+      "name": "Extract Verify Params",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 140]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "mode-check",
+              "leftValue": "={{ $json.hub_mode }}",
+              "rightValue": "subscribe",
+              "operator": { "type": "string", "operation": "equals" }
+            },
+            {
+              "id": "token-check",
+              "leftValue": "={{ $json.hub_verify_token }}",
+              "rightValue": "meluvo-bot-2026",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-check-verify",
+      "name": "Valid Verification?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 140]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.hub_challenge }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "node-respond-challenge",
+      "name": "Return hub.challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 80]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Forbidden",
+        "options": { "responseCode": 403 }
+      },
+      "id": "node-respond-forbidden",
+      "name": "Return 403",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "path": "whatsapp-shipping",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "options": {}
+      },
+      "id": "node-webhook",
+      "name": "WhatsApp Incoming Message",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 380],
+      "webhookId": "whatsapp-shipping-msg"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "sender_phone",
+              "name": "sender_phone",
+              "value": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "message_type",
+              "name": "message_type",
+              "value": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "message_text",
+              "name": "message_text",
+              "value": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.text?.body || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "has_messages",
+              "name": "has_messages",
+              "value": "={{ !!$json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0] }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-parse",
+      "name": "Parse WhatsApp Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "has-message",
+              "leftValue": "={{ $json.has_messages }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            },
+            {
+              "id": "is-text",
+              "leftValue": "={{ $json.message_type }}",
+              "rightValue": "text",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-filter-text",
+      "name": "Is Text Message?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 380]
+    },
+    {
+      "parameters": {},
+      "id": "node-ignore",
+      "name": "Ignore Non-Text",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [900, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "normalized_phone",
+              "name": "normalized_phone",
+              "value": "={{ (() => { const p = $json.sender_phone.replace(/\\D/g, ''); if (p.startsWith('972')) return p; if (p.startsWith('0')) return '972' + p.slice(1); return '972' + p; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "sender_phone",
+              "name": "sender_phone",
+              "value": "={{ $json.sender_phone }}",
+              "type": "string"
+            },
+            {
+              "id": "message_text",
+              "name": "message_text",
+              "value": "={{ $json.message_text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-normalize-phone",
+      "name": "Normalize Phone Number",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ"
+            },
+            {
+              "name": "API-Version",
+              "value": "2024-10"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: 'query { items_by_column_values(board_id: 2131896795, column_id: \"phone__1\", column_value: \"' + $json.normalized_phone + '\") { id name column_values { id text } } }' }) }}",
+        "options": {}
+      },
+      "id": "node-monday-search",
+      "name": "Search Monday by Phone",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "order_found",
+              "name": "order_found",
+              "value": "={{ ($json.data?.items_by_column_values || []).length > 0 }}",
+              "type": "boolean"
+            },
+            {
+              "id": "tracking_number",
+              "name": "tracking_number",
+              "value": "={{ ($json.data?.items_by_column_values?.[0]?.column_values || []).find(c => c.id === 'text__1')?.text || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "order_name",
+              "name": "order_name",
+              "value": "={{ $json.data?.items_by_column_values?.[0]?.name || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "sender_phone",
+              "name": "sender_phone",
+              "value": "={{ $('Normalize Phone Number').item.json.sender_phone }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-extract-monday",
+      "name": "Extract Order & Tracking",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "order-found",
+              "leftValue": "={{ $json.order_found }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-check-order",
+      "name": "Order Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/1032171949979127/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: $json.sender_phone, type: 'text', text: { body: 'מצטערים, לא מצאנו הזמנה הקשורה למספר הטלפון שלך. אנא פנה אלינו לשירות לקוחות לעזרה.' } }) }}",
+        "options": {}
+      },
+      "id": "node-reply-no-order",
+      "name": "Reply: No Order Found",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 460]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "tracking-exists",
+              "leftValue": "={{ $json.tracking_number }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "isNotEmpty" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-check-tracking",
+      "name": "Tracking Number Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1780, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/1032171949979127/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: $('Extract Order & Tracking').item.json.sender_phone, type: 'text', text: { body: 'ההזמנה שלך עדיין בהכנה ומספר המעקב טרם הוקצה. נעדכן אותך ברגע שהחבילה תצא לדרך! 📦' } }) }}",
+        "options": {}
+      },
+      "id": "node-reply-no-tracking",
+      "name": "Reply: No Tracking Yet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.aftership.com/tracking/2024-07/trackings",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "as-api-key",
+              "value": "asat_785db7e65312486a9ff8ac92b048a6d3"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ tracking: { tracking_number: $json.tracking_number } }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "node-aftership-register",
+      "name": "Register AfterShip Tracking",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 320]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.aftership.com/tracking/2024-07/trackings?tracking_numbers={{ $('Extract Order & Tracking').item.json.tracking_number }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "as-api-key",
+              "value": "asat_785db7e65312486a9ff8ac92b048a6d3"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "node-aftership-get",
+      "name": "Get AfterShip Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "api_ok",
+              "name": "api_ok",
+              "value": "={{ ($json.data?.trackings?.length ?? 0) > 0 }}",
+              "type": "boolean"
+            },
+            {
+              "id": "carrier",
+              "name": "carrier",
+              "value": "={{ $json.data?.trackings?.[0]?.slug || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "status_code",
+              "name": "status_code",
+              "value": "={{ $json.data?.trackings?.[0]?.tag || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "last_event",
+              "name": "last_event",
+              "value": "={{ $json.data?.trackings?.[0]?.checkpoints?.[0]?.message || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "last_location",
+              "name": "last_location",
+              "value": "={{ $json.data?.trackings?.[0]?.checkpoints?.[0]?.city || $json.data?.trackings?.[0]?.checkpoints?.[0]?.country_name || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "last_time",
+              "name": "last_time",
+              "value": "={{ $json.data?.trackings?.[0]?.checkpoints?.[0]?.checkpoint_time || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "tracking_number",
+              "name": "tracking_number",
+              "value": "={{ $('Extract Order & Tracking').item.json.tracking_number }}",
+              "type": "string"
+            },
+            {
+              "id": "sender_phone",
+              "name": "sender_phone",
+              "value": "={{ $('Extract Order & Tracking').item.json.sender_phone }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-extract-aftership",
+      "name": "Extract Tracking Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2440, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "api-ok",
+              "leftValue": "={{ $json.api_ok }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-check-aftership",
+      "name": "AfterShip OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2660, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/1032171949979127/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: $json.sender_phone, type: 'text', text: { body: 'מצטערים, לא הצלחנו לאחזר את פרטי המשלוח כרגע. אנא נסה שוב מאוחר יותר או פנה לשירות הלקוחות שלנו.' } }) }}",
+        "options": {}
+      },
+      "id": "node-reply-error",
+      "name": "Reply: Tracking Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2880, 460]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "reply_body",
+              "name": "reply_body",
+              "value": "={{ (() => { const statusMap = { NotFound: 'לא נמצא', InTransit: 'בדרך 🚚', Expired: 'פג תוקף', Delivered: 'נמסר ✅', Undelivered: 'לא נמסר', Exception: 'חריגה ⚠️', PickedUp: 'נאסף', Alert: 'התראה ⚠️', Returning: 'בדרך חזרה', Returned: 'הוחזר' }; const status = statusMap[$json.status_code] || $json.status_code || 'לא ידוע'; const lines = ['📦 *עדכון משלוח*', '']; if ($json.carrier) lines.push('🚚 חברת שליחויות: ' + $json.carrier); lines.push('📍 סטטוס: ' + status); if ($json.last_event) lines.push('🔔 עדכון אחרון: ' + $json.last_event); if ($json.last_location) lines.push('📌 מיקום: ' + $json.last_location); if ($json.last_time) lines.push('🕐 זמן: ' + $json.last_time); lines.push(''); lines.push('מספר מעקב: ' + $json.tracking_number); return lines.join('\\n'); })() }}",
+              "type": "string"
+            },
+            {
+              "id": "sender_phone",
+              "name": "sender_phone",
+              "value": "={{ $json.sender_phone }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-format-reply",
+      "name": "Format Hebrew Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2880, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/1032171949979127/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: $json.sender_phone, type: 'text', text: { body: $json.reply_body } }) }}",
+        "options": {}
+      },
+      "id": "node-send-whatsapp",
+      "name": "Send WhatsApp Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3100, 320]
+    }
+  ],
+  "connections": {
+    "Meta Webhook Verification": {
+      "main": [[{ "node": "Extract Verify Params", "type": "main", "index": 0 }]]
+    },
+    "Extract Verify Params": {
+      "main": [[{ "node": "Valid Verification?", "type": "main", "index": 0 }]]
+    },
+    "Valid Verification?": {
+      "main": [
+        [{ "node": "Return hub.challenge", "type": "main", "index": 0 }],
+        [{ "node": "Return 403", "type": "main", "index": 0 }]
+      ]
+    },
+    "WhatsApp Incoming Message": {
+      "main": [[{ "node": "Parse WhatsApp Message", "type": "main", "index": 0 }]]
+    },
+    "Parse WhatsApp Message": {
+      "main": [[{ "node": "Is Text Message?", "type": "main", "index": 0 }]]
+    },
+    "Is Text Message?": {
+      "main": [
+        [{ "node": "Normalize Phone Number", "type": "main", "index": 0 }],
+        [{ "node": "Ignore Non-Text", "type": "main", "index": 0 }]
+      ]
+    },
+    "Normalize Phone Number": {
+      "main": [[{ "node": "Search Monday by Phone", "type": "main", "index": 0 }]]
+    },
+    "Search Monday by Phone": {
+      "main": [[{ "node": "Extract Order & Tracking", "type": "main", "index": 0 }]]
+    },
+    "Extract Order & Tracking": {
+      "main": [[{ "node": "Order Found?", "type": "main", "index": 0 }]]
+    },
+    "Order Found?": {
+      "main": [
+        [{ "node": "Tracking Number Exists?", "type": "main", "index": 0 }],
+        [{ "node": "Reply: No Order Found", "type": "main", "index": 0 }]
+      ]
+    },
+    "Tracking Number Exists?": {
+      "main": [
+        [{ "node": "Register AfterShip Tracking", "type": "main", "index": 0 }],
+        [{ "node": "Reply: No Tracking Yet", "type": "main", "index": 0 }]
+      ]
+    },
+    "Register AfterShip Tracking": {
+      "main": [[{ "node": "Get AfterShip Status", "type": "main", "index": 0 }]]
+    },
+    "Get AfterShip Status": {
+      "main": [[{ "node": "Extract Tracking Data", "type": "main", "index": 0 }]]
+    },
+    "Extract Tracking Data": {
+      "main": [[{ "node": "AfterShip OK?", "type": "main", "index": 0 }]]
+    },
+    "AfterShip OK?": {
+      "main": [
+        [{ "node": "Format Hebrew Reply", "type": "main", "index": 0 }],
+        [{ "node": "Reply: Tracking Error", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Hebrew Reply": {
+      "main": [[{ "node": "Send WhatsApp Reply", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true
+  },
+  "tags": []
+}
