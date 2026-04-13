@@ -198,7 +198,8 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     const phone = (cols['phone__1']||'').replace(/[^0-9]/g,'');
     if (phone.length < 9) continue;
     if (/TEST/i.test(item.name)) continue;
-    orders.push({ name: item.name, tracking, phone });
+    const orderDateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    orders.push({ name: item.name, tracking, phone, orderDate: orderDateStr });
     if (LIMIT > 0 && orders.length >= LIMIT) break;
   }
 
@@ -260,7 +261,8 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
           const regD = new Date(`20${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`);
           days = Math.floor((Date.now() - regD.getTime()) / 86400000);
         } catch(e) {}
-        const ownerMsg = `\u26a0\ufe0f *OneZone - \u05d7\u05d1\u05d9\u05dc\u05d4 \u05ea\u05e7\u05d5\u05e2\u05d4*\n\n\u05dc\u05e7\u05d5\u05d7: ${order.name}\n\u05de\u05e2\u05e7\u05d1: ${order.tracking}\n\u05d9\u05de\u05d9\u05dd \u05d1\u05d3\u05e8\u05da: ${days}\n\u05d8\u05dc\u05e4\u05d5\u05df: ${order.phone}\n\n\u05d9\u05e9 \u05dc\u05d1\u05d3\u05d5\u05e7 \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05e2\u05dd \u05d4\u05de\u05e9\u05dc\u05d5\u05d7.`;
+        const lastUpdate = (stageDate && stageTime) ? `${stageDate} ${stageTime}` : 'לא ידוע';
+        const ownerMsg = `\u26a0\ufe0f *OneZone - \u05d7\u05d1\u05d9\u05dc\u05d4 \u05ea\u05e7\u05d5\u05e2\u05d4*\n\n\u05dc\u05e7\u05d5\u05d7: ${order.name}\n\u05d8\u05dc\u05e4\u05d5\u05df: ${order.phone}\n\u05de\u05e2\u05e7\u05d1: ${order.tracking}\n\u05ea\u05d0\u05e8\u05d9\u05da \u05d4\u05d6\u05de\u05e0\u05d4: ${order.orderDate}\n\u05d9\u05de\u05d9\u05dd \u05d1\u05d3\u05e8\u05da: ${days}\n\u05e2\u05d3\u05db\u05d5\u05df \u05d0\u05d7\u05e8\u05d5\u05df \u05de-HFD: ${lastUpdate}\n\n\u05d9\u05e9 \u05dc\u05d1\u05d3\u05d5\u05e7 \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05e2\u05dd \u05d4\u05de\u05e9\u05dc\u05d5\u05d7.`;
         try { await sendJoni(OWNER_PHONE, ownerMsg); state[stuckKey] = true; saveState(); console.log(' [OWNER ALERT SENT]'); } catch(e) {}
       }
     }
