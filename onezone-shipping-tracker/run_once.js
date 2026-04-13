@@ -139,7 +139,7 @@ const stageMessages = {
   '29':    { h: 'מחכה לך בנקודת איסוף 📍',   d: null }, // built dynamically with pudo_details
   '429':   { h: 'מחכה לך בנקודת איסוף 📍',   d: null }, // built dynamically with pudo_details
   '19':    { h: 'עדכון פרטי משלוח 📝',        d: 'בוצע עדכון כתובת/פרטים להזמנה שלך.' },
-  '99':    { h: 'נמסרה! 🎉',                  d: 'ההזמנה שלך נמסרה בהצלחה!\nמקווים שאתה מרוצה — תהנה מהמוצר! ⚽🏆\nנשמח לראות אותך שוב בחנות 😊' },
+  '99':    { h: 'נמסרה! 🎉',                  d: null }, // built dynamically with delivery address
   'STUCK': { h: 'עדכון על ההזמנה שלך ⏳',    d: 'ההזמנה שלך מתעכבת מעט יותר מהצפוי.\nאנחנו בודקים מה קורה ונחזור אליך בהקדם.\nמתנצלים על האיחור 🙏' }
 };
 
@@ -241,8 +241,15 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
 
     const dateLine = (stageDate && REALTIME_CODES.has(code)) ? `\nעדכון אחרון: ${stageDate} ${stageTime}` : '';
 
-    // Pickup point details for stages 29/429
+    // Delivered: show delivery address
     let detail = info.d;
+    if (code === '99') {
+      const yaadAdd = getTag(xml, 'yaad_add').trim();
+      detail = 'ההזמנה שלך נמסרה בהצלחה!\nמקווים שאתה מרוצה — תהנה מהמוצר! ⚽🏆\nנשמח לראות אותך שוב בחנות 😊';
+      if (yaadAdd) detail += `\n\n📍 *נמסר לכתובת:* ${yaadAdd}`;
+    }
+
+    // Pickup point details for stages 29/429
     if ((code === '29' || code === '429')) {
       const pudoDetails = getTag(xml, 'pudo_details').replace(/<[^>]+>/g, '').trim();
       const pudoHours  = getTag(xml, 'pudo_hours').replace(/<[^>]+>/g, '').trim();
