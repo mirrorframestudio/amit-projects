@@ -194,112 +194,246 @@ def _read_pnl_data(target_date: date | None = None) -> dict:
     return result
 
 
+def _pick_top_actions(recommendations: list[dict]) -> list[str]:
+    """
+    Pick the 3 most actionable recommendations — one per category.
+    Returns short Hebrew action strings, no repetition.
+    """
+    chosen: list[str] = []
+    seen_types: set[str] = set()
+
+    # Priority order: kill → funnel → scale → frequency/fatigue → trend/audience
+    type_order = ["kill", "funnel", "scale", "frequency", "fatigue", "creative", "budget", "audience", "info"]
+
+    sorted_recs = sorted(recommendations, key=lambda r: (r["priority"], type_order.index(r["type"]) if r["type"] in type_order else 99))
+
+    for rec in sorted_recs:
+        if len(chosen) >= 3:
+            break
+        rtype = rec["type"]
+
+        # Allow at most one per type, except scale (allow top 1 only)
+        if rtype in seen_types:
+            continue
+
+        icon = rec.get("icon", "")
+        text = rec.get("text", "")
+        ad = rec.get("ad", "")
+        adset = rec.get("adset", "")
+        campaign = rec.get("campaign", "")
+
+        # Build a short label — prefer ad name, then adset, then campaign
+        label = ad or adset or (campaign if campaign != "כללי" else "")
+        # Truncate long names
+        if label and len(label) > 28:
+            label = label[:26] + "…"
+
+        # Rephrase into action-first, single-line format
+        if rtype == "kill":
+            chosen.append(f"{icon} *{label}* — הוצאה ₪{_extract_spend(text)}, 0 תוצאות → *לכבות*")
+        elif rtype == "funnel":
+            chosen.append(f"{icon} {text}")
+        elif rtype == "scale":
+            chosen.append(f"{icon} *{label}* — {_extract_roas_phrase(text)} → *להגדיל תקציב*")
+        elif rtype in ("frequency", "fatigue"):
+            chosen.append(f"{icon} *{label or 'כללי'}* — {_shorten(text, 55)}")
+        elif rtype == "creative":
+            chosen.append(f"{icon} {_shorten(text, 65)}")
+        elif rtype == "budget":
+            chosen.append(f"{icon} {_shorten(text, 65)}")
+        elif rtype == "audience":
+            chosen.append(f"{icon} {text}")
+        else:
+            chosen.append(f"{icon} {_shorten(text, 65)}")
+
+        seen_types.add(rtype)
+
+    return chosen
+
+
+def _extract_spend(text: str) -> str:
+    """Pull the ₪ amount from a recommendation text."""
+    import re
+    m = re.search(r"₪([\d,]+)", text)
+    return m.group(1) if m else "?"
+
+
+def _extract_roas_phrase(text: str) -> str:
+    """Extract a short ROAS+purchases phrase."""
+    import re
+    roas_m = re.search(r"ROAS\s+([\d.]+)", text)
+    purch_m = re.search(r"(\d+)\s+רכישות", text)
+    parts = []
+    if roas_m:
+        parts.append(f"ROAS {roas_m.group(1)}")
+    if purch_m:
+        parts.append(f"{purch_m.group(1)} רכישות")
+    return ", ".join(parts) if parts else text[:40]
+
+
+def _shorten(text: str, max_len: int) -> str:
+    return text if len(text) <= max_len else text[:max_len - 1] + "…"
+
+
 def _build_daily_summary(
     campaign_data: dict,
     trend_data: dict,
     recommendations: list[dict],
     drive_link: str | None = None,
+    hourly_data: list[dict] | None = None,
+    video_data: list[dict] | None = None,
 ) -> str:
-    """Build a clean Hebrew daily summary — yesterday's data + P&L + 3 recommendations."""
+    """Build a clean, high-quality Hebrew daily WhatsApp summary.
+    Sources:
+    - Meta Ads API: spend, impressions, clicks, ATC, IC, CPC, CTR, hourly, video
+    - WooCommerce: orders, revenue, visitors, CVR
+    - ROAS = WooCommerce revenue / Meta spend
+    """
     yesterday = date.today() - timedelta(days=1)
 
-    # ── Extract yesterday's data from daily breakdown ──
+    # ── Meta: extract yesterday from daily breakdown ──
     daily_rows = trend_data.get("daily", [])
     yesterday_str = yesterday.isoformat()
-    yesterday_data = None
-    for d in daily_rows:
-        if d.get("date") == yesterday_str:
-            yesterday_data = d
-            break
+    yesterday_data = next((d for d in daily_rows if d.get("date") == yesterday_str), None)
 
-    # Fallback: use overall totals if no yesterday data
     if yesterday_data:
-        spend = yesterday_data.get("spend", 0)
-        purchases = yesterday_data.get("purchases", 0)
-        roas = yesterday_data.get("roas", 0)
-        atc = yesterday_data.get("add_to_cart", 0)
-        revenue = yesterday_data.get("purchase_value", 0)
+        spend       = yesterday_data.get("spend", 0)
+        impressions = yesterday_data.get("impressions", 0)
+        clicks      = yesterday_data.get("clicks", 0)
+        atc         = yesterday_data.get("add_to_cart", 0)
+        ic          = yesterday_data.get("initiate_checkout", 0)
+        cpc         = yesterday_data.get("cpc", 0)
+        ctr         = yesterday_data.get("ctr", 0)
     else:
-        spend = campaign_data.get("total_spend", 0)
-        purchases = campaign_data.get("total_purchases", 0)
-        roas = campaign_data.get("total_roas", 0)
-        atc = campaign_data.get("total_atc", 0)
-        revenue = campaign_data.get("total_purchase_value", 0)
+        spend       = campaign_data.get("total_spend", 0)
+        impressions = campaign_data.get("total_impressions", 0)
+        clicks      = campaign_data.get("total_clicks", 0)
+        atc         = campaign_data.get("total_atc", 0)
+        ic          = campaign_data.get("total_ic", 0)
+        cpc         = spend / clicks if clicks > 0 else 0
+        ctr         = clicks / impressions * 100 if impressions > 0 else 0
 
-    cost_per_purchase = spend / purchases if purchases > 0 else 0
+    # ── Same weekday last week (from existing daily data — no extra API call) ──
+    last_week = yesterday - timedelta(days=7)
+    last_week_str = last_week.isoformat()
+    lw = next((d for d in daily_rows if d.get("date") == last_week_str), None)
+    lw_spend   = lw.get("spend", 0) if lw else 0
+    lw_roas    = lw.get("roas", 0) if lw else 0
 
-    # ── Read P&L data for yesterday specifically ──
-    pnl = _read_pnl_data(target_date=yesterday)
+    def _delta(cur: float, prev: float) -> str:
+        """Return a short ▲/▼ delta string."""
+        if prev == 0:
+            return ""
+        pct = (cur - prev) / prev * 100
+        arrow = "▲" if pct >= 0 else "▼"
+        return f" {arrow}{abs(pct):.0f}%"
 
-    # Calculate net profit: profit from orders minus ad spend for that day
-    net_profit = pnl["total_profit"] - spend
-
-    # ── Build message ──
-    lines = [
-        f"*OneZone Jersey - סיכום יומי*",
-        f"*{yesterday.strftime('%d/%m/%Y')}*",
-        "",
-        "*--- פרסום ---*",
-        f"💸 הוצאה: ₪{spend:,.0f}",
-        f"🛒 רכישות מפרסום: {purchases}",
-        f"🛍 הוספות לעגלה: {atc}",
-        f"💰 הכנסות מפרסום: ₪{revenue:,.0f}",
-        f"📈 ROAS: {roas:.2f}",
-        f"💵 עלות לרכישה: ₪{cost_per_purchase:,.0f}",
-    ]
-
-    # ── P&L section for that specific day ──
-    if pnl["total_orders"] > 0:
-        lines.append("")
-        lines.append(f"*--- רווחיות {yesterday.strftime('%d/%m')} ---*")
-        lines.append(f"📦 הזמנות: {pnl['total_orders']}")
-        lines.append(f"💳 הכנסות: ₪{pnl['total_revenue']:,.0f}")
-        lines.append(f"🏷 מע״מ: -₪{pnl['total_vat']:,.0f}")
-        lines.append(f"📋 עלות סחורה: -₪{pnl['total_cogs']:,.0f}")
-        lines.append(f"💸 עלות פרסום: -₪{spend:,.0f}")
-        lines.append(f"{'✅' if net_profit >= 0 else '❌'} *רווח נקי: ₪{net_profit:,.0f}*")
-        # Net margin after ads
-        net_margin = net_profit / pnl["total_revenue"] * 100 if pnl["total_revenue"] > 0 else 0
-        lines.append(f"📊 מרג'ין נקי: {net_margin:.1f}%")
-    else:
-        lines.append("")
-        lines.append(f"📦 אין הזמנות ב-{yesterday.strftime('%d/%m')}")
-
-    # ── Top 3 recommendations (concise) ──
-    if recommendations:
-        lines.append("")
-        lines.append("*--- המלצות ---*")
-        for rec in recommendations[:3]:
-            # Build short path
-            parts = []
-            if rec.get("campaign") and rec["campaign"] != "כללי":
-                parts.append(rec["campaign"])
-            if rec.get("ad"):
-                parts.append(rec["ad"])
-            path = " → ".join(parts)
-
-            text = rec.get("text", "")
-            icon = rec.get("icon", "")
-
-            if path:
-                lines.append(f"{icon} *{path}:* {text}")
-            else:
-                lines.append(f"{icon} {text}")
-
-    # ── WooCommerce site stats ──
+    # ── WooCommerce ──
     from .woo_client import get_daily_stats
     woo = get_daily_stats(target_date=yesterday)
-    if woo["visitors"] > 0:
-        lines.append("")
-        lines.append("*--- אתר ---*")
-        lines.append(f"👁 מבקרים: {woo['visitors']:,}")
-        lines.append(f"🛒 הזמנות באתר: {woo['orders']}")
-        lines.append(f"🎯 יחס המרה: {woo['conversion_rate']:.2f}%")
+    woo_lw  = get_daily_stats(target_date=last_week)
+    woo_orders  = woo["orders"]
+    woo_revenue = woo["revenue"]
+    visitors    = woo["visitors"]
+    cvr         = woo["conversion_rate"]
+    roas        = woo_revenue / spend if spend > 0 else 0
+
+    lw_woo_revenue = woo_lw["revenue"]
+    lw_woo_orders  = woo_lw["orders"]
+
+    # ── Funnel conversion rates ──
+    atc_to_ic  = round(ic / atc * 100) if atc > 0 else 0
+    ic_to_pur  = round(woo_orders / ic * 100) if ic > 0 else 0
+
+    # ── Header ──
+    lines = [
+        f"*OneZone Jersey | {yesterday.strftime('%d/%m/%Y')}*",
+        "",
+    ]
+
+    # ── Meta Ads block ──
+    spend_delta = _delta(spend, lw_spend)
+    lines += [
+        "*📊 Meta Ads*",
+        f"💸 הוצאה: *₪{spend:,.0f}*{spend_delta}",
+        f"👁 חשיפות: {impressions:,}  |  CTR: {ctr:.2f}%",
+        f"🛒 ATC: {atc}  |  IC: {ic}",
+        f"💵 CPC: ₪{cpc:.2f}",
+    ]
+
+    # ── Funnel block ──
+    if atc > 0:
+        lines += [
+            "",
+            "*🔽 פאנל*",
+            f"ATC → IC: {atc_to_ic}%  |  IC → רכישה: {ic_to_pur}%",
+        ]
+
+    # ── Site block ──
+    lines += ["", "*🛍 אתר*"]
+    if visitors > 0:
+        lines.append(f"👤 מבקרים: {visitors:,}")
+    if woo_orders > 0:
+        orders_delta  = _delta(woo_orders, lw_woo_orders)
+        revenue_delta = _delta(woo_revenue, lw_woo_revenue)
+        roas_delta    = _delta(roas, lw_woo_revenue / lw_spend if lw_spend > 0 else 0)
+        lines += [
+            f"📦 הזמנות: *{woo_orders}*{orders_delta}  |  המרה: {cvr:.2f}%",
+            f"💰 הכנסות: *₪{woo_revenue:,.0f}*{revenue_delta}",
+            f"📈 ROAS: *{roas:.2f}x*{roas_delta}",
+        ]
+    else:
+        lines.append(f"📦 אין הזמנות ב-{yesterday.strftime('%d/%m')}")
+
+    # ── Hourly peaks block ──
+    if hourly_data:
+        # rank hours by ATC + purchases combined
+        scored = sorted(
+            [h for h in hourly_data if h["add_to_cart"] + h["purchases"] > 0],
+            key=lambda h: h["add_to_cart"] + h["purchases"] * 3,
+            reverse=True,
+        )
+        if scored:
+            lines += ["", "*🕐 שעות שיא*"]
+            for h in scored[:3]:
+                hr = h["hour"]
+                label = f"{hr:02d}:00–{hr+1:02d}:00"
+                parts = []
+                if h["add_to_cart"]:
+                    parts.append(f"ATC {h['add_to_cart']}")
+                if h["purchases"]:
+                    parts.append(f"רכישות {h['purchases']}")
+                lines.append(f"🕐 {label}: {' | '.join(parts)}")
+
+    # ── Video retention block ──
+    if video_data:
+        # Show top 2 video ads by plays, sorted by p50 retention
+        top_videos = sorted(
+            [v for v in video_data if v["plays"] > 50],
+            key=lambda v: v["p50_pct"],
+            reverse=True,
+        )[:2]
+        if top_videos:
+            lines += ["", "*📹 וידאו*"]
+            for v in top_videos:
+                name = v["ad_name"]
+                if len(name) > 25:
+                    name = name[:23] + "…"
+                avg = f"{v['avg_watch_sec']}שנ" if v["avg_watch_sec"] else ""
+                retention = f"25%▶{v['p25_pct']}%  50%▶{v['p50_pct']}%  100%▶{v['p100_pct']}%"
+                lines.append(f"🎬 *{name}*")
+                lines.append(f"   {retention}  {avg}")
+
+    # ── Actions block ──
+    actions = _pick_top_actions(recommendations)
+    if actions:
+        lines += ["", "*🎯 פעולות*"]
+        for a in actions:
+            lines.append(a)
 
     # ── Drive link ──
     if drive_link:
-        lines.append("")
-        lines.append(f"📎 דוח מלא: {drive_link}")
+        lines += ["", f"📎 {drive_link}"]
 
     return "\n".join(lines)
 
@@ -355,33 +489,70 @@ def _send_via_template(
         return False
 
 
-def _send_via_hello_world_then_text(message: str) -> bool:
-    """Fallback: send hello_world to open window, then send full text report."""
-    import time
+def _upload_media(file_path: str) -> str | None:
+    """Upload a file to WhatsApp media API. Returns media_id or None."""
+    url = API_URL.format(phone_id=settings.WHATSAPP_PHONE_NUMBER_ID).replace("/messages", "/media")
+    headers = {"Authorization": f"Bearer {settings.WHATSAPP_ACCESS_TOKEN}"}
+    try:
+        with open(file_path, "rb") as f:
+            resp = requests.post(
+                url,
+                headers=headers,
+                files={"file": (file_path.split("\\")[-1].split("/")[-1], f, "application/pdf")},
+                data={"messaging_product": "whatsapp", "type": "document"},
+                timeout=60,
+            )
+        resp.raise_for_status()
+        media_id = resp.json().get("id")
+        logger.info("Media uploaded — ID: %s", media_id)
+        return media_id
+    except Exception:
+        logger.exception("Failed to upload media")
+        return None
+
+
+def _send_via_document(pdf_path: str, filename: str, caption: str = "") -> bool:
+    """Upload PDF to WhatsApp and send as document message with optional caption."""
+    media_id = _upload_media(pdf_path)
+    if not media_id:
+        logger.warning("Media upload failed — falling back to text message")
+        return False
 
     url = API_URL.format(phone_id=settings.WHATSAPP_PHONE_NUMBER_ID)
     headers = {
         "Authorization": f"Bearer {settings.WHATSAPP_ACCESS_TOKEN}",
         "Content-Type": "application/json",
     }
-
-    # Step 1: Open conversation window
-    opener = {
+    doc_obj: dict = {"id": media_id, "filename": filename}
+    if caption:
+        doc_obj["caption"] = caption
+    payload = {
         "messaging_product": "whatsapp",
         "to": settings.WHATSAPP_TO,
-        "type": "template",
-        "template": {"name": "hello_world", "language": {"code": "en_US"}},
+        "type": "document",
+        "document": doc_obj,
     }
     try:
-        resp = requests.post(url, json=opener, headers=headers, timeout=30)
+        resp = requests.post(url, json=payload, headers=headers, timeout=30)
         resp.raise_for_status()
-        logger.info("hello_world opener sent — waiting 5s")
-        time.sleep(5)
+        msg_id = resp.json().get("messages", [{}])[0].get("id", "unknown")
+        logger.info("PDF document sent (ID: %s)", msg_id)
+        return True
+    except requests.exceptions.HTTPError as e:
+        logger.error("Document send failed: %s — %s", e, resp.text)
+        return False
     except Exception:
-        logger.exception("hello_world opener failed")
+        logger.exception("Failed to send document")
         return False
 
-    # Step 2: Send full text report
+
+def _send_via_text(message: str) -> bool:
+    """Send full text report directly (works within 24h conversation window)."""
+    url = API_URL.format(phone_id=settings.WHATSAPP_PHONE_NUMBER_ID)
+    headers = {
+        "Authorization": f"Bearer {settings.WHATSAPP_ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+    }
     text_payload = {
         "messaging_product": "whatsapp",
         "to": settings.WHATSAPP_TO,
@@ -525,6 +696,8 @@ def send_summary(
     recommendations: list,
     drive_link: str | None = None,
     structured_recs: list[dict] | None = None,
+    hourly_data: list[dict] | None = None,
+    video_data: list[dict] | None = None,
 ) -> bool:
     """Send unified daily summary via WhatsApp. Returns True on success."""
     if not settings.WHATSAPP_ACCESS_TOKEN or not settings.WHATSAPP_PHONE_NUMBER_ID:
@@ -558,18 +731,63 @@ def send_summary(
     pnl = _read_pnl_data(target_date=yesterday)
     net_profit = pnl["total_profit"] - spend
 
-    # ── Try template first (always works on test number) ──
-    if _send_via_template(yesterday, spend, purchases, roas,
-                          pnl["total_orders"], net_profit):
-        return True
-
-    # ── Fallback: hello_world opener + full text message ──
-    logger.warning("Template failed — falling back to hello_world + text")
-
-    # Use structured recs if available, otherwise wrap strings
     recs = structured_recs or []
     if not recs and recommendations:
         recs = [{"icon": "", "text": r, "campaign": "", "ad": ""} for r in recommendations]
 
-    message = _build_daily_summary(campaign_data, trend_data, recs, drive_link)
-    return _send_via_hello_world_then_text(message)
+    actions = _pick_top_actions(recs)
+
+    # ── Try to generate & send PDF ──
+    try:
+        from .pdf_report import generate_daily_pdf
+        from .woo_client import get_daily_stats
+
+        woo      = get_daily_stats(target_date=yesterday)
+        woo_lw   = get_daily_stats(target_date=yesterday - timedelta(days=7))
+
+        daily_rows   = trend_data.get("daily", [])
+        yesterday_data = next((d for d in daily_rows if d.get("date") == yesterday.isoformat()), None)
+        lw_data        = next((d for d in daily_rows if d.get("date") == (yesterday - timedelta(days=7)).isoformat()), None)
+
+        spend       = yesterday_data.get("spend", 0) if yesterday_data else campaign_data.get("total_spend", 0)
+        impressions = yesterday_data.get("impressions", 0) if yesterday_data else 0
+        clicks      = yesterday_data.get("clicks", 0) if yesterday_data else 0
+        atc         = yesterday_data.get("add_to_cart", 0) if yesterday_data else 0
+        ic          = yesterday_data.get("initiate_checkout", 0) if yesterday_data else 0
+        cpc         = yesterday_data.get("cpc", 0) if yesterday_data else 0
+        ctr         = yesterday_data.get("ctr", 0) if yesterday_data else 0
+
+        meta_data = {"spend": spend, "impressions": impressions, "clicks": clicks,
+                     "atc": atc, "ic": ic, "cpc": cpc, "ctr": ctr}
+        meta_lw   = {"spend": lw_data.get("spend", 0)} if lw_data else {"spend": 0}
+        funnel    = {
+            "atc_to_ic":       round(ic / atc * 100) if atc > 0 else 0,
+            "ic_to_purchase":  round(woo["orders"] / ic * 100) if ic > 0 else 0,
+        }
+        woo_data  = {"orders": woo["orders"], "revenue": woo["revenue"],
+                     "visitors": woo["visitors"], "cvr": woo["conversion_rate"]}
+        woo_lw_data = {"orders": woo_lw["orders"], "revenue": woo_lw["revenue"]}
+
+        pdf_path = generate_daily_pdf(
+            report_date=yesterday,
+            meta=meta_data, meta_lw=meta_lw,
+            woo=woo_data, woo_lw=woo_lw_data,
+            funnel=funnel,
+            hourly_data=hourly_data or [],
+            video_data=video_data or [],
+            actions=actions,
+            drive_link=drive_link,
+        )
+        filename = f"OneZone_{yesterday.strftime('%d_%m_%Y')}.pdf"
+        # Send title text first, then the PDF document
+        _send_via_text(f"📋 *סיכום יומי — {yesterday.strftime('%d/%m/%Y')}*")
+        if _send_via_document(str(pdf_path), filename):
+            return True
+        logger.warning("PDF send failed — falling back to text")
+    except Exception:
+        logger.exception("PDF generation/send failed — falling back to text")
+
+    # ── Fallback: plain text ──
+    message = _build_daily_summary(campaign_data, trend_data, recs, drive_link,
+                                   hourly_data=hourly_data, video_data=video_data)
+    return _send_via_text(message)

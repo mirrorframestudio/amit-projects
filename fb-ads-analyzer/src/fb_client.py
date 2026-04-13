@@ -248,6 +248,126 @@ def fetch_ads_daily(since: str | None = None, until: str | None = None) -> list[
     return [_parse_row(r, "ad") for r in data]
 
 
+# ── Hourly breakdown (yesterday only) ────────────────────
+def fetch_hourly_breakdown(target_date: str | None = None) -> list[dict]:
+    """Fetch spend + ATC + purchases broken down by hour for a specific day."""
+    if not target_date:
+        target_date = (date.today() - timedelta(days=1)).isoformat()
+
+    if not settings.FB_AD_ACCOUNT_ID or not settings.FB_ACCESS_TOKEN:
+        return []
+
+    url = f"{BASE}/{settings.FB_AD_ACCOUNT_ID}/insights"
+    params = {
+        "access_token": settings.FB_ACCESS_TOKEN,
+        "fields": "spend,actions",
+        "time_range": f'{{"since":"{target_date}","until":"{target_date}"}}',
+        "breakdowns": "hourly_stats_aggregated_by_advertiser_time_zone",
+        "level": "account",
+        "limit": 24,
+    }
+    try:
+        body = _get_with_retry(url, params)
+        rows = body.get("data", [])
+        result = []
+        for r in rows:
+            hour_str = r.get("hourly_stats_aggregated_by_advertiser_time_zone", "0")
+            # Meta returns "0" ... "23"
+            try:
+                hour = int(hour_str.split(":")[0]) if ":" in hour_str else int(hour_str)
+            except ValueError:
+                hour = 0
+            actions = r.get("actions", [])
+            atc = _extract_action(actions, "add_to_cart")
+            purchases = (_extract_action(actions, "omni_purchase")
+                         or _extract_action(actions, "purchase"))
+            result.append({
+                "hour": hour,
+                "spend": float(r.get("spend", 0)),
+                "add_to_cart": atc,
+                "purchases": purchases,
+            })
+        result.sort(key=lambda x: x["hour"])
+        logger.info("Fetched hourly breakdown: %d hours", len(result))
+        return result
+    except Exception:
+        logger.exception("Failed to fetch hourly breakdown")
+        return []
+
+
+# ── Video metrics (yesterday only) ───────────────────────
+def fetch_video_metrics(target_date: str | None = None) -> list[dict]:
+    """Fetch video retention metrics per ad for a specific day."""
+    if not target_date:
+        target_date = (date.today() - timedelta(days=1)).isoformat()
+
+    if not settings.FB_AD_ACCOUNT_ID or not settings.FB_ACCESS_TOKEN:
+        return []
+
+    video_fields = (
+        "ad_name,ad_id,campaign_name,spend,"
+        "video_play_actions,"
+        "video_p25_watched_actions,"
+        "video_p50_watched_actions,"
+        "video_p75_watched_actions,"
+        "video_p100_watched_actions,"
+        "video_avg_time_watched_actions"
+    )
+    params = {
+        "fields": video_fields,
+        "time_range": f'{{"since":"{target_date}","until":"{target_date}"}}',
+        "filtering": _ACTIVE_CAMPAIGN_FILTER,
+        "level": "ad",
+        "limit": 500,
+    }
+
+    def _v(actions: list | None, action_type: str) -> int:
+        if not actions:
+            return 0
+        for a in actions:
+            if a.get("action_type") == action_type:
+                return int(float(a.get("value", 0)))
+        return 0
+
+    def _vf(actions: list | None, action_type: str) -> float:
+        if not actions:
+            return 0.0
+        for a in actions:
+            if a.get("action_type") == action_type:
+                return float(a.get("value", 0))
+        return 0.0
+
+    try:
+        data = _get(f"{settings.FB_AD_ACCOUNT_ID}/insights", params)
+        result = []
+        for r in data:
+            plays = _v(r.get("video_play_actions"), "video_view")
+            if plays == 0:
+                continue  # skip non-video ads
+            p25  = _v(r.get("video_p25_watched_actions"), "video_view")
+            p50  = _v(r.get("video_p50_watched_actions"), "video_view")
+            p75  = _v(r.get("video_p75_watched_actions"), "video_view")
+            p100 = _v(r.get("video_p100_watched_actions"), "video_view")
+            avg_watch = _vf(r.get("video_avg_time_watched_actions"), "video_view")
+            result.append({
+                "ad_name": r.get("ad_name", ""),
+                "ad_id": r.get("ad_id", ""),
+                "campaign_name": r.get("campaign_name", ""),
+                "spend": float(r.get("spend", 0)),
+                "plays": plays,
+                "p25_pct":  round(p25  / plays * 100) if plays else 0,
+                "p50_pct":  round(p50  / plays * 100) if plays else 0,
+                "p75_pct":  round(p75  / plays * 100) if plays else 0,
+                "p100_pct": round(p100 / plays * 100) if plays else 0,
+                "avg_watch_sec": round(avg_watch, 1),
+            })
+        logger.info("Fetched video metrics: %d video ads", len(result))
+        return result
+    except Exception:
+        logger.exception("Failed to fetch video metrics")
+        return []
+
+
 # ── Age & Gender breakdown ────────────────────────────────
 def fetch_demographics(since: str | None = None, until: str | None = None) -> list[dict]:
     if not since:

@@ -16,6 +16,7 @@ from . import settings
 from .fb_client import (
     fetch_campaigns, fetch_ads, fetch_ads_daily,
     fetch_adsets, fetch_demographics, fetch_placements,
+    fetch_hourly_breakdown, fetch_video_metrics,
     check_token_expiry,
 )
 from .analyzer import (
@@ -75,13 +76,18 @@ def run(since: str | None = None, until: str | None = None):
     check_token_expiry()
 
     # ── Step 1: Fetch data ────────────────────────────────
+    from datetime import date, timedelta as _td
+    yesterday_str = (date.today() - _td(days=1)).isoformat()
+
     logger.info("Step 1/6: Fetching data from Facebook (active campaigns only)...")
-    campaigns_raw = fetch_campaigns(since, until)
-    adsets_raw = fetch_adsets(since, until)
-    ads_raw = fetch_ads(since, until)
-    daily_raw = fetch_ads_daily(since, until)
-    demo_raw = fetch_demographics(since, until)
-    placement_raw = fetch_placements(since, until)
+    campaigns_raw  = fetch_campaigns(since, until)
+    adsets_raw     = fetch_adsets(since, until)
+    ads_raw        = fetch_ads(since, until)
+    daily_raw      = fetch_ads_daily(since, until)
+    demo_raw       = fetch_demographics(since, until)
+    placement_raw  = fetch_placements(since, until)
+    hourly_raw     = fetch_hourly_breakdown(yesterday_str)
+    video_raw      = fetch_video_metrics(yesterday_str)
 
     # ── Step 2: Analyze ───────────────────────────────────
     logger.info("Step 2/6: Analyzing performance (4 granularities + funnel)...")
@@ -136,7 +142,8 @@ def run(since: str | None = None, until: str | None = None):
     # ── Step 6: Send WhatsApp summary (unified daily message) ──
     logger.info("Step 6/6: Sending WhatsApp summary...")
     whatsapp_send(campaign_analysis, ad_analysis, trend_analysis,
-                  rec_strings, drive_link, structured_recs=recommendations)
+                  rec_strings, drive_link, structured_recs=recommendations,
+                  hourly_data=hourly_raw, video_data=video_raw)
 
     # ── Save daily snapshot to PostgreSQL ─────────────────
     from datetime import date, timedelta
