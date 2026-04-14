@@ -13,7 +13,10 @@
       "name": "Meta Webhook Verification",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 140],
+      "position": [
+        240,
+        140
+      ],
       "webhookId": "whatsapp-shipping-verify"
     },
     {
@@ -46,24 +49,36 @@
       "name": "Extract Verify Params",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [460, 140]
+      "position": [
+        460,
+        140
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "mode-check",
               "leftValue": "={{ $json.hub_mode }}",
               "rightValue": "subscribe",
-              "operator": { "type": "string", "operation": "equals" }
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             },
             {
               "id": "token-check",
               "leftValue": "={{ $json.hub_verify_token }}",
               "rightValue": "meluvo-bot-2026",
-              "operator": { "type": "string", "operation": "equals" }
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             }
           ],
           "combinator": "and"
@@ -74,31 +89,44 @@
       "name": "Valid Verification?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 140]
+      "position": [
+        680,
+        140
+      ]
     },
     {
       "parameters": {
         "respondWith": "text",
         "responseBody": "={{ $json.hub_challenge }}",
-        "options": { "responseCode": 200 }
+        "options": {
+          "responseCode": 200
+        }
       },
       "id": "node-respond-challenge",
       "name": "Return hub.challenge",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [900, 80]
+      "position": [
+        900,
+        80
+      ]
     },
     {
       "parameters": {
         "respondWith": "text",
         "responseBody": "Forbidden",
-        "options": { "responseCode": 403 }
+        "options": {
+          "responseCode": 403
+        }
       },
       "id": "node-respond-forbidden",
       "name": "Return 403",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [900, 200]
+      "position": [
+        900,
+        200
+      ]
     },
     {
       "parameters": {
@@ -112,7 +140,10 @@
       "name": "WhatsApp Incoming Message",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 380],
+      "position": [
+        240,
+        380
+      ],
       "webhookId": "whatsapp-shipping-msg"
     },
     {
@@ -151,24 +182,36 @@
       "name": "Parse WhatsApp Message",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [460, 380]
+      "position": [
+        460,
+        380
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "has-message",
               "leftValue": "={{ $json.has_messages }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "true" }
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
             },
             {
               "id": "is-text",
               "leftValue": "={{ $json.message_type }}",
               "rightValue": "text",
-              "operator": { "type": "string", "operation": "equals" }
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             }
           ],
           "combinator": "and"
@@ -179,7 +222,10 @@
       "name": "Is Text Message?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 380]
+      "position": [
+        680,
+        380
+      ]
     },
     {
       "parameters": {},
@@ -187,7 +233,10 @@
       "name": "Ignore Non-Text",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
-      "position": [900, 500]
+      "position": [
+        900,
+        500
+      ]
     },
     {
       "parameters": {
@@ -219,7 +268,10 @@
       "name": "Normalize Phone Number",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [900, 320]
+      "position": [
+        900,
+        320
+      ]
     },
     {
       "parameters": {
@@ -252,7 +304,10 @@
       "name": "Search Monday by Phone",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 320]
+      "position": [
+        1120,
+        320
+      ]
     },
     {
       "parameters": {
@@ -290,18 +345,27 @@
       "name": "Extract Order & Tracking",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1340, 320]
+      "position": [
+        1340,
+        320
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "order-found",
               "leftValue": "={{ $json.order_found }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "true" }
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
             }
           ],
           "combinator": "and"
@@ -312,7 +376,10 @@
       "name": "Order Found?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1560, 320]
+      "position": [
+        1560,
+        320
+      ]
     },
     {
       "parameters": {
@@ -337,18 +404,27 @@
       "name": "Reply: No Order Found",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 460]
+      "position": [
+        1780,
+        460
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "tracking-exists",
               "leftValue": "={{ $json.tracking_number }}",
               "rightValue": "",
-              "operator": { "type": "string", "operation": "isNotEmpty" }
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
             }
           ],
           "combinator": "and"
@@ -359,7 +435,10 @@
       "name": "Tracking Number Exists?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1780, 320]
+      "position": [
+        1780,
+        320
+      ]
     },
     {
       "parameters": {
@@ -384,7 +463,10 @@
       "name": "Reply: No Tracking Yet",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2000, 460]
+      "position": [
+        2000,
+        460
+      ]
     },
     {
       "parameters": {
@@ -419,7 +501,10 @@
       "name": "Register AfterShip Tracking",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2000, 320]
+      "position": [
+        2000,
+        320
+      ]
     },
     {
       "parameters": {
@@ -446,7 +531,10 @@
       "name": "Get AfterShip Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2220, 320]
+      "position": [
+        2220,
+        320
+      ]
     },
     {
       "parameters": {
@@ -508,18 +596,27 @@
       "name": "Extract Tracking Data",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2440, 320]
+      "position": [
+        2440,
+        320
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "api-ok",
               "leftValue": "={{ $json.api_ok }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "true" }
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
             }
           ],
           "combinator": "and"
@@ -530,7 +627,10 @@
       "name": "AfterShip OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2660, 320]
+      "position": [
+        2660,
+        320
+      ]
     },
     {
       "parameters": {
@@ -555,7 +655,10 @@
       "name": "Reply: Tracking Error",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2880, 460]
+      "position": [
+        2880,
+        460
+      ]
     },
     {
       "parameters": {
@@ -564,7 +667,7 @@
             {
               "id": "reply_body",
               "name": "reply_body",
-              "value": "={{ (() => { const statusMap = { NotFound: 'לא נמצא', InTransit: 'בדרך 🚚', Expired: 'פג תוקף', Delivered: 'נמסר ✅', Undelivered: 'לא נמסר', Exception: 'חריגה ⚠️', PickedUp: 'נאסף', Alert: 'התראה ⚠️', Returning: 'בדרך חזרה', Returned: 'הוחזר' }; const status = statusMap[$json.status_code] || $json.status_code || 'לא ידוע'; const lines = ['📦 *עדכון משלוח*', '']; if ($json.carrier) lines.push('🚚 חברת שליחויות: ' + $json.carrier); lines.push('📍 סטטוס: ' + status); if ($json.last_event) lines.push('🔔 עדכון אחרון: ' + $json.last_event); if ($json.last_location) lines.push('📌 מיקום: ' + $json.last_location); if ($json.last_time) lines.push('🕐 זמן: ' + $json.last_time); lines.push(''); lines.push('מספר מעקב: ' + $json.tracking_number); return lines.join('\\n'); })() }}",
+              "value": "={{ (() => { const statusMap = { NotFound: 'לא נמצא עדיין', InTransit: 'בדרכה לארץ! ✈️', Expired: 'פג תוקף', Delivered: 'נמסרה! 🎉', Undelivered: 'ניסיון מסירה נכשל ⚠️', Exception: 'בעיה במשלוח ⚠️', PickedUp: 'נאספה על ידי השליח 📦', Alert: 'התראה ⚠️', Returning: 'בדרך חזרה', Returned: 'הוחזרה' }; const status = statusMap[$json.status_code] || $json.status_code || 'לא ידוע'; const lines = ['*עדכון משלוח | OneZone* 🏆', '', '*סטטוס:* ' + status]; if ($json.last_event) lines.push('\\n🔔 עדכון אחרון: ' + $json.last_event); if ($json.last_location) lines.push('📍 מיקום: ' + $json.last_location); if ($json.last_time) { try { const d = new Date($json.last_time); lines.push('🕐 זמן: ' + d.toLocaleDateString('he-IL', {day:'numeric',month:'long',year:'numeric'}) + ' ' + d.toLocaleTimeString('he-IL', {hour:'2-digit',minute:'2-digit'})); } catch(e) { lines.push('🕐 זמן: ' + $json.last_time); } } lines.push(''); lines.push('*מס׳ מעקב:* ' + $json.tracking_number); lines.push('\\n🔍 *למעקב עצמאי בכל רגע:* https://www.hfd.co.il/איתור-חבילה/\\n_(יש להקליד את מספר המעקב ידנית)_); return lines.join('\\n'); })() }}",
               "type": "string"
             },
             {
@@ -581,7 +684,10 @@
       "name": "Format Hebrew Reply",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2880, 320]
+      "position": [
+        2880,
+        320
+      ]
     },
     {
       "parameters": {
@@ -606,72 +712,223 @@
       "name": "Send WhatsApp Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3100, 320]
+      "position": [
+        3100,
+        320
+      ]
     }
   ],
   "connections": {
     "Meta Webhook Verification": {
-      "main": [[{ "node": "Extract Verify Params", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Extract Verify Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Extract Verify Params": {
-      "main": [[{ "node": "Valid Verification?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Valid Verification?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Valid Verification?": {
       "main": [
-        [{ "node": "Return hub.challenge", "type": "main", "index": 0 }],
-        [{ "node": "Return 403", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Return hub.challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return 403",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "WhatsApp Incoming Message": {
-      "main": [[{ "node": "Parse WhatsApp Message", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse WhatsApp Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse WhatsApp Message": {
-      "main": [[{ "node": "Is Text Message?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Is Text Message?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Is Text Message?": {
       "main": [
-        [{ "node": "Normalize Phone Number", "type": "main", "index": 0 }],
-        [{ "node": "Ignore Non-Text", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Normalize Phone Number",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignore Non-Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Normalize Phone Number": {
-      "main": [[{ "node": "Search Monday by Phone", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Search Monday by Phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Search Monday by Phone": {
-      "main": [[{ "node": "Extract Order & Tracking", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Extract Order & Tracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Extract Order & Tracking": {
-      "main": [[{ "node": "Order Found?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Order Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Order Found?": {
       "main": [
-        [{ "node": "Tracking Number Exists?", "type": "main", "index": 0 }],
-        [{ "node": "Reply: No Order Found", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Tracking Number Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply: No Order Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Tracking Number Exists?": {
       "main": [
-        [{ "node": "Register AfterShip Tracking", "type": "main", "index": 0 }],
-        [{ "node": "Reply: No Tracking Yet", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Register AfterShip Tracking",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply: No Tracking Yet",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Register AfterShip Tracking": {
-      "main": [[{ "node": "Get AfterShip Status", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Get AfterShip Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Get AfterShip Status": {
-      "main": [[{ "node": "Extract Tracking Data", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Extract Tracking Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Extract Tracking Data": {
-      "main": [[{ "node": "AfterShip OK?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "AfterShip OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "AfterShip OK?": {
       "main": [
-        [{ "node": "Format Hebrew Reply", "type": "main", "index": 0 }],
-        [{ "node": "Reply: Tracking Error", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Format Hebrew Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply: Tracking Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Format Hebrew Reply": {
-      "main": [[{ "node": "Send WhatsApp Reply", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {

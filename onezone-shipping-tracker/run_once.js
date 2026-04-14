@@ -297,8 +297,8 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     const greeting = firstName ? `שלום ${firstName}! 👋\n\n` : '';
 
     const war = (code !== '99') ? `\n\n${warNotice}` : '';
-    const trackingLine = (code !== '99') ? `\n\n🔍 *למעקב:* https://www.hfd.co.il/איתור-חבילה/\n_(יש להקליד את מספר המעקב ידנית)_` : '';
-    const message = `*עדכון משלוח | OneZone* 🏆\n\n${greeting}*סטטוס:* ${info.h}\n\n${detail}${dateLine}${war}\n\n*מס׳ מעקב:* ${order.tracking}${trackingLine}\n\n_להפסקת עדכונים שלח STOP_`;
+    const trackingLink = `\n\n🔍 *למעקב עצמאי בכל רגע:* https://www.hfd.co.il/איתור-חבילה/\n_(יש להקליד את מספר המעקב ידנית)_`;
+    const message = `*עדכון משלוח | OneZone* 🏆\n\n${greeting}*סטטוס:* ${info.h}\n\n${detail}${dateLine}${war}\n\n*מס׳ מעקב:* ${order.tracking}${trackingLink}\n\n_להפסקת עדכונים שלח STOP_`;
 
     try {
       const resp = await sendJoni(order.phone, message);

@@ -5,14 +5,22 @@
     {
       "parameters": {
         "rule": {
-          "interval": [{ "field": "hours", "hoursInterval": 2 }]
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
         }
       },
       "id": "node-schedule",
       "name": "Every 2 Hours",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [240, 300]
+      "position": [
+        240,
+        300
+      ]
     },
     {
       "parameters": {
@@ -25,8 +33,14 @@
               "name": "Authorization",
               "value": "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjU1OTAyMjM2MiwiYWFpIjoxMSwidWlkIjo2Mzc3NjA5NywiaWFkIjoiMjAyNS0wOS0wN1QxNTowMToxNy4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ1MzIyMjcsInJnbiI6ImV1YzEifQ.d86GOnxc-RhtZND7Q7LIoIg3ShFUW0xImLCVjRlzXHQ"
             },
-            { "name": "Content-Type", "value": "application/json" },
-            { "name": "API-Version", "value": "2023-10" }
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "API-Version",
+              "value": "2023-10"
+            }
           ]
         },
         "sendBody": true,
@@ -39,7 +53,10 @@
       "name": "Get Monday Orders",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -49,7 +66,10 @@
       "name": "Parse Orders",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -58,8 +78,14 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Tracking-Api-Key", "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Tracking-Api-Key",
+              "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
@@ -67,14 +93,21 @@
         "rawContentType": "application/json",
         "body": "={{ JSON.stringify({ tracking_number: $json.tracking_number, courier_code: 'hfd', tracking_postal_code: $json.postal_code || undefined }) }}",
         "options": {
-          "response": { "response": { "neverError": true } }
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
         }
       },
       "id": "node-register-tracking",
       "name": "Register on TrackingMore",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 300]
+      "position": [
+        900,
+        300
+      ]
     },
     {
       "parameters": {
@@ -82,18 +115,28 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Tracking-Api-Key", "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b" }
+            {
+              "name": "Tracking-Api-Key",
+              "value": "yocbwatn-q6cl-f3o2-gpdi-5n7qdsd2xh5b"
+            }
           ]
         },
         "options": {
-          "response": { "response": { "neverError": true } }
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
         }
       },
       "id": "node-get-status",
       "name": "Get TrackingMore Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 300]
+      "position": [
+        1120,
+        300
+      ]
     },
     {
       "parameters": {
@@ -103,17 +146,23 @@
       "name": "Status Changed?",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1340, 300]
+      "position": [
+        1340,
+        300
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const { status, last_message, last_location, eta_from, eta_to, phone, tracking_number } = $input.first().json;\n\nconst statusMap = {\n  InTransit: 'בדרך אליך 🚚',\n  OutForDelivery: 'יוצא למשלוח עכשיו 📦',\n  Delivered: 'נמסר בהצלחה ✅',\n  Exception: 'בעיה בתהליך המשלוח ⚠️',\n  AvailableForPickup: 'ממתין לאיסוף בנקודת חלוקה 📍',\n  Undelivered: 'ניסיון מסירה נכשל ⚠️'\n};\n\nconst statusHebrew = statusMap[status] || status;\n\nlet etaLine = '';\nif (eta_from) {\n  try {\n    const d = new Date(eta_from);\n    const formatted = d.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });\n    etaLine = `\\nצפי הגעה: ${formatted}`;\n  } catch(e) {\n    etaLine = `\\nצפי הגעה: ${eta_from}`;\n  }\n}\n\nconst locationLine = last_location ? `\\nמיקום: ${last_location}` : '';\nconst msgLine = last_message ? `\\nעדכון: ${last_message}` : '';\n\nconst message = `*OneZone - עדכון משלוח* 🏆\\n\\nסטטוס: ${statusHebrew}${locationLine}${msgLine}${etaLine}\\n\\nמס' מעקב: ${tracking_number}\\n\\nמעקב מלא: https://t.17track.net/he#nums=${tracking_number}`;\n\nreturn [{ json: { phone, message } }];"
+        "jsCode": "const { status, last_message, last_location, eta_from, eta_to, phone, tracking_number, customer_name } = $input.first().json;\n\nconst warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכובים קלים במשלוחים, אנחנו עם יד על הדופק ובודקים מה עם המשלוח שלך בכל יום ויום.\\nנא להיות סבלניים 🙏';\n\nconst statusMap = {\n  InTransit: { headline: 'בדרכה לארץ! ✈️', detail: 'זמני האספקה הם 7-21 ימי עסקים, אנו נעדכן אותכם בכל שלב ושלב.' },\n  OutForDelivery: { headline: 'יוצאת למסירה עכשיו! 🚚', detail: 'השליח בדרכו אליך היום — שמור על הטלפון פתוח!' },\n  Delivered: { headline: 'נמסרה! 🎉', detail: 'ההזמנה שלך נמסרה בהצלחה!\\nנשמח לשמוע שהגיעה — תהנה מהמוצר! ⚽' },\n  Exception: { headline: 'בעיה במשלוח ⚠️', detail: 'אנחנו בודקים מה קורה ונחזור אליך בהקדם.' },\n  AvailableForPickup: { headline: 'מחכה לך בנקודת חלוקה 📍', detail: 'החבילה שלך מחכה לאיסוף בנקודת החלוקה הקרובה אליך.' },\n  Undelivered: { headline: 'ניסיון מסירה נכשל ⚠️', detail: 'לא הצלחנו למסור את החבילה. ננסה שוב בהקדם.' }\n};\n\nconst info = statusMap[status];\nif (!info) return [];\n\nlet etaLine = '';\nif (eta_from) {\n  try {\n    const d = new Date(eta_from);\n    const formatted = d.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });\n    etaLine = `\\nצפי הגעה: ${formatted}`;\n  } catch(e) {\n    etaLine = `\\nצפי הגעה: ${eta_from}`;\n  }\n}\n\nconst firstName = (customer_name || '').split(' ')[0];\nconst greeting = firstName ? `שלום ${firstName}! 👋\\n\\n` : '';\nconst war = (status !== 'Delivered') ? `\\n\\n${warNotice}` : '';\nconst trackingLink = `\\n\\n🔍 *למעקב עצמאי בכל רגע:* https://www.hfd.co.il/איתור-חבילה/\\n_(יש להקליד את מספר המעקב ידנית)_`;\n\nconst message = `*עדכון משלוח | OneZone* 🏆\\n\\n${greeting}*סטטוס:* ${info.headline}\\n\\n${info.detail}${etaLine}${war}\\n\\n*מס׳ מעקב:* ${tracking_number}${trackingLink}\\n\\n_להפסקת עדכונים שלח STOP_`;\n\nreturn [{ json: { phone, message } }];"
       },
       "id": "node-format-message",
       "name": "Format Hebrew Message",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 300]
+      "position": [
+        1560,
+        300
+      ]
     },
     {
       "parameters": {
@@ -122,7 +171,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
@@ -135,30 +187,89 @@
       "name": "Send via JONI",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 300]
+      "position": [
+        1780,
+        300
+      ]
     }
   ],
   "connections": {
     "Every 2 Hours": {
-      "main": [[{ "node": "Get Monday Orders", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Get Monday Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Get Monday Orders": {
-      "main": [[{ "node": "Parse Orders", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse Orders": {
-      "main": [[{ "node": "Register on TrackingMore", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Register on TrackingMore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Register on TrackingMore": {
-      "main": [[{ "node": "Get TrackingMore Status", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Get TrackingMore Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Get TrackingMore Status": {
-      "main": [[{ "node": "Status Changed?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Status Changed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Status Changed?": {
-      "main": [[{ "node": "Format Hebrew Message", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Format Hebrew Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Format Hebrew Message": {
-      "main": [[{ "node": "Send via JONI", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Send via JONI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -166,7 +277,9 @@
     "saveStaticData": true
   },
   "staticData": null,
-  "meta": { "templateCredsSetupCompleted": true },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
   "versionId": "1",
   "triggerCount": 0,

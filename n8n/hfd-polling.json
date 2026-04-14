@@ -5,14 +5,22 @@
     {
       "parameters": {
         "rule": {
-          "interval": [{ "field": "hours", "hoursInterval": 2 }]
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
         }
       },
       "id": "node-schedule",
       "name": "Every 2 Hours",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [240, 300]
+      "position": [
+        240,
+        300
+      ]
     },
     {
       "parameters": {
@@ -22,7 +30,10 @@
       "name": "Get All Monday Orders",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -32,7 +43,10 @@
       "name": "Parse & Filter Orders",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -42,10 +56,22 @@
         "contentType": "form-urlencoded",
         "bodyParameters": {
           "parameters": [
-            { "name": "client_id", "value": "8260" },
-            { "name": "tracking_id", "value": "={{ $json.tracking_number }}" },
-            { "name": "ref", "value": "ALL" },
-            { "name": "lang", "value": "he" }
+            {
+              "name": "client_id",
+              "value": "8260"
+            },
+            {
+              "name": "tracking_id",
+              "value": "={{ $json.tracking_number }}"
+            },
+            {
+              "name": "ref",
+              "value": "ALL"
+            },
+            {
+              "name": "lang",
+              "value": "he"
+            }
           ]
         },
         "options": {
@@ -61,7 +87,10 @@
       "name": "HFD Status API",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 300]
+      "position": [
+        900,
+        300
+      ]
     },
     {
       "parameters": {
@@ -71,28 +100,37 @@
       "name": "Parse HFD & Status Changed?",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 300]
+      "position": [
+        1120,
+        300
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const { stage_code, stage_date, stage_time, phone, tracking_number, customer_name } = $input.first().json;\n\nconst warNotice = '\u05d1\u05e2\u05e7\u05d1\u05d5\u05ea \u05de\u05d1\u05e6\u05e2 \u05e9\u05d0\u05d2\u05ea \u05d4\u05d0\u05e8\u05d9 \u05e6\u05e4\u05d5\u05d9\u05d9\u05dd \u05e2\u05d9\u05db\u05d5\u05d1\u05d9\u05dd \u05e7\u05dc\u05d9\u05dd \u05d1\u05de\u05e9\u05dc\u05d5\u05d7\u05d9\u05dd, \u05d0\u05e0\u05d7\u05e0\u05d5 \u05e2\u05dd \u05d9\u05d3 \u05e2\u05dc \u05d4\u05d3\u05d5\u05e4\u05e7 \u05d5\u05d1\u05d5\u05d3\u05e7\u05d9\u05dd \u05de\u05d4 \u05e2\u05dd \u05d4\u05de\u05e9\u05dc\u05d5\u05d7 \u05e9\u05dc\u05da \u05d1\u05db\u05dc \u05d9\u05d5\u05dd \u05d5\u05d9\u05d5\u05dd.\\n\u05e0\u05d0 \u05dc\u05d4\u05d9\u05d5\u05ea \u05e1\u05d1\u05dc\u05e0\u05d9\u05d9\u05dd \ud83d\ude4f';\n\nconst stageInfo = {\n  '10':  {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '21':  {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '103': {\n    headline: '\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05d0\u05e8\u05e5! \u2708\ufe0f',\n    detail: '\u05d6\u05de\u05e0\u05d9 \u05d4\u05d0\u05e1\u05e4\u05e7\u05d4 \u05d4\u05dd 7-21 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd \u05de\u05e8\u05d2\u05e2 \u05e7\u05d1\u05dc\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1, \u05d0\u05e0\u05d5 \u05e0\u05e2\u05d3\u05db\u05df \u05d0\u05d5\u05ea\u05db\u05dd \u05db\u05d0\u05df \u05d1\u05db\u05dc \u05e9\u05dc\u05d1 \u05d5\u05e9\u05dc\u05d1.'\n  },\n  '18':  {\n    headline: '\u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05d9\u05e9\u05e8\u05d0\u05dc! \ud83d\udec3',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05d9\u05e9\u05e8\u05d0\u05dc \u05d5\u05e2\u05d5\u05d1\u05e8\u05ea \u05d1\u05d3\u05d9\u05e7\u05ea \u05de\u05db\u05e1.\\n\u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc \u05dc\u05d5\u05e7\u05d7 2-5 \u05d9\u05de\u05d9 \u05e2\u05e1\u05e7\u05d9\u05dd.'\n  },\n  '13':  {\n    headline: '\u05e2\u05d1\u05e8\u05d4 \u05de\u05db\u05e1 \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4! \u2705',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05e2\u05d1\u05e8\u05d4 \u05d0\u05ea \u05d4\u05de\u05db\u05e1 \u05d5\u05d1\u05d3\u05e8\u05db\u05d4 \u05dc\u05de\u05e8\u05db\u05d6 \u05de\u05d9\u05d5\u05df.'\n  },\n  '521': {\n    headline: '\u05d1\u05de\u05e8\u05db\u05d6 \u05de\u05d9\u05d5\u05df \u05d1\u05d9\u05e9\u05e8\u05d0\u05dc \ud83d\udce6',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d4\u05d2\u05d9\u05e2\u05d4 \u05dc\u05de\u05e8\u05db\u05d6 \u05d4\u05de\u05d9\u05d5\u05df \u2014 \u05d1\u05e7\u05e8\u05d5\u05d1 \u05ea\u05d9\u05e9\u05dc\u05d7 \u05dc\u05d0\u05d9\u05d6\u05d5\u05e8\u05da!'\n  },\n  '23':  {\n    headline: '\u05d1\u05d3\u05e8\u05da \u05d0\u05dc\u05d9\u05da \ud83d\ude9a',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d0\u05e8\u05d5\u05d6\u05d4 \u05d5\u05de\u05d5\u05db\u05e0\u05d4 \u05dc\u05de\u05e1\u05d9\u05e8\u05d4.'\n  },\n  '48':  {\n    headline: '\u05d1\u05d3\u05e8\u05da \u05d0\u05dc\u05d9\u05da \ud83d\ude9a',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05d1\u05d3\u05e8\u05db\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '27':  {\n    headline: '\u05d9\u05d5\u05e6\u05d0\u05ea \u05dc\u05de\u05e1\u05d9\u05e8\u05d4 \u05e2\u05db\u05e9\u05d9\u05d5! \ud83d\ude9a',\n    detail: '\u05d4\u05e9\u05dc\u05d9\u05d7 \u05d1\u05d3\u05e8\u05db\u05d5 \u05d0\u05dc\u05d9\u05da \u05d4\u05d9\u05d5\u05dd \u2014 \u05e9\u05de\u05d5\u05e8 \u05e2\u05dc \u05d4\u05d8\u05dc\u05e4\u05d5\u05df \u05e4\u05ea\u05d5\u05d7!'\n  },\n  '29':  {\n    headline: '\u05de\u05d7\u05db\u05d4 \u05dc\u05da \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d7\u05dc\u05d5\u05e7\u05d4 \ud83d\udccd',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05de\u05d7\u05db\u05d4 \u05dc\u05d0\u05d9\u05e1\u05d5\u05e3 \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d4\u05d7\u05dc\u05d5\u05e7\u05d4 \u05d4\u05e7\u05e8\u05d5\u05d1\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '429': {\n    headline: '\u05de\u05d7\u05db\u05d4 \u05dc\u05da \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d7\u05dc\u05d5\u05e7\u05d4 \ud83d\udccd',\n    detail: '\u05d4\u05d7\u05d1\u05d9\u05dc\u05d4 \u05e9\u05dc\u05da \u05de\u05d7\u05db\u05d4 \u05dc\u05d0\u05d9\u05e1\u05d5\u05e3 \u05d1\u05e0\u05e7\u05d5\u05d3\u05ea \u05d4\u05d7\u05dc\u05d5\u05e7\u05d4 \u05d4\u05e7\u05e8\u05d5\u05d1\u05d4 \u05d0\u05dc\u05d9\u05da.'\n  },\n  '19':  {\n    headline: '\u05e2\u05d3\u05db\u05d5\u05df \u05e4\u05e8\u05d8\u05d9 \u05de\u05e9\u05dc\u05d5\u05d7 \ud83d\udcdd',\n    detail: '\u05d1\u05d5\u05e6\u05e2 \u05e2\u05d3\u05db\u05d5\u05df \u05db\u05ea\u05d5\u05d1\u05ea/\u05e4\u05e8\u05d8\u05d9\u05dd \u05dc\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da.'\n  },\n  '99':  {\n    headline: '\u05e0\u05de\u05e1\u05e8\u05d4! \ud83c\udf89',\n    detail: '\u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u05e0\u05de\u05e1\u05e8\u05d4 \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4!\\n\u05e0\u05e9\u05de\u05d7 \u05dc\u05e9\u05de\u05d5\u05e2 \u05e9\u05d4\u05d2\u05d9\u05e2\u05d4 \u2014 \u05ea\u05d4\u05e0\u05d4 \u05de\u05d4\u05de\u05d5\u05e6\u05e8! \u26bd'\n  },\n  'STUCK': {\n    headline: '\u05e2\u05d3\u05db\u05d5\u05df \u05e2\u05dc \u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u23f3',\n    detail: '\u05d4\u05d4\u05d6\u05de\u05e0\u05d4 \u05e9\u05dc\u05da \u05de\u05ea\u05e2\u05db\u05d1\u05ea \u05de\u05e2\u05d8 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d4\u05e6\u05e4\u05d5\u05d9.\\n\u05d0\u05e0\u05d7\u05e0\u05d5 \u05d1\u05d5\u05d3\u05e7\u05d9\u05dd \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05d5\u05e0\u05d7\u05d6\u05d5\u05e8 \u05d0\u05dc\u05d9\u05da \u05d1\u05d4\u05e7\u05d3\u05dd.\\n\u05de\u05ea\u05e0\u05e6\u05dc\u05d9\u05dd \u05e2\u05dc \u05d4\u05d0\u05d9\u05d7\u05d5\u05e8 \ud83d\ude4f'\n  }\n};\n\nconst info = stageInfo[stage_code];\nif (!info) return [];\n\nconst REALTIME_CODES = new Set(['18','13','521','23','27','29','429','48','99','19']);\nlet dateLine = '';\nif (stage_date && REALTIME_CODES.has(stage_code)) {\n  dateLine = '\\n' + '\u05e2\u05d3\u05db\u05d5\u05df \u05d0\u05d7\u05e8\u05d5\u05df: ' + stage_date + (stage_time ? ' ' + stage_time : '');\n}\n\nconst firstName = (customer_name || '').split(' ')[0];\nconst greeting = firstName ? '\u05e9\u05dc\u05d5\u05dd ' + firstName + '! \ud83d\udc4b\\n\\n' : '';\n\nconst message = '*\u05e2\u05d3\u05db\u05d5\u05df \u05de\u05e9\u05dc\u05d5\u05d7 | OneZone* \ud83c\udfc6\\n\\n' + greeting + '*\u05e1\u05d8\u05d8\u05d5\u05e1:* ' + info.headline + '\\n\\n' + info.detail + dateLine + '\\n\\n' + warNotice + '\\n\\n*\u05de\u05e1\\u05f3 \u05de\u05e2\u05e7\u05d1:* ' + tracking_number + '\\n\\n\ud83d\udd0d *\u05dc\u05de\u05e2\u05e7\u05d1:* https://www.hfd.co.il/\u05d0\u05d9\u05ea\u05d5\u05e8-\u05d7\u05d1\u05d9\u05dc\u05d4/\\n_(\u05d9\u05e9 \u05dc\u05d4\u05e7\u05dc\u05d9\u05d3 \u05d0\u05ea \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05e2\u05e7\u05d1 \u05d9\u05d3\u05e0\u05d9\u05ea)_\\n\\n_\u05dc\u05d4\u05e4\u05e1\u05e7\u05ea \u05e2\u05d3\u05db\u05d5\u05e0\u05d9\u05dd \u05e9\u05dc\u05d7 STOP_';\n\nreturn [{ json: { phone, message } }];"
+        "jsCode": "const { stage_code, stage_date, stage_time, phone, tracking_number, customer_name } = $input.first().json;\n\nconst warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכובים קלים במשלוחים, אנחנו עם יד על הדופק ובודקים מה עם המשלוח שלך בכל יום ויום.\\nנא להיות סבלניים 🙏';\n\nconst stageInfo = {\n  '10':  {\n    headline: 'בדרכה לארץ! ✈️',\n    detail: 'זמני האספקה הם 7-21 ימי עסקים מרגע קבלת מספר המעקב, אנו נעדכן אותכם כאן בכל שלב ושלב.'\n  },\n  '21':  {\n    headline: 'בדרכה לארץ! ✈️',\n    detail: 'זמני האספקה הם 7-21 ימי עסקים מרגע קבלת מספר המעקב, אנו נעדכן אותכם כאן בכל שלב ושלב.'\n  },\n  '103': {\n    headline: 'בדרכה לארץ! ✈️',\n    detail: 'זמני האספקה הם 7-21 ימי עסקים מרגע קבלת מספר המעקב, אנו נעדכן אותכם כאן בכל שלב ושלב.'\n  },\n  '18':  {\n    headline: 'הגיעה לישראל! 🛃',\n    detail: 'החבילה שלך הגיעה לישראל ועוברת בדיקת מכס.\\nבדרך כלל לוקח 2-5 ימי עסקים.'\n  },\n  '13':  {\n    headline: 'עברה מכס בהצלחה! ✅',\n    detail: 'החבילה שלך עברה את המכס ובדרכה למרכז מיון.'\n  },\n  '521': {\n    headline: 'במרכז מיון בישראל 📦',\n    detail: 'החבילה שלך הגיעה למרכז המיון — בקרוב תישלח לאיזורך!'\n  },\n  '23':  {\n    headline: 'בדרך אליך 🚚',\n    detail: 'החבילה שלך ארוזה ומוכנה למסירה.'\n  },\n  '48':  {\n    headline: 'בדרך אליך 🚚',\n    detail: 'החבילה שלך בדרכה אליך.'\n  },\n  '27':  {\n    headline: 'יוצאת למסירה עכשיו! 🚚',\n    detail: 'השליח בדרכו אליך היום — שמור על הטלפון פתוח!'\n  },\n  '29':  {\n    headline: 'מחכה לך בנקודת חלוקה 📍',\n    detail: 'החבילה שלך מחכה לאיסוף בנקודת החלוקה הקרובה אליך.'\n  },\n  '429': {\n    headline: 'מחכה לך בנקודת חלוקה 📍',\n    detail: 'החבילה שלך מחכה לאיסוף בנקודת החלוקה הקרובה אליך.'\n  },\n  '19':  {\n    headline: 'עדכון פרטי משלוח 📝',\n    detail: 'בוצע עדכון כתובת/פרטים להזמנה שלך.'\n  },\n  '99':  {\n    headline: 'נמסרה! 🎉',\n    detail: 'ההזמנה שלך נמסרה בהצלחה!\\nנשמח לשמוע שהגיעה — תהנה מהמוצר! ⚽'\n  },\n  'STUCK': {\n    headline: 'עדכון על ההזמנה שלך ⏳',\n    detail: 'ההזמנה שלך מתעכבת מעט יותר מהצפוי.\\nאנחנו בודקים מה קורה ונחזור אליך בהקדם.\\nמתנצלים על האיחור 🙏'\n  }\n};\n\nconst info = stageInfo[stage_code];\nif (!info) return [];\n\nconst REALTIME_CODES = new Set(['18','13','521','23','27','29','429','48','99','19']);\nlet dateLine = '';\nif (stage_date && REALTIME_CODES.has(stage_code)) {\n  dateLine = '\\nעדכון אחרון: ' + stage_date + (stage_time ? ' ' + stage_time : '');\n}\n\nconst firstName = (customer_name || '').split(' ')[0];\nconst greeting = firstName ? 'שלום ' + firstName + '! 👋\\n\\n' : '';\n\nconst war = (stage_code !== '99') ? '\\n\\n' + warNotice : '';\nconst trackingLink = '\\n\\n🔍 *למעקב עצמאי בכל רגע:* https://www.hfd.co.il/איתור-חבילה/\\n_(יש להקליד את מספר המעקב ידנית)_;\n\nconst message = '*עדכון משלוח | OneZone* 🏆\\n\\n' + greeting + '*סטטוס:* ' + info.headline + '\\n\\n' + info.detail + dateLine + war + '\\n\\n*מס\\u05f3 מעקב:* ' + tracking_number + trackingLink + '\\n\\n_להפסקת עדכונים שלח STOP_';\n\nreturn [{ json: { phone, message } }];"
       },
       "id": "node-format-message",
       "name": "Format Hebrew Message",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1340, 300]
+      "position": [
+        1340,
+        300
+      ]
     },
     {
       "parameters": {
-        "amount": 34,
+        "amount": 105,
         "unit": "seconds"
       },
       "id": "node-wait",
-      "name": "Wait 34s",
+      "name": "Wait 105s",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [1560, 300],
+      "position": [
+        1560,
+        300
+      ],
       "webhookId": "hfd-wait-01"
     },
     {
@@ -102,7 +140,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
@@ -115,30 +156,89 @@
       "name": "Send via JONI",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 300]
+      "position": [
+        1780,
+        300
+      ]
     }
   ],
   "connections": {
     "Every 2 Hours": {
-      "main": [[{ "node": "Get All Monday Orders", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Get All Monday Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Get All Monday Orders": {
-      "main": [[{ "node": "Parse & Filter Orders", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse & Filter Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse & Filter Orders": {
-      "main": [[{ "node": "HFD Status API", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "HFD Status API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "HFD Status API": {
-      "main": [[{ "node": "Parse HFD & Status Changed?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse HFD & Status Changed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse HFD & Status Changed?": {
-      "main": [[{ "node": "Format Hebrew Message", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Format Hebrew Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Format Hebrew Message": {
-      "main": [[{ "node": "Wait 34s", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Wait 34s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Wait 34s": {
-      "main": [[{ "node": "Send via JONI", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Send via JONI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -146,7 +246,9 @@
     "saveStaticData": true
   },
   "staticData": null,
-  "meta": { "templateCredsSetupCompleted": true },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
   "versionId": "1",
   "triggerCount": 0,
