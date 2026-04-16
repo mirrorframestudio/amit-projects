@@ -79,10 +79,11 @@ const fetchHFD = (tracking) => new Promise((resolve, reject) => {
   req.end();
 });
 
-// XML tag extractor
+// XML tag extractor (strips CDATA wrappers)
 const getTag = (xml, tag) => {
   const m = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
-  return m ? m[1].trim() : '';
+  if (!m) return '';
+  return m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
 };
 
 // Send via JONI
