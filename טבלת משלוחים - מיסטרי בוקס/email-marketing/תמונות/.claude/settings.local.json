@@ -55,7 +55,10 @@
       "Bash(curl -s \"https://graph.facebook.com/v22.0/2005439846677221/message_templates?name=onezone_daily_report\" -H \"Authorization: Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD\")",
       "Bash(curl -s \"https://graph.facebook.com/v22.0/2005439846677221/message_templates\" -H \"Authorization: Bearer EAAVVSo0stdABRM2xZBf9ZBQ0cKECLZAoFeRXxuw0hvJH1ZAdEZCepvGqCj8nZCVYx09GeZCbd0YzwlIyozaxw2l7yiuIE4YN1vHWInoZCe309ZAorzAIYt8zXH2JZCS4veixZBZCx7BWS5ECj78iPqfMYAPrfZAlZAHTPcctIgo7aTsHyrWUzvpH4cbNsRFcU9iVJtcn0ZCXQZDZD\")",
       "Bash(python3 -c \":*)",
-      "Bash(ls \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\monday-pnl\\\\src\"/*.py)"
+      "Bash(ls \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\monday-pnl\\\\src\"/*.py)",
+      "Bash(\"C:\\\\Users\\\\amith\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\" -m pip install reportlab python-bidi)",
+      "Bash(cmd.exe /c \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\fb-ads-analyzer\\\\run_daily.bat\")",
+      "Bash(echo \"Started in background, PID: $!\")"
     ]
   }
 }
