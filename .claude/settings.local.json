@@ -397,7 +397,12 @@
       "Bash(curl -sI -L --max-redirs 3 http://wp.onezonejersey.com/.well-known/acme-challenge/test)",
       "Bash(curl -sI \"https://onezone-next.vercel.app/api/feed.xml?t=$\\(date +%s\\)\")",
       "Bash(git commit -m ' *)",
-      "WebFetch(domain:pagespeed.web.dev)"
+      "WebFetch(domain:pagespeed.web.dev)",
+      "Read(//c/tmp/**)",
+      "Bash(curl -sSL \"https://onezonejersey.com/wp-content/uploads/2025/05/67a8790f-3129-42da-896b-bf86c3d1b784.jpg\" -o logo.jpg)",
+      "Bash(file /c/Users/amith/ads-dashboard/onezone-next/public/icon-*.png)",
+      "Bash(curl -sSL \"https://onezonejersey.com/wp-content/uploads/2025/05/67a8790f-3129-42da-896b-bf86c3d1b784.jpg\" -o /c/Users/amith/ads-dashboard/onezone-next/tmp-logo.jpg)",
+      "Bash(git commit -m 'chore\\(debug\\): temp /api/order/debug-monday to verify Monday integration *)"
     ]
   }
 }
