@@ -463,7 +463,8 @@
       "Bash(curl -sL --max-time 10 https://onezonejersey.com)",
       "Bash(git commit -m 'Fix missing PaymentIcon component in checkout *)",
       "Bash(git commit -m 'Fix PromoToast count \\(out of 3\\) + image URL + quality videos + logo URLs *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(npm ls *)"
     ]
   }
 }
