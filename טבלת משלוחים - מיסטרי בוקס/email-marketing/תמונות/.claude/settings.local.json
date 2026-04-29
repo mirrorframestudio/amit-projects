@@ -60,7 +60,9 @@
       "Bash(cmd.exe /c \"C:\\\\Users\\\\amith\\\\ads-dashboard\\\\fb-ads-analyzer\\\\run_daily.bat\")",
       "Bash(echo \"Started in background, PID: $!\")",
       "Bash(cmd.exe /c \"cd /d C:\\\\Users\\\\amith\\\\ads-dashboard\\\\monday-pnl && C:\\\\Users\\\\amith\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe -m src.main --no-upload >> logs\\\\pnl.log 2>&1 && echo STEP1_OK\")",
-      "Bash(powershell -Command \"Get-Content 'C:\\\\Users\\\\amith\\\\ads-dashboard\\\\fb-ads-analyzer\\\\logs\\\\cron.log' | Select-Object -Last 20\")"
+      "Bash(powershell -Command \"Get-Content 'C:\\\\Users\\\\amith\\\\ads-dashboard\\\\fb-ads-analyzer\\\\logs\\\\cron.log' | Select-Object -Last 20\")",
+      "Bash(tasklist)",
+      "Bash(cmd.exe /c \"run_daily.bat\")"
     ]
   }
 }

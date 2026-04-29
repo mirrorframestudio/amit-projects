@@ -6,7 +6,7 @@
       "runtimeExecutable": "C:\\Users\\amith\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
       "runtimeArgs": ["-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"],
       "port": 8080,
-      "cwd": "C:\\Users\\amith\\ads-dashboard\\adcampaigner"
+      "cwd": "."
     }
   ]
 }

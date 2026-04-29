@@ -26,3 +26,5 @@ Thumbs.db
 # Large/generated files
 *.zip
 daily_run_log.txt
+
+.vercel

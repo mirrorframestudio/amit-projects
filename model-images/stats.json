@@ -1,0 +1,116 @@
+{
+  "records": [
+    {
+      "ts": "2026-04-27T21:41:00",
+      "aspect": "1:1",
+      "style": "street",
+      "n_jerseys": 3,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-27T21:41:22",
+      "aspect": "9:16",
+      "style": "street",
+      "n_jerseys": 3,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:48:30",
+      "aspect": "1:1",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:48:57",
+      "aspect": "16:9",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:49:52",
+      "aspect": "1:1",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:50:58",
+      "aspect": "9:16",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:53:54",
+      "aspect": "9:16",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:54:16",
+      "aspect": "16:9",
+      "style": "pitch",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:55:18",
+      "aspect": "1:1",
+      "style": "street",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T14:55:47",
+      "aspect": "9:16",
+      "style": "street",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T19:12:27",
+      "aspect": "1:1",
+      "style": "fans_pov",
+      "n_jerseys": 9,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T19:13:31",
+      "aspect": "1:1",
+      "style": "street",
+      "n_jerseys": 9,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T19:14:22",
+      "aspect": "1:1",
+      "style": "street",
+      "n_jerseys": 9,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T19:15:30",
+      "aspect": "1:1",
+      "style": "street",
+      "n_jerseys": 4,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T21:44:48",
+      "aspect": "1:1",
+      "style": "night_city",
+      "n_jerseys": 5,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-28T21:53:03",
+      "aspect": "1:1",
+      "style": "stadium",
+      "n_jerseys": 7,
+      "cost_usd": 0.04
+    }
+  ]
+}

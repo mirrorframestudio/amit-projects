@@ -7,13 +7,6 @@
       "runtimeArgs": ["-m", "http.server", "5500"],
       "port": 5500,
       "cwd": "."
-    },
-    {
-      "name": "onezone-next",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
-      "cwd": "onezone-next"
     }
   ]
 }

@@ -214,6 +214,11 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     const order = orders[i];
     process.stdout.write(`   [${i+1}/${orders.length}] ${order.name} | ${order.tracking}`);
 
+    const TERMINAL_STATES = new Set(['99', '4', '5', '6']);
+    if (TERMINAL_STATES.has(state[order.tracking])) {
+      console.log(` [DONE state=${state[order.tracking]}]`); skipped++; continue;
+    }
+
     let xml;
     try { xml = await fetchHFD(order.tracking); }
     catch(e) { console.log(' [HFD ERROR]'); errors++; continue; }
@@ -230,7 +235,7 @@ const warNotice = 'בעקבות מבצע שאגת הארי צפויים עיכו
     const stageTime = getTag(lastStage, 'time');
     const regDate = getTag(xml, 'reg_date');
 
-    if (SKIP_CODES.has(code)) { console.log(` [SKIP code=${code}]`); skipped++; continue; }
+    if (SKIP_CODES.has(code)) { console.log(` [SKIP code=${code}]`); state[order.tracking] = code; saveState(); skipped++; continue; }
 
     // Stuck detection
     if (TRANSIT_CODES.has(code) && regDate) {
