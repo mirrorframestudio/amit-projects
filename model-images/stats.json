@@ -111,6 +111,34 @@
       "style": "stadium",
       "n_jerseys": 7,
       "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-30T17:15:26",
+      "aspect": "1:1",
+      "style": "action",
+      "n_jerseys": 4,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-30T17:15:53",
+      "aspect": "16:9",
+      "style": "action",
+      "n_jerseys": 4,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-30T17:18:13",
+      "aspect": "1:1",
+      "style": "action",
+      "n_jerseys": 4,
+      "cost_usd": 0.04
+    },
+    {
+      "ts": "2026-04-30T17:18:37",
+      "aspect": "9:16",
+      "style": "action",
+      "n_jerseys": 4,
+      "cost_usd": 0.04
     }
   ]
 }
