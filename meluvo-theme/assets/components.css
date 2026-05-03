@@ -4,12 +4,13 @@
 
 /* --- Announcement Bar --- */
 .announcement-bar {
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-  color: white;
+  background: var(--bg-dark-tertiary);
+  color: var(--color-glow);
   text-align: center;
   padding: 0.625rem var(--space-md);
   font-size: var(--text-sm);
   font-weight: 500;
+  letter-spacing: 0.02em;
   position: relative;
   z-index: 50;
   height: var(--announcement-height);
@@ -17,6 +18,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
+  border-bottom: 1px solid var(--border-glass);
 }
 
 .announcement-bar__icon {
@@ -28,7 +30,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10, 10, 18, 0.85);
+  background: rgba(13, 27, 42, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-glass);
@@ -37,7 +39,7 @@
 }
 
 .site-header.scrolled {
-  background: rgba(10, 10, 18, 0.95);
+  background: rgba(13, 27, 42, 0.95);
   box-shadow: var(--shadow-lg);
 }
 
@@ -139,7 +141,7 @@
   height: 18px;
   border-radius: var(--radius-full);
   background: var(--color-primary);
-  color: white;
+  color: var(--text-dark);
   font-size: 11px;
   font-weight: 700;
   display: flex;
@@ -614,7 +616,7 @@
 .testimonial-card__star {
   width: 16px;
   height: 16px;
-  color: #fbbf24;
+  color: var(--color-primary);
 }
 
 .testimonial-card__text {
@@ -634,13 +636,13 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: var(--text-sm);
-  color: white;
+  color: var(--text-dark);
 }
 
 .testimonial-card__name {

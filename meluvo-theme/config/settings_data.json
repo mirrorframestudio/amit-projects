@@ -1,12 +1,12 @@
 {
   "current": {
-    "color_primary": "#6366f1",
-    "color_secondary": "#06b6d4",
-    "color_bg_dark": "#0a0a12",
-    "color_bg_light": "#f8f9fc",
-    "color_text_light": "#ffffff",
-    "color_text_dark": "#1a1a2e",
-    "color_glow": "#818cf8",
+    "color_primary": "#d4a574",
+    "color_secondary": "#a8c5d6",
+    "color_bg_dark": "#0d1b2a",
+    "color_bg_light": "#faf3e8",
+    "color_text_light": "#f5ede0",
+    "color_text_dark": "#0d1b2a",
+    "color_glow": "#e8c39e",
     "sections": {},
     "content_for_index": []
   }

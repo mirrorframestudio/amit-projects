@@ -26,8 +26,8 @@
 .testimonial__star {
   width: 18px;
   height: 18px;
-  color: #fbbf24;
-  fill: #fbbf24;
+  color: var(--color-primary);
+  fill: var(--color-primary);
 }
 
 .testimonial__quote {
@@ -67,16 +67,18 @@
   justify-content: center;
   font-weight: 700;
   font-size: var(--text-sm);
-  color: white;
+  color: var(--text-dark);
   flex-shrink: 0;
 }
 
 .testimonial:nth-child(odd) .testimonial__avatar {
-  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+  background: var(--color-primary);
+  color: var(--text-dark);
 }
 
 .testimonial:nth-child(even) .testimonial__avatar {
-  background: linear-gradient(135deg, var(--color-secondary), #0891b2);
+  background: var(--color-secondary);
+  color: var(--text-dark);
 }
 
 .testimonial__name {
