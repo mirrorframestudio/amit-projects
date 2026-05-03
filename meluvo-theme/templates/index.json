@@ -11,6 +11,26 @@
         "secondary_cta_text": "למידע נוסף"
       }
     },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "items": "חסימת 97% אור כחול | משלוח חינם | 30 ימי ניסיון | תשלום מאובטח | אלפי לקוחות מרוצים | ספורטאי עילית בוחרים בנו"
+      }
+    },
+    "media-logos": {
+      "type": "media-logos",
+      "settings": {
+        "label": "כתבו עלינו"
+      },
+      "blocks": {
+        "m1": { "type": "logo", "settings": { "name": "ynet" } },
+        "m2": { "type": "logo", "settings": { "name": "כלכליסט" } },
+        "m3": { "type": "logo", "settings": { "name": "Globes" } },
+        "m4": { "type": "logo", "settings": { "name": "Walla" } },
+        "m5": { "type": "logo", "settings": { "name": "Mako" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "m5"]
+    },
     "featured-products": {
       "type": "featured-products",
       "settings": {
@@ -210,6 +230,8 @@
   },
   "order": [
     "hero",
+    "marquee",
+    "media-logos",
     "featured-products",
     "benefits",
     "stats",

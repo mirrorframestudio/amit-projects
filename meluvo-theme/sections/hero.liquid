@@ -19,18 +19,18 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(var(--color-primary-rgb), 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 70% 60%, rgba(var(--color-secondary-rgb), 0.08) 0%, transparent 70%);
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(var(--color-primary-rgb), 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 60%, rgba(var(--color-secondary-rgb), 0.14) 0%, transparent 70%);
 }
 
 .hero__grid-pattern {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(13, 27, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 27, 42, 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .hero__content {
@@ -56,11 +56,11 @@
   gap: var(--space-sm);
   padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
-  background: rgba(var(--color-primary-rgb), 0.1);
-  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  background: rgba(var(--color-primary-rgb), 0.12);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.3);
   font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-glow);
+  font-weight: 600;
+  color: var(--color-primary);
   margin-bottom: var(--space-xl);
 }
 
@@ -137,7 +137,7 @@
   position: absolute;
   inset: -20%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.25) 0%, transparent 70%);
   z-index: -1;
   animation: pulse-glow 4s ease-in-out infinite;
 }
@@ -154,19 +154,19 @@
 .hero__floating-badge--top {
   top: 10%;
   left: -10%;
-  background: rgba(var(--color-primary-rgb), 0.15);
-  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
-  color: var(--color-glow);
-  backdrop-filter: blur(10px);
+  background: var(--bg-light);
+  border: 1px solid var(--border-glass);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-md);
 }
 
 .hero__floating-badge--bottom {
   bottom: 15%;
   right: -5%;
-  background: rgba(var(--color-secondary-rgb), 0.15);
-  border: 1px solid rgba(var(--color-secondary-rgb), 0.2);
+  background: var(--bg-light);
+  border: 1px solid var(--border-glass);
   color: var(--color-secondary);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
   animation-delay: 1s;
 }
 

@@ -18,31 +18,31 @@
         "type": "color",
         "id": "color_primary",
         "label": "Primary accent (gold)",
-        "default": "#d4a574"
+        "default": "#c08e5a"
       },
       {
         "type": "color",
         "id": "color_secondary",
-        "label": "Secondary accent (mist)",
-        "default": "#a8c5d6"
+        "label": "Secondary accent (mist blue)",
+        "default": "#6f9bb8"
       },
       {
         "type": "color",
         "id": "color_bg_dark",
-        "label": "Dark background (midnight)",
-        "default": "#0d1b2a"
+        "label": "Main background (warm white)",
+        "default": "#fdfbf7"
       },
       {
         "type": "color",
         "id": "color_bg_light",
-        "label": "Light background (cream)",
-        "default": "#faf3e8"
+        "label": "Card / panel background",
+        "default": "#ffffff"
       },
       {
         "type": "color",
         "id": "color_text_light",
-        "label": "Light text (cream)",
-        "default": "#f5ede0"
+        "label": "Primary text (deep navy)",
+        "default": "#0d1b2a"
       },
       {
         "type": "color",
@@ -54,7 +54,7 @@
         "type": "color",
         "id": "color_glow",
         "label": "Glow accent (light gold)",
-        "default": "#e8c39e"
+        "default": "#d4a574"
       }
     ]
   },

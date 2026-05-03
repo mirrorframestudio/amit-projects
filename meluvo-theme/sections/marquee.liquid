@@ -1,0 +1,90 @@
+{%- style -%}
+.marquee {
+  background: var(--bg-dark-secondary);
+  border-top: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-glass);
+  padding: var(--space-md) 0;
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  gap: var(--space-3xl);
+  animation: marquee-scroll 30s linear infinite;
+  width: max-content;
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.marquee__item svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.marquee__divider {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+}
+{%- endstyle -%}
+
+{%- assign items = section.settings.items | split: '|' -%}
+
+<section class="marquee" aria-label="יתרונות המוצר">
+  <div class="marquee__track">
+    {%- for i in (1..2) -%}
+      {%- for item in items -%}
+        <span class="marquee__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {{ item | strip }}
+        </span>
+        <span class="marquee__divider" aria-hidden="true"></span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee Bar",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "items",
+      "label": "Items (separated by |)",
+      "default": "חסימת 97% אור כחול | משלוח חינם | 30 ימי ניסיון | תשלום מאובטח | אלפי לקוחות מרוצים | ספורטאי עילית בוחרים בנו"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Bar"
+    }
+  ]
+}
+{% endschema %}
