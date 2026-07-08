@@ -107,3 +107,44 @@ starts describing the next room while the current one is still on screen, **spee
 `clean_vo()` in `lib.sh` applies: high-pass 90 Hz (kill rumble) → gentle compression → `loudnorm`
 to −16 LUFS (consistent level across lines) → stereo/48k. Music is **side-chain ducked** under the
 voice so the VO is always clear and the music breathes in the gaps.
+
+---
+
+## Short cut vs Long cut (two videos, one set of clips)
+A property usually needs both a punchy teaser and a full showcase. Produce the clips **once**, cut twice.
+
+- **Short (~90s):** the chained **flythrough** — fast, continuous, energetic. Steps 03–07 as-is.
+- **Long (~3min):** don't just string transitions — the camera must **dwell** on each room.
+  Add `08_dwell.sh` clips: a slow push-in / gentle drift that **lingers** on each space (8–10s each).
+  Structure the long cut as *enter (flythrough) → dwell on the room → move on → dwell …*.
+  The flythrough bridges become connective tissue; the dwell clips carry the detail.
+  VO for the long cut is more descriptive per room (more time on screen = more to say).
+
+Dwell clips are **single-image and independent** — no frame-matched chaining — so they're the
+easiest part to batch in parallel.
+
+## Parallel / batch production (10+ villas)
+The plan's concurrent-job cap is the throttle: **Ultra = 8, Plus = 6, Starter = 2**. Work in waves:
+
+1. **Prep everything first** — convert + crop all photos for all villas.
+2. **Fan out generation** — launch clips up to the cap, poll, download. `08_dwell.sh` already throttles
+   with `MAXPAR`. Chained segments (`04_chain.sh`) are sequential *within* a segment, but different
+   segments and different villas run concurrently — so keep several in flight.
+3. **Edit in series** while the next batch generates in the background — your editing time is the real
+   bottleneck, not the render wait.
+4. Reuse a **fixed script + assembly template** per villa (fill-in-the-blanks) so villas 3–10 fly.
+
+Rough throughput once dialed in: **~2.5–4 active hours per villa** (both cuts); a 10-villa batch ≈
+**7–9 working days**, generation overlapping edits.
+
+## Reality check on credits (read before picking a plan)
+The **video** model (Kling 3.0) **costs credits** — it is *not* in the "unlimited & free generations"
+list, which covers **image** models (Nano Banana, Flux, Seedream, Kling *Image*, GPT Image, Soul).
+So size the plan by **credits**, not by the unlimited badge:
+
+- One ~90s villa flythrough ≈ **~230 credits**. A villa's long+short (clips reused) ≈ **~350–450 credits**.
+- 10 villas ≈ **~4,000 credits** → **Ultra** (3,000/mo, bump the slider to 6,000) fits; **Plus** (1,200) does not.
+- Save credits: prefer `kling3_0` std over `--mode pro` on simple clips; avoid re-rolls (plan motion up front);
+  use Ken Burns (ffmpeg, 0 credits) for static hero/closing shots.
+
+See [`PRICING.md`](PRICING.md) for the client-facing pricing model.
