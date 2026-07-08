@@ -1,0 +1,11 @@
+# toolkit outputs (regenerate locally; don't commit heavy media)
+out/
+photos/
+crop/
+vo/
+*.mp4
+*.wav
+*.png
+*.jpg
+!examples/**/*.png
+!examples/**/*.jpg
