@@ -1,0 +1,11 @@
+# Ella Sun villa videos — keep heavy AI-generated source/intermediate media OUT of git.
+# Only the FINAL deliverables (final/*.mp4) + READMEs are tracked, so they can be
+# pulled/edited from any machine without bloating the repo with the full 1.8GB.
+*
+!*/
+!.gitignore
+!**/README.md
+!**/final/*.mp4
+
+# The 416MB Cocos master exceeds GitHub's 100MB per-file hard limit — never track it.
+ella-sun/villa-cocos/final/וילה*.mp4
