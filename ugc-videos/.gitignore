@@ -9,3 +9,7 @@
 
 # The 416MB Cocos master exceeds GitHub's 100MB per-file hard limit — never track it.
 ella-sun/villa-cocos/final/וילה*.mp4
+
+# EXCEPTION (2026-07-15): villa-cocos 9:16 short prep is tracked so work can
+# continue across machines (12 AI shots, frames, VO). ~250MB, all files <100MB.
+!ella-sun/villa-cocos/_cocos_short_prep/**
