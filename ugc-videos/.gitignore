@@ -17,3 +17,9 @@ ella-sun/villa-cocos/final/וילה*.mp4
 # EXCEPTION (2026-07-22): villa-mountain 9:16 reel working set is tracked so work can
 # continue across machines (11 shots, 8 VO lines, 9:16 source images, build script). ~61MB.
 !ella-sun/villa-mountain/_mountain_reel_prep/**
+
+# EXCEPTION (2026-08-09): villa-shikma working set — 37 real listing photos (~7MB) +
+# scripts, so the Shikma tour can be pulled/edited from the MacBook. Keep heavy Kling
+# renders out; only final/*.mp4 (whitelisted above) ships. 4K masters >100MB stay out.
+!ella-sun/villa-shikma/**
+ella-sun/villa-shikma/**/*_4k.mp4
