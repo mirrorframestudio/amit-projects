@@ -17,44 +17,44 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Primary accent",
-        "default": "#6366f1"
+        "label": "Primary accent (gold)",
+        "default": "#c08e5a"
       },
       {
         "type": "color",
         "id": "color_secondary",
-        "label": "Secondary accent",
-        "default": "#06b6d4"
+        "label": "Secondary accent (mist blue)",
+        "default": "#6f9bb8"
       },
       {
         "type": "color",
         "id": "color_bg_dark",
-        "label": "Dark background",
-        "default": "#0a0a12"
+        "label": "Main background (warm white)",
+        "default": "#fdfbf7"
       },
       {
         "type": "color",
         "id": "color_bg_light",
-        "label": "Light background",
-        "default": "#f8f9fc"
+        "label": "Card / panel background",
+        "default": "#ffffff"
       },
       {
         "type": "color",
         "id": "color_text_light",
-        "label": "Light text",
-        "default": "#ffffff"
+        "label": "Primary text (deep navy)",
+        "default": "#0d1b2a"
       },
       {
         "type": "color",
         "id": "color_text_dark",
         "label": "Dark text",
-        "default": "#1a1a2e"
+        "default": "#0d1b2a"
       },
       {
         "type": "color",
         "id": "color_glow",
-        "label": "Glow accent",
-        "default": "#818cf8"
+        "label": "Glow accent (light gold)",
+        "default": "#d4a574"
       }
     ]
   },
@@ -65,13 +65,13 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Heading font",
-        "default": "poppins_n7"
+        "default": "heebo_n7"
       },
       {
         "type": "font_picker",
         "id": "font_body",
         "label": "Body font",
-        "default": "poppins_n4"
+        "default": "assistant_n4"
       }
     ]
   },
