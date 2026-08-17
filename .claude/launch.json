@@ -7,6 +7,12 @@
       "runtimeArgs": ["-m", "http.server", "5500"],
       "port": 5500,
       "cwd": "."
+    },
+    {
+      "name": "nano-scripture",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "nano-scripture"],
+      "port": 3200
     }
   ]
 }

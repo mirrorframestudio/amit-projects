@@ -1,0 +1,643 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   מִקְרָא — מערכת העיצוב.
+
+   שים לב: מחלקות הכותרות הן t-hero / t-1 / t-2 / t-3.
+   אין להשתמש ב־h-1/h-2/h-3 — אלה מחלקות גובה של Tailwind
+   שמכווצות את הכותרת לארבעה פיקסלים.
+   ============================================================ */
+
+@theme {
+  --font-sans: var(--font-app), system-ui, sans-serif;
+}
+
+:root {
+  /* --- אלבסטר וזהב עתיק --- */
+  --bg: #fbf8f1;
+  --bg-2: #f2ebdb;
+  --surface: #ffffff;
+  --surface-2: #f8f3e7;
+  --ink: #16150f;
+  /* נמדד על הקרם: 0.44 נתן 2.8:1 בטקסט המשני - מתחת לתקן, וזה מה
+     שגרם לכל הכיתוב המשני להיקרא כאותו חום דהוי בלי היררכיה.
+     0.62 מעלה אותו ל־4.9:1, ו־0.76 בשכבה שמעליו ל־8:1 */
+  --ink-2: rgb(22 21 15 / 0.76);
+  --ink-3: rgb(22 21 15 / 0.62);
+  --line: rgb(150 110 32 / 0.24);
+  --line-strong: rgb(150 110 32 / 0.44);
+  --accent: #96661c;
+  --accent-deep: #6f4a10;
+  --spark: #dcb45e;
+  --on-accent: #fffdf7;
+  --halo: rgb(214 172 82 / 0.3);
+
+  /* אדום המבצע — הצבע היחיד באתר שאינו במשפחת הזהב, ולכן העין נעצרת בו */
+  --sale: #d81f2a;
+  --sale-deep: #a8141d;
+  --on-sale: #fff7f6;
+  --sale-soft: rgb(216 31 42 / 0.1);
+
+  --font-display: var(--font-app), system-ui, sans-serif;
+  --font-body: var(--font-app), system-ui, sans-serif;
+  /* כותרות כבדות. הדק היוקרתי נבדק ונפסל — הוא מה שגרם לאתר להיקרא מת,
+     והכיוון שעובד בשוק הזה הוא כותרת בולד שאומרת מה המוצר */
+  --weight-display: 700;
+  --track-display: 0;
+  --radius: 3px;
+  --radius-lg: 6px;
+
+  --shell: min(1440px, 92vw);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  color-scheme: light;
+}
+
+/* ---------- base ---------- */
+
+* {
+  min-width: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  /* clip ולא hidden: מונע גלישה אופקית בלי להפוך את הגוף למיכל גלילה
+     — hidden כאן שובר sticky ומדידות גלילה */
+  overflow-x: clip;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.7s var(--ease),
+    color 0.7s var(--ease);
+}
+
+/* אווירה: ערפל זהב עדין שנדבק לרקע */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(48% 38% at 82% 2%, var(--halo), transparent 66%),
+    radial-gradient(42% 34% at 8% 84%, var(--halo), transparent 68%),
+    radial-gradient(38% 30% at 96% 58%, rgb(216 31 42 / 0.05), transparent 70%);
+  transition: background 0.7s var(--ease);
+}
+
+/* מרקם נייר — מוריד מהסטריליות של הלבן */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ---------- typography ---------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display, 300);
+  letter-spacing: var(--track-display);
+  line-height: 1.12;
+}
+
+.t-hero {
+  font-size: clamp(2.9rem, 8.2vw, 7.4rem);
+}
+.t-1 {
+  font-size: clamp(2.1rem, 5vw, 4.2rem);
+}
+.t-2 {
+  font-size: clamp(1.55rem, 3vw, 2.6rem);
+}
+.t-3 {
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.lede {
+  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+
+/* זהב על רקע בהיר צריך עצירות כהות, אחרת הוא נמוג */
+.gold-text {
+  background: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    var(--accent-deep) 22%,
+    var(--spark) 44%,
+    var(--accent-deep) 64%,
+    var(--accent) 86%,
+    var(--spark) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 9s linear infinite;
+}
+
+@keyframes sheen {
+  to {
+    background-position: -260% 0;
+  }
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---------- layout ---------- */
+
+.shell {
+  width: var(--shell);
+  margin-inline: auto;
+}
+
+.rule {
+  height: 1px;
+  background: linear-gradient(to left, transparent, var(--line-strong), transparent);
+  border: 0;
+}
+
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* אריח מוצר: הרקע כמעט לבן כדי שהמתכת תישאר קרה ונקייה.
+   צילומי המוצר הם PNG שקוף, ולכן אין כאן ריבוע לבן שצף על בז׳. */
+.tile {
+  background:
+    radial-gradient(62% 50% at 50% 34%, #ffffff, var(--surface-2) 62%, color-mix(in oklab, var(--accent) 9%, var(--surface-2)) 100%);
+}
+
+/* במה כהה — לשימוש כשרוצים שהכסף יזהר במקום להיבלע */
+.stage {
+  background:
+    radial-gradient(66% 52% at 50% 34%, var(--halo), transparent 72%),
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--ink) 4%, var(--surface)),
+      color-mix(in oklab, var(--ink) 11%, var(--bg-2))
+    );
+}
+
+/* ---------- reveal on scroll ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+  transition-delay: var(--d, 0ms);
+  will-change: transform, opacity;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+.reveal.done {
+  will-change: auto;
+}
+
+.reveal-x {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.reveal-x.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* חשיפת אותיות — כותרת שנפתחת שורה־שורה מאחורי מסכה */
+.mask-line {
+  display: block;
+  overflow: hidden;
+}
+.mask-line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.85s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.in > .mask-line > span,
+.mask-line.in > span {
+  transform: none;
+}
+
+/* כניסה בטעינת עמוד — CSS בלבד, לא מחכה ל־JS ולא מהבהב */
+.load.mask-line > span {
+  animation: rise-in 0.85s var(--ease) var(--d, 0ms) both;
+}
+.reveal.load {
+  animation: fade-up 0.75s var(--ease) var(--d, 0ms) both;
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  --pad: 0.95rem 2.2rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: var(--pad);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  isolation: isolate;
+  transition:
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+/* מילוי שנשטף מלמטה — לא צבע שמתחלף פתאום */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, var(--accent), var(--accent-deep));
+  transform: translateY(101%);
+  transition: transform 0.45s var(--ease);
+}
+.btn:hover {
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.btn:hover::before {
+  transform: none;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-solid {
+  color: var(--on-accent);
+  border-color: transparent;
+}
+.btn-solid::before {
+  transform: none;
+}
+.btn-solid:hover::before {
+  transform: none;
+  filter: brightness(1.15);
+}
+
+.btn-ghost {
+  border-color: transparent;
+  padding-inline: 0;
+  color: var(--ink-2);
+}
+.btn-ghost::before {
+  display: none;
+}
+.btn-ghost:hover {
+  color: var(--accent);
+}
+
+/* קו שנמתח מתחת לקישור */
+.link-u {
+  position: relative;
+  color: inherit;
+}
+.link-u::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.42s var(--ease);
+}
+.link-u:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- surfaces ---------- */
+
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    border-color 0.4s var(--ease),
+    transform 0.5s var(--ease),
+    box-shadow 0.5s var(--ease);
+}
+.card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-5px);
+  box-shadow: 0 26px 60px -34px rgb(60 45 15 / 0.45);
+}
+
+/* ברק שעובר על הכרטיס בריחוף */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    transparent 30%,
+    color-mix(in oklab, var(--spark) 22%, transparent) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: none;
+}
+.card:hover::after {
+  opacity: 1;
+  transform: translateX(120%);
+  transition:
+    transform 0.9s var(--ease),
+    opacity 0.2s;
+}
+
+.hairline {
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- micro-engraving texture ---------- */
+.nano-grid {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--accent) 34%, transparent) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--accent) 22%, transparent) 0 1px,
+      transparent 1px 2px
+    );
+  opacity: 0.5;
+}
+
+/* ---------- marquee ---------- */
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--dur, 38s) linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+/* ---------- signature motion ---------- */
+
+/* התכשיט מרחף — תנועה קטנה מספיק כדי להרגיש חיה ולא מוצגת */
+@keyframes jewel-float {
+  0%,
+  100% {
+    transform: translateY(-0.9%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(0.9%) rotate(0.5deg);
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- helpers ---------- */
+
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ar {
+  direction: rtl;
+}
+
+.glass {
+  background: color-mix(in oklab, var(--bg) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal,
+  .mask-line > span {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
+/* ---------- מבצע ---------- */
+
+/* ברק שחוצה את רצועת המבצע — התנועה היא מה שמושך את העין אליה */
+@keyframes promo-sheen {
+  from {
+    transform: translateX(-140%);
+  }
+  to {
+    transform: translateX(140%);
+  }
+}
+
+.promo-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgb(255 255 255 / 0.3) 50%,
+    transparent 62%
+  );
+  animation: promo-sheen 5.5s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-sheen::after {
+    animation: none;
+  }
+}
+
+
+/* ---------- מקטע עם צילום ברקע ---------- */
+
+/* שני הקצוות נבדקו ונפסלו: כרטיס אטום הוא קופסה לבנה שבולעת את הצילום,
+   וכרטיס שקוף לגמרי מפסיק להיות כרטיס. האמצע הוא זכוכית חלבית —
+   הכרטיס נשאר צורה מוגדרת עם מסגרת, והצילום ממשיך להיראות דרכו.
+
+   שלוש הדרגות למטה הן הכוונון היחיד שנדרש: המשטח, בריכת האור מתחת
+   למוצר, ולוח הטקסט. */
+/* אין כאן טשטוש. backdrop-filter מכריח את הדפדפן לצלם ולטשטש את הרקע
+   מחדש בכל פריים שבו האלמנט זז, וגלילה מזיזה את כולם. שישה־עשר כרטיסים
+   בעמוד הפכו את זה לעשרים ואחת שכבות טשטוש חיות בו־זמנית.
+   האטימות הועלתה כדי לשמור על אותו מראה חלבי בלי המחיר. */
+.on-photo {
+  --glass: 60%;
+  --pool: 52%;
+  --panel: 76%;
+}
+
+.on-photo .card {
+  background: color-mix(in oklab, var(--surface) var(--glass), transparent);
+  border-color: color-mix(in oklab, var(--line) 80%, transparent);
+}
+
+.on-photo .card:hover {
+  background: color-mix(in oklab, var(--surface) 66%, transparent);
+  border-color: var(--line-strong);
+}
+
+/* בריכת אור מתחת למוצר — בלעדיה הכסף מאבד ניגודיות מול הצילום,
+   וריבוע מלא היה מחזיר בדיוק את הקופסה שרצינו להיפטר ממנה */
+.on-photo .tile {
+  background: radial-gradient(
+    58% 48% at 50% 42%,
+    color-mix(in oklab, var(--surface) var(--pool), transparent),
+    transparent 76%
+  );
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.on-photo .card-body {
+  background: color-mix(in oklab, var(--bg) var(--panel), transparent);
+}
+
+
+/* ---------- יעדי נגיעה ---------- */
+
+/* אייקון של 15px הוא יעד של 15px. האצבע צריכה 44 - התוספת היא בשטח
+   הלחיץ בלבד, האייקון עצמו נשאר בגודלו. */
+.tap {
+  display: inline-grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* כפתורי טקסט בתפריט המובייל - שורה של 36px קשה לפגוע בה בתנועה */
+@media (pointer: coarse) {
+  .tap-row {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}

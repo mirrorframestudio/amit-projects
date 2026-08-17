@@ -1,0 +1,5 @@
+# שורות אחידות בין Windows ל־macOS — הריפו נשמר תמיד ב־LF
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.woff2 binary
