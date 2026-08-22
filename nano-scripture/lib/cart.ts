@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getProduct } from './catalog';
-import { salePrice } from './promo';
+import { codeDiscount } from './promo';
 import type { BlessingId } from './blessings';
 
 /** אותו תכשיט עם ברכה אחרת הוא שורה נפרדת בעגלה */
@@ -15,11 +15,14 @@ type CartState = {
   lines: CartLine[];
   /** אריזת המתנה היא תוספת להזמנה, לא לשורה - ולכן היא חיה ברמת העגלה */
   gift: boolean;
+  /** קוד ההנחה כפי שהוזן. נשמר כדי שלא יאבד ברענון באמצע הקנייה */
+  code: string | null;
   open: boolean;
   add: (slug: string, blessing: BlessingId, qty?: number) => void;
   remove: (key: string) => void;
   setQty: (key: string, qty: number) => void;
   setGift: (gift: boolean) => void;
+  setCode: (code: string | null) => void;
   setOpen: (open: boolean) => void;
 };
 
@@ -28,6 +31,7 @@ export const useCart = create<CartState>()(
     (set) => ({
       lines: [],
       gift: false,
+      code: null,
       open: false,
       add: (slug, blessing, qty = 1) =>
         set((s) => {
@@ -52,31 +56,32 @@ export const useCart = create<CartState>()(
                 ),
         })),
       setGift: (gift) => set({ gift }),
+      setCode: (code) => set({ code }),
       setOpen: (open) => set({ open }),
     }),
     {
       name: 'ns-cart',
-      version: 3,
-      partialize: (s) => ({ lines: s.lines, gift: s.gift }) as CartState,
+      version: 4,
+      partialize: (s) => ({ lines: s.lines, gift: s.gift, code: s.code }) as CartState,
       // ההידרציה נדחית לאפקט כדי שהשרת והלקוח יצבעו אותו דבר בסיבוב הראשון
       skipHydration: true,
       // גרסה 1 לא הכילה ברכה — עגלות ישנות נזרקות במקום לשבור את התצוגה
-      migrate: () => ({ lines: [], gift: false }) as unknown as CartState,
+      migrate: () => ({ lines: [], gift: false, code: null }) as unknown as CartState,
     },
   ),
 );
 
-export function cartTotals(lines: CartLine[]) {
+export function cartTotals(lines: CartLine[], code: string | null = null) {
   let items = 0;
-  let subtotal = 0;
   let listTotal = 0;
   for (const line of lines) {
     const product = getProduct(line.slug);
     if (!product) continue;
     items += line.qty;
     listTotal += product.price * line.qty;
-    subtotal += salePrice(product.price) * line.qty;
   }
-  // subtotal הוא מה שמשלמים בפועל; discount הוא מה שנחסך מול המחירון
-  return { items, subtotal, listTotal, discount: listTotal - subtotal };
+  // ההנחה מגיעה מקוד שהוזן, ולא מחושבת מראש לתוך המחירים.
+  // listTotal הוא מה שנגבה בלי קוד; subtotal הוא מה שמשלמים איתו.
+  const discount = codeDiscount(listTotal, code);
+  return { items, listTotal, discount, subtotal: listTotal - discount };
 }

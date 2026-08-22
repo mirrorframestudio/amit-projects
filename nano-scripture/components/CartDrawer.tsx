@@ -1,15 +1,102 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart, cartTotals, lineKey } from '@/lib/cart';
 import { getProduct, formatPrice, ACTIVE_CATEGORIES, PRODUCTS } from '@/lib/catalog';
 import { getBlessing } from '@/lib/blessings';
-import { PROMO, saleOf } from '@/lib/promo';
+import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 
 const FREE_SHIPPING = 450;
+
+/**
+ * שדה קוד ההנחה.
+ *
+ * ההנחה אינה מחושבת מראש לתוך המחירים - היא ניתנת כאן, למי שמזין קוד.
+ * הקוד המוזן נשמר בעגלה ולא ב־state מקומי, כדי שרענון באמצע הקנייה
+ * לא יבטל אותו בשקט אחרי שהלקוח כבר ראה את ההנחה.
+ */
+function CodeField() {
+  const { code, setCode } = useCart();
+  const [draft, setDraft] = useState('');
+  const [error, setError] = useState(false);
+  const applied = Boolean(code);
+
+  if (applied) {
+    return (
+      <div
+        className="mb-3 flex items-center justify-between gap-3 px-3 py-2"
+        style={{
+          borderRadius: 'var(--radius)',
+          border: '1px solid var(--sale)',
+          background: 'color-mix(in oklab, var(--sale) 7%, transparent)',
+        }}
+      >
+        <span style={{ fontSize: '.78rem', color: 'var(--sale-deep)', fontWeight: 500 }}>
+          הקוד <span className="num">{code}</span> הופעל
+        </span>
+        <button
+          type="button"
+          onClick={() => { setCode(null); setDraft(''); }}
+          className="link-u tap"
+          style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}
+        >
+          הסרה
+        </button>
+      </div>
+    );
+  }
+
+  const submit = () => {
+    if (isPromoCode(draft)) {
+      setCode(normalizeCode(draft));
+      setError(false);
+    } else {
+      setError(true);
+    }
+  };
+
+  return (
+    <div className="mb-3">
+      <div className="flex gap-2">
+        <input
+          value={draft}
+          onChange={(e) => { setDraft(e.target.value); setError(false); }}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); submit(); } }}
+          placeholder="קוד הנחה"
+          aria-label="קוד הנחה"
+          aria-invalid={error || undefined}
+          className="num min-w-0 flex-1 px-3"
+          style={{
+            height: 44,
+            fontSize: '.84rem',
+            letterSpacing: '.06em',
+            borderRadius: 'var(--radius)',
+            border: `1px solid ${error ? 'var(--sale)' : 'var(--line-strong)'}`,
+            background: 'var(--surface)',
+            color: 'var(--ink)',
+            textAlign: 'start',
+          }}
+        />
+        <button
+          type="button"
+          onClick={submit}
+          disabled={!draft.trim()}
+          className="btn tap"
+          style={{ ['--pad' as string]: '0 1.1rem', height: 44, fontSize: '.8rem', opacity: draft.trim() ? 1 : 0.45 }}
+        >
+          החלה
+        </button>
+      </div>
+
+      <p className="mt-1.5" style={{ fontSize: '.7rem', color: error ? 'var(--sale)' : 'var(--ink-3)' }}>
+        {error ? 'הקוד אינו מזוהה. בדקו את הכתיב ונסו שוב.' : PROMO.sub}
+      </p>
+    </div>
+  );
+}
 
 /** מדרגת כמות עם שטח נגיעה אמיתי - הקודמת הייתה תווי טקסט בגודל 14px */
 function Stepper({
@@ -52,8 +139,8 @@ function Stepper({
 }
 
 export default function CartDrawer() {
-  const { lines, open, setOpen, setQty, remove, add, gift, setGift } = useCart();
-  const { items, subtotal, listTotal, discount } = cartTotals(lines);
+  const { lines, open, setOpen, setQty, remove, add, gift, setGift, code } = useCart();
+  const { items, subtotal, listTotal, discount } = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
   const total = subtotal + giftFee;
   const gap = FREE_SHIPPING - subtotal;
@@ -367,14 +454,14 @@ export default function CartDrawer() {
             {discount > 0 && (
               <>
                 <div className="mb-2 flex items-center justify-between">
-                  <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>מחיר מחירון</span>
+                  <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>סכום הפריטים</span>
                   <span className="num" style={{ fontSize: '.88rem', color: 'var(--ink-2)' }}>
                     {formatPrice(listTotal)}
                   </span>
                 </div>
                 <div className="mb-2 flex items-center justify-between">
                   <span style={{ color: 'var(--sale)', fontSize: '.82rem', fontWeight: 500 }}>
-                    {PROMO.pill}
+                    {PROMO.pill} · {PROMO.code}
                   </span>
                   <span className="num" style={{ fontSize: '.88rem', fontWeight: 500, color: 'var(--sale)' }}>
                     −{formatPrice(discount)}
@@ -382,6 +469,8 @@ export default function CartDrawer() {
                 </div>
               </>
             )}
+
+            <CodeField />
 
             <div className="mb-3 flex items-center justify-between">
               <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>משלוח</span>
