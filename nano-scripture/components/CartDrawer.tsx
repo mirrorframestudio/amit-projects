@@ -290,7 +290,7 @@ export default function CartDrawer() {
                     <Link
                       href={`/products/${p.slug}`}
                       onClick={() => setOpen(false)}
-                      className="display"
+                      className="display link-u"
                       style={{ fontSize: 'var(--fs-md)' }}
                     >
                       {p.name}

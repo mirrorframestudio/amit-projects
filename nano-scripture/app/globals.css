@@ -404,12 +404,17 @@ section {
 .link-u {
   position: relative;
   color: inherit;
+  /* WCAG 2.5.8 דורש מטרת מגע של 24 פיקסל. קישורי הטקסט האלה נמדדו
+     ב־19 עד 22, והחריג לקישור בתוך משפט אינו חל עליהם כי הם עומדים
+     בפני עצמם. לאלמנט inline, ריפוד אנכי מרחיב את שטח הלחיצה בלי
+     להזיז שום דבר סביבו - ולכן זה מתקן את המידה בלי לגעת בפריסה. */
+  padding-block: 0.34rem;
 }
 .link-u::after {
   content: '';
   position: absolute;
   inset-inline: 0;
-  bottom: -3px;
+  bottom: calc(0.34rem - 3px);
   height: 1px;
   background: currentColor;
   transform: scaleX(0);
