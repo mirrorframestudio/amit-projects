@@ -96,7 +96,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       </section>
 
       {/* ---- הנוסח המלא ---- */}
-      <section className="py-20" style={{ background: 'var(--bg-2)', borderBlock: '1px solid var(--line)' }}>
+      <section className="py-24" style={{ background: 'var(--bg-2)', borderBlock: '1px solid var(--line)' }}>
         <div className="shell grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <p className="eyebrow reveal" style={{ color: b.accentInk }}>הנוסח המלא</p>

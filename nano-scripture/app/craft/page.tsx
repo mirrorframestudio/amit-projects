@@ -92,7 +92,7 @@ export default function CraftPage() {
       {/* ---- קנה מידה ---- */}
       {/* 42% מהקונים מנסים לשפוט גודל פיזי מהתמונה ו־37% מהאתרים לא
           נותנים שום רמז. בעמוד שכל טענתו היא "קטן מכדי לראות", זו הראיה */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="shell grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
           <div>
             <p className="eyebrow reveal">קנה מידה</p>
@@ -122,7 +122,7 @@ export default function CraftPage() {
       </section>
 
       {/* ---- מספרים ---- */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="shell grid gap-10 border-y py-14 sm:grid-cols-3" style={{ borderColor: 'var(--line)' }}>
           {[
             { v: LONGEST_BLESSING_CHARS, l: 'תווים בנוסח הארוך ביותר', s: '', d: 0 },
@@ -169,7 +169,7 @@ export default function CraftPage() {
       </section>
 
       {/* ---- שאלות נפוצות ---- */}
-      <section id="faq" className="py-28" style={{ scrollMarginTop: 120 }}>
+      <section id="faq" className="py-32" style={{ scrollMarginTop: 120 }}>
         <div className="shell grid gap-14 lg:grid-cols-[.75fr_1.25fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <p className="eyebrow reveal">שאלות נפוצות</p>

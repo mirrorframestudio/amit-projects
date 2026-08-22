@@ -11,7 +11,7 @@ const STATS = [
 
 export default function Scale() {
   return (
-    <section className="py-28 md:py-40">
+    <section className="py-32 md:py-40">
       <div className="shell grid items-center gap-16 lg:grid-cols-[1fr_1.05fr] lg:gap-24">
         <div>
           <p className="eyebrow reveal">קנה המידה</p>

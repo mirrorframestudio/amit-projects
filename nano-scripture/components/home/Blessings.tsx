@@ -9,7 +9,7 @@ export default function Blessings() {
 
   return (
     <section
-      className="py-24 md:py-36"
+      className="py-24 md:py-40"
       style={{ background: 'var(--bg-2)', borderBlock: '1px solid var(--line)' }}
     >
       <div className="shell">

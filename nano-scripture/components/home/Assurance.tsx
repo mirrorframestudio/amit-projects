@@ -34,7 +34,7 @@ const PILLARS = [
 
 export default function Assurance() {
   return (
-    <section className="py-28 md:py-36">
+    <section className="py-32 md:py-40">
       <div className="shell grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
         {/* אמירת המותג */}
         <figure className="reveal relative self-start">

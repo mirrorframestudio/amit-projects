@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Closing() {
   return (
-    <section className="relative overflow-hidden py-32 md:py-44" style={{ borderTop: '1px solid var(--line)' }}>
+    <section className="relative overflow-hidden py-32 md:py-40" style={{ borderTop: '1px solid var(--line)' }}>
       {/* תכשיט ענק, כמעט שקוף, חותך את החלק התחתון */}
       <div
         aria-hidden

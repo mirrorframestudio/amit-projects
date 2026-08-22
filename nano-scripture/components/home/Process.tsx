@@ -32,7 +32,7 @@ export default function Process() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 90, damping: 26, restDelta: 0.001 });
 
   return (
-    <section className="py-28 md:py-40">
+    <section className="py-32 md:py-40">
       <div className="shell grid gap-16 lg:grid-cols-[.85fr_1.15fr] lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <p className="eyebrow reveal">מהתהליך</p>

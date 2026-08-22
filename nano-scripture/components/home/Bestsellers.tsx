@@ -14,7 +14,7 @@ export default function Bestsellers() {
   ]).slice(0, 8);
 
   return (
-    <section className="on-photo relative py-20 md:py-24">
+    <section className="on-photo relative py-24 md:py-24">
       <SectionPhoto src="/worn/scene-window.jpg" mode="band" veil={0.22} />
 
       <div className="shell relative">
