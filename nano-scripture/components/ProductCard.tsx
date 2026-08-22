@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRef } from 'react';
-import { FINISHES, MATERIALS, formatPrice, type Product } from '@/lib/catalog';
+import { FINISHES, MATERIALS, formatPrice, photoFor, type Product } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
 import { PROMO, saleOf } from '@/lib/promo';
 
@@ -30,12 +30,23 @@ export default function ProductCard({
   // הדגימות מציגות את הברכות שבאמת זמינות לדגם, לא את חמש הראשונות
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
   const sale = saleOf(product.price);
+  const photo = photoFor(product);
+  // גוון הברכה הראשונה של הדגם. חמישה כרטיסים בקרם על קרם נקראים
+  // כרשת אחת אפורה, וזה מה שגרם לאתר להיראות מת
+  const tint = available[0]?.accent ?? 'var(--accent)';
 
   return (
     <article className="reveal" style={{ ['--d' as string]: `${(index % 3) * 90}ms` }}>
       <div ref={ref} onPointerMove={track} className="h-full">
         <Link href={`/products/${product.slug}`} className="card group flex h-full flex-col">
-          <div className="tile relative" style={{ aspectRatio: '1' }}>
+          <div
+            className="tile relative overflow-hidden"
+            style={{
+              aspectRatio: '1',
+              // רמז צבע בעוצמה נמוכה. גבוה מזה והחיתוך הלבן מתחיל להצטבע
+              backgroundImage: `radial-gradient(78% 62% at 50% 108%, color-mix(in oklab, ${tint} 22%, transparent), transparent 70%)`,
+            }}
+          >
             <span
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -54,6 +65,38 @@ export default function ProductCard({
               className="object-contain p-[16%] transition-transform duration-[850ms] group-hover:scale-[1.07]"
               style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
             />
+
+            {/* הצילום נחשף מעל החיתוך. המגע אינו מפעיל hover, ולכן
+                המסמן למטה מודיע שיש צילום גם למי שלא יראה אותו כאן */}
+            {photo && (
+              <Image
+                src={photo.src}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                style={{ objectPosition: photo.focus }}
+                className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+              />
+            )}
+
+            {photo && (
+              <span
+                aria-hidden
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 transition-opacity duration-500 group-hover:opacity-0"
+                style={{
+                  insetInlineStart: 14,
+                  bottom: 14,
+                  fontSize: 'var(--fs-2xs)',
+                  letterSpacing: '.1em',
+                  borderRadius: 99,
+                  color: 'var(--ink-2)',
+                  background: 'color-mix(in oklab, var(--surface) 82%, transparent)',
+                  border: '1px solid var(--line)',
+                }}
+              >
+                {photo.kind === 'worn' ? 'על הגוף' : 'בסצנה'}
+              </span>
+            )}
 
             {product.badge && (
               <span

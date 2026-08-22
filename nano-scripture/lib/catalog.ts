@@ -1,4 +1,5 @@
 import { salePrice } from './promo';
+import { wornFor, wornFocus } from './worn';
 import type { BlessingId } from './blessings';
 
 /* ============================================================
@@ -644,3 +645,23 @@ export const CARE_SPEC: { label: string; value: string }[] = [
   { label: 'אחריות', value: 'שנה על פגמי ייצור והלחמות. אינה חלה על שבר משימוש' },
   { label: 'החזרה', value: '30 יום, ללא תנאי' },
 ];
+
+/**
+ * הצילום הטוב ביותר שיש לדגם, לפי סדר יורד של כוח שכנוע.
+ *
+ * בדיקות שימושיות מראות שתכשיטים הם בין הקטגוריות שבהן חיתוך על רקע
+ * לבן אינו מספיק: בלי לראות את הפריט על גוף אי אפשר לשפוט את גודלו
+ * ואת נפילתו. הרשת ממשיכה להציג את החיתוך כדי שתישאר סרוקה והשוואתית,
+ * והצילום נחשף עליו - ולכן הסדר כאן הוא מה שגובר על החיתוך, לא מה
+ * שמחליף אותו.
+ */
+export function photoFor(
+  product: Product,
+): { src: string; kind: 'worn' | 'scene'; focus: string } | null {
+  const shot = wornFor(product.slug);
+  if (shot) {
+    return { src: shot.file, kind: 'worn', focus: wornFocus(shot, product.slug) };
+  }
+  const scene = product.scenes?.[0];
+  return scene ? { src: scene, kind: 'scene', focus: '50% 50%' } : null;
+}

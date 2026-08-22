@@ -10,6 +10,15 @@ export type WornShot = {
   alt: string;
   /** הדגמים שנראים בפריים — הראשון הוא הנושא של הצילום */
   products: string[];
+  /**
+   * מוקד החיתוך לכל דגם, כערך object-position.
+   *
+   * בצילום שנראים בו שני תכשיטים, חיתוך למרכז מפספס את שניהם: ב־lev
+   * הצמיד הגברי יושב ברבע השמאלי והנשי בשלושת־רבעים, והמרכז הוא
+   * הרווח ביניהם. בלי המוקד, כרטיס ריבועי חותך בדיוק את מה שבאנו
+   * להראות. דגם שאינו מופיע כאן נחתך למרכז.
+   */
+  focus?: Record<string, string>;
 };
 
 export const WORN: WornShot[] = [
@@ -33,13 +42,7 @@ export const WORN: WornShot[] = [
     height: 1120,
     alt: 'צמיד אין סוף ושרשרת טיפת אור נענדים יחד',
     products: ['ahavat-olam', 'tipat-or'],
-  },
-  {
-    file: '/worn/luach.jpg',
-    width: 1254,
-    height: 1254,
-    alt: 'תליון לוח בכסף עם השבב הכחול, וצמיד חישוק על פרק היד',
-    products: ['luach-libecha', 'chishuk'],
+    focus: { 'ahavat-olam': '77% 62%', 'tipat-or': '38% 58%' },
   },
   {
     file: '/worn/lev.jpg',
@@ -47,6 +50,15 @@ export const WORN: WornShot[] = [
     height: 1120,
     alt: 'צמיד חישוק על יד גבר וצמיד לב על יד אישה, זה לצד זה',
     products: ['libi-er', 'chishuk'],
+    focus: { 'libi-er': '75% 58%', chishuk: '28% 57%' },
+  },
+  {
+    file: '/worn/luach.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'תליון לוח בכסף עם השבב הכחול, וצמיד חישוק על פרק היד',
+    products: ['luach-libecha', 'chishuk'],
+    focus: { 'luach-libecha': '56% 61%', chishuk: '8% 67%' },
   },
   {
     file: '/worn/avot-black.jpg',
@@ -63,4 +75,9 @@ export function wornFor(slug: string) {
     WORN.find((w) => w.products[0] === slug) ??
     WORN.find((w) => w.products.includes(slug))
   );
+}
+
+/** מוקד החיתוך של דגם בצילום נתון. ברירת המחדל היא מרכז הפריים */
+export function wornFocus(shot: WornShot | undefined, slug: string) {
+  return shot?.focus?.[slug] ?? '50% 50%';
 }

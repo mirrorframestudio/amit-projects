@@ -20,7 +20,7 @@ import {
 } from '@/lib/catalog';
 import { useCart } from '@/lib/cart';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
-import { wornFor } from '@/lib/worn';
+import { wornFor, wornFocus } from '@/lib/worn';
 import GiftTags from './GiftTags';
 import ScaleCompare from './ScaleCompare';
 
@@ -89,6 +89,8 @@ export default function ProductView({ product }: { product: Product }) {
   const setGift = useCart((s) => s.setGift);
 
   const worn = wornFor(product.slug);
+  // בצילום עם שני תכשיטים, המרכז הוא הרווח ביניהם ולא אחד מהם
+  const wornAt = wornFocus(worn, product.slug);
   // הצילום על הדגם נכנס מיד אחרי פאק־שוט המוצר, אם קיים כזה
   const VIEWS = [
     BASE_VIEWS[0],
@@ -181,6 +183,7 @@ export default function ProductView({ product }: { product: Product }) {
               alt={worn.alt}
               fill
               sizes="(max-width: 1024px) 92vw, 46vw"
+              style={{ objectPosition: wornAt }}
               className="object-cover"
             />
           )}
@@ -228,7 +231,14 @@ export default function ProductView({ product }: { product: Product }) {
                   <Image src={product.image} alt="" fill sizes="84px" className="object-contain p-1.5" />
                 )}
                 {v.id === 'worn' && worn && (
-                  <Image src={worn.file} alt="" fill sizes="84px" className="object-cover" />
+                  <Image
+                    src={worn.file}
+                    alt=""
+                    fill
+                    sizes="84px"
+                    style={{ objectPosition: wornAt }}
+                    className="object-cover"
+                  />
                 )}
                 {v.id.startsWith('scene-') && (
                   <Image
