@@ -111,7 +111,11 @@ export default function FeaturedCard({ product }: { product: Product }) {
             )}
             <span
               className="num display"
-              style={{ fontSize: '1.5rem', fontWeight: 500, color: 'var(--sale)' }}
+              style={{
+                fontSize: '1.5rem',
+                fontWeight: sale.discounted ? 500 : undefined,
+                color: sale.discounted ? 'var(--sale)' : undefined,
+              }}
             >
               {formatPrice(sale.now)}
             </span>

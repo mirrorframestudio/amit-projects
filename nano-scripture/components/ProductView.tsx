@@ -798,7 +798,10 @@ export default function ProductView({ product }: { product: Product }) {
                 {formatPrice(product.price)}
               </span>
             )}
-            <span className="num display" style={{ fontSize: '1.15rem', color: 'var(--sale)' }}>
+            <span
+              className="num display"
+              style={{ fontSize: '1.15rem', color: sale.discounted ? 'var(--sale)' : undefined }}
+            >
               {formatPrice(sale.now)}
             </span>
           </span>
