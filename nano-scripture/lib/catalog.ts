@@ -96,8 +96,8 @@ export type Product = {
   blessings: BlessingId[];
   /** הפסוק שממנו נגזר שם הדגם. מוצג לצד השם. */
   source?: { phrase: string; ref: string };
-  /** צילום מסוגנן של הפריט בסביבה - נכנס לגלריה כתצוגה נוספת */
-  scene?: string;
+  /** צילומי הפריט בסביבה מסוגננת. כל אחד נכנס לגלריה כתצוגה נפרדת */
+  scenes?: string[];
   badge?: string;
   featured?: boolean;
 };
@@ -107,6 +107,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'YASNN004W',
     slug: 'toldot',
+    scenes: ['/scene/toldot-1.jpg', '/scene/toldot-2.jpg', '/scene/toldot-3.jpg'],
     name: 'תּוֹלְדוֹת',
     nameLatin: 'TOLDOT',
     source: { phrase: 'אֵלֶּה תוֹלְדוֹת הַשָּׁמַיִם וְהָאָרֶץ', ref: 'בראשית ב׳, ד׳' },
@@ -187,6 +188,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN012S',
     slug: 'al-kapayim',
+    scenes: ['/scene/al-kapayim-1.jpg', '/scene/al-kapayim-2.jpg', '/scene/al-kapayim-3.jpg'],
     name: 'עַל כַּפַּיִם',
     nameLatin: 'AL KAPAYIM',
     source: { phrase: 'הֵן עַל־כַּפַּיִם חַקֹּתִיךְ', ref: 'ישעיהו מ״ט, ט״ז' },
@@ -213,6 +215,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN003S',
     slug: 'beseter',
+    scenes: ['/scene/beseter-1.jpg', '/scene/beseter-2.jpg', '/scene/beseter-3.jpg'],
     name: 'בְּסֵתֶר',
     nameLatin: 'BESETER',
     source: { phrase: 'יֹשֵׁב בְּסֵתֶר עֶלְיוֹן', ref: 'תהילים צ״א, א׳' },
@@ -262,6 +265,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN011S',
     slug: 'lo-yanum',
+    scenes: ['/scene/lo-yanum-1.jpg', '/scene/lo-yanum-2.jpg', '/scene/lo-yanum-3.jpg'],
     name: 'לֹא יָנוּם',
     nameLatin: 'LO YANUM',
     source: { phrase: 'הִנֵּה לֹא־יָנוּם וְלֹא יִישָׁן שׁוֹמֵר יִשְׂרָאֵל', ref: 'תהילים קכ״א, ד׳' },
@@ -311,6 +315,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN001G',
     slug: 'kachotam',
+    scenes: ['/scene/kachotam-1.jpg', '/scene/kachotam-2.jpg', '/scene/kachotam-3.jpg'],
     name: 'כַּחוֹתָם',
     nameLatin: 'KACHOTAM',
     source: { phrase: 'שִׂימֵנִי כַחוֹתָם עַל־לִבֶּךָ', ref: 'שיר השירים ח׳, ו׳' },
@@ -363,7 +368,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     sku: 'OYANB007B',
-    scene: '/scene/avot-black.jpg',
+    scenes: ['/scene/avot-black.jpg'],
     slug: 'avot-black',
     name: 'עֲבוֹת',
     nameLatin: 'AVOT',
@@ -507,6 +512,70 @@ export function finishSiblings(product: Product) {
   return PRODUCTS.filter((p) => p.name === product.name);
 }
 
+/**
+ * צילומי הקטגוריה, לפס השבירה שבאמצע העמוד.
+ *
+ * צילום אחד לכל דגם. הרשימה הגולמית מסודרת לפי מוצר, ולכן שני
+ * הראשונים בה תמיד מאותו תכשיט - ופס שבירה עם אותו דגם פעמיים,
+ * בשני צילומים כהים, נראה כמו טעות ולא כמו בחירה.
+ */
+export function categoryPhotos(id: CategoryId) {
+  return PRODUCTS.filter((p) => p.category === id)
+    .map((p) => p.scenes?.[0])
+    .filter((src): src is string => Boolean(src));
+}
+
+/** כל הצילומים בקטגוריה, בלי סינון - לבחירת הבאנר */
+function allCategoryPhotos(id: CategoryId) {
+  return PRODUCTS.filter((p) => p.category === id).flatMap((p) => p.scenes ?? []);
+}
+
+/**
+ * הצילום שמותר להניח מתחת לכותרת הקטגוריה.
+ *
+ * לא כל צילום מתאים לזה. הכותרת בדיו כהה יושבת עליו, ונמדד שצילום
+ * כהה מפיל אותה מתחת לתקן: avot-black נתן 3.08:1 בצעיף 40%, ואילו
+ * beseter-2 נותן 8.79:1 באותו צעיף. לכן הרשימה סגורה ומבוססת מדידה,
+ * וקטגוריה בלי צילום מאושר מקבלת כותרת על קרם - שזה עדיף על כותרת
+ * שאי אפשר לקרוא.
+ */
+const APPROVED_BANNERS = [
+  '/scene/beseter-2.jpg',
+  '/scene/al-kapayim-1.jpg',
+  '/scene/al-kapayim-2.jpg',
+  '/scene/lo-yanum-2.jpg',
+];
+
+export function categoryBanner(id: CategoryId) {
+  return allCategoryPhotos(id).find((src) => APPROVED_BANNERS.includes(src)) ?? null;
+}
+
+/**
+ * צילום לכרטיס הברכה: תכשיט שבאמת נושא את הנוסח הזה.
+ *
+ * הבחירה נעשית פעם אחת לכל הברכות יחד ולא לכל אחת בנפרד, כדי שאותו
+ * צילום לא יופיע בשני כרטיסים סמוכים - ארבע מתוך חמש הברכות נישאות
+ * על אותם דגמים מצולמים, ובחירה עצמאית הייתה מחזירה את תולדות שלוש
+ * פעמים.
+ *
+ * ברכת התינוק נישאת על הסיכה בלבד, ולה אין צילום סצנה. היא מקבלת
+ * null והכרטיס נופל בחזרה לפס צבע נקי.
+ */
+export function blessingPhotos(order: string[]): Record<string, string | null> {
+  const used = new Set<string>();
+  const out: Record<string, string | null> = {};
+
+  for (const id of order) {
+    const carrier = PRODUCTS.find(
+      (p) => p.blessings.includes(id as never) && p.scenes?.[0] && !used.has(p.scenes[0]),
+    );
+    const photo = carrier?.scenes?.[0] ?? null;
+    if (photo) used.add(photo);
+    out[id] = photo;
+  }
+  return out;
+}
+
 /** דגם אחד לכל עיצוב - לרשימות. הגימורים נבחרים בתוך עמוד המוצר */
 export function uniqueDesigns(list: Product[]) {
   const seen = new Set<string>();
@@ -555,7 +624,7 @@ export function priceRange(id: CategoryId) {
 export const CHIP_SPEC: { label: string; value: string }[] = [
   { label: 'חלון הצריבה', value: '5 × 5 מ״מ · שטח כתיבה כ־0.5 מ״מ²' },
   { label: 'טכנולוגיה', value: 'ליתוגרפיית קרן יונים ממוקדת' },
-  { label: 'עובי האות', value: '5 ננומטר' },
+  { label: 'גובה האות', value: 'כ־9 מיקרון' },
   { label: 'מצע', value: 'סיליקון מונו־קריסטלי' },
   { label: 'הגנה', value: 'חלון אטום, עמיד למים, לזיעה ולתמרוקים' },
   { label: 'בקרה', value: 'השוואה לנוסח המקור לפני השיבוץ' },
@@ -572,6 +641,6 @@ export const CARE_SPEC: { label: string; value: string }[] = [
   { label: 'שימוש יומיומי', value: 'להסיר לפני מקלחת, ים ובריכה' },
   { label: 'ניקוי', value: 'בד מיקרופייבר יבש, בלי חומרי ניקוי אגרסיביים' },
   { label: 'אחסון', value: 'בקופסה המקורית, בנפרד מתכשיטים אחרים' },
-  { label: 'אחריות', value: 'שנתיים על השבב, השיבוץ והסוגר' },
+  { label: 'אחריות', value: 'שנה על פגמי ייצור והלחמות. אינה חלה על שבר משימוש' },
   { label: 'החזרה', value: '30 יום, ללא תנאי' },
 ];

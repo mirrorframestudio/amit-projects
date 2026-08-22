@@ -119,10 +119,10 @@ export default function Footer() {
             © {new Date().getFullYear()} {BRAND.name} · {BRAND.nameLatin} - כל הזכויות שמורות
           </p>
           <div className="flex gap-6">
-            <Link href="#" className="tap-row link-u">תנאי שימוש</Link>
-            <Link href="#" className="tap-row link-u">פרטיות</Link>
-            <Link href="#" className="tap-row link-u">נגישות</Link>
-            <Link href="#" className="tap-row link-u">משלוחים והחזרות</Link>
+            <Link href="/legal/terms" className="tap-row link-u">תנאי שימוש</Link>
+            <Link href="/legal/privacy" className="tap-row link-u">פרטיות</Link>
+            <Link href="/legal/accessibility" className="tap-row link-u">נגישות</Link>
+            <Link href="/legal/shipping-returns" className="tap-row link-u">משלוחים והחזרות</Link>
           </div>
         </div>
       </div>

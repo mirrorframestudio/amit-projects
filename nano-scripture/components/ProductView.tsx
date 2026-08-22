@@ -22,8 +22,9 @@ import { useCart } from '@/lib/cart';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { wornFor } from '@/lib/worn';
 import GiftTags from './GiftTags';
+import ScaleCompare from './ScaleCompare';
 
-type View = 'jewel' | 'scene' | 'worn' | 'chip' | 'scale';
+type View = 'jewel' | 'worn' | 'chip' | 'scale' | `scene-${number}`;
 
 const BASE_VIEWS: { id: View; label: string }[] = [
   { id: 'jewel', label: 'התכשיט' },
@@ -47,7 +48,7 @@ const ASSURANCE = [
     ),
   },
   {
-    label: 'שנתיים אחריות',
+    label: 'שנה אחריות',
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
         <path
@@ -76,45 +77,6 @@ const ASSURANCE = [
   },
 ];
 
-/** השוואת גדלים: גרגר אורז, ראש סיכה, והשבב */
-function ScaleCompare({ accent }: { accent: string }) {
-  const items = [
-    { label: 'גרגר אורז', w: 164, h: 50, rx: 25 },
-    { label: 'ראש סיכה', w: 58, h: 58, rx: 29 },
-    { label: 'השבב', w: 24, h: 24, rx: 2, chip: true },
-  ];
-  return (
-    <div className="flex h-full flex-col items-center justify-center gap-11 p-10">
-      {items.map((it) => (
-        <div key={it.label} className="flex flex-col items-center gap-3.5">
-          <div
-            style={{
-              width: it.w,
-              height: it.h,
-              borderRadius: it.rx,
-              background: it.chip ? accent : 'color-mix(in oklab, var(--ink) 10%, var(--surface))',
-              border: `1px solid ${it.chip ? accent : 'var(--line-strong)'}`,
-              boxShadow: it.chip ? `0 0 30px -6px ${accent}` : 'none',
-            }}
-          />
-          <span
-            style={{
-              fontSize: '.72rem',
-              letterSpacing: '.16em',
-              color: it.chip ? accent : 'var(--ink-3)',
-            }}
-          >
-            {it.label}
-          </span>
-        </div>
-      ))}
-      <p className="max-w-xs text-center" style={{ fontSize: '.74rem', color: 'var(--ink-3)', lineHeight: 1.7 }}>
-        שטח הכתיבה בפועל הוא כחצי מילימטר רבוע - כשליש מראש הסיכה.
-      </p>
-    </div>
-  );
-}
-
 export default function ProductView({ product }: { product: Product }) {
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
 
@@ -131,7 +93,10 @@ export default function ProductView({ product }: { product: Product }) {
   const VIEWS = [
     BASE_VIEWS[0],
     ...(worn ? [{ id: 'worn' as View, label: 'על הדגם' }] : []),
-    ...(product.scene ? [{ id: 'scene' as View, label: 'בסצנה' }] : []),
+    ...(product.scenes ?? []).map((_, i) => ({
+      id: `scene-${i}` as View,
+      label: (product.scenes?.length ?? 0) > 1 ? `בסצנה ${i + 1}` : 'בסצנה',
+    })),
     ...BASE_VIEWS.slice(1),
   ];
 
@@ -139,6 +104,8 @@ export default function ProductView({ product }: { product: Product }) {
   const b = getBlessing(blessing);
   const cat = CATEGORIES[product.category];
   const sale = saleOf(product.price);
+  // התצוגה הנוכחית כשהיא סצנה - האינדקס נגזר מהמזהה
+  const sceneIndex = view.startsWith('scene-') ? Number(view.slice(6)) : -1;
   const siblings = finishSiblings(product);
 
   // הפס הדביק מופיע רק כשהכפתור האמיתי יצא מהמסך, אחרת שני כפתורים
@@ -188,7 +155,7 @@ export default function ProductView({ product }: { product: Product }) {
           ומגיעה ל־845px על חלון של 918 — ריבוע ענק שבולע את העמוד */}
       <div className="mx-auto w-full max-w-[540px] lg:mx-0 lg:max-w-none lg:sticky lg:top-28 lg:self-start">
         <div
-          className={view === 'chip' || view === 'worn' || view === 'scene' ? '' : 'tile'}
+          className={view === 'chip' || view === 'worn' || sceneIndex >= 0 ? '' : 'tile'}
           style={{
             position: 'relative',
             aspectRatio: '1',
@@ -217,9 +184,9 @@ export default function ProductView({ product }: { product: Product }) {
               className="object-cover"
             />
           )}
-          {view === 'scene' && product.scene && (
+          {sceneIndex >= 0 && product.scenes?.[sceneIndex] && (
             <Image
-              src={product.scene}
+              src={product.scenes[sceneIndex]}
               alt={product.name}
               fill
               sizes="(max-width: 1024px) 92vw, 46vw"
@@ -244,7 +211,7 @@ export default function ProductView({ product }: { product: Product }) {
                 onClick={() => setView(v.id)}
                 aria-label={v.label}
                 aria-pressed={on}
-                className={v.id === 'chip' || v.id === 'worn' || v.id === 'scene' ? '' : 'tile'}
+                className={v.id === 'chip' || v.id === 'worn' || v.id.startsWith('scene-') ? '' : 'tile'}
                 style={{
                   position: 'relative',
                   width: 84,
@@ -263,8 +230,14 @@ export default function ProductView({ product }: { product: Product }) {
                 {v.id === 'worn' && worn && (
                   <Image src={worn.file} alt="" fill sizes="84px" className="object-cover" />
                 )}
-                {v.id === 'scene' && product.scene && (
-                  <Image src={product.scene} alt="" fill sizes="84px" className="object-cover" />
+                {v.id.startsWith('scene-') && (
+                  <Image
+                    src={product.scenes?.[Number(v.id.slice(6))] ?? ''}
+                    alt=""
+                    fill
+                    sizes="84px"
+                    className="object-cover"
+                  />
                 )}
                 {v.id === 'chip' && (
                   <span

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { BRAND } from '@/lib/brand';
 
-const MICRO = ['משלוח חינם מעל ₪450', 'שנתיים אחריות', 'החזרה תוך 30 יום'];
+const MICRO = ['משלוח חינם מעל ₪450', 'שנה אחריות', 'החזרה תוך 30 יום'];
 
 /** הירו: וידאו מלא־רוחב, וטקסט יושב על צעיף שמנת בצד ימין */
 export default function Hero() {

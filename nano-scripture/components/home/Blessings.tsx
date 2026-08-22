@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import BlessingCard from '@/components/BlessingCard';
 import { BLESSINGS } from '@/lib/blessings';
+import { blessingPhotos } from '@/lib/catalog';
 
 /** חמש הברכות — ציר התוכן של האתר */
 export default function Blessings() {
+  const photos = blessingPhotos(BLESSINGS.map((b) => b.id));
+
   return (
     <section
       className="py-24 md:py-36"
@@ -25,15 +28,14 @@ export default function Blessings() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {BLESSINGS.slice(0, 3).map((b, i) => (
-            <BlessingCard key={b.id} blessing={b} index={i} />
-          ))}
-        </div>
-
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {BLESSINGS.slice(3).map((b, i) => (
-            <BlessingCard key={b.id} blessing={b} index={i} />
+        <div className={`mt-14 ${'grid gap-6 md:grid-cols-2 lg:grid-cols-6'}`}>
+          {BLESSINGS.map((b, i) => (
+            <div
+              key={b.id}
+              className={i === 3 ? 'lg:col-span-2 lg:col-start-2' : 'lg:col-span-2'}
+            >
+              <BlessingCard blessing={b} index={i} photo={photos[b.id]} />
+            </div>
           ))}
         </div>
 

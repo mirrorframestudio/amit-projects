@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { BLESSINGS, TOTAL_BLESSING_WORDS } from '@/lib/blessings';
 import BlessingCard from '@/components/BlessingCard';
+import { blessingPhotos } from '@/lib/catalog';
 import NanoLoupe from '@/components/NanoLoupe';
 
 export const metadata: Metadata = {
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlessingsPage() {
+  const photos = blessingPhotos(BLESSINGS.map((b) => b.id));
+
   return (
     <>
       <section className="pt-40 pb-14">
@@ -56,9 +59,14 @@ export default function BlessingsPage() {
       </section>
 
       <section className="pb-32">
-        <div className="shell grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="shell grid gap-6 md:grid-cols-2 lg:grid-cols-6">
           {BLESSINGS.map((b, i) => (
-            <BlessingCard key={b.id} blessing={b} index={i} />
+            <div
+              key={b.id}
+              className={i === 3 ? 'lg:col-span-2 lg:col-start-2' : 'lg:col-span-2'}
+            >
+              <BlessingCard blessing={b} index={i} photo={photos[b.id]} />
+            </div>
           ))}
         </div>
       </section>

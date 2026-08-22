@@ -1,3 +1,4 @@
+import Link from 'next/link';
 const PILLARS = [
   {
     title: 'תעודת אותנטיות',
@@ -20,8 +21,8 @@ const PILLARS = [
     ),
   },
   {
-    title: 'שנתיים אחריות',
-    body: 'שנתיים אחריות מלאה על השבב, השיבוץ והסוגר. החלפת שרשרת או תיקון - ללא עלות בתקופה הזו.',
+    title: 'שנה אחריות',
+    body: 'שנה על פגמי ייצור - השבב במשבצתו, ההלחמות, הסוגר והחוליות. תיקון בתקופה הזו ללא עלות.',
     icon: (
       <>
         <circle cx="12" cy="12" r="8.2" />
@@ -35,7 +36,7 @@ export default function Assurance() {
   return (
     <section className="py-28 md:py-36">
       <div className="shell grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
-        {/* ציטוט לקוחה */}
+        {/* אמירת המותג */}
         <figure className="reveal relative self-start">
           <span
             aria-hidden
@@ -52,26 +53,19 @@ export default function Assurance() {
             ״
           </span>
           <blockquote className="display relative" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', lineHeight: 1.55 }}>
-            קניתי את זה לאבא שלי ליום ההולדת השבעים. הוא הסתכל דרך הזכוכית,
-            שתק חצי דקה, ואז אמר שזו המתנה הראשונה שהוא לא יודע איך להודות עליה.
+            הטקסט על השבב הוא הנוסח המלא, מילה במילה, בלי קיצור ובלי השמטה.
+            אפשר לקרוא אותו כאן באתר לפני שקונים, ולהשוות למקור.
           </blockquote>
           <figcaption className="mt-7 flex items-center gap-4">
             <span style={{ width: 34, height: 1, background: 'var(--accent)' }} />
-            <span style={{ fontSize: '.82rem', color: 'var(--ink-2)' }}>
-              נעמה ל׳ · רמת השרון
-            </span>
+            <Link
+              href="/blessings"
+              className="link-u"
+              style={{ fontSize: '.82rem', color: 'var(--accent-deep)' }}
+            >
+              לקריאת חמשת הנוסחים ←
+            </Link>
           </figcaption>
-
-          <div className="mt-10 flex items-center gap-2" style={{ color: 'var(--accent)' }}>
-            {Array.from({ length: 5 }, (_, i) => (
-              <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                <path d="m12 2 3 6.9 7.5.7-5.6 5 1.6 7.4L12 18.3 5.5 22l1.6-7.4-5.6-5 7.5-.7Z" />
-              </svg>
-            ))}
-            <span className="num" style={{ fontSize: '.78rem', color: 'var(--ink-3)', marginInlineStart: '.5rem' }}>
-              4.9 · 1,284 חוות דעת
-            </span>
-          </div>
         </figure>
 
         {/* עמודי ביטחון */}

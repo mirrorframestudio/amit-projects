@@ -5,8 +5,8 @@ import { BLESSINGS, TOTAL_BLESSING_WORDS } from '@/lib/blessings';
 const STATS = [
   { value: TOTAL_BLESSING_WORDS, label: 'מילים בחמשת הנוסחים', decimals: 0 },
   { value: 0.5, label: 'מ״מ רוחב שטח הכתיבה', decimals: 1 },
-  { value: 5, label: 'ננומטר עובי האות', decimals: 0 },
-  { value: 100, label: 'שנות עמידות מובטחות', decimals: 0, suffix: '+' },
+  { value: 9, label: 'מיקרון גובה האות', decimals: 0 },
+  { value: 500, label: 'הגדלה נדרשת לקריאה', decimals: 0 },
 ];
 
 export default function Scale() {
@@ -29,7 +29,7 @@ export default function Scale() {
 
           <p className="lede reveal mt-7 max-w-lg" style={{ ['--d' as string]: '160ms' }}>
             שבב הסיליקון שבליבת כל תכשיט קטן מראש סיכה. עליו נצרבות שורות הכתב
-            בעובי של חמישה ננומטר - כעשירית מקוטר גדיל DNA. האות אינה מודפסת ואינה
+            בגובה של תשעה מיקרון - כשמינית מעובי שערת אדם. האות אינה מודפסת ואינה
             מצופה: היא חלק מהחומר עצמו, ולכן לא תדהה ולא תימחק.
           </p>
 
@@ -40,7 +40,7 @@ export default function Scale() {
                   className="display gold-text"
                   style={{ fontSize: 'clamp(1.9rem, 3.4vw, 2.9rem)', lineHeight: 1 }}
                 >
-                  <Counter to={s.value} decimals={s.decimals} suffix={s.suffix ?? ''} />
+                  <Counter to={s.value} decimals={s.decimals} />
                 </p>
                 <p className="mt-2" style={{ fontSize: '.78rem', color: 'var(--ink-3)', letterSpacing: '.04em' }}>
                   {s.label}

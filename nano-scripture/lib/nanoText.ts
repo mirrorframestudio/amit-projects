@@ -28,36 +28,90 @@ export function nanoFont(size: number) {
   return `${size}px ${family || 'sans-serif'}, sans-serif`;
 }
 
+const LINE_RATIO = 1.46;
+
+/** שבירה למילים שלמות. בעדשה קוראים את הטקסט, ומילה חתוכה נראית כמו שגיאה */
+function wrap(words: string[], perLine: number, limit: number) {
+  const lines: string[] = [];
+  let cur = '';
+  for (const word of words) {
+    if (!cur.length) {
+      cur = word;
+    } else if (cur.length + 1 + word.length <= perLine) {
+      cur += ' ' + word;
+    } else {
+      lines.push(cur);
+      if (lines.length > limit) return null;
+      cur = word;
+    }
+  }
+  if (cur.length) lines.push(cur);
+  return lines.length <= limit ? lines : null;
+}
+
 /**
- * פורס את הטקסט לשורות שממלאות בדיוק את המלבן.
- * הפריסה מחושבת פעם אחת ומשמשת גם את שכבת הבסיס וגם את העדשה,
- * ולכן ההגדלה תמיד מציגה בדיוק את מה שנמצא מתחתיה.
+ * פורס את הנוסח כך שהוא ממלא את המלבן **פעם אחת**.
+ *
+ * הגרסה הקודמת קיבלה גודל גופן קבוע וחזרה על הטקסט עשרות פעמים עד
+ * שהלוח התמלא. זה גם נראה כמו מילוי חלל וגם ייצג את המוצר לא נכון:
+ * על השבב צרוב נוסח אחד, לא ארבעים עותקים שלו.
+ *
+ * לכן הכיוון הפוך - מחפשים את הגופן הגדול ביותר שבו הנוסח כולו עדיין
+ * נכנס. חיפוש בינארי, ובכל צעד שוברים באמת למילים ובודקים אם מספר
+ * השורות נכנס בגובה. הקיבולת יורדת כריבוע הגופן, ולכן ההתכנסות מהירה.
  */
 export function layoutNano(
   ctx: CanvasRenderingContext2D,
   source: string,
   width: number,
   height: number,
-  fontSize: number,
+  _fontSize: number,
   pad = 10,
 ): NanoLayout {
-  const lineHeight = fontSize * 1.46;
   const usableW = width - pad * 2;
-  const rows = Math.max(1, Math.floor((height - pad * 2) / lineHeight));
+  const usableH = height - pad * 2;
+  const words = source.split(/\s+/).filter(Boolean);
 
-  // רוחב תו ממוצע מדגימה אחת — מדידה תו־אחר־תו על עשרות אלפי תווים יקרה מדי
-  const sample = source.slice(0, 200);
-  const avg = ctx.measureText(sample).width / sample.length || fontSize * 0.5;
-  const perLine = Math.max(8, Math.floor(usableW / avg));
+  // יחס רוחב־תו לגודל גופן, נמדד פעם אחת. הוא ליניארי, ולכן די בדגימה
+  const probe = 10;
+  ctx.font = nanoFont(probe);
+  const sample = source.slice(0, 400);
+  const ratio = ctx.measureText(sample).width / sample.length / probe || 0.5;
 
-  const needed = rows * perLine;
-  // הברכות קצרות מהלוח, ולכן הנוסח חוזר על עצמו עד שהוא ממלא אותו
-  const body = source.repeat(Math.ceil(needed / source.length) + 1);
+  const fit = (fs: number) => {
+    const rows = Math.floor(usableH / (fs * LINE_RATIO));
+    const perLine = Math.floor(usableW / (fs * ratio));
+    if (rows < 1 || perLine < 4) return null;
+    return wrap(words, perLine, rows);
+  };
 
-  const lines: string[] = new Array(rows);
-  for (let i = 0; i < rows; i++) lines[i] = body.substr(i * perLine, perLine);
+  let lo = 0.4;
+  let hi = 64;
+  let best = fit(lo);
+  for (let i = 0; i < 22; i++) {
+    const mid = (lo + hi) / 2;
+    const attempt = fit(mid);
+    if (attempt) {
+      lo = mid;
+      best = attempt;
+    } else {
+      hi = mid;
+    }
+  }
 
-  return { lines, fontSize, lineHeight, pad, right: width - pad, top: pad, avg };
+  const fontSize = lo;
+  const lines = best ?? [source];
+  const avg = fontSize * ratio;
+
+  return {
+    lines,
+    fontSize,
+    lineHeight: fontSize * LINE_RATIO,
+    pad,
+    right: width - pad,
+    top: pad,
+    avg,
+  };
 }
 
 /** מצייר את שכבת הבסיס — הכתב הזעיר שממלא את כל הלוח */
