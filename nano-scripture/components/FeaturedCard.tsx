@@ -42,7 +42,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
                 position: 'absolute',
                 insetInlineEnd: 14,
                 top: 14,
-                fontSize: '.7rem',
+                fontSize: 'var(--fs-xs)',
                 fontWeight: 700,
                 letterSpacing: '.04em',
                 padding: '.32rem .62rem',
@@ -62,7 +62,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
             <span
               className="mb-4 w-fit"
               style={{
-                fontSize: '.7rem',
+                fontSize: 'var(--fs-xs)',
                 letterSpacing: '.14em',
                 padding: '.34rem .72rem',
                 borderRadius: 99,
@@ -74,7 +74,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
             </span>
           )}
 
-          <span className="display block" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}>
+          <span className="display block" style={{ fontSize: 'var(--ds-2)' }}>
             {product.name}
           </span>
 
@@ -82,7 +82,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
             <span
               className="mt-3 block"
               style={{
-                fontSize: '.92rem',
+                fontSize: 'var(--fs-base)',
                 lineHeight: 1.7,
                 color: 'var(--accent-deep)',
                 borderInlineStart: '2px solid var(--accent)',
@@ -90,13 +90,13 @@ export default function FeaturedCard({ product }: { product: Product }) {
               }}
             >
               {product.source.phrase}
-              <span className="mt-1 block" style={{ fontSize: '.7rem', color: 'var(--ink-3)' }}>
+              <span className="mt-1 block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                 {product.source.ref}
               </span>
             </span>
           )}
 
-          <span className="mt-5 block" style={{ fontSize: '.88rem', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+          <span className="mt-5 block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
             {product.short}
           </span>
 
@@ -104,7 +104,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
             {sale.discounted && (
               <span
                 className="num"
-                style={{ fontSize: '.9rem', color: 'var(--ink-3)', textDecoration: 'line-through' }}
+                style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-3)', textDecoration: 'line-through' }}
               >
                 {formatPrice(sale.was)}
               </span>
@@ -112,7 +112,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
             <span
               className="num display"
               style={{
-                fontSize: '1.5rem',
+                fontSize: 'var(--fs-xl)',
                 fontWeight: sale.discounted ? 500 : undefined,
                 color: sale.discounted ? 'var(--sale)' : undefined,
               }}
@@ -123,7 +123,7 @@ export default function FeaturedCard({ product }: { product: Product }) {
 
           <span
             className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 pt-5"
-            style={{ borderTop: '1px solid var(--line)', fontSize: '.74rem', color: 'var(--ink-3)' }}
+            style={{ borderTop: '1px solid var(--line)', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
           >
             <span>
               {MATERIALS[product.material].label} · {FINISHES[product.finish]}

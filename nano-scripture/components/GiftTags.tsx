@@ -25,7 +25,7 @@ export default function GiftTags({
       {label && (
         <span
           style={{
-            fontSize: '.66rem',
+            fontSize: 'var(--fs-2xs)',
             letterSpacing: '.12em',
             color: 'var(--ink-3)',
             marginInlineEnd: '.15rem',
@@ -39,7 +39,7 @@ export default function GiftTags({
         <span
           key={item}
           style={{
-            fontSize: '.7rem',
+            fontSize: 'var(--fs-xs)',
             lineHeight: 1.4,
             padding: '.16rem .5rem',
             borderRadius: 99,

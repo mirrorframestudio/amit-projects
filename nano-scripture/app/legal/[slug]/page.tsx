@@ -35,7 +35,7 @@ export default async function LegalPage({
         <h1 className="display t-1 mt-4">{doc.title}</h1>
         <p className="lede mt-5">{doc.lede}</p>
 
-        <p className="mt-4" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+        <p className="mt-4" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
           עודכן לאחרונה: {COMPANY.updated}
         </p>
 
@@ -50,7 +50,7 @@ export default async function LegalPage({
               background: 'color-mix(in oklab, var(--sale) 8%, transparent)',
             }}
           >
-            <p style={{ fontSize: '.85rem', color: 'var(--sale-deep)', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sale-deep)', lineHeight: 1.7 }}>
               <strong>טיוטה - לא לפרסום.</strong> חסר עדיין:{' '}
               {MISSING.join(' · ')}. בנוסף, הנוסח טרם נבדק על ידי עורך דין. יש
               להשלים את שניהם לפני שהאתר עולה לאוויר.
@@ -61,14 +61,14 @@ export default async function LegalPage({
         <div className="mt-14">
           {doc.sections.map((sec, i) => (
             <section key={sec.h} className="reveal mb-11" style={{ ['--d' as string]: `${i * 50}ms` }}>
-              <h2 className="display" style={{ fontSize: '1.22rem' }}>
+              <h2 className="display" style={{ fontSize: 'var(--fs-lg)' }}>
                 {sec.h}
               </h2>
               {sec.p.map((line, j) => (
                 <p
                   key={j}
                   className="mt-3"
-                  style={{ fontSize: '.94rem', lineHeight: 1.85, color: 'var(--ink-2)' }}
+                  style={{ fontSize: 'var(--fs-base)', lineHeight: 1.85, color: 'var(--ink-2)' }}
                 >
                   {line}
                 </p>
@@ -86,7 +86,7 @@ export default async function LegalPage({
               key={d.slug}
               href={`/legal/${d.slug}`}
               className="tap-row link-u"
-              style={{ fontSize: '.86rem', color: 'var(--accent-deep)' }}
+              style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent-deep)' }}
             >
               {d.title}
             </Link>

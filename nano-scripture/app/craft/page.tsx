@@ -64,7 +64,7 @@ export default function CraftPage() {
       <section className="relative overflow-hidden pt-44 pb-14">
         <div className="shell">
           <p className="eyebrow reveal">הטכנולוגיה</p>
-          <h1 className="display mt-6" style={{ fontSize: 'clamp(2.6rem, 7.5vw, 6rem)' }}>
+          <h1 className="display mt-6" style={{ fontSize: 'var(--ds-hero)' }}>
             <span className="mask-line load">
               <span>איך מכניסים ברכה</span>
             </span>
@@ -130,10 +130,10 @@ export default function CraftPage() {
             { v: 500, l: 'הגדלה נדרשת כדי לקרוא', s: '', d: 0 },
           ].map((s, i) => (
             <div key={s.l} className="reveal text-center" style={{ ['--d' as string]: `${i * 90}ms` }}>
-              <p className="display gold-text" style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', lineHeight: 1 }}>
+              <p className="display gold-text" style={{ fontSize: 'var(--ds-1)', lineHeight: 1 }}>
                 <Counter to={s.v} suffix={s.s} decimals={s.d} />
               </p>
-              <p className="mt-3" style={{ fontSize: '.8rem', color: 'var(--ink-3)' }}>{s.l}</p>
+              <p className="mt-3" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>{s.l}</p>
             </div>
           ))}
         </div>
@@ -159,8 +159,8 @@ export default function CraftPage() {
                 className="reveal flex flex-col justify-between gap-1 py-5 sm:flex-row sm:items-baseline"
                 style={{ borderTop: '1px solid var(--line)', ['--d' as string]: `${i * 45}ms` }}
               >
-                <span style={{ fontSize: '.86rem', color: 'var(--ink-3)', letterSpacing: '.06em' }}>{k}</span>
-                <span className="num" style={{ fontSize: '.95rem', textAlign: 'start' }}>{v}</span>
+                <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', letterSpacing: '.06em' }}>{k}</span>
+                <span className="num" style={{ fontSize: 'var(--fs-base)', textAlign: 'start' }}>{v}</span>
               </div>
             ))}
             <div style={{ borderTop: '1px solid var(--line)' }} />
@@ -201,10 +201,10 @@ export default function CraftPage() {
             <ol className="mt-9 grid gap-6 sm:grid-cols-2">
               {CARE.map((c, i) => (
                 <li key={c} className="flex gap-4">
-                  <span className="num display" style={{ color: 'var(--accent)', fontSize: '1.1rem', lineHeight: 1.7 }}>
+                  <span className="num display" style={{ color: 'var(--accent)', fontSize: 'var(--fs-md)', lineHeight: 1.7 }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <span style={{ fontSize: '.92rem', color: 'var(--ink-2)', lineHeight: 1.8 }}>{c}</span>
+                  <span style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)', lineHeight: 1.8 }}>{c}</span>
                 </li>
               ))}
             </ol>

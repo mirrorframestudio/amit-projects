@@ -44,7 +44,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
         }}
       >
         <div className="shell">
-          <nav className="mb-8 flex items-center gap-3" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+          <nav className="mb-8 flex items-center gap-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             <Link href="/" className="link-u">בית</Link>
             <span>/</span>
             <Link href="/blessings" className="link-u">הברכות</Link>
@@ -54,13 +54,13 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
 
           <p className="eyebrow reveal load" style={{ color: b.accentInk }}>{b.forWhom}</p>
 
-          <h1 className="display mt-4" style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)' }}>
+          <h1 className="display mt-4" style={{ fontSize: 'var(--ds-hero)' }}>
             <span className="mask-line load">
               <span style={{ color: b.accentInk }}>{b.title}</span>
             </span>
           </h1>
 
-          <p className="mt-4" style={{ fontSize: '.82rem', letterSpacing: '.14em', color: 'var(--ink-2)' }}>
+          <p className="mt-4" style={{ fontSize: 'var(--fs-sm)', letterSpacing: '.14em', color: 'var(--ink-2)' }}>
             {b.sources}
           </p>
 
@@ -75,10 +75,10 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
               { v: b.gift, l: 'מתאים ל' },
             ].map((s, i) => (
               <div key={s.l} className="reveal load" style={{ ['--d' as string]: `${320 + i * 70}ms` }}>
-                <p className="num display" style={{ fontSize: '1.5rem', lineHeight: 1.3, color: 'var(--ink)' }}>
+                <p className="num display" style={{ fontSize: 'var(--fs-xl)', lineHeight: 1.3, color: 'var(--ink)' }}>
                   {s.v}
                 </p>
-                <p className="mt-1.5" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>{s.l}</p>
+                <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>{s.l}</p>
               </div>
             ))}
           </div>
@@ -89,7 +89,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       <section className="pb-20">
         <div className="shell">
           <NanoLoupe blessing={b.id} height={440} zoom={11} radius={104} />
-          <p className="mt-4 text-center" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+          <p className="mt-4 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             זהו בדיוק הנוסח שנצרב - העבירו את הסמן כדי לקרוא אותו
           </p>
         </div>
@@ -105,7 +105,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
                 <span>מילה במילה</span>
               </span>
             </h2>
-            <p className="lede reveal mt-5 max-w-xs" style={{ fontSize: '.96rem' }}>
+            <p className="lede reveal mt-5 max-w-xs" style={{ fontSize: 'var(--fs-base)' }}>
               בלי קיצור ובלי השמטה. מה שכתוב כאן, בניקוד מלא, הוא בדיוק מה
               שנצרב על השבב.
             </p>
@@ -137,7 +137,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
                   </span>
                 </h2>
               </div>
-              <p className="lede reveal max-w-sm" style={{ fontSize: '.96rem' }}>
+              <p className="lede reveal max-w-sm" style={{ fontSize: 'var(--fs-base)' }}>
                 כל דגם בקטלוג יכול לשאת את {b.plain} - בוחרים את התכשיט, ואז את הנוסח.
               </p>
             </div>

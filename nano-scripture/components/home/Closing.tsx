@@ -16,7 +16,7 @@ export default function Closing() {
       <div className="shell relative text-center">
         <p className="eyebrow reveal">מתנה שנשארת</p>
 
-        <h2 className="display mt-6" style={{ fontSize: 'clamp(2.2rem, 6.5vw, 5.4rem)' }}>
+        <h2 className="display mt-6" style={{ fontSize: 'var(--ds-hero)' }}>
           <span className="mask-line">
             <span>מה נותנים למי</span>
           </span>
@@ -44,7 +44,7 @@ export default function Closing() {
           </Link>
         </div>
 
-        <p className="reveal mt-9" style={{ fontSize: '.74rem', color: 'var(--ink-3)', letterSpacing: '.08em' }}>
+        <p className="reveal mt-9" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}>
           משלוח עד 3 ימי עסקים · החזרה חינם תוך 30 יום · תשלום מאובטח
         </p>
       </div>

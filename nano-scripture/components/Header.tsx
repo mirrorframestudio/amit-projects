@@ -71,7 +71,7 @@ export default function Header() {
                 href={n.href}
                 className="link-u"
                 style={{
-                  fontSize: '.88rem',
+                  fontSize: 'var(--fs-sm)',
                   letterSpacing: '.03em',
                   color: pathname === n.href ? 'var(--accent)' : 'var(--ink-2)',
                 }}
@@ -85,7 +85,7 @@ export default function Header() {
             <button
               onClick={() => setOpen(true)}
               className="tap relative flex items-center gap-2"
-              style={{ color: 'var(--ink-2)', fontSize: '.85rem' }}
+              style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}
               aria-label={`עגלת קניות, ${items} פריטים`}
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>

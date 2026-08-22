@@ -61,7 +61,7 @@ export default function ProductCard({
                   position: 'absolute',
                   insetInlineStart: 14,
                   top: 14,
-                  fontSize: '.7rem',
+                  fontSize: 'var(--fs-xs)',
                   letterSpacing: '.14em',
                   padding: '.34rem .72rem',
                   borderRadius: 99,
@@ -79,7 +79,7 @@ export default function ProductCard({
                   position: 'absolute',
                   insetInlineEnd: 14,
                   top: 14,
-                  fontSize: '.7rem',
+                  fontSize: 'var(--fs-xs)',
                   fontWeight: 700,
                   letterSpacing: '.04em',
                   padding: '.32rem .62rem',
@@ -110,21 +110,21 @@ export default function ProductCard({
 
           <div className="card-body flex flex-1 flex-col px-6 pb-6 pt-5">
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="display" style={{ fontSize: '1.28rem' }}>
+              <h3 className="display" style={{ fontSize: 'var(--fs-lg)' }}>
                 {product.name}
               </h3>
               <span className="flex shrink-0 items-baseline gap-2">
                 {sale.discounted && (
                   <span
                     className="num"
-                    style={{ fontSize: '.82rem', color: 'var(--ink-3)', textDecoration: 'line-through' }}
+                    style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', textDecoration: 'line-through' }}
                   >
                     {formatPrice(sale.was)}
                   </span>
                 )}
                 <span
                   className="num display"
-                  style={{ fontSize: '1.08rem', fontWeight: sale.discounted ? 500 : undefined, color: sale.discounted ? 'var(--sale)' : undefined }}
+                  style={{ fontSize: 'var(--fs-md)', fontWeight: sale.discounted ? 500 : undefined, color: sale.discounted ? 'var(--sale)' : undefined }}
                 >
                   {formatPrice(sale.now)}
                 </span>
@@ -132,16 +132,16 @@ export default function ProductCard({
             </div>
 
             {product.source && (
-              <p className="mt-1" style={{ fontSize: '.7rem', letterSpacing: '.06em', color: 'var(--accent)' }}>
+              <p className="mt-1" style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.06em', color: 'var(--accent)' }}>
                 {product.source.ref}
               </p>
             )}
 
-            <p className="mt-1.5" style={{ fontSize: '.7rem', letterSpacing: '.1em', color: 'var(--ink-3)' }}>
+            <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.1em', color: 'var(--ink-3)' }}>
               {MATERIALS[product.material].label} · {FINISHES[product.finish]}
             </p>
 
-            <p className="mt-3 flex-1" style={{ fontSize: '.82rem', color: 'var(--ink-3)', lineHeight: 1.65 }}>
+            <p className="mt-3 flex-1" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', lineHeight: 1.65 }}>
               {product.short}
             </p>
 
@@ -149,12 +149,12 @@ export default function ProductCard({
               className="mt-5 flex items-center justify-between pt-4"
               style={{ borderTop: '1px solid var(--line)' }}
             >
-              <span className="num" style={{ fontSize: '.72rem', color: 'var(--ink-3)' }}>
+              <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                 {available.length === 1 ? available[0].plain : `${available.length} ברכות לבחירה`}
               </span>
               <span
                 className="link-u"
-                style={{ fontSize: '.8rem', color: 'var(--accent)', letterSpacing: '.03em' }}
+                style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)', letterSpacing: '.03em' }}
               >
                 לפריט ←
               </span>

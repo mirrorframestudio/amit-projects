@@ -30,7 +30,7 @@ export default function Bestsellers() {
           <Link
             href={`/categories/${ACTIVE_CATEGORIES[0]}`}
             className="btn-ghost link-u reveal"
-            style={{ fontSize: '.86rem' }}
+            style={{ fontSize: 'var(--fs-sm)' }}
           >
             לכל הדגמים ←
           </Link>

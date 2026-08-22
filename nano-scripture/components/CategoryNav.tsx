@@ -20,7 +20,7 @@ export default function CategoryNav({ current }: { current?: CategoryId }) {
               flexShrink: 0,
               padding: '.62rem 1.35rem',
               borderRadius: 99,
-              fontSize: '.86rem',
+              fontSize: 'var(--fs-sm)',
               letterSpacing: '.03em',
               whiteSpace: 'nowrap',
               border: `1px solid ${active ? 'var(--accent)' : 'var(--line)'}`,
@@ -30,7 +30,7 @@ export default function CategoryNav({ current }: { current?: CategoryId }) {
             }}
           >
             {cat.title}
-            <span className="num" style={{ opacity: 0.6, marginInlineStart: '.5rem', fontSize: '.76rem' }}>
+            <span className="num" style={{ opacity: 0.6, marginInlineStart: '.5rem', fontSize: 'var(--fs-xs)' }}>
               {productsByCategory(id).length}
             </span>
           </Link>

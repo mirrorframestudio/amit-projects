@@ -62,7 +62,7 @@ export default function Hero() {
 
           <h1
             className="display mt-4"
-            style={{ fontSize: 'clamp(2.6rem, 5.4vw, 5rem)', fontWeight: 700, lineHeight: 1.05 }}
+            style={{ fontSize: 'var(--ds-hero)', fontWeight: 700, lineHeight: 1.05 }}
           >
             <span className="mask-line load">
               <span>ברכה שלמה</span>
@@ -76,7 +76,7 @@ export default function Hero() {
             className="reveal load mt-5"
             style={{
               ['--d' as string]: '300ms',
-              fontSize: 'clamp(1.15rem, 2.2vw, 1.8rem)',
+              fontSize: 'var(--ds-3)',
               fontWeight: 400,
               color: 'var(--ink-2)',
             }}
@@ -88,7 +88,7 @@ export default function Hero() {
             className="reveal load mt-8 flex flex-wrap items-center gap-4"
             style={{ ['--d' as string]: '440ms' }}
           >
-            <Link href="/blessings" className="btn btn-solid" style={{ ['--pad' as string]: '1.05rem 2.6rem', fontSize: '.95rem' }}>
+            <Link href="/blessings" className="btn btn-solid" style={{ ['--pad' as string]: '1.05rem 2.6rem', fontSize: 'var(--fs-base)' }}>
               לבחירת הברכה
             </Link>
             <Link href="/categories/necklaces" className="btn">
@@ -98,7 +98,7 @@ export default function Hero() {
 
           <ul
             className="reveal load mt-9 flex flex-wrap gap-x-7 gap-y-2"
-            style={{ ['--d' as string]: '580ms', fontSize: '.76rem', color: 'var(--ink-3)' }}
+            style={{ ['--d' as string]: '580ms', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
           >
             {MICRO.map((m) => (
               <li key={m} className="flex items-center gap-2">

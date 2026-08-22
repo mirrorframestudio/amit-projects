@@ -34,14 +34,14 @@ function CodeField() {
           background: 'color-mix(in oklab, var(--sale) 7%, transparent)',
         }}
       >
-        <span style={{ fontSize: '.78rem', color: 'var(--sale-deep)', fontWeight: 500 }}>
+        <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--sale-deep)', fontWeight: 500 }}>
           הקוד <span className="num">{code}</span> הופעל
         </span>
         <button
           type="button"
           onClick={() => { setCode(null); setDraft(''); }}
           className="link-u tap"
-          style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}
+          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
         >
           הסרה
         </button>
@@ -71,7 +71,7 @@ function CodeField() {
           className="num min-w-0 flex-1 px-3"
           style={{
             height: 44,
-            fontSize: '.84rem',
+            fontSize: 'var(--fs-sm)',
             letterSpacing: '.06em',
             borderRadius: 'var(--radius)',
             border: `1px solid ${error ? 'var(--sale)' : 'var(--line-strong)'}`,
@@ -85,13 +85,13 @@ function CodeField() {
           onClick={submit}
           disabled={!draft.trim()}
           className="btn tap"
-          style={{ ['--pad' as string]: '0 1.1rem', height: 44, fontSize: '.8rem', opacity: draft.trim() ? 1 : 0.45 }}
+          style={{ ['--pad' as string]: '0 1.1rem', height: 44, fontSize: 'var(--fs-sm)', opacity: draft.trim() ? 1 : 0.45 }}
         >
           החלה
         </button>
       </div>
 
-      <p className="mt-1.5" style={{ fontSize: '.7rem', color: error ? 'var(--sale)' : 'var(--ink-3)' }}>
+      <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: error ? 'var(--sale)' : 'var(--ink-3)' }}>
         {error ? 'הקוד אינו מזוהה. בדקו את הכתיב ונסו שוב.' : PROMO.sub}
       </p>
     </div>
@@ -112,7 +112,7 @@ function Stepper({
     display: 'grid',
     placeItems: 'center',
     color: 'var(--ink-2)',
-    fontSize: '1rem',
+    fontSize: 'var(--fs-md)',
     lineHeight: 1,
   };
 
@@ -127,7 +127,7 @@ function Stepper({
       <span
         className="num"
         aria-live="polite"
-        style={{ fontSize: '.86rem', minWidth: 22, textAlign: 'center' }}
+        style={{ fontSize: 'var(--fs-sm)', minWidth: 22, textAlign: 'center' }}
       >
         {qty}
       </span>
@@ -213,7 +213,7 @@ export default function CartDrawer() {
           className="flex items-center justify-between px-7 py-6"
           style={{ borderBottom: '1px solid var(--line)' }}
         >
-          <span className="display" style={{ fontSize: '1.3rem' }}>
+          <span className="display" style={{ fontSize: 'var(--fs-lg)' }}>
             העגלה{' '}
             <span className="num" style={{ color: 'var(--accent)' }}>
               ({items})
@@ -228,7 +228,7 @@ export default function CartDrawer() {
 
         {lines.length > 0 && (
           <div className="px-7 py-4" style={{ borderBottom: '1px solid var(--line)' }}>
-            <p style={{ fontSize: '.8rem', color: 'var(--ink-2)' }}>
+            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               {gap <= 0 ? (
                 <span style={{ color: 'var(--accent-deep)', fontWeight: 500 }}>המשלוח עלינו ✦</span>
               ) : (
@@ -291,7 +291,7 @@ export default function CartDrawer() {
                       href={`/products/${p.slug}`}
                       onClick={() => setOpen(false)}
                       className="display"
-                      style={{ fontSize: '1.05rem' }}
+                      style={{ fontSize: 'var(--fs-md)' }}
                     >
                       {p.name}
                     </Link>
@@ -311,7 +311,7 @@ export default function CartDrawer() {
                   <span
                     className="mt-1.5 inline-flex w-fit items-center gap-1.5"
                     style={{
-                      fontSize: '.71rem',
+                      fontSize: 'var(--fs-xs)',
                       padding: '.14rem .5rem',
                       borderRadius: 99,
                       color: b.accentInk,
@@ -326,7 +326,7 @@ export default function CartDrawer() {
                     {b.plain}
                   </span>
 
-                  <p className="num mt-2" style={{ fontSize: '.74rem', color: 'var(--ink-2)' }}>
+                  <p className="num mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
                     {formatPrice(sale.now)} ליחידה
                   </p>
 
@@ -336,12 +336,12 @@ export default function CartDrawer() {
                       {sale.discounted && (
                         <span
                           className="num"
-                          style={{ fontSize: '.76rem', color: 'var(--ink-3)', textDecoration: 'line-through' }}
+                          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', textDecoration: 'line-through' }}
                         >
                           {formatPrice(p.price * line.qty)}
                         </span>
                       )}
-                      <span className="num" style={{ fontSize: '1rem', fontWeight: 500 }}>
+                      <span className="num" style={{ fontSize: 'var(--fs-md)', fontWeight: 500 }}>
                         {formatPrice(sale.now * line.qty)}
                       </span>
                     </span>
@@ -388,14 +388,14 @@ export default function CartDrawer() {
                 />
               </span>
               <span className="flex-1">
-                <span className="display block" style={{ fontSize: '.9rem' }}>
+                <span className="display block" style={{ fontSize: 'var(--fs-base)' }}>
                   {GIFT_BOX.title}
                 </span>
-                <span style={{ fontSize: '.72rem', color: 'var(--ink-3)' }}>
+                <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                   מגיעה סגורה ומוכנה למסירה
                 </span>
               </span>
-              <span className="num" style={{ fontSize: '.86rem', color: 'var(--accent)' }}>
+              <span className="num" style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}>
                 +{formatPrice(GIFT_BOX.price)}
               </span>
             </button>
@@ -403,7 +403,7 @@ export default function CartDrawer() {
 
           {fillers.length > 0 && (
             <div className="py-7">
-              <p style={{ fontSize: '.74rem', fontWeight: 500, color: 'var(--accent-deep)' }}>
+              <p style={{ fontSize: 'var(--fs-xs)', fontWeight: 500, color: 'var(--accent-deep)' }}>
                 להשלמה למשלוח חינם
               </p>
 
@@ -424,10 +424,10 @@ export default function CartDrawer() {
                       </span>
 
                       <span className="flex-1">
-                        <span className="display block" style={{ fontSize: '.9rem' }}>
+                        <span className="display block" style={{ fontSize: 'var(--fs-base)' }}>
                           {p.name}
                         </span>
-                        <span className="num" style={{ fontSize: '.74rem', color: 'var(--sale)' }}>
+                        <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--sale)' }}>
                           {formatPrice(sale.now)}
                         </span>
                       </span>
@@ -435,7 +435,7 @@ export default function CartDrawer() {
                       <button
                         onClick={() => add(p.slug, p.blessings[0])}
                         className="btn"
-                        style={{ ['--pad' as string]: '.5rem 1rem', fontSize: '.74rem' }}
+                        style={{ ['--pad' as string]: '.5rem 1rem', fontSize: 'var(--fs-xs)' }}
                       >
                         הוספה
                       </button>
@@ -454,16 +454,16 @@ export default function CartDrawer() {
             {discount > 0 && (
               <>
                 <div className="mb-2 flex items-center justify-between">
-                  <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>סכום הפריטים</span>
-                  <span className="num" style={{ fontSize: '.88rem', color: 'var(--ink-2)' }}>
+                  <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>סכום הפריטים</span>
+                  <span className="num" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
                     {formatPrice(listTotal)}
                   </span>
                 </div>
                 <div className="mb-2 flex items-center justify-between">
-                  <span style={{ color: 'var(--sale)', fontSize: '.82rem', fontWeight: 500 }}>
+                  <span style={{ color: 'var(--sale)', fontSize: 'var(--fs-sm)', fontWeight: 500 }}>
                     {PROMO.pill} · {PROMO.code}
                   </span>
-                  <span className="num" style={{ fontSize: '.88rem', fontWeight: 500, color: 'var(--sale)' }}>
+                  <span className="num" style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: 'var(--sale)' }}>
                     −{formatPrice(discount)}
                   </span>
                 </div>
@@ -473,16 +473,16 @@ export default function CartDrawer() {
             <CodeField />
 
             <div className="mb-3 flex items-center justify-between">
-              <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>משלוח</span>
-              <span style={{ fontSize: '.82rem', fontWeight: gap <= 0 ? 500 : 400, color: gap <= 0 ? 'var(--accent-deep)' : 'var(--ink-2)' }}>
+              <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>משלוח</span>
+              <span style={{ fontSize: 'var(--fs-sm)', fontWeight: gap <= 0 ? 500 : 400, color: gap <= 0 ? 'var(--accent-deep)' : 'var(--ink-2)' }}>
                 {gap <= 0 ? 'חינם' : 'מחושב בתשלום'}
               </span>
             </div>
 
             {giftFee > 0 && (
               <div className="mb-3 flex items-center justify-between">
-                <span style={{ color: 'var(--ink-2)', fontSize: '.82rem' }}>{GIFT_BOX.title}</span>
-                <span className="num" style={{ fontSize: '.88rem', color: 'var(--ink)' }}>
+                <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>{GIFT_BOX.title}</span>
+                <span className="num" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink)' }}>
                   {formatPrice(giftFee)}
                 </span>
               </div>
@@ -492,26 +492,26 @@ export default function CartDrawer() {
               className="flex items-baseline justify-between pt-3"
               style={{ borderTop: '1px solid var(--line)' }}
             >
-              <span style={{ color: 'var(--ink-2)', fontSize: '.86rem' }}>סה״כ ביניים</span>
-              <span className="num display" style={{ fontSize: '1.5rem' }}>
+              <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>סה״כ ביניים</span>
+              <span className="num display" style={{ fontSize: 'var(--fs-xl)' }}>
                 {formatPrice(total)}
               </span>
             </div>
 
-            <p className="mb-4 mt-1 text-end" style={{ fontSize: '.76rem', color: 'var(--ink-2)' }}>
+            <p className="mb-4 mt-1 text-end" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
               או עד {INSTALLMENTS} תשלומים של כ־
               <span className="num">{formatPrice(perInstallment(total))}</span>
             </p>
 
             <button
               className="btn btn-solid w-full"
-              style={{ ['--pad' as string]: '1.15rem 2rem', fontSize: '.95rem' }}
+              style={{ ['--pad' as string]: '1.15rem 2rem', fontSize: 'var(--fs-base)' }}
             >
               מעבר לתשלום מאובטח
             </button>
 
             {/* המשלוח לא נכלל כאן. ההבטחה הזו סותרת את הפס שלמעלה */}
-            <p className="mt-3 text-center" style={{ fontSize: '.7rem', color: 'var(--ink-3)' }}>
+            <p className="mt-3 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
               קופסה מרופדת, כרטיס ברכה וזכוכית מגדלת - כלולים בכל הזמנה
             </p>
           </div>

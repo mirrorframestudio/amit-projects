@@ -238,7 +238,7 @@ export default function NanoLoupe({
             insetInline: 0,
             bottom: 16,
             textAlign: 'center',
-            fontSize: '.72rem',
+            fontSize: 'var(--fs-xs)',
             letterSpacing: '.22em',
             color: b.accentSoft,
             opacity: active ? 0 : 0.8,

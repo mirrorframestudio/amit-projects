@@ -62,7 +62,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         {banner && <SectionPhoto src={banner} mode="band" ratio="16 / 7" veil={0.4} />}
 
         <div className="shell relative">
-          <nav className="mb-8 flex items-center gap-3" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+          <nav className="mb-8 flex items-center gap-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             <Link href="/" className="link-u">בית</Link>
             <span>/</span>
             <span style={{ color: 'var(--accent)' }}>{cat.title}</span>
@@ -78,7 +78,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <p className="lede reveal load mt-7 max-w-xl" style={{ ['--d' as string]: '220ms' }}>
               {cat.blurb}
             </p>
-            <p className="reveal load mt-6" style={{ fontSize: '.86rem', color: 'var(--ink-2)' }}>
+            <p className="reveal load mt-6" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               <span className="num">{products.length}</span> דגמים · מ־
               <span className="num">{formatPrice(range.min)}</span> עד{' '}
               <span className="num">{formatPrice(range.max)}</span> · כל דגם עם כל אחת מ־
@@ -132,7 +132,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               <Link
                 href="/blessings"
                 className="link-u mt-6 inline-block"
-                style={{ fontSize: '.86rem', color: 'var(--accent-deep)' }}
+                style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent-deep)' }}
               >
                 לחמש הברכות ←
               </Link>

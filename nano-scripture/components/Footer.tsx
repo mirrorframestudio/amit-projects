@@ -31,7 +31,7 @@ export default function Footer() {
         <div className="grid gap-14 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
           <div>
             <Logo size={34} />
-            <p className="lede mt-6 max-w-xs" style={{ fontSize: '.92rem' }}>
+            <p className="lede mt-6 max-w-xs" style={{ fontSize: 'var(--fs-base)' }}>
               {BRAND.tagline}
             </p>
             <div className="mt-7 flex gap-4">
@@ -40,7 +40,7 @@ export default function Footer() {
                   key={s}
                   href="#"
                   className="tap-row link-u ltr"
-                  style={{ fontSize: '.72rem', letterSpacing: '.14em', color: 'var(--ink-3)' }}
+                  style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.14em', color: 'var(--ink-3)' }}
                 >
                   {s}
                 </a>
@@ -51,11 +51,11 @@ export default function Footer() {
           <nav className="flex flex-col gap-3">
             <p className="eyebrow mb-2">הקטלוג</p>
             {ACTIVE_CATEGORIES.map((id) => (
-              <Link key={id} href={`/categories/${id}`} className="tap-row link-u" style={{ fontSize: '.87rem', color: 'var(--ink-2)' }}>
+              <Link key={id} href={`/categories/${id}`} className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
                 {CATEGORIES[id].title}
               </Link>
             ))}
-            <Link href="/blessings" className="tap-row link-u" style={{ fontSize: '.87rem', color: 'var(--ink-2)' }}>
+            <Link href="/blessings" className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               כל הברכות
             </Link>
           </nav>
@@ -63,7 +63,7 @@ export default function Footer() {
           <nav className="flex flex-col gap-3">
             <p className="eyebrow mb-2">הברכות</p>
             {BLESSINGS.map((b) => [`/blessings/${b.id}`, b.plain]).map(([href, label]) => (
-              <Link key={label} href={href} className="tap-row link-u" style={{ fontSize: '.87rem', color: 'var(--ink-2)' }}>
+              <Link key={label} href={href} className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
                 {label}
               </Link>
             ))}
@@ -71,7 +71,7 @@ export default function Footer() {
 
           <div>
             <p className="eyebrow mb-3">מכתב הבית</p>
-            <p style={{ fontSize: '.85rem', color: 'var(--ink-2)' }}>
+            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               דגמים חדשים, סדרות מוגבלות, ומעט מאוד דואר.
             </p>
             <form
@@ -93,7 +93,7 @@ export default function Footer() {
                   background: 'transparent',
                   borderBottom: '1px solid var(--line-strong)',
                   padding: '.55rem .2rem',
-                  fontSize: '.88rem',
+                  fontSize: 'var(--fs-sm)',
                   color: 'var(--ink)',
                   outline: 'none',
                 }}
@@ -101,7 +101,7 @@ export default function Footer() {
               <button
                 type="submit"
                 className="link-u px-3"
-                style={{ fontSize: '.8rem', color: 'var(--accent)' }}
+                style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
               >
                 {sent ? 'נרשמת ✦' : 'הרשמה'}
               </button>
@@ -113,7 +113,7 @@ export default function Footer() {
 
         <div
           className="flex flex-col gap-3 pt-6 md:flex-row md:items-center md:justify-between"
-          style={{ fontSize: '.72rem', color: 'var(--ink-3)' }}
+          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
         >
           <p>
             © {new Date().getFullYear()} {BRAND.name} · {BRAND.nameLatin} - כל הזכויות שמורות

@@ -26,30 +26,30 @@ export default function PromoBar({ spacer = false }: { spacer?: boolean }) {
         className="shell relative flex items-center justify-center gap-2.5 py-2 text-center sm:gap-4"
         style={{ minHeight: 38, zIndex: 1 }}
       >
-        <span aria-hidden style={{ opacity: 0.75, fontSize: '.7rem' }}>
+        <span aria-hidden style={{ opacity: 0.75, fontSize: 'var(--fs-xs)' }}>
           ✦
         </span>
 
-        <p style={{ fontSize: '.85rem', fontWeight: 700, letterSpacing: '.02em' }}>
+        <p style={{ fontSize: 'var(--fs-sm)', fontWeight: 700, letterSpacing: '.02em' }}>
           {PROMO.headline}
         </p>
 
         <span
           className="hidden sm:inline"
           aria-hidden
-          style={{ opacity: 0.42, fontSize: '.7rem' }}
+          style={{ opacity: 0.42, fontSize: 'var(--fs-xs)' }}
         >
           ·
         </span>
 
         <p
           className="hidden sm:block"
-          style={{ fontSize: '.75rem', opacity: 0.85, letterSpacing: '.02em' }}
+          style={{ fontSize: 'var(--fs-xs)', opacity: 0.85, letterSpacing: '.02em' }}
         >
           {PROMO.sub}
         </p>
 
-        <span aria-hidden style={{ opacity: 0.75, fontSize: '.7rem' }}>
+        <span aria-hidden style={{ opacity: 0.75, fontSize: 'var(--fs-xs)' }}>
           ✦
         </span>
       </div>

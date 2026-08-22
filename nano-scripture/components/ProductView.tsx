@@ -262,7 +262,7 @@ export default function ProductView({ product }: { product: Product }) {
 
           <p
             className="flex-1 self-center ps-1"
-            style={{ fontSize: '.74rem', color: 'var(--ink-3)', lineHeight: 1.6 }}
+            style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.6 }}
           >
             {VIEWS.find((v) => v.id === view)?.label}
           </p>
@@ -271,7 +271,7 @@ export default function ProductView({ product }: { product: Product }) {
 
       {/* ================= מידע ורכישה ================= */}
       <div className="pb-16">
-        <nav className="mb-6 flex items-center gap-3" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+        <nav className="mb-6 flex items-center gap-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
           <Link href="/" className="link-u">בית</Link>
           <span>/</span>
           <Link href={`/categories/${product.category}`} className="link-u">{cat.title}</Link>
@@ -283,7 +283,7 @@ export default function ProductView({ product }: { product: Product }) {
           <span
             className="mb-4 inline-block"
             style={{
-              fontSize: '.7rem',
+              fontSize: 'var(--fs-xs)',
               letterSpacing: '.14em',
               padding: '.34rem .72rem',
               borderRadius: 99,
@@ -297,7 +297,7 @@ export default function ProductView({ product }: { product: Product }) {
 
         <h1
           className="display"
-          style={{ fontSize: 'clamp(2.3rem, 4.6vw, 3.4rem)', fontWeight: 500, lineHeight: 1.1 }}
+          style={{ fontSize: 'var(--ds-1)', fontWeight: 500, lineHeight: 1.1 }}
         >
           {product.name}
         </h1>
@@ -308,7 +308,7 @@ export default function ProductView({ product }: { product: Product }) {
             <blockquote
               className="display"
               style={{
-                fontSize: '1.05rem',
+                fontSize: 'var(--fs-md)',
                 fontWeight: 400,
                 lineHeight: 1.7,
                 color: 'var(--accent-deep)',
@@ -321,7 +321,7 @@ export default function ProductView({ product }: { product: Product }) {
             <figcaption
               className="mt-1.5"
               style={{
-                fontSize: '.7rem',
+                fontSize: 'var(--fs-xs)',
                 letterSpacing: '.14em',
                 color: 'var(--ink-3)',
                 paddingInlineStart: '.9rem',
@@ -333,7 +333,7 @@ export default function ProductView({ product }: { product: Product }) {
         ) : (
           <p className="mt-3 flex items-center gap-3">
             <span aria-hidden style={{ width: 26, height: 1, background: 'var(--accent)', flexShrink: 0 }} />
-            <span className="ltr" style={{ fontSize: '.68rem', letterSpacing: '.32em', color: 'var(--accent)' }}>
+            <span className="ltr" style={{ fontSize: 'var(--fs-2xs)', letterSpacing: '.32em', color: 'var(--accent)' }}>
               {product.nameLatin}
             </span>
           </p>
@@ -342,12 +342,12 @@ export default function ProductView({ product }: { product: Product }) {
         <div className="mt-6 flex flex-wrap items-baseline gap-x-4 gap-y-2">
           <span
             className="num display"
-            style={{ fontSize: '2rem', fontWeight: sale.discounted ? 500 : undefined, color: sale.discounted ? 'var(--sale)' : undefined }}
+            style={{ fontSize: 'var(--fs-2xl)', fontWeight: sale.discounted ? 500 : undefined, color: sale.discounted ? 'var(--sale)' : undefined }}
           >
             {formatPrice(sale.now)}
           </span>
           {(sale.discounted || product.compareAt) && (
-            <span className="num" style={{ fontSize: '1rem', color: 'var(--ink-3)', textDecoration: 'line-through' }}>
+            <span className="num" style={{ fontSize: 'var(--fs-md)', color: 'var(--ink-3)', textDecoration: 'line-through' }}>
               {formatPrice(product.compareAt ?? sale.was)}
             </span>
           )}
@@ -355,7 +355,7 @@ export default function ProductView({ product }: { product: Product }) {
             <span
               className="num"
               style={{
-                fontSize: '.74rem',
+                fontSize: 'var(--fs-xs)',
                 fontWeight: 700,
                 letterSpacing: '.04em',
                 padding: '.3rem .72rem',
@@ -370,7 +370,7 @@ export default function ProductView({ product }: { product: Product }) {
           )}
           <span
             style={{
-              fontSize: '.72rem',
+              fontSize: 'var(--fs-xs)',
               letterSpacing: '.06em',
               color: 'var(--ink-2)',
               border: '1px solid var(--line)',
@@ -382,7 +382,7 @@ export default function ProductView({ product }: { product: Product }) {
           </span>
         </div>
 
-        <p className="mt-2" style={{ fontSize: '.8rem', color: 'var(--ink-2)' }}>
+        <p className="mt-2" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
           או עד {INSTALLMENTS} תשלומים של כ־
           <span className="num" style={{ color: 'var(--ink)' }}>
             {formatPrice(perInstallment(sale.now))}
@@ -391,7 +391,7 @@ export default function ProductView({ product }: { product: Product }) {
 
         {siblings.length > 1 && (
           <div className="mt-7">
-            <p className="mb-3" style={{ fontSize: '.78rem', color: 'var(--ink-3)' }}>
+            <p className="mb-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
               גימור:{' '}
               <span style={{ color: 'var(--ink)' }}>{FINISHES[product.finish]}</span>
             </p>
@@ -432,11 +432,11 @@ export default function ProductView({ product }: { product: Product }) {
             <p className="eyebrow" style={{ color: b.accentInk }}>
               {one ? 'הברכה שנצרבת' : 'הברכה שתיצרב'}
             </p>
-            <span style={{ fontSize: '.72rem', color: 'var(--ink-3)' }}>
+            <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
               {one ? 'נוסח אחד' : `${available.length} נוסחים לבחירה`}
             </span>
           </div>
-          <p className="mb-5" style={{ fontSize: '.82rem', color: 'var(--ink-3)' }}>
+          <p className="mb-5" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>
             {one
               ? 'בדגם הזה נצרב נוסח אחד, והוא נבחר לפי אופי התכשיט.'
               : 'אותו תכשיט, נוסח אחר. הבחירה משנה רק את מה שנצרב על השבב.'}
@@ -479,14 +479,14 @@ export default function ProductView({ product }: { product: Product }) {
                     <span className="flex items-baseline justify-between gap-3">
                       <span
                         className="display"
-                        style={{ fontSize: '1.06rem', color: on ? item.accentInk : 'var(--ink)' }}
+                        style={{ fontSize: 'var(--fs-md)', color: on ? item.accentInk : 'var(--ink)' }}
                       >
                         {item.title}
                       </span>
                       <span
                         className="num"
                         style={{
-                          fontSize: '.7rem',
+                          fontSize: 'var(--fs-xs)',
                           color: on ? item.accentInk : 'var(--ink-3)',
                           flexShrink: 0,
                         }}
@@ -495,7 +495,7 @@ export default function ProductView({ product }: { product: Product }) {
                       </span>
                     </span>
 
-                    <span className="mt-0.5 block" style={{ fontSize: '.75rem', color: 'var(--ink-3)' }}>
+                    <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                       {item.forWhom}
                     </span>
 
@@ -554,7 +554,7 @@ export default function ProductView({ product }: { product: Product }) {
               onClick={() => setQty((q) => Math.max(1, q - 1))}
               aria-label="הפחתת כמות"
               className="tap"
-              style={{ color: 'var(--ink-2)', fontSize: '1.05rem' }}
+              style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-md)' }}
             >
               −
             </button>
@@ -565,7 +565,7 @@ export default function ProductView({ product }: { product: Product }) {
               onClick={() => setQty((q) => q + 1)}
               aria-label="הוספת כמות"
               className="tap"
-              style={{ color: 'var(--ink-2)', fontSize: '1.05rem' }}
+              style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-md)' }}
             >
               +
             </button>
@@ -614,13 +614,13 @@ export default function ProductView({ product }: { product: Product }) {
           </span>
 
           <span className="flex-1">
-            <span className="display block" style={{ fontSize: '.98rem' }}>
+            <span className="display block" style={{ fontSize: 'var(--fs-base)' }}>
               {GIFT_BOX.title}
               <span className="num" style={{ marginInlineStart: '.5rem', color: 'var(--accent)' }}>
                 +{formatPrice(GIFT_BOX.price)}
               </span>
             </span>
-            <span className="mt-0.5 block" style={{ fontSize: '.75rem', color: 'var(--ink-3)', lineHeight: 1.6 }}>
+            <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.6 }}>
               {GIFT_BOX.note}
             </span>
           </span>
@@ -633,7 +633,7 @@ export default function ProductView({ product }: { product: Product }) {
               <span aria-hidden style={{ color: 'var(--accent)' }}>
                 {a.icon}
               </span>
-              <span style={{ fontSize: '.72rem', color: 'var(--ink-2)', lineHeight: 1.5 }}>
+              <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.5 }}>
                 {a.label}
               </span>
             </li>
@@ -652,22 +652,22 @@ export default function ProductView({ product }: { product: Product }) {
             background: `color-mix(in oklab, ${b.accentSoft} 26%, var(--surface))`,
           }}
         >
-          <p style={{ fontSize: '.66rem', letterSpacing: '.22em', color: b.accentInk }}>
+          <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: '.22em', color: b.accentInk }}>
             {b.sources}
           </p>
 
-          <p className="display mt-4" style={{ fontSize: '1.24rem', lineHeight: 1.7, color: 'var(--ink)' }}>
+          <p className="display mt-4" style={{ fontSize: 'var(--fs-lg)', lineHeight: 1.7, color: 'var(--ink)' }}>
             {b.opening}
           </p>
-          <p className="mt-1.5" style={{ fontSize: '.7rem', color: 'var(--ink-3)' }}>{b.openingSource}</p>
+          <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>{b.openingSource}</p>
 
-          <p className="mt-4" style={{ fontSize: '.88rem', color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          <p className="mt-4" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.8 }}>
             {b.blurb}
           </p>
 
           <div
             className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 pt-4"
-            style={{ borderTop: '1px solid var(--line)', fontSize: '.74rem', color: 'var(--ink-3)' }}
+            style={{ borderTop: '1px solid var(--line)', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
           >
             <span className="num">{b.words} מילים</span>
             <span className="num">{b.chars.toLocaleString('he-IL')} תווים</span>
@@ -698,7 +698,7 @@ export default function ProductView({ product }: { product: Product }) {
                   aria-expanded={open}
                   className="flex w-full items-center justify-between gap-6 py-5 text-start"
                 >
-                  <span className="display" style={{ fontSize: '1rem' }}>
+                  <span className="display" style={{ fontSize: 'var(--fs-md)' }}>
                     {group.title}
                   </span>
                   <span
@@ -706,7 +706,7 @@ export default function ProductView({ product }: { product: Product }) {
                     style={{
                       color: 'var(--accent)',
                       flexShrink: 0,
-                      fontSize: '1.2rem',
+                      fontSize: 'var(--fs-lg)',
                       lineHeight: 1,
                       transform: open ? 'rotate(45deg)' : 'none',
                       transition: 'transform .4s var(--ease)',
@@ -732,11 +732,11 @@ export default function ProductView({ product }: { product: Product }) {
                       >
                         <dt
                           className="sm:w-40 sm:shrink-0"
-                          style={{ fontSize: '.82rem', color: 'var(--ink-3)' }}
+                          style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}
                         >
                           {row.label}
                         </dt>
-                        <dd style={{ fontSize: '.88rem', color: 'var(--ink-2)', lineHeight: 1.65 }}>
+                        <dd style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.65 }}>
                           {row.value}
                         </dd>
                       </div>
@@ -783,24 +783,24 @@ export default function ProductView({ product }: { product: Product }) {
           </span>
 
           <span className="hidden min-w-0 flex-1 sm:block">
-            <span className="display block truncate" style={{ fontSize: '.98rem' }}>
+            <span className="display block truncate" style={{ fontSize: 'var(--fs-base)' }}>
               {product.name}
             </span>
-            <span style={{ fontSize: '.74rem', color: 'var(--ink-2)' }}>{b.plain}</span>
+            <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>{b.plain}</span>
           </span>
 
           <span className="flex items-baseline gap-2 sm:flex-shrink-0">
             {sale.discounted && (
               <span
                 className="num"
-                style={{ fontSize: '.78rem', color: 'var(--ink-3)', textDecoration: 'line-through' }}
+                style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', textDecoration: 'line-through' }}
               >
                 {formatPrice(product.price)}
               </span>
             )}
             <span
               className="num display"
-              style={{ fontSize: '1.15rem', color: sale.discounted ? 'var(--sale)' : undefined }}
+              style={{ fontSize: 'var(--fs-lg)', color: sale.discounted ? 'var(--sale)' : undefined }}
             >
               {formatPrice(sale.now)}
             </span>
@@ -809,7 +809,7 @@ export default function ProductView({ product }: { product: Product }) {
           <button
             onClick={() => add(product.slug, blessing, qty)}
             className="btn btn-solid flex-1 sm:max-w-xs"
-            style={{ ['--pad' as string]: '.85rem 1.6rem', fontSize: '.88rem' }}
+            style={{ ['--pad' as string]: '.85rem 1.6rem', fontSize: 'var(--fs-sm)' }}
           >
             הוספה לעגלה
           </button>

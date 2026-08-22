@@ -63,10 +63,10 @@ export default function Trust() {
               </svg>
             </span>
             <span>
-              <span className="block" style={{ fontSize: '.86rem', color: 'var(--ink)' }}>
+              <span className="block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink)' }}>
                 {it.title}
               </span>
-              <span className="block" style={{ fontSize: '.72rem', color: 'var(--ink-3)' }}>
+              <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                 {it.note}
               </span>
             </span>

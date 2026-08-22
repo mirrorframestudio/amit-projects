@@ -41,8 +41,8 @@ export default function BlessingsPage() {
               { v: '0.5 מ״מ²', l: 'שטח הצריבה' },
             ].map((s, i) => (
               <div key={s.l} className="reveal load" style={{ ['--d' as string]: `${380 + i * 70}ms` }}>
-                <p className="num display" style={{ fontSize: '1.8rem', lineHeight: 1 }}>{s.v}</p>
-                <p className="mt-1.5" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>{s.l}</p>
+                <p className="num display" style={{ fontSize: 'var(--fs-2xl)', lineHeight: 1 }}>{s.v}</p>
+                <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>{s.l}</p>
               </div>
             ))}
           </div>
@@ -52,7 +52,7 @@ export default function BlessingsPage() {
       <section className="pb-20">
         <div className="shell">
           <NanoLoupe blessing={BLESSINGS[0].id} height={360} />
-          <p className="mt-4 text-center" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+          <p className="mt-4 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             הדמיית פני השבב · {BLESSINGS[0].plain} · הגדלה פי 9
           </p>
         </div>

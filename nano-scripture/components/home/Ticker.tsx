@@ -30,7 +30,7 @@ export default function Ticker() {
                 key={`${rep}-${i}`}
                 style={{
                   padding: '0 1.6rem',
-                  fontSize: '.74rem',
+                  fontSize: 'var(--fs-xs)',
                   letterSpacing: '.24em',
                   whiteSpace: 'nowrap',
                   color: w === '✦' ? 'var(--accent)' : 'var(--ink-3)',

@@ -27,7 +27,7 @@ export default function Worn() {
         </div>
         <p
           className="lede reveal max-w-sm"
-          style={{ ['--d' as string]: '160ms', fontSize: '.95rem' }}
+          style={{ ['--d' as string]: '160ms', fontSize: 'var(--fs-base)' }}
         >
           השבב הכחול הוא הסימן - בכל דגם הוא יושב במקום אחר, ותמיד הוא מה שקולט את
           האור ראשון.
@@ -78,10 +78,10 @@ export default function Worn() {
               className="absolute bottom-5 flex items-baseline gap-2.5"
               style={{ insetInlineStart: 20, color: '#fff' }}
             >
-              <span className="display" style={{ fontSize: '1.15rem' }}>
+              <span className="display" style={{ fontSize: 'var(--fs-lg)' }}>
                 {product!.name}
               </span>
-              <span style={{ fontSize: '.72rem', opacity: 0.72 }}>
+              <span style={{ fontSize: 'var(--fs-xs)', opacity: 0.72 }}>
                 {shot.products.length > 1 ? `+${shot.products.length - 1} בפריים` : 'לפריט ←'}
               </span>
             </span>

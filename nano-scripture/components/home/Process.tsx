@@ -94,12 +94,12 @@ export default function Process() {
                 />
                 <p
                   className="num display"
-                  style={{ fontSize: '.9rem', letterSpacing: '.3em', color: 'var(--accent)' }}
+                  style={{ fontSize: 'var(--fs-base)', letterSpacing: '.3em', color: 'var(--accent)' }}
                 >
                   {s.n}
                 </p>
                 <h3 className="display t-2 mt-3">{s.title}</h3>
-                <p className="lede mt-4 max-w-xl" style={{ fontSize: '1rem' }}>
+                <p className="lede mt-4 max-w-xl" style={{ fontSize: 'var(--fs-md)' }}>
                   {s.body}
                 </p>
               </div>

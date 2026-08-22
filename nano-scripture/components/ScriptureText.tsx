@@ -48,7 +48,7 @@ export default function ScriptureText({
                 position: 'absolute',
                 insetInlineStart: 0,
                 top: '.42em',
-                fontSize: '.62rem',
+                fontSize: 'var(--fs-2xs)',
                 letterSpacing: '.04em',
                 color: accent,
                 opacity: 0.65,

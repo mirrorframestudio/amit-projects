@@ -16,7 +16,7 @@ export default function Accordion({ items }: { items: QA[] }) {
             aria-expanded={open === i}
             className="flex w-full items-start justify-between gap-6 py-6 text-start"
           >
-            <span className="display" style={{ fontSize: '1.08rem', lineHeight: 1.5 }}>
+            <span className="display" style={{ fontSize: 'var(--fs-md)', lineHeight: 1.5 }}>
               {item.q}
             </span>
             <span
@@ -26,7 +26,7 @@ export default function Accordion({ items }: { items: QA[] }) {
                 marginTop: 4,
                 transform: open === i ? 'rotate(45deg)' : 'none',
                 transition: 'transform .45s var(--ease)',
-                fontSize: '1.25rem',
+                fontSize: 'var(--fs-lg)',
                 lineHeight: 1,
               }}
               aria-hidden
@@ -43,7 +43,7 @@ export default function Accordion({ items }: { items: QA[] }) {
             }}
           >
             <div style={{ overflow: 'hidden' }}>
-              <p className="lede pb-7" style={{ fontSize: '.96rem', maxWidth: '62ch' }}>
+              <p className="lede pb-7" style={{ fontSize: 'var(--fs-base)', maxWidth: '62ch' }}>
                 {item.a}
               </p>
             </div>

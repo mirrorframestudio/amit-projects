@@ -52,7 +52,7 @@ export default function Assurance() {
           >
             ״
           </span>
-          <blockquote className="display relative" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', lineHeight: 1.55 }}>
+          <blockquote className="display relative" style={{ fontSize: 'var(--ds-2)', lineHeight: 1.55 }}>
             הטקסט על השבב הוא הנוסח המלא, מילה במילה, בלי קיצור ובלי השמטה.
             אפשר לקרוא אותו כאן באתר לפני שקונים, ולהשוות למקור.
           </blockquote>
@@ -61,7 +61,7 @@ export default function Assurance() {
             <Link
               href="/blessings"
               className="link-u"
-              style={{ fontSize: '.82rem', color: 'var(--accent-deep)' }}
+              style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent-deep)' }}
             >
               לקריאת חמשת הנוסחים ←
             </Link>
@@ -97,7 +97,7 @@ export default function Assurance() {
               </span>
               <div>
                 <h3 className="display t-3">{p.title}</h3>
-                <p className="mt-2" style={{ fontSize: '.9rem', color: 'var(--ink-2)', lineHeight: 1.75 }}>
+                <p className="mt-2" style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)', lineHeight: 1.75 }}>
                   {p.body}
                 </p>
               </div>

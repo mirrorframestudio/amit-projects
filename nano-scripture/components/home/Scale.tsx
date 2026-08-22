@@ -38,11 +38,11 @@ export default function Scale() {
               <div key={s.label} className="reveal" style={{ ['--d' as string]: `${i * 90}ms` }}>
                 <p
                   className="display gold-text"
-                  style={{ fontSize: 'clamp(1.9rem, 3.4vw, 2.9rem)', lineHeight: 1 }}
+                  style={{ fontSize: 'var(--ds-2)', lineHeight: 1 }}
                 >
                   <Counter to={s.value} decimals={s.decimals} />
                 </p>
-                <p className="mt-2" style={{ fontSize: '.78rem', color: 'var(--ink-3)', letterSpacing: '.04em' }}>
+                <p className="mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.04em' }}>
                   {s.label}
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function Scale() {
 
         <div className="reveal-x">
           <NanoLoupe blessing={BLESSINGS[0].id} height={520} />
-          <p className="mt-5 text-center" style={{ fontSize: '.75rem', color: 'var(--ink-3)' }}>
+          <p className="mt-5 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             הדמיית פני השבב · הגדלה פי 9
           </p>
         </div>

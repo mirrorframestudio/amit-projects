@@ -38,6 +38,28 @@
   --on-sale: #fff7f6;
   --sale-soft: rgb(216 31 42 / 0.1);
 
+  /* --- סולם טיפוגרפי ---
+     היו כאן 51 גדלים שונים ב־177 מקומות, מהם חמישה־עשר בין 0.7rem
+     ל־1rem בלבד. הפרש של 0.01rem אינו נראה, אבל היעדר החוקיות כן
+     מורגש. שמונה מדרגות ביחס של כ־1.12, וכל גודל באתר נשאב מהן. */
+  --fs-2xs: 0.66rem;
+  --fs-xs: 0.74rem;
+  --fs-sm: 0.84rem;
+  --fs-base: 0.94rem;
+  --fs-md: 1.06rem;
+  --fs-lg: 1.2rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 1.9rem;
+
+  /* כותרות זורמות. היו שתים־עשרה נוסחאות clamp שונות בקוד; אלה ארבע
+     המדרגות, ו־.t-hero/.t-1/.t-2/.t-3 שואבות מהן כדי שיהיה מקור אחד */
+  --ds-hero: clamp(2.9rem, 8.2vw, 7.4rem);
+  --ds-1: clamp(2.1rem, 5vw, 4.2rem);
+  --ds-2: clamp(1.55rem, 3vw, 2.6rem);
+  --ds-3: clamp(1.15rem, 1.8vw, 1.5rem);
+  /* דקורטיבי בלבד: ספרת 404 והחותם בפוטר */
+  --ds-mega: clamp(4rem, 16vw, 11rem);
+
   --font-display: var(--font-app), system-ui, sans-serif;
   --font-body: var(--font-app), system-ui, sans-serif;
   /* כותרות כבדות. הדק היוקרתי נבדק ונפסל — הוא מה שגרם לאתר להיקרא מת,
@@ -142,20 +164,20 @@ body::after {
 }
 
 .t-hero {
-  font-size: clamp(2.9rem, 8.2vw, 7.4rem);
+  font-size: var(--ds-hero);
 }
 .t-1 {
-  font-size: clamp(2.1rem, 5vw, 4.2rem);
+  font-size: var(--ds-1);
 }
 .t-2 {
-  font-size: clamp(1.55rem, 3vw, 2.6rem);
+  font-size: var(--ds-2);
 }
 .t-3 {
-  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  font-size: var(--ds-3);
 }
 
 .eyebrow {
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--accent);

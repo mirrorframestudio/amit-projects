@@ -60,16 +60,16 @@ export default function Categories() {
                 <div className="flex flex-1 flex-col p-7">
                   <div className="flex items-baseline justify-between">
                     <h3 className="display t-2">{cat.title}</h3>
-                    <span className="num" style={{ fontSize: '.74rem', color: 'var(--ink-3)' }}>
+                    <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                       {products.length} דגמים
                     </span>
                   </div>
 
-                  <p className="mt-1" style={{ fontSize: '.75rem', letterSpacing: '.12em', color: 'var(--ink-3)' }}>
+                  <p className="mt-1" style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.12em', color: 'var(--ink-3)' }}>
                     {cat.subtitle}
                   </p>
 
-                  <p className="mt-4 flex-1" style={{ fontSize: '.87rem', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+                  <p className="mt-4 flex-1" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
                     {cat.blurb}
                   </p>
 
@@ -77,12 +77,12 @@ export default function Categories() {
                     className="mt-6 flex items-center justify-between pt-5"
                     style={{ borderTop: '1px solid var(--line)' }}
                   >
-                    <span className="num" style={{ fontSize: '.78rem', color: 'var(--ink-3)' }}>
+                    <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                       {formatPrice(range.min)} - {formatPrice(range.max)}
                     </span>
                     <span
                       className="link-u"
-                      style={{ fontSize: '.82rem', color: 'var(--accent)', letterSpacing: '.03em' }}
+                      style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)', letterSpacing: '.03em' }}
                     >
                       לצפייה ב{cat.title} ←
                     </span>
