@@ -16,6 +16,7 @@ import {
   FINISH_SWATCH,
   finishSiblings,
   formatPrice,
+  sceneFocus,
   type Product,
 } from '@/lib/catalog';
 import { useCart } from '@/lib/cart';
@@ -193,6 +194,7 @@ export default function ProductView({ product }: { product: Product }) {
               alt={product.name}
               fill
               sizes="(max-width: 1024px) 92vw, 46vw"
+              style={{ objectPosition: sceneFocus(product.scenes[sceneIndex]) }}
               className="object-cover"
             />
           )}
@@ -246,6 +248,7 @@ export default function ProductView({ product }: { product: Product }) {
                     alt=""
                     fill
                     sizes="84px"
+                    style={{ objectPosition: sceneFocus(product.scenes?.[Number(v.id.slice(6))] ?? '') }}
                     className="object-cover"
                   />
                 )}

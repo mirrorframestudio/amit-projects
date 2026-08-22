@@ -663,5 +663,23 @@ export function photoFor(
     return { src: shot.file, kind: 'worn', focus: wornFocus(shot, product.slug) };
   }
   const scene = product.scenes?.[0];
-  return scene ? { src: scene, kind: 'scene', focus: '50% 50%' } : null;
+  return scene ? { src: scene, kind: 'scene', focus: sceneFocus(scene) } : null;
+}
+
+/**
+ * מוקד החיתוך של צילומי הסצנה, כערך object-position.
+ *
+ * הגלריה בדף המוצר היא ריבוע. צילום לרוחב מאבד בו רבע מכל צד וזה
+ * נסבל, אבל שלושת הצילומים לגובה (788x1400) מאבדים 44% מהגובה, ובכולם
+ * התכשיט יושב בשני־שלישים התחתונים - כלומר חיתוך למרכז דוחף אותו
+ * לשפה. שלושתם נמדדו בנפרד ולא הוערכו לפי דפוס.
+ */
+const SCENE_FOCUS: Record<string, string> = {
+  '/scene/toldot-3.jpg': '50% 67%',
+  '/scene/lo-yanum-3.jpg': '49% 65%',
+  '/scene/al-kapayim-3.jpg': '56% 68%',
+};
+
+export function sceneFocus(src: string) {
+  return SCENE_FOCUS[src] ?? '50% 50%';
 }
