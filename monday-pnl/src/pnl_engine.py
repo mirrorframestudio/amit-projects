@@ -35,6 +35,18 @@ def _calc_item_cogs(product: dict[str, Any]) -> float:
     if product.get("is_boots"):
         return settings.COST_BOOTS * qty
 
+    # Accessories are whole products with their own cost, and like boots they
+    # take no shirt add-ons.
+    accessory_costs = {
+        "grip_socks": settings.COST_GRIP_SOCKS,
+        "ball":       settings.COST_BALL,
+        "scarf":      settings.COST_SCARF,
+        "keychain":   settings.COST_KEYCHAIN,
+    }
+    kind = product.get("accessory_kind")
+    if kind in accessory_costs:
+        return accessory_costs[kind] * qty
+
     # Base cost: retro or player version = $13, regular = $11
     if product.get("is_retro"):
         base = settings.COST_RETRO

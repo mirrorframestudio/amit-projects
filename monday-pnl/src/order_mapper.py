@@ -127,6 +127,26 @@ def _is_boots(product_name: str) -> bool:
     return any(k in lower for k in ("נעלי כדורגל", "נעל כדורגל", "football boots"))
 
 
+# Accessories carry their own cost, not the shirt default. The ball pattern
+# keeps its trailing space on purpose: every shirt and boot name contains
+# "כדורגל", and a bare "כדור" would price 400 pairs of boots as a football.
+_ACCESSORY_PATTERNS = (
+    ("grip_socks", ("גרבי גריפ", "grip socks")),
+    ("ball",       ("כדור ", "כדור-")),
+    ("scarf",      ("צעיף", "scarf")),
+    ("keychain",   ("מחזיק מפתחות", "keychain")),
+)
+
+
+def _accessory_kind(product_name: str) -> str | None:
+    """Which accessory this is, if any. First match wins; patterns are disjoint."""
+    lower = (product_name or "").lower()
+    for kind, keys in _ACCESSORY_PATTERNS:
+        if any(k.lower() in lower for k in keys):
+            return kind
+    return None
+
+
 def _parse_subitems(subitems: list[dict]) -> list[dict[str, Any]]:
     """Parse subitems (products) from an order with all cost flags."""
     products = []
@@ -147,6 +167,7 @@ def _parse_subitems(subitems: list[dict]) -> list[dict[str, Any]]:
             "cost_override": _safe_float(get_sub_text("cost")),
             "is_retro": _is_retro(name),
             "is_boots": _is_boots(name),
+            "accessory_kind": _accessory_kind(name),
             "is_player_version": _is_yes(get_sub_text("player_version")),
             "has_name_number": _has_name_number(get_sub_text("name_number")),
             "has_pants": _is_yes(get_sub_text("pants")),
