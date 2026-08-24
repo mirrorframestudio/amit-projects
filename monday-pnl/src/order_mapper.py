@@ -117,6 +117,16 @@ def _is_retro(product_name: str) -> bool:
     return "retro" in product_name.lower()
 
 
+def _is_boots(product_name: str) -> bool:
+    """Football boots cost $58, not $11 — see settings.COST_BOOTS.
+
+    Every boot in the catalogue is named "נעלי כדורגל ..."; the singular and
+    the English are covered in case a future listing is titled differently.
+    """
+    lower = (product_name or "").lower()
+    return any(k in lower for k in ("נעלי כדורגל", "נעל כדורגל", "football boots"))
+
+
 def _parse_subitems(subitems: list[dict]) -> list[dict[str, Any]]:
     """Parse subitems (products) from an order with all cost flags."""
     products = []
@@ -136,6 +146,7 @@ def _parse_subitems(subitems: list[dict]) -> list[dict[str, Any]]:
             "quantity": int(_safe_float(get_sub_text("quantity")) or 1),
             "cost_override": _safe_float(get_sub_text("cost")),
             "is_retro": _is_retro(name),
+            "is_boots": _is_boots(name),
             "is_player_version": _is_yes(get_sub_text("player_version")),
             "has_name_number": _has_name_number(get_sub_text("name_number")),
             "has_pants": _is_yes(get_sub_text("pants")),

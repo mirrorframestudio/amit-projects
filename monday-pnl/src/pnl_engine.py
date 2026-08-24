@@ -1,7 +1,7 @@
 """
 P&L calculation engine.
 
-COGS per subitem:
+COGS per subitem (boots $58; see settings.COST_BOOTS):
   Base:  Regular shirt = $11, Retro = $13, Player version = $13
   Add-ons: Name & Number +$2, Pants +$5, Long shirt +$2, Socks $0, Patch $0
   Shipping: Home delivery +$4 per order, Pickup = $0
@@ -29,6 +29,11 @@ def _get_rate() -> float:
 def _calc_item_cogs(product: dict[str, Any]) -> float:
     """Calculate COGS for a single subitem (product)."""
     qty = product.get("quantity", 1) or 1
+
+    # Boots first, and they take no add-ons: a boot line cannot carry a name
+    # print or shorts, and a stray flag must not add $5 to a $58 item.
+    if product.get("is_boots"):
+        return settings.COST_BOOTS * qty
 
     # Base cost: retro or player version = $13, regular = $11
     if product.get("is_retro"):
