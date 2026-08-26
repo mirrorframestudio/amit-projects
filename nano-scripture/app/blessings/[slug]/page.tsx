@@ -88,7 +88,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       {/* ---- השבב ---- */}
       <section className="pb-20">
         <div className="shell">
-          <NanoLoupe blessing={b.id} height={440} zoom={11} radius={104} />
+          <NanoLoupe blessing={b.id} height={440} radius={62} />
           <p className="mt-4 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
             זהו בדיוק הנוסח שנצרב - העבירו את הסמן כדי לקרוא אותו
           </p>

@@ -85,7 +85,7 @@ export default function CraftPage() {
       {/* ---- לוח ננו ענק ---- */}
       <section className="pb-10">
         <div className="shell">
-          <NanoLoupe blessing={BLESSINGS[0].id} height={480} zoom={13} radius={112} />
+          <NanoLoupe blessing={BLESSINGS[0].id} height={480} radius={70} />
         </div>
       </section>
 

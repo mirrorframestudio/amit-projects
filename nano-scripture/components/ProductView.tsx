@@ -227,7 +227,7 @@ export default function ProductView({ product }: { product: Product }) {
           )}
           {view === 'chip' && (
             <div className="absolute inset-0">
-              <NanoLoupe blessing={blessing} height="100%" zoom={12} radius={104} />
+              <NanoLoupe blessing={blessing} height="100%" radius={62} />
             </div>
           )}
           {view === 'scale' && <ScaleCompare accent={b.accent} />}

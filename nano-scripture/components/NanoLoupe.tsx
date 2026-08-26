@@ -13,14 +13,22 @@ import { blessingText, layoutNano, nanoFont, paintNano, type NanoLayout } from '
 export default function NanoLoupe({
   blessing,
   height = 420,
-  zoom = 9,
-  radius = 96,
+  readPx = 19,
+  radius = 58,
   fontSize = 3.4,
   hint = true,
 }: {
   blessing: BlessingId;
   height?: number | string;
-  zoom?: number;
+  /**
+   * גובה האות בתוך העדשה, בפיקסלים.
+   *
+   * קודם הועבר כאן מקדם הגדלה קבוע, וזו הייתה טעות: גודל האות על
+   * הלוח נקבע בזמן ריצה לפי אורך הנוסח ורוחב הרכיב, ולכן אותו מקדם
+   * נתן פעם מילה ופעם אות אחת שממלאת את כל העדשה. יעד בפיקסלים
+   * מחזיר את אותה קריאוּת בכל נוסח ובכל מידה.
+   */
+  readPx?: number;
   radius?: number;
   fontSize?: number;
   hint?: boolean;
@@ -32,6 +40,8 @@ export default function NanoLoupe({
   const posRef = useRef({ x: -999, y: -999 });
   const frame = useRef(0);
   const [active, setActive] = useState(false);
+  /** רדיוס העדשה בפועל - נגזר מרוחב הלוח, חסום בערך שהרכיב קיבל */
+  const [r, setR] = useState(radius);
 
   const b = getBlessing(blessing);
   const source = blessingText(blessing);
@@ -75,7 +85,15 @@ export default function NanoLoupe({
     document.fonts.ready.then(() => alive && paintBase());
     paintBase();
 
-    const ro = new ResizeObserver(() => paintBase());
+    // העדשה נמדדת ביחס ללוח ולא במספר קבוע. רדיוס קבוע נראה סביר
+    // ברוחב אחד וכעדשה שבולעת שליש מהלוח ברוחב אחר, וזה מה שקרה
+    const fit = () => setR(Math.round(Math.min(radius, Math.max(34, el.clientWidth * 0.08))));
+    fit();
+
+    const ro = new ResizeObserver(() => {
+      paintBase();
+      fit();
+    });
     ro.observe(el);
     return () => {
       alive = false;
@@ -95,7 +113,9 @@ export default function NanoLoupe({
 
     const { x, y } = posRef.current;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const size = radius * 2;
+    const size = r * 2;
+    // מקדם ההגדלה נגזר מגודל האות בפועל, ולא נקבע מראש
+    const zoom = Math.max(1.6, readPx / layout.fontSize);
 
     if (cv.width !== size * dpr) {
       cv.width = size * dpr;
@@ -109,14 +129,14 @@ export default function NanoLoupe({
 
     ctx.save();
     ctx.beginPath();
-    ctx.arc(radius, radius, radius, 0, Math.PI * 2);
+    ctx.arc(r, r, r, 0, Math.PI * 2);
     ctx.clip();
 
     ctx.fillStyle = back;
     ctx.fillRect(0, 0, size, size);
 
     // מעבר למערכת הקואורדינטות של הלוח, מוגדלת סביב נקודת הסמן
-    ctx.translate(radius, radius);
+    ctx.translate(r, r);
     ctx.scale(zoom, zoom);
     ctx.translate(-x, -y);
 
@@ -127,7 +147,7 @@ export default function NanoLoupe({
 
     // רק מה שנופל בתוך העדשה מצויר — כמה שורות, וכמה תווים בכל שורה.
     // בלי החיתוך הזה כל תזוזה הייתה מציירת אלפי גליפים שאיש לא רואה.
-    const span = radius / zoom;
+    const span = r / zoom;
     const first = Math.max(0, Math.floor((y - span - layout.top) / layout.lineHeight) - 1);
     const last = Math.min(
       layout.lines.length - 1,
@@ -145,7 +165,7 @@ export default function NanoLoupe({
       );
     }
     ctx.restore();
-  }, [back, ink, radius, zoom]);
+  }, [back, ink, r, readPx]);
 
   const move = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -208,8 +228,8 @@ export default function NanoLoupe({
           position: 'absolute',
           left: 'var(--mx, 50%)',
           top: 'var(--my, 50%)',
-          width: radius * 2,
-          height: radius * 2,
+          width: r * 2,
+          height: r * 2,
           transform: 'translate(-50%, -50%)',
           borderRadius: '50%',
           overflow: 'hidden',
