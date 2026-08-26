@@ -23,19 +23,17 @@ import { useCart } from '@/lib/cart';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { wornFor, wornFocus } from '@/lib/worn';
 import GiftTags from './GiftTags';
-import ScaleCompare from './ScaleCompare';
 import ProductStory from './ProductStory';
 import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
 import Accordion, { type QA } from './Accordion';
 import { POLICY } from '@/lib/policy';
 
-type View = 'jewel' | 'worn' | 'chip' | 'scale' | `scene-${number}`;
+type View = 'jewel' | 'worn' | 'chip' | `scene-${number}`;
 
 const BASE_VIEWS: { id: View; label: string }[] = [
   { id: 'jewel', label: 'התכשיט' },
   { id: 'chip', label: 'הברכה על השבב' },
-  { id: 'scale', label: 'קנה מידה' },
 ];
 
 /* שורת הביטחון שמתחת לכפתור. אייקון נקרא לפני שהעין מגיעה למילה */
@@ -231,7 +229,6 @@ export default function ProductView({ product }: { product: Product }) {
               <NanoLoupe blessing={blessing} height="100%" radius={62} />
             </div>
           )}
-          {view === 'scale' && <ScaleCompare accent={b.accent} />}
         </div>
 
         {/* תמונות ממוזערות — כמו בכל חנות, ולא כפתורי טקסט */}
@@ -286,16 +283,6 @@ export default function ProductView({ product }: { product: Product }) {
                     className="nano-grid absolute inset-2"
                     style={{ ['--accent' as string]: b.accentSoft }}
                   />
-                )}
-                {v.id === 'scale' && (
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 flex items-center justify-center gap-1.5"
-                  >
-                    <span style={{ width: 30, height: 10, borderRadius: 5, background: 'var(--line-strong)' }} />
-                    <span style={{ width: 12, height: 12, borderRadius: 6, background: 'var(--line-strong)' }} />
-                    <span style={{ width: 5, height: 5, background: b.accent }} />
-                  </span>
                 )}
               </button>
             );

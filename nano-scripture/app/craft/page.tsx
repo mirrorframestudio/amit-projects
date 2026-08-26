@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Process from '@/components/home/Process';
 import NanoLoupe from '@/components/NanoLoupe';
-import ScaleCompare from '@/components/ScaleCompare';
+import ZoomLadder from '@/components/ZoomLadder';
+import { wornFor, wornFocus } from '@/lib/worn';
 import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
 import Counter from '@/components/Counter';
 import Accordion, { type QA } from '@/components/Accordion';
@@ -58,6 +59,9 @@ const CARE = [
 ];
 
 export default function CraftPage() {
+  // הצילום על הגוף הוא נקודת המוצא: מה שרואים לפני שמתקרבים
+  const shot = wornFor('toldot');
+
   return (
     <>
       {/* ---- כותרת ---- */}
@@ -102,21 +106,20 @@ export default function CraftPage() {
               </span>
             </h2>
             <p className="lede reveal mt-6 max-w-md" style={{ ['--d' as string]: '160ms' }}>
-              קל להגיד חצי מילימטר רבוע. קשה יותר לתפוס את זה. שלושת הגופים
-              כאן הם ביחס הגודל האמיתי ביניהם - וכל הנוסח נכנס לריבוע הקטן.
+              קל להגיד חצי מילימטר רבוע. קשה יותר לתפוס את זה. ארבעה צעדים
+              פנימה, מהתכשיט שעל הצוואר עד האותיות - וכל הנוסח נכנס לריבוע
+              האחרון.
             </p>
           </div>
 
-          <div
-            className="reveal"
-            style={{
-              ['--d' as string]: '260ms',
-              border: '1px solid var(--line)',
-              borderRadius: 'var(--radius-lg)',
-              background: 'var(--surface)',
-            }}
-          >
-            <ScaleCompare accent={BLESSINGS[0].accent} size="lg" />
+          <div className="reveal" style={{ ['--d' as string]: '260ms' }}>
+            <ZoomLadder
+              photo={shot?.file ?? '/scene/toldot-wood.jpg'}
+              focus={shot ? wornFocus(shot, 'toldot') : '50% 50%'}
+              accent={BLESSINGS[0].accent}
+            >
+              <NanoLoupe blessing={BLESSINGS[0].id} height="100%" radius={40} readPx={15} />
+            </ZoomLadder>
           </div>
         </div>
       </section>
