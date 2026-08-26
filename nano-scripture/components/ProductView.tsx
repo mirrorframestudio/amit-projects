@@ -24,6 +24,10 @@ import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { wornFor, wornFocus } from '@/lib/worn';
 import GiftTags from './GiftTags';
 import ScaleCompare from './ScaleCompare';
+import ProductStory from './ProductStory';
+import DeliveryEstimate from './DeliveryEstimate';
+import Accordion, { type QA } from './Accordion';
+import { POLICY } from '@/lib/policy';
 
 type View = 'jewel' | 'worn' | 'chip' | 'scale' | `scene-${number}`;
 
@@ -140,6 +144,29 @@ export default function ProductView({ product }: { product: Product }) {
       window.removeEventListener('resize', onScroll);
     };
   }, []);
+
+  const faq: QA[] = [
+    {
+      q: 'איך אני יודע שהנוסח באמת צרוב שם?',
+      a: `הנוסח המלא מוצג באתר לפני הרכישה ואפשר להשוות אותו למקור. אחרי הצריבה מושווה הכתב שעל השבב לקובץ המקור תו אחר תו, ושבב עם ולו סטייה אחת נפסל. הזכוכית המגדלת שבקופסה מראה את מרקם השורות ואת גבולות השבב - את האותיות עצמן אפשר לראות רק בהגדלה של פי 500 לפחות.`,
+    },
+    {
+      q: 'אפשר להחליף את הברכה אחרי שהזמנתי?',
+      a: `הנוסח נצרב לפי ההזמנה, ולכן שינוי אפשרי כל עוד ההזמנה לא נשלחה - כתבו לנו ונחליף. אחרי המשלוח חלה מדיניות ההחזרה הרגילה: ${POLICY.returnDays} יום, כל עוד הפריט לא נלבש ובאריזתו המקורית.`,
+    },
+    {
+      q: 'ומה אם התכשיט נשבר?',
+      a: `אחריות של שנה על פגמי ייצור בגוף התכשיט - הלחמות, חוליות, והשבב במשבצתו. הסוגר הוא חלק נע והאחריות עליו היא ${POLICY.claspMonths} חודשים. שבר או עיקום שנגרמו בשימוש אינם באחריות, אבל נשמח לתקן גם אותם - נודיע מראש על העלות ונבצע רק אחרי אישורכם.`,
+    },
+    {
+      q: 'אפשר להתקלח עם זה? ללכת לים?',
+      a: 'השבב עצמו אטום ואינו נפגע ממים. גוף התכשיט הוא סיפור אחר: מי ים, מי בריכה, סבון ותמרוקים פוגעים במתכת ובציפוי. מומלץ להסיר לפני מקלחת, רחצה ופעילות גופנית.',
+    },
+    {
+      q: 'כמה זמן לוקח המשלוח?',
+      a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים, מבוטחת. מעל ${POLICY.freeShippingOver} ש״ח המשלוח חינם.`,
+    },
+  ];
 
   // המק״ט, החומר והברכה הנבחרת נגזרים מהנתונים ומצטרפים למפרט הדגם
   const productRows = [
@@ -588,6 +615,8 @@ export default function ProductView({ product }: { product: Product }) {
           </button>
         </div>
 
+        <DeliveryEstimate color={b.accentInk} />
+
         {/* ---------- שדרוג אריזה ---------- */}
         <button
           onClick={() => setGift(!gift)}
@@ -763,6 +792,23 @@ export default function ProductView({ product }: { product: Product }) {
         </div>
         </div>
       </div>
+
+      {/* ---------- התוכן המסביר ---------- */}
+      <ProductStory product={product} blessing={b} />
+
+      {/* ---------- שאלות נפוצות ----------
+          הסקיל מציב את השאלות כקו ההגנה האחרון לפני ההמרה, ומורה
+          לבנות אותן סביב ההתנגדויות ולא סביב מה שנוח לענות עליו.
+          חמש השאלות כאן הן חמש ההתנגדויות של הקטגוריה הזאת */}
+      <section className="pb-24 pt-4" style={{ borderTop: '1px solid var(--line)' }}>
+        <div className="shell grid gap-10 pt-14 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
+          <div className="lg:sticky lg:top-32 lg:self-start">
+            <p className="eyebrow" style={{ color: b.accentInk }}>לפני שקונים</p>
+            <h2 className="display t-2 mt-4">שאלות שחוזרות</h2>
+          </div>
+          <Accordion items={faq} />
+        </div>
+      </section>
 
       {/* ---------- פס קנייה דביק ---------- */}
       <div

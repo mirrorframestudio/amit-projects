@@ -45,7 +45,7 @@ export default function Closing() {
         </div>
 
         <p className="reveal mt-9" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}>
-          משלוח עד 3 ימי עסקים · החזרה חינם תוך 30 יום · תשלום מאובטח
+          משלוח 1-4 ימי עסקים · החזרה חינם תוך 30 יום · תשלום מאובטח
         </p>
       </div>
     </section>

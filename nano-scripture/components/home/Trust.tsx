@@ -1,12 +1,14 @@
+import { deliveryLine, warrantyNote } from '@/lib/policy';
+
 const ITEMS = [
   {
     title: 'משלוח חינם מעל ₪450',
-    note: '2-3 ימי עסקים, מבוטח',
+    note: `${deliveryLine}, מבוטח`,
     icon: <path d="M3 7h11v8H3zM14 10h4l3 3v2h-7zM7.5 18a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2ZM17.5 18a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2Z" />,
   },
   {
     title: 'שנה אחריות',
-    note: 'שנה מלאה גם על הסוגר והחוליות',
+    note: warrantyNote,
     icon: (
       <>
         <path d="M12 3 4.6 6.3v5.1c0 4.4 3 8.1 7.4 9.2 4.4-1.1 7.4-4.8 7.4-9.2V6.3Z" />
