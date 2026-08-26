@@ -23,6 +23,34 @@ export type WornShot = {
 
 export const WORN: WornShot[] = [
   {
+    file: '/worn/avot.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'צמיד עבות בכסף על יד גבר, השבב הכחול בחוליה המרכזית',
+    products: ['avot'],
+  },
+  {
+    file: '/worn/libi-er.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'צמיד לב בכסף על יד אישה, השבב הכחול לצד הלב',
+    products: ['libi-er'],
+  },
+  {
+    file: '/worn/libi-er-gold.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'צמיד לב בזהב על יד אישה, השבב הכחול לצד הלב',
+    products: ['libi-er-gold'],
+  },
+  {
+    file: '/worn/ahavat-olam.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'צמיד אהבת עולם בכסף על יד אישה, סמל האינסוף לצד השבב',
+    products: ['ahavat-olam'],
+  },
+  {
     file: '/worn/etz-hachaim.jpg',
     width: 1120,
     height: 1400,
@@ -48,17 +76,17 @@ export const WORN: WornShot[] = [
     file: '/worn/lev.jpg',
     width: 1400,
     height: 1120,
-    alt: 'צמיד חישוק על יד גבר וצמיד לב על יד אישה, זה לצד זה',
-    products: ['libi-er', 'chishuk'],
-    focus: { 'libi-er': '75% 58%', chishuk: '28% 57%' },
+    alt: 'צמיד עבות על יד גבר וצמיד לב על יד אישה, זה לצד זה',
+    products: ['libi-er', 'avot'],
+    focus: { 'libi-er': '75% 58%', avot: '28% 57%' },
   },
   {
     file: '/worn/luach.jpg',
     width: 1254,
     height: 1254,
-    alt: 'תליון לוח בכסף עם השבב הכחול, וצמיד חישוק על פרק היד',
-    products: ['luach-libecha', 'chishuk'],
-    focus: { 'luach-libecha': '56% 61%', chishuk: '8% 67%' },
+    alt: 'תליון לוח בכסף עם השבב הכחול, וצמיד עבות על פרק היד',
+    products: ['luach-libecha', 'avot'],
+    focus: { 'luach-libecha': '56% 61%', avot: '8% 67%' },
   },
   {
     file: '/worn/avot-black.jpg',

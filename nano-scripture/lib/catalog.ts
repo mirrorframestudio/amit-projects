@@ -108,7 +108,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'YASNN004W',
     slug: 'toldot',
-    scenes: ['/scene/toldot-1.jpg', '/scene/toldot-2.jpg', '/scene/toldot-3.jpg'],
+    scenes: ['/scene/toldot-wood.jpg', '/scene/toldot-dark.jpg', '/scene/toldot-1.jpg', '/scene/toldot-2.jpg', '/scene/toldot-3.jpg'],
     name: 'תּוֹלְדוֹת',
     nameLatin: 'TOLDOT',
     source: { phrase: 'אֵלֶּה תוֹלְדוֹת הַשָּׁמַיִם וְהָאָרֶץ', ref: 'בראשית ב׳, ד׳' },
@@ -161,6 +161,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'YASNB001W',
     slug: 'ahavat-olam',
+    scenes: ['/scene/ahavat-olam-tray.jpg'],
     name: 'אַהֲבַת עוֹלָם',
     nameLatin: 'AHAVAT OLAM',
     source: { phrase: 'וְאַהֲבַת עוֹלָם אֲהַבְתִּיךְ', ref: 'ירמיהו ל״א, ב׳' },
@@ -189,7 +190,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN012S',
     slug: 'al-kapayim',
-    scenes: ['/scene/al-kapayim-1.jpg', '/scene/al-kapayim-2.jpg', '/scene/al-kapayim-3.jpg'],
+    scenes: ['/scene/al-kapayim-marble.jpg', '/scene/al-kapayim-linen.jpg', '/scene/al-kapayim-1.jpg', '/scene/al-kapayim-2.jpg'],
     name: 'עַל כַּפַּיִם',
     nameLatin: 'AL KAPAYIM',
     source: { phrase: 'הֵן עַל־כַּפַּיִם חַקֹּתִיךְ', ref: 'ישעיהו מ״ט, ט״ז' },
@@ -216,7 +217,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN003S',
     slug: 'beseter',
-    scenes: ['/scene/beseter-1.jpg', '/scene/beseter-2.jpg', '/scene/beseter-3.jpg'],
+    scenes: ['/scene/beseter-pair.jpg', '/scene/beseter-pair-marble.jpg', '/scene/beseter-1.jpg', '/scene/beseter-2.jpg', '/scene/beseter-3.jpg'],
     name: 'בְּסֵתֶר',
     nameLatin: 'BESETER',
     source: { phrase: 'יֹשֵׁב בְּסֵתֶר עֶלְיוֹן', ref: 'תהילים צ״א, א׳' },
@@ -241,6 +242,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN003G',
     slug: 'beseter-gold',
+    scenes: ['/scene/beseter-pair.jpg', '/scene/beseter-pair-marble.jpg'],
     name: 'בְּסֵתֶר',
     nameLatin: 'BESETER',
     source: { phrase: 'יֹשֵׁב בְּסֵתֶר עֶלְיוֹן', ref: 'תהילים צ״א, א׳' },
@@ -266,7 +268,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN011S',
     slug: 'lo-yanum',
-    scenes: ['/scene/lo-yanum-1.jpg', '/scene/lo-yanum-2.jpg', '/scene/lo-yanum-3.jpg'],
+    scenes: ['/scene/lo-yanum-stone.jpg', '/scene/lo-yanum-wood.jpg', '/scene/lo-yanum-marble.jpg', '/scene/lo-yanum-1.jpg', '/scene/lo-yanum-2.jpg', '/scene/lo-yanum-3.jpg'],
     name: 'לֹא יָנוּם',
     nameLatin: 'LO YANUM',
     source: { phrase: 'הִנֵּה לֹא־יָנוּם וְלֹא יִישָׁן שׁוֹמֵר יִשְׂרָאֵל', ref: 'תהילים קכ״א, ד׳' },
@@ -316,7 +318,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN001G',
     slug: 'kachotam',
-    scenes: ['/scene/kachotam-1.jpg', '/scene/kachotam-2.jpg', '/scene/kachotam-3.jpg'],
+    scenes: ['/scene/kachotam-linen.jpg', '/scene/kachotam-stone.jpg', '/scene/kachotam-dark.jpg', '/scene/kachotam-1.jpg', '/scene/kachotam-2.jpg', '/scene/kachotam-3.jpg'],
     name: 'כַּחוֹתָם',
     nameLatin: 'KACHOTAM',
     source: { phrase: 'שִׂימֵנִי כַחוֹתָם עַל־לִבֶּךָ', ref: 'שיר השירים ח׳, ו׳' },
@@ -344,6 +346,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANB007RS',
     slug: 'avot',
+    scenes: ['/scene/avot-shelf.jpg'],
     name: 'עֲבוֹת',
     nameLatin: 'AVOT',
     source: { phrase: 'בְּחַבְלֵי אָדָם אֶמְשְׁכֵם בַּעֲבֹתוֹת אַהֲבָה', ref: 'הושע י״א, ד׳' },
@@ -396,6 +399,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANB002S',
     slug: 'libi-er',
+    scenes: ['/scene/libi-er-tray.jpg'],
     name: 'לִבִּי עֵר',
     nameLatin: 'LIBI ER',
     source: { phrase: 'אֲנִי יְשֵׁנָה וְלִבִּי עֵר', ref: 'שיר השירים ה׳, ב׳' },
@@ -421,6 +425,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANB002G',
     slug: 'libi-er-gold',
+    scenes: ['/scene/libi-er-gold-tray.jpg'],
     name: 'לִבִּי עֵר',
     nameLatin: 'LIBI ER',
     source: { phrase: 'אֲנִי יְשֵׁנָה וְלִבִּי עֵר', ref: 'שיר השירים ה׳, ב׳' },
@@ -677,7 +682,6 @@ export function photoFor(
 const SCENE_FOCUS: Record<string, string> = {
   '/scene/toldot-3.jpg': '50% 67%',
   '/scene/lo-yanum-3.jpg': '49% 65%',
-  '/scene/al-kapayim-3.jpg': '56% 68%',
 };
 
 export function sceneFocus(src: string) {
