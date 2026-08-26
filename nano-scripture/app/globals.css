@@ -499,6 +499,13 @@ section {
 .marquee:hover {
   animation-play-state: paused;
 }
+/* מי שביקש פחות תנועה מקבל את הרצועה עומדת. הטקסט עדיין שם, ורק
+   העותק הראשון נראה - השני הוא הכפלה לצורך הגלילה בלבד */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+  }
+}
 @keyframes marquee {
   to {
     transform: translateX(50%);
