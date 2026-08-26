@@ -20,6 +20,7 @@ export type Blessing = {
   openingSource: string;
   /** ספירה אמיתית מתוך הטקסט שנצרב */
   words: number;
+  /** אורך הנוסח כפי שהוא נצרב. נגזר, ולא נכתב ביד */
   chars: number;
   accent: string;
   /** גרסה בהירה — לכתב על פני השבב הכהה */
@@ -36,7 +37,7 @@ export type Blessing = {
    שנכתב או קוצר על ידי הקוד. ספירת המילים והתווים מחושבת מהם.
    ============================================================ */
 
-export const BLESSINGS: Blessing[] = [
+const RAW: Omit<Blessing, 'chars'>[] = [
   {
     id: 'bracha',
     title: 'הַבְּרָכָה שֶׁלְּךָ',
@@ -49,7 +50,6 @@ export const BLESSINGS: Blessing[] = [
     opening: 'וּבָאוּ עָלֶיךָ כָּל הַבְּרָכוֹת הָאֵלֶּה וְהִשִּׂיגֻךָ',
     openingSource: 'דברים כ״ח, ב׳',
     words: 281,
-    chars: 2664,
     accent: '#6B7A3A',
     accentSoft: '#DCE7B8',
     accentInk: '#4E5A26',
@@ -68,7 +68,6 @@ export const BLESSINGS: Blessing[] = [
     opening: 'יֹשֵׁב בְּסֵתֶר עֶלְיוֹן, בְּצֵל שַׁדַּי יִתְלוֹנָן',
     openingSource: 'תהילים צ״א, א׳',
     words: 341,
-    chars: 3241,
     accent: '#3B5A8C',
     accentSoft: '#CBDAF2',
     accentInk: '#2A4066',
@@ -87,7 +86,6 @@ export const BLESSINGS: Blessing[] = [
     opening: 'לַה׳ הָאָרֶץ וּמְלוֹאָהּ, תֵּבֵל וְיֹשְׁבֵי בָהּ',
     openingSource: 'תהילים כ״ד, א׳',
     words: 563,
-    chars: 4941,
     accent: '#8C6820',
     accentSoft: '#F0DCA6',
     accentInk: '#6E5216',
@@ -106,7 +104,6 @@ export const BLESSINGS: Blessing[] = [
     opening: 'אֵשֶׁת חַיִל מִי יִמְצָא, וְרָחֹק מִפְּנִינִים מִכְרָהּ',
     openingSource: 'משלי ל״א, י׳',
     words: 204,
-    chars: 1868,
     accent: '#8E3A52',
     accentSoft: '#F0CDD8',
     accentInk: '#6B2439',
@@ -125,7 +122,6 @@ export const BLESSINGS: Blessing[] = [
     opening: 'יְבָרֶכְךָ ה׳ וְיִשְׁמְרֶךָ',
     openingSource: 'במדבר ו׳, כ״ד',
     words: 100,
-    chars: 879,
     accent: '#A96A52',
     accentSoft: '#F3D8C9',
     accentInk: '#7B4630',
@@ -133,6 +129,17 @@ export const BLESSINGS: Blessing[] = [
       'יְהִי רָצוֹן מִלְּפָנֶיךָ, ה׳ אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ, שֶׁתִּשְׁמֹר וְתָגֵן עַל הַתִּינוֹק הַזֶּה בְּכָל עֵת וּבְכָל שָׁעָה. תְּזַכֵּהוּ לְחַיִּים אֲרֻכִּים, לִבְרִיאוּת אֵיתָנָה, לְשִׂמְחָה, לְאַהֲבָה וּלְשָׁלוֹם. הָאֵר אֶת דַּרְכּוֹ בְּחָכְמָה, בְּיוֹשֶׁר וּבֶאֱמוּנָה, וְתֵן בְּלִבּוֹ מִדּוֹת טוֹבוֹת וּמְתֻקָּנוֹת, אַהֲבַת הַתּוֹרָה וְיִרְאַת שָׁמַיִם. יְהִי רָצוֹן שֶׁיִּגְדַּל לְתוֹךְ אוֹר, שִׂמְחָה, בְּרָכָה וְהַצְלָחָה, וִיהִי מְקוֹר שֶׁל נַחַת וְשִׂמְחָה לְמִשְׁפַּחְתּוֹ כָּל יָמָיו. וְיַעֲלֶה מַעְלָה מַעְלָה בַּתּוֹרָה וּבַמִּצְווֹת, וִיהֵא שְׁמוֹ כְּשֵׁם הַגְּדוֹלִים אֲשֶׁר בָּאָרֶץ הֵמָּה, לְגָאוֹן וּלְתִפְאֶרֶת. בִּרְכַּת כֹּהֲנִים יְבָרֶכְךָ ה׳ וְיִשְׁמְרֶךָ׃ יָאֵר ה׳ פָּנָיו אֵלֶיךָ וִיחֻנֶּךָּ׃ יִשָּׂא ה׳ פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם׃ יִהְיוּ לְרָצוֹן אִמְרֵי פִי וְהֶגְיוֹן לִבִּי לְפָנֶיךָ, ה׳ צוּרִי וְגֹאֲלִי. אָמֵן, כֵּן יְהִי רָצוֹן.',
   },
 ];
+
+/**
+ * מספר התווים נגזר מהנוסח ולא נכתב לידו.
+ *
+ * הוא היה שדה שמור, ובמקביל היה חישוב שרץ על אותו טקסט - שני
+ * מספרים לאותה עובדה, שנבדלו זה מזה. עכשיו יש אחד.
+ */
+export const BLESSINGS: Blessing[] = RAW.map((b) => ({
+  ...b,
+  chars: burnedChars(b.text),
+}));
 
 export const BLESSING_ORDER: BlessingId[] = BLESSINGS.map((b) => b.id);
 
@@ -155,6 +162,4 @@ export const TOTAL_BLESSING_WORDS = BLESSINGS.reduce((sum, b) => sum + b.words, 
  * אורך הנוסח הארוך ביותר, כפי שהוא נצרב בפועל - בלי טעמי מקרא.
  * נגזר מהטקסטים עצמם כדי שהמספר שמוצג באתר לא יוכל להתיישן.
  */
-export const LONGEST_BLESSING_CHARS = Math.max(
-  ...BLESSINGS.map((b) => burnedChars(b.text)),
-);
+export const LONGEST_BLESSING_CHARS = Math.max(...BLESSINGS.map((b) => b.chars));

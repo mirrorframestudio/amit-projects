@@ -3,8 +3,23 @@
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { BRAND } from '@/lib/brand';
+import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
 
-const MICRO = ['משלוח חינם מעל ₪450', 'שנה אחריות', 'החזרה תוך 30 יום'];
+/**
+ * המקורות, ולא המדיניות.
+ *
+ * כאן ישבו קודם משלוח, אחריות והחזרה - בדיוק שלושת הפריטים שרצועת
+ * האמון שמתחת להירו כבר אומרת, כלומר חזרה ולא תוספת. הסקיל דורש
+ * אלמנט של הוכחה מעל הקיפול, ולמותג בלי לקוחות עדיין אין ביקורות.
+ * מה שכן יש הוא סמכות המקור: הנוסחים אינם כתובים כאן, הם מצוטטים.
+ */
+const SOURCES = BLESSINGS.map((b) => {
+  const parts = b.sources.split(' · ');
+  // המקור הראשון אינו תמיד ציטוט. בברכת התינוק הוא "ברכה לתינוק",
+  // תיאור ולא מקור, וברצועה שכל תפקידה סמכות זה מחליש. נבחר החלק
+  // שנושא מספר פרק בגרשיים - כלומר הפניה אמיתית
+  return parts.find((x) => /[׳״]/.test(x)) ?? parts[parts.length - 1];
+});
 
 /** הירו: וידאו מלא־רוחב, וטקסט יושב על צעיף שמנת בצד ימין */
 export default function Hero() {
@@ -65,10 +80,10 @@ export default function Hero() {
             style={{ fontSize: 'var(--ds-hero)', fontWeight: 700, lineHeight: 1.05 }}
           >
             <span className="mask-line load">
-              <span>ברכה שלמה</span>
+              <span>כל הנוסח.</span>
             </span>
             <span className="mask-line load">
-              <span style={{ ['--d' as string]: '120ms' }}>בתוך תכשיט</span>
+              <span style={{ ['--d' as string]: '120ms' }}>לא שורה ממנו.</span>
             </span>
           </h1>
 
@@ -81,7 +96,8 @@ export default function Hero() {
               color: 'var(--ink-2)',
             }}
           >
-            חמש ברכות לבחירה - אחת שלכם
+            עד <span className="num">{LONGEST_BLESSING_CHARS.toLocaleString('he-IL')}</span> תווים
+            נצרבים על שטח של חצי מילימטר רבוע. חמישה נוסחים - אחד שלכם.
           </p>
 
           <div
@@ -100,7 +116,7 @@ export default function Hero() {
             className="reveal load mt-9 flex flex-wrap gap-x-7 gap-y-2"
             style={{ ['--d' as string]: '580ms', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
           >
-            {MICRO.map((m) => (
+            {SOURCES.map((m) => (
               <li key={m} className="flex items-center gap-2">
                 <span aria-hidden style={{ color: 'var(--accent)' }}>✦</span>
                 {m}

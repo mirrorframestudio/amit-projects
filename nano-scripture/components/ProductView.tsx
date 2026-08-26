@@ -25,6 +25,7 @@ import { wornFor, wornFocus } from '@/lib/worn';
 import GiftTags from './GiftTags';
 import ScaleCompare from './ScaleCompare';
 import ProductStory from './ProductStory';
+import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
 import Accordion, { type QA } from './Accordion';
 import { POLICY } from '@/lib/policy';
@@ -795,6 +796,9 @@ export default function ProductView({ product }: { product: Product }) {
 
       {/* ---------- התוכן המסביר ---------- */}
       <ProductStory product={product} blessing={b} />
+
+      {/* ---------- נענדים יחד ---------- */}
+      <PairedWith slug={product.slug} accent={b.accentInk} />
 
       {/* ---------- שאלות נפוצות ----------
           הסקיל מציב את השאלות כקו ההגנה האחרון לפני ההמרה, ומורה
