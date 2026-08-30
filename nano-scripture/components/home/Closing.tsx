@@ -10,7 +10,7 @@ export default function Closing() {
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
         style={{ opacity: 0.22 }}
       >
-        <Image src="/products/YASNN004W.png" alt="" width={900} height={900} className="h-[128%] w-auto object-contain" />
+        <Image src="/products/YASNN004W.webp" alt="" width={900} height={900} className="h-[128%] w-auto object-contain" />
       </div>
 
       <div className="shell relative text-center">

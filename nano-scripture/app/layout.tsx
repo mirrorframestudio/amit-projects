@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { SITE_URL } from '@/lib/site';
 import { Assistant } from 'next/font/google';
 import './globals.css';
 
@@ -19,7 +20,7 @@ const assistant = Assistant({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nano-scripture.local'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'מִקְרָא · תכשיטי ננו - ברכה שלמה על שבב אחד',
     template: '%s · מִקְרָא',

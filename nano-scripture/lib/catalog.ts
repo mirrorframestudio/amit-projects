@@ -118,7 +118,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 749,
     cost: 31.9,
-    image: '/products/YASNN004W.png',
+    image: '/products/YASNN004W.webp',
     blessings: ['bracha', 'parnasa', 'eshet-chayil'],
     short: 'מדליון עץ החיים בכסף 925, השבב משובץ בין הענפים',
     story:
@@ -144,7 +144,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 549,
     cost: 16.5,
-    image: '/products/YASNN010W.png',
+    image: '/products/YASNN010W.webp',
     blessings: ['bracha', 'shmira', 'eshet-chayil'],
     short: 'שרשרת לריאט בכסף 925 - סמל האינסוף, והשבב נופל ממנו',
     story:
@@ -171,7 +171,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 549,
     cost: 15.4,
-    image: '/products/YASNB001W.png',
+    image: '/products/YASNB001W.webp',
     blessings: ['bracha', 'eshet-chayil'],
     short: 'צמיד כסף 925 עדין, סמל האינסוף לצד השבב',
     story:
@@ -200,7 +200,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 299,
     cost: 6.0,
-    image: '/products/OYANN012S.png',
+    image: '/products/OYANN012S.webp',
     blessings: ['eshet-chayil'],
     short: 'חמסה בקו נקי, השבב משובץ בכף היד',
     story:
@@ -227,7 +227,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 299,
     cost: 5.6,
-    image: '/products/OYANN003S.png',
+    image: '/products/OYANN003S.webp',
     blessings: ['shmira'],
     short: 'מגן דוד בקווים חדים, השבב במרכז המשושה',
     story:
@@ -252,7 +252,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 329,
     cost: 6.5,
-    image: '/products/OYANN003G.png',
+    image: '/products/OYANN003G.webp',
     blessings: ['shmira', 'parnasa'],
     short: 'אותו מגן דוד, בגימור זהב חם',
     story:
@@ -278,7 +278,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 299,
     cost: 6.0,
-    image: '/products/OYANN011S.png',
+    image: '/products/OYANN011S.webp',
     blessings: ['eshet-chayil'],
     short: 'תליון עין אופקי, השבב הוא האישון',
     story:
@@ -303,7 +303,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 279,
     cost: 5.6,
-    image: '/products/OYANN006S.png',
+    image: '/products/OYANN006S.webp',
     blessings: ['shmira'],
     short: 'תליון מלבני אנכי, מינימלי לחלוטין',
     story:
@@ -328,7 +328,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 329,
     cost: 6.8,
-    image: '/products/OYANN001G.png',
+    image: '/products/OYANN001G.webp',
     blessings: ['shmira', 'eshet-chayil'],
     short: 'שרשרת זהב אסימטרית - לב תלוי, והשבב גבוה ממנו',
     story:
@@ -356,7 +356,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 349,
     cost: 7.0,
-    image: '/products/OYANB007RS.png',
+    image: '/products/OYANB007RS.webp',
     blessings: ['shmira', 'parnasa'],
     short: 'צמיד גברי קלוע כבד, לוחית עם השבב במרכז',
     story:
@@ -383,7 +383,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 349,
     cost: 7.5,
-    image: '/products/OYANB007B.png',
+    image: '/products/OYANB007B.webp',
     blessings: ['bracha', 'parnasa'],
     short: 'אותו צמיד קלוע, בגימור שחור מלא',
     story:
@@ -409,7 +409,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 289,
     cost: 6.0,
-    image: '/products/OYANB002S.png',
+    image: '/products/OYANB002S.webp',
     blessings: ['shmira', 'eshet-chayil'],
     short: 'צמיד שרשרת עדין עם לב חלק והשבב לצידו',
     story:
@@ -435,7 +435,7 @@ export const PRODUCTS: Product[] = [
     audience: 'women',
     price: 319,
     cost: 6.8,
-    image: '/products/OYANB002G.png',
+    image: '/products/OYANB002G.webp',
     blessings: ['bracha', 'eshet-chayil'],
     short: 'אותו צמיד לב, בגימור זהב',
     story:
@@ -459,7 +459,7 @@ export const PRODUCTS: Product[] = [
     audience: 'men',
     price: 279,
     cost: 5.0,
-    image: '/products/OYANB001S.png',
+    image: '/products/OYANB001S.webp',
     blessings: ['shmira', 'parnasa'],
     short: 'צמיד קשיח פתוח ברוחב 6 מ״מ, השבב בקצה',
     story:
@@ -483,7 +483,7 @@ export const PRODUCTS: Product[] = [
     finish: 'silver',
     audience: 'unisex',
     price: 749,
-    image: '/products/BABYPIN01.png',
+    image: '/products/BABYPIN01.webp',
     blessings: ['tinok'],
     short: 'סיכת כסף 925 לעגלה, ארבעה תליונים וברכת התינוק על השבב',
     story:
