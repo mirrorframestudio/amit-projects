@@ -8,8 +8,7 @@ import { getProduct, formatPrice, ACTIVE_CATEGORIES, PRODUCTS } from '@/lib/cata
 import { getBlessing } from '@/lib/blessings';
 import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
-
-const FREE_SHIPPING = 450;
+import { POLICY, shippingNote } from '@/lib/policy';
 
 /**
  * שדה קוד ההנחה.
@@ -143,13 +142,16 @@ export default function CartDrawer() {
   const { items, subtotal, listTotal, discount } = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
   const total = subtotal + giftFee;
-  const gap = FREE_SHIPPING - subtotal;
-  const progress = Math.min(1, subtotal / FREE_SHIPPING);
+  // אין משלוח חינם. הסף נשאר בקוד כדי שהחזרתו תהיה שינוי ערך אחד
+  const threshold = POLICY.freeShippingOver;
+  const gap = threshold === null ? 0 : threshold - subtotal;
+  const freeShip = threshold !== null && gap <= 0;
+  const progress = threshold === null ? 0 : Math.min(1, subtotal / threshold);
 
   // השלמה למשלוח חינם: הפריטים הזולים שאינם כבר בעגלה
   const inCart = new Set(lines.map((l) => l.slug));
   const fillers =
-    gap > 0 && lines.length
+    threshold !== null && gap > 0 && lines.length
       ? [...PRODUCTS]
           .filter((p) => !inCart.has(p.slug))
           .sort((a, b) => saleOf(a.price).now - saleOf(b.price).now)
@@ -226,7 +228,7 @@ export default function CartDrawer() {
           </button>
         </div>
 
-        {lines.length > 0 && (
+        {lines.length > 0 && threshold !== null && (
           <div className="px-7 py-4" style={{ borderBottom: '1px solid var(--line)' }}>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               {gap <= 0 ? (
@@ -474,8 +476,15 @@ export default function CartDrawer() {
 
             <div className="mb-3 flex items-center justify-between">
               <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>משלוח</span>
-              <span style={{ fontSize: 'var(--fs-sm)', fontWeight: gap <= 0 ? 500 : 400, color: gap <= 0 ? 'var(--accent-deep)' : 'var(--ink-2)' }}>
-                {gap <= 0 ? 'חינם' : 'מחושב בתשלום'}
+              <span
+                className={POLICY.shippingFlat === null ? undefined : 'num'}
+                style={{
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: freeShip ? 500 : 400,
+                  color: freeShip ? 'var(--accent-deep)' : 'var(--ink-2)',
+                }}
+              >
+                {freeShip ? 'חינם' : shippingNote}
               </span>
             </div>
 

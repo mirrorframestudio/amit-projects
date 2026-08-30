@@ -87,7 +87,8 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     ? [{ name: GIFT_BOX.title, total: String(GIFT_BOX.price), tax_status: 'taxable' }]
     : [];
 
-  const shippingFree = itemsTotal >= POLICY.freeShippingOver;
+  const shippingFree =
+    POLICY.freeShippingOver !== null && itemsTotal >= POLICY.freeShippingOver;
   const coupon_lines =
     input.code && isPromoCode(input.code) ? [{ code: PROMO.code.toLowerCase() }] : [];
 

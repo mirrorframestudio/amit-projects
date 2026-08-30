@@ -2,8 +2,8 @@ import { deliveryLine, warrantyNote } from '@/lib/policy';
 
 const ITEMS = [
   {
-    title: 'משלוח חינם מעל ₪450',
-    note: `${deliveryLine}, מבוטח`,
+    title: 'משלוח מבוטח',
+    note: deliveryLine,
     icon: <path d="M3 7h11v8H3zM14 10h4l3 3v2h-7zM7.5 18a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2ZM17.5 18a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2Z" />,
   },
   {

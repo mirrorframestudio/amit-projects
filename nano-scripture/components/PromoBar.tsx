@@ -17,7 +17,6 @@ import { GIFT_BOX, INSTALLMENTS } from '@/lib/extras';
  */
 const OFFERS = [
   ...(promoOn ? [`${PROMO.percent}% הנחה על ההזמנה הראשונה · קוד ${PROMO.code}`] : []),
-  `משלוח חינם בהזמנה מעל ₪${POLICY.freeShippingOver}`,
   `עד ${INSTALLMENTS} תשלומים ללא ריבית`,
   `החזרה תוך ${POLICY.returnDays} יום`,
   `משלוח מבוטח · ${deliveryLine}`,

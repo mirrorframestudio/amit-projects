@@ -640,7 +640,7 @@ export const BOX_SPEC: { label: string; value: string }[] = [
   { label: 'אריזה', value: 'קופסה מרופדת - כלולה. אריזת מתנה קשיחה בתוספת ₪49' },
   { label: 'כרטיס ברכה', value: 'שם הברכה, המקורות שלה והנוסח המלא' },
   { label: 'זכוכית מגדלת', value: 'כלולה - לראות את פני השבב מקרוב' },
-  { label: 'משלוח', value: 'מבוטח · חינם בהזמנה מעל ₪450' },
+  { label: 'משלוח', value: 'מבוטח · 1-4 ימי עסקים' },
 ];
 
 export const CARE_SPEC: { label: string; value: string }[] = [

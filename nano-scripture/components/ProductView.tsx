@@ -27,7 +27,7 @@ import ProductStory from './ProductStory';
 import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
 import Accordion, { type QA } from './Accordion';
-import { POLICY } from '@/lib/policy';
+import { POLICY, deliveryLine, shippingNote } from '@/lib/policy';
 
 type View = 'jewel' | 'worn' | 'chip' | `scene-${number}`;
 
@@ -39,7 +39,7 @@ const BASE_VIEWS: { id: View; label: string }[] = [
 /* שורת הביטחון שמתחת לכפתור. אייקון נקרא לפני שהעין מגיעה למילה */
 const ASSURANCE = [
   {
-    label: 'משלוח חינם מעל ₪450',
+    label: `משלוח מבוטח · ${deliveryLine}`,
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
         <path
@@ -163,7 +163,7 @@ export default function ProductView({ product }: { product: Product }) {
     },
     {
       q: 'כמה זמן לוקח המשלוח?',
-      a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים, מבוטחת. מעל ${POLICY.freeShippingOver} ש״ח המשלוח חינם.`,
+      a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים, מבוטחת. דמי המשלוח ${shippingNote === 'מחושב בתשלום' ? 'מוצגים בעת התשלום' : shippingNote}.`,
     },
   ];
 
