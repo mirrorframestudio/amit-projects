@@ -17,3 +17,22 @@ ella-sun/villa-cocos/final/וילה*.mp4
 # EXCEPTION (2026-07-22): villa-mountain 9:16 reel working set is tracked so work can
 # continue across machines (11 shots, 8 VO lines, 9:16 source images, build script). ~61MB.
 !ella-sun/villa-mountain/_mountain_reel_prep/**
+
+# EXCEPTION (2026-08-11): villa-shikma — track the deliverables + inputs, NOT the
+# heavy re-derivable intermediates. Keep: 37 photos, VO scripts (.md), VO wavs, and
+# the final assembled videos (full tour + 3 part finals). Drop the ~500MB of raw
+# Kling shots/, composited frames/, and trim//norm/ intermediates (regenerable / paid
+# media stays off git per the policy above). So Shikma pulls to the MacBook at ~200MB.
+!ella-sun/villa-shikma/**/*.md
+!ella-sun/villa-shikma/photos/*.jpg
+!ella-sun/villa-shikma/vo/*.wav
+!ella-sun/villa-shikma/shikma_FULL_tour_card.mp4
+!ella-sun/villa-shikma/shikma_FULL_tour_VO.mp4
+!ella-sun/villa-shikma/part1_exterior/shikma_part1_exterior.mp4
+!ella-sun/villa-shikma/part2_interior/shikma_part2_interior.mp4
+!ella-sun/villa-shikma/part3_bedrooms/shikma_part3_bedrooms.mp4
+
+# mini-villa VO script (the long-tour narration) — keep it with the project.
+!ella-sun/mini-villa/villa_mini_VO_script.md
+# The pre-shower-cut backup is redundant once the no-shower tour is the deliverable.
+ella-sun/mini-villa/final/mini_villa_TOUR_orig_withshower.mp4
