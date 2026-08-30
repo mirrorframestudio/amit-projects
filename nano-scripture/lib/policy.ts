@@ -17,6 +17,9 @@ export const POLICY = {
   deliveryMaxDays: 4,
   returnDays: 30,
 
+  /** מספר התשלומים המרבי שהסולק יציע */
+  maxInstallments: 5,
+
   /**
    * סף למשלוח חינם. null = אין משלוח חינם.
    *

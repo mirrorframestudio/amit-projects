@@ -24,6 +24,7 @@
 import { PRODUCTS, CATEGORIES, MATERIALS, FINISHES } from '../lib/catalog';
 import { getBlessing } from '../lib/blessings';
 import { wcGet, wcPost, wcPut, wcReady } from '../lib/wcClient';
+import { PROMO } from '../lib/promo';
 
 const WRITE = process.argv.includes('--write');
 
@@ -73,6 +74,35 @@ function payloadFor(p: (typeof PRODUCTS)[number], categoryId?: number) {
   };
 }
 
+/**
+ * קוד ההנחה, כאובייקט אמיתי בווקומרס.
+ *
+ * עד עכשיו ההנחה חושבה רק בחזית, וזה אומר ששום דבר לא אכף אותה:
+ * "הזמנה ראשונה" היה טקסט שיווקי בלבד. usage_limit_per_user הופך
+ * אותו לכלל - ווקומרס סופר לפי דוא"ל גם עבור הזמנות אורח.
+ */
+async function ensureCoupon() {
+  const code = PROMO.code.toLowerCase();
+  const existing = await wcGet<{ id: number; code: string }[]>('/coupons', { code, per_page: 10 });
+  const body = {
+    code,
+    discount_type: 'percent',
+    amount: String(PROMO.percent),
+    individual_use: true,
+    exclude_sale_items: false,
+    usage_limit_per_user: 1,
+    description: 'הנחת הזמנה ראשונה - נוצר מהקוד',
+  };
+
+  if (existing.length) {
+    console.log(`  קופון ${code} קיים`);
+    if (WRITE) await wcPut(`/coupons/${existing[0].id}`, body);
+    return;
+  }
+  console.log(`  יצירת קופון ${code} · ${PROMO.percent}% · פעם אחת ללקוח`);
+  if (WRITE) await wcPost('/coupons', body);
+}
+
 async function main() {
   if (!wcReady) {
     console.error('חסרים NEXT_PUBLIC_WC_URL / WC_CONSUMER_KEY / WC_CONSUMER_SECRET ב-.env.local');
@@ -81,6 +111,7 @@ async function main() {
 
   console.log(WRITE ? '— כותב לווקומרס —' : '— הרצה יבשה, לא נכתב דבר —\n');
 
+  await ensureCoupon();
   const cats = await ensureCategories();
 
   const existing = await wcGet<WcProduct[]>('/products', { per_page: 100, status: 'any' });

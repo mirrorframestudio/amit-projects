@@ -512,12 +512,14 @@ export default function CartDrawer() {
               <span className="num">{formatPrice(perInstallment(total))}</span>
             </p>
 
-            <button
+            <Link
+              href="/checkout"
+              onClick={() => setOpen(false)}
               className="btn btn-solid w-full"
               style={{ ['--pad' as string]: '1.15rem 2rem', fontSize: 'var(--fs-base)' }}
             >
               מעבר לתשלום מאובטח
-            </button>
+            </Link>
 
             {/* המשלוח לא נכלל כאן. ההבטחה הזו סותרת את הפס שלמעלה */}
             <p className="mt-3 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
