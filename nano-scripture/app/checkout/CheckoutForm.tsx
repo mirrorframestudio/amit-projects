@@ -8,7 +8,8 @@ import { getProduct, formatPrice } from '@/lib/catalog';
 import { getBlessing } from '@/lib/blessings';
 import { GIFT_BOX } from '@/lib/extras';
 import { PROMO } from '@/lib/promo';
-import { shippingNote } from '@/lib/policy';
+import { SHIPPING, shippingMethod } from '@/lib/policy';
+import { COMPANY } from '@/lib/company';
 import {
   EMPTY_CUSTOMER,
   FIELDS,
@@ -46,9 +47,10 @@ export default function CheckoutForm() {
 
   const totals = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
-  const total = totals.subtotal + giftFee;
+  const ship = shippingMethod(customer.shipping);
+  const total = totals.subtotal + giftFee + ship.price;
 
-  const set = (key: keyof Customer, value: string) => {
+  const set = (key: keyof Customer, value: string | boolean) => {
     const next = { ...customer, [key]: value };
     setCustomer(next);
     if (tried) setErrors(validate(next));
@@ -138,8 +140,56 @@ export default function CheckoutForm() {
       <div>
         <h1 className="display t-2">פרטי המשלוח</h1>
 
+        {/* בחירת המשלוח מוצגת לפני הכתובת, כי היא קובעת אם הכתובת
+            בכלל נדרשת - ומיותר לבקש שדות שמיד יימחקו */}
+        <fieldset className="mt-8">
+          <legend style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>איך לקבל</legend>
+          <div className="mt-2 grid gap-3 sm:grid-cols-2">
+            {SHIPPING.map((m) => {
+              const on = customer.shipping === m.id;
+              return (
+                <label
+                  key={m.id}
+                  className="flex cursor-pointer items-start gap-3 p-4"
+                  style={{
+                    borderRadius: 'var(--radius)',
+                    border: `1px solid ${on ? 'var(--accent)' : 'var(--line)'}`,
+                    background: on ? 'color-mix(in oklab, var(--accent) 6%, var(--surface))' : 'var(--surface)',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="shipping"
+                    checked={on}
+                    onChange={() => set('shipping', m.id)}
+                    style={{ marginTop: 3, accentColor: 'var(--accent)' }}
+                  />
+                  <span className="min-w-0">
+                    <span className="flex items-baseline justify-between gap-2">
+                      <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink)' }}>{m.label}</span>
+                      <span className="num shrink-0" style={{ fontSize: 'var(--fs-sm)', color: m.price ? 'var(--ink-2)' : 'var(--accent-deep)' }}>
+                        {m.price ? formatPrice(m.price) : 'חינם'}
+                      </span>
+                    </span>
+                    <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+                      {m.note}
+                    </span>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+          {customer.shipping === 'pickup' && (
+            <p className="mt-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+              האיסוף מ{COMPANY.address}. ניצור קשר לתיאום מועד לאחר ההזמנה.
+            </p>
+          )}
+        </fieldset>
+
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
-          {FIELDS.map((f) => (
+          {FIELDS.filter(
+            (f) => customer.shipping !== 'pickup' || !['address', 'city', 'postcode'].includes(f.key),
+          ).map((f) => (
             <label key={f.key} className={f.half ? '' : 'sm:col-span-2'}>
               <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
                 {f.label}
@@ -147,7 +197,7 @@ export default function CheckoutForm() {
               </span>
               <input
                 type={f.type}
-                value={customer[f.key]}
+                value={String(customer[f.key] ?? '')}
                 onChange={(e) => set(f.key, e.target.value)}
                 autoComplete={f.autoComplete}
                 aria-invalid={errors[f.key] ? 'true' : undefined}
@@ -173,6 +223,59 @@ export default function CheckoutForm() {
               )}
             </label>
           ))}
+        </div>
+
+        {/* אישור התקנון: חובה, לא מסומן מראש, ועם קישור שנפתח בלשונית
+            נפרדת כדי שהטופס לא יאבד. דיוור: רשות, ובנפרד - סעיף 30א
+            דורש הסכמה מפורשת ונפרדת, לא כרוכה באישור התנאים */}
+        <div className="mt-8 flex flex-col gap-4">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={customer.terms}
+              onChange={(e) => set('terms', e.target.checked)}
+              aria-invalid={errors.terms ? 'true' : undefined}
+              style={{ marginTop: 3, width: 17, height: 17, accentColor: 'var(--accent)' }}
+            />
+            <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.65 }}>
+              קראתי ואני מאשר/ת את{' '}
+              <Link
+                href="/legal/terms"
+                target="_blank"
+                className="link-u"
+                style={{ color: 'var(--accent-deep)' }}
+              >
+                תנאי השימוש
+              </Link>
+              {' '}ואת{' '}
+              <Link
+                href="/legal/privacy"
+                target="_blank"
+                className="link-u"
+                style={{ color: 'var(--accent-deep)' }}
+              >
+                מדיניות הפרטיות
+              </Link>
+              .
+            </span>
+          </label>
+          {errors.terms && (
+            <span style={{ fontSize: 'var(--fs-2xs)', color: 'var(--sale)', marginTop: -8 }}>
+              {errors.terms}
+            </span>
+          )}
+
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={customer.marketing}
+              onChange={(e) => set('marketing', e.target.checked)}
+              style={{ marginTop: 3, width: 17, height: 17, accentColor: 'var(--accent)' }}
+            />
+            <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.65 }}>
+              אשמח לקבל עדכונים על דגמים חדשים ומבצעים. אפשר להסיר בכל עת.
+            </span>
+          </label>
         </div>
 
         {failed && (
@@ -253,8 +356,10 @@ export default function CheckoutForm() {
               </div>
             )}
             <div className="mb-3 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
-              <span>משלוח</span>
-              <span>{shippingNote}</span>
+              <span>{ship.label}</span>
+              <span className={ship.price ? 'num' : undefined} style={{ color: ship.price ? undefined : 'var(--accent-deep)' }}>
+                {ship.price ? formatPrice(ship.price) : 'חינם'}
+              </span>
             </div>
             <div
               className="flex items-baseline justify-between pt-3"

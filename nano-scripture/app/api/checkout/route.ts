@@ -60,7 +60,15 @@ export async function POST(req: NextRequest) {
   }
 
   // --- הפרטים ---
-  const customer = { ...body.customer, phone: normalizePhone(body.customer?.phone ?? '') };
+  const customer = {
+    ...body.customer,
+    phone: normalizePhone(body.customer?.phone ?? ''),
+    // בוליאנים מהרשת אינם בוליאנים עד שכופים עליהם. אישור התקנון
+    // הוא הדבר שהכי לא כדאי לקבל כ-"truthy"
+    terms: body.customer?.terms === true,
+    marketing: body.customer?.marketing === true,
+    shipping: body.customer?.shipping === 'pickup' ? ('pickup' as const) : ('delivery' as const),
+  };
   const errors = validate(customer);
   if (Object.keys(errors).length) {
     return NextResponse.json({ error: 'פרטים חסרים או שגויים', fields: errors }, { status: 400 });
@@ -68,7 +76,7 @@ export async function POST(req: NextRequest) {
 
   const gift = Boolean(body.gift);
   const code = typeof body.code === 'string' ? body.code : null;
-  const totals = orderTotal({ lines, gift, code });
+  const totals = orderTotal({ lines, gift, code, shipping: customer.shipping });
 
   try {
     const order = await createOrder({

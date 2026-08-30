@@ -30,8 +30,44 @@ export const POLICY = {
   freeShippingOver: null as number | null,
 
   /** דמי משלוח קבועים. null = טרם נקבע, והעגלה תדחה את המספר לתשלום */
-  shippingFlat: null as number | null,
+  shippingFlat: 35 as number | null,
 };
+
+/**
+ * שיטות המשלוח.
+ *
+ * האיסוף העצמי אינו רק חיסכון של 35 שקל - הוא גם ההזדמנות היחידה
+ * שבה לקוח מחזיק את התכשיט לפני שהוא משלם עליו במשלוח, ולכן הוא
+ * מוצג כאפשרות שווה ולא כהערה קטנה.
+ */
+export type ShippingMethodId = 'delivery' | 'pickup';
+
+export const SHIPPING: {
+  id: ShippingMethodId;
+  label: string;
+  note: string;
+  price: number;
+  /** מזהה השיטה בווקומרס */
+  wcMethod: string;
+}[] = [
+  {
+    id: 'delivery',
+    label: 'משלוח עד הבית',
+    note: `מבוטח · ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים`,
+    price: 35,
+    wcMethod: 'flat_rate',
+  },
+  {
+    id: 'pickup',
+    label: 'איסוף עצמי ממודיעין',
+    note: 'בתיאום מראש · ללא עלות',
+    price: 0,
+    wcMethod: 'local_pickup',
+  },
+];
+
+export const shippingMethod = (id: ShippingMethodId) =>
+  SHIPPING.find((m) => m.id === id) ?? SHIPPING[0];
 
 /** "1-4 ימי עסקים" - הניסוח היחיד. ה־num עוטף במקומות שצריך LTR */
 export const deliveryDays = `${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays}`;

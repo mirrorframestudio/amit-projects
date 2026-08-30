@@ -2,7 +2,7 @@ import { wcPost, skuToId } from './wcClient';
 import { getProduct } from './catalog';
 import { getBlessing, isBlessingId, type BlessingId } from './blessings';
 import { GIFT_BOX } from './extras';
-import { POLICY } from './policy';
+import { POLICY, shippingMethod } from './policy';
 import { PROMO, isPromoCode, codeDiscount } from './promo';
 
 /**
@@ -42,6 +42,9 @@ export type OrderInput = {
     address: string;
     city: string;
     postcode?: string;
+    shipping: 'delivery' | 'pickup';
+    terms: boolean;
+    marketing: boolean;
   };
   /** הערת לקוח, אם נמסרה */
   note?: string;
@@ -86,8 +89,10 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     ? [{ name: GIFT_BOX.title, total: String(GIFT_BOX.price), tax_status: 'taxable' }]
     : [];
 
+  const ship = shippingMethod(input.customer.shipping);
   const shippingFree =
-    POLICY.freeShippingOver !== null && itemsTotal >= POLICY.freeShippingOver;
+    ship.price === 0 ||
+    (POLICY.freeShippingOver !== null && itemsTotal >= POLICY.freeShippingOver);
   const coupon_lines =
     input.code && isPromoCode(input.code) ? [{ code: PROMO.code.toLowerCase() }] : [];
 
@@ -118,13 +123,21 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     coupon_lines,
     shipping_lines: [
       {
-        method_id: shippingFree ? 'free_shipping' : 'flat_rate',
-        method_title: shippingFree ? 'משלוח חינם' : 'משלוח מבוטח',
-        total: shippingFree ? '0' : '',
+        method_id: ship.wcMethod,
+        method_title: ship.label,
+        total: String(ship.price),
       },
     ],
     customer_note: input.note ?? '',
-    meta_data: [{ key: '_mikra_source', value: 'storefront' }],
+    meta_data: [
+      { key: '_mikra_source', value: 'storefront' },
+      // אישור התקנון נשמר עם חותמת זמן. אם מישהו יטען שלא ראה את
+      // התנאים, זו הראיה - ולכן היא חלק מההזמנה ולא לוג נפרד
+      { key: 'אישור תקנון', value: new Date().toISOString() },
+      // ההסכמה לדיוור נשמרת גם כשהיא שלילית: "לא הסכים" הוא עובדה
+      // שצריך לכבד, ולא היעדר מידע
+      { key: 'הסכמה לדיוור', value: input.customer.marketing ? 'כן' : 'לא' },
+    ],
   };
 }
 
@@ -136,12 +149,15 @@ export async function createOrder(input: OrderInput): Promise<WcOrder> {
 }
 
 /** הסכום שהלקוח ישלם, לפי אותם כללים שהעגלה מציגה */
-export function orderTotal(input: Pick<OrderInput, 'lines' | 'gift' | 'code'>) {
+export function orderTotal(
+  input: Pick<OrderInput, 'lines' | 'gift' | 'code'> & { shipping?: 'delivery' | 'pickup' },
+) {
   const items = input.lines.reduce((sum, l) => {
     const p = getProduct(l.slug);
     return sum + (p ? p.price * l.qty : 0);
   }, 0);
   const discount = codeDiscount(items, input.code);
   const gift = input.gift ? GIFT_BOX.price : 0;
-  return { items, discount, gift, total: items - discount + gift };
+  const ship = shippingMethod(input.shipping ?? 'delivery').price;
+  return { items, discount, gift, shipping: ship, total: items - discount + gift + ship };
 }

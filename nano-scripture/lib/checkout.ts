@@ -7,6 +7,8 @@
  * ההודעות בעברית ומיועדות להיות מוצגות כמו שהן ליד השדה, ולא להיות
  * מתורגמות במקום אחר - תרגום כפול הוא איך שהודעות שגיאה מתיישנות.
  */
+import type { ShippingMethodId } from './policy';
+
 export type Customer = {
   firstName: string;
   lastName: string;
@@ -15,6 +17,22 @@ export type Customer = {
   address: string;
   city: string;
   postcode: string;
+  shipping: ShippingMethodId;
+  /**
+   * אישור תקנון. חובה, ולא מסומן מראש.
+   *
+   * תיבה מסומנת מראש אינה הסכמה - היא הנחה. וברגע שמישהו יטען
+   * שלא ראה את התנאים, מה שיקבע הוא אם הייתה פעולה אקטיבית.
+   */
+  terms: boolean;
+  /**
+   * הסכמה לדיוור. רשות, ולא מסומן מראש.
+   *
+   * סעיף 30א לחוק התקשורת אוסר משלוח דבר פרסומת בלי הסכמה מפורשת
+   * מראש. תיבה מסומנת מראש אינה הסכמה מפורשת, והקנס הוא עד 1,000
+   * שקל לכל הודעה, בלי הוכחת נזק.
+   */
+  marketing: boolean;
 };
 
 export const EMPTY_CUSTOMER: Customer = {
@@ -25,6 +43,9 @@ export const EMPTY_CUSTOMER: Customer = {
   address: '',
   city: '',
   postcode: '',
+  shipping: 'delivery',
+  terms: false,
+  marketing: false,
 };
 
 export type FieldErrors = Partial<Record<keyof Customer, string>>;
@@ -54,8 +75,13 @@ export function validate(c: Customer): FieldErrors {
   const phone = normalizePhone(c.phone);
   if (!/^0(5\d|[2-4,8-9])\d{7}$/.test(phone)) e.phone = 'מספר טלפון ישראלי לא תקין';
 
-  if (t(c.address).length < 4) e.address = 'רחוב ומספר בית';
-  if (t(c.city).length < 2) e.city = 'עיר חסרה';
+  // באיסוף עצמי אין למה לשלוח, ולכן הכתובת אינה נדרשת
+  if (c.shipping !== 'pickup') {
+    if (t(c.address).length < 4) e.address = 'רחוב ומספר בית';
+    if (t(c.city).length < 2) e.city = 'עיר חסרה';
+  }
+
+  if (!c.terms) e.terms = 'יש לאשר את תנאי השימוש';
 
   // מיקוד אינו חובה בישראל לצורך משלוח, ולכן נבדק רק אם הוזן
   const zip = t(c.postcode);
