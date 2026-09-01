@@ -639,7 +639,6 @@ export const CHIP_SPEC: { label: string; value: string }[] = [
 export const BOX_SPEC: { label: string; value: string }[] = [
   { label: 'אריזה', value: 'קופסה מרופדת - כלולה. אריזת מתנה קשיחה בתוספת ₪49' },
   { label: 'כרטיס ברכה', value: 'שם הברכה, המקורות שלה והנוסח המלא' },
-  { label: 'זכוכית מגדלת', value: 'כלולה - לראות את פני השבב מקרוב' },
   { label: 'משלוח', value: 'מבוטח · 1-4 ימי עסקים' },
 ];
 
@@ -668,7 +667,7 @@ export function photoFor(
     return { src: shot.file, kind: 'worn', focus: wornFocus(shot, product.slug) };
   }
   const scene = product.scenes?.[0];
-  return scene ? { src: scene, kind: 'scene', focus: sceneFocus(scene) } : null;
+  return scene ? { src: scene, kind: 'scene', focus: sceneFocus(scene, product.slug) } : null;
 }
 
 /**
@@ -684,7 +683,26 @@ const SCENE_FOCUS: Record<string, string> = {
   '/scene/lo-yanum-3.jpg': '49% 65%',
 };
 
-export function sceneFocus(src: string) {
+/**
+ * מוקד לכל דגם בנפרד, כשאותו צילום משרת כמה דגמים.
+ *
+ * בצילום מגן דוד נראים שני הגימורים יחד: הזהב ב-40%/70% והכסף
+ * ב-55%/77%. בלי הבחנה, שני עמודי המוצר הציגו את אותה תמונה בדיוק
+ * ובשניהם נראה גם הפריט שלא קונים - כלומר עמוד הזהב מכר כסף.
+ * המפתח הוא "slug|src", כי המוקד תלוי בשניהם.
+ */
+const SCENE_FOCUS_BY_PRODUCT: Record<string, string> = {
+  'beseter-gold|/scene/beseter-pair.jpg': '40% 70%',
+  'beseter|/scene/beseter-pair.jpg': '55% 77%',
+  'beseter-gold|/scene/beseter-pair-marble.jpg': '40% 70%',
+  'beseter|/scene/beseter-pair-marble.jpg': '55% 77%',
+};
+
+export function sceneFocus(src: string, slug?: string) {
+  if (slug) {
+    const perProduct = SCENE_FOCUS_BY_PRODUCT[`${slug}|${src}`];
+    if (perProduct) return perProduct;
+  }
   return SCENE_FOCUS[src] ?? '50% 50%';
 }
 

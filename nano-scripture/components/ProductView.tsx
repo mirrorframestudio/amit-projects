@@ -147,7 +147,7 @@ export default function ProductView({ product }: { product: Product }) {
   const faq: QA[] = [
     {
       q: 'איך אני יודע שהנוסח באמת צרוב שם?',
-      a: `הנוסח המלא מוצג באתר לפני הרכישה ואפשר להשוות אותו למקור. אחרי הצריבה מושווה הכתב שעל השבב לקובץ המקור תו אחר תו, ושבב עם ולו סטייה אחת נפסל. הזכוכית המגדלת שבקופסה מראה את מרקם השורות ואת גבולות השבב - את האותיות עצמן אפשר לראות רק בהגדלה של פי 500 לפחות.`,
+      a: `הנוסח המלא מוצג באתר לפני הרכישה ואפשר להשוות אותו למקור. אחרי הצריבה מושווה הכתב שעל השבב לקובץ המקור תו אחר תו, ושבב עם ולו סטייה אחת נפסל. את האותיות עצמן אי אפשר לראות בעין ולא בזכוכית מגדלת רגילה - הן בגובה תשעה מיקרון, ונדרשת הגדלה של פי 500 לפחות.`,
     },
     {
       q: 'אפשר להחליף את הברכה אחרי שהזמנתי?',
@@ -220,7 +220,7 @@ export default function ProductView({ product }: { product: Product }) {
               alt={product.name}
               fill
               sizes="(max-width: 1024px) 92vw, 46vw"
-              style={{ objectPosition: sceneFocus(product.scenes[sceneIndex]) }}
+              style={{ objectPosition: sceneFocus(product.scenes[sceneIndex], product.slug) }}
               className="object-cover"
             />
           )}
@@ -277,7 +277,7 @@ export default function ProductView({ product }: { product: Product }) {
                     alt=""
                     fill
                     sizes="84px"
-                    style={{ objectPosition: sceneFocus(product.scenes?.[Number(v.id.slice(6))] ?? '') }}
+                    style={{ objectPosition: sceneFocus(product.scenes?.[Number(v.id.slice(6))] ?? '', product.slug) }}
                     className="object-cover"
                   />
                 )}

@@ -530,7 +530,7 @@ export default function CartDrawer() {
 
             {/* המשלוח לא נכלל כאן. ההבטחה הזו סותרת את הפס שלמעלה */}
             <p className="mt-3 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-              קופסה מרופדת, כרטיס ברכה וזכוכית מגדלת - כלולים בכל הזמנה
+              קופסה מרופדת וכרטיס ברכה - כלולים בכל הזמנה
             </p>
           </div>
         )}
