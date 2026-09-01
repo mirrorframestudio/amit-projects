@@ -118,7 +118,7 @@ export default function CraftPage() {
               focus={shot ? wornFocus(shot, 'toldot') : '50% 50%'}
               accent={BLESSINGS[0].accent}
             >
-              <NanoLoupe blessing={BLESSINGS[0].id} height="100%" radius={40} readPx={15} />
+              <NanoLoupe blessing={BLESSINGS[0].id} height="100%" radius={40} readPx={15} hint={false} />
             </ZoomLadder>
           </div>
         </div>

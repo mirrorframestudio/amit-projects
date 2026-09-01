@@ -151,7 +151,7 @@ export default function ZoomLadder({
             color: '#fff',
           }}
         >
-          <span style={{ fontSize: 'var(--fs-xs)' }}>הכתב · העבירו את הסמן</span>
+          <span style={{ fontSize: 'var(--fs-xs)' }}>הכתב</span>
           <span className="num" style={{ fontSize: 'var(--fs-2xs)', opacity: 0.85 }}>
             0.009 מ״מ
           </span>

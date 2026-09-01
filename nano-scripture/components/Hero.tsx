@@ -57,7 +57,12 @@ export default function Hero() {
         className="absolute inset-0 md:hidden"
         style={{
           background:
-            'linear-gradient(to top, var(--bg) 40%, color-mix(in oklab, var(--bg) 86%, transparent) 60%, transparent 84%)',
+            // הצעיף הישן נגמר ב-40% אטימות, ובגובה שבו יושבת שורת
+            // המקורות הקרם היה שקוף ב-47% בלבד. מדידה על הפריים
+            // שמאחוריה נתנה 2.15:1 מול הזהב - כלומר השורה הראשונה
+            // בעמוד הייתה בלתי קריאה בטלפון. ההרמה ל-56% משאירה את
+            // השרשרת נראית ומביאה את היחס לכ-5.6:1
+            'linear-gradient(to top, var(--bg) 56%, color-mix(in oklab, var(--bg) 80%, transparent) 76%, transparent 92%)',
         }}
       />
       <div
@@ -71,7 +76,7 @@ export default function Hero() {
 
       <div className="shell relative flex min-h-[inherit] items-end pb-14 md:items-center md:pb-0">
         <div className="w-full py-16 md:w-[46%] md:py-24">
-          <p className="eyebrow mask-line load">
+          <p className="eyebrow mask-line load" style={{ color: 'var(--accent-deep)' }}>
             <span>כסף 925 · צריבת ננו · הנוסח המלא</span>
           </p>
 

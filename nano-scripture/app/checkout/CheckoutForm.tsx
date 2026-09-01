@@ -235,7 +235,7 @@ export default function CheckoutForm() {
               checked={customer.terms}
               onChange={(e) => set('terms', e.target.checked)}
               aria-invalid={errors.terms ? 'true' : undefined}
-              style={{ marginTop: 3, width: 17, height: 17, accentColor: 'var(--accent)' }}
+              style={{ marginTop: 3, accentColor: 'var(--accent)' }}
             />
             <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.65 }}>
               קראתי ואני מאשר/ת את{' '}
@@ -270,7 +270,7 @@ export default function CheckoutForm() {
               type="checkbox"
               checked={customer.marketing}
               onChange={(e) => set('marketing', e.target.checked)}
-              style={{ marginTop: 3, width: 17, height: 17, accentColor: 'var(--accent)' }}
+              style={{ marginTop: 3, accentColor: 'var(--accent)' }}
             />
             <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.65 }}>
               אשמח לקבל עדכונים על דגמים חדשים ומבצעים. אפשר להסיר בכל עת.

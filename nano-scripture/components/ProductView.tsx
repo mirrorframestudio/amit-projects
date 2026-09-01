@@ -231,8 +231,12 @@ export default function ProductView({ product }: { product: Product }) {
           )}
         </div>
 
-        {/* תמונות ממוזערות — כמו בכל חנות, ולא כפתורי טקסט */}
-        <div className="mt-4 flex gap-3">
+        {/* תמונות ממוזערות — כמו בכל חנות, ולא כפתורי טקסט.
+            overflow-x-auto ולא visible: לדגם עם שמונה תצוגות הרצועה
+            רחבה 812 בתוך טור של 345, וחמש מהן היו מחוץ למסך ובלתי
+            נגישות. זה קורה בכל רוחב ולא רק בטלפון - גם ב-1440 הטור
+            צר מדי - ולכן אין תנאי רספונסיבי */}
+        <div className="mt-4 flex gap-3 overflow-x-auto">
           {VIEWS.map((v) => {
             const on = v.id === view;
             return (
@@ -288,13 +292,14 @@ export default function ProductView({ product }: { product: Product }) {
             );
           })}
 
-          <p
-            className="flex-1 self-center ps-1"
-            style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.6 }}
-          >
-            {VIEWS.find((v) => v.id === view)?.label}
-          </p>
         </div>
+
+        <p
+          className="mt-2 ps-1"
+          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.6 }}
+        >
+          {VIEWS.find((v) => v.id === view)?.label}
+        </p>
       </div>
 
       {/* ================= מידע ורכישה ================= */}
@@ -802,6 +807,9 @@ export default function ProductView({ product }: { product: Product }) {
       </section>
 
       {/* ---------- פס קנייה דביק ---------- */}
+      {/* מסמן לפוטר שיש פס שעלול לכסות אותו. סימון ולא מדידה, כי
+          הפוטר אינו יודע דבר על דף המוצר */}
+      <span className="buybar-space hidden" aria-hidden />
       <div
         aria-hidden={!stuck}
         style={{

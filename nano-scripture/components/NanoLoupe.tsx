@@ -40,6 +40,14 @@ export default function NanoLoupe({
   const posRef = useRef({ x: -999, y: -999 });
   const frame = useRef(0);
   const [active, setActive] = useState(false);
+  /**
+   * האם המצביע גס - כלומר אצבע.
+   *
+   * נקבע באפקט ולא בזמן רינדור: הרמז נמצא ב-HTML שהשרת מייצר, וקריאה
+   * ל-matchMedia בזמן רינדור הייתה שוברת את ההידרציה. מתחיל false,
+   * כך שהשרת והציור הראשון מסכימים על גרסת העכבר.
+   */
+  const [coarse, setCoarse] = useState(false);
   /** רדיוס העדשה בפועל - נגזר מרוחב הלוח, חסום בערך שהרכיב קיבל */
   const [r, setR] = useState(radius);
 
@@ -75,6 +83,14 @@ export default function NanoLoupe({
     layoutRef.current = layout;
     paintNano(ctx, layout, ink);
   }, [fontSize, ink, source]);
+
+  useEffect(() => {
+    const m = window.matchMedia('(pointer: coarse)');
+    const on = () => setCoarse(m.matches);
+    on();
+    m.addEventListener('change', on);
+    return () => m.removeEventListener('change', on);
+  }, []);
 
   useEffect(() => {
     const el = wrap.current;
@@ -191,6 +207,9 @@ export default function NanoLoupe({
       onPointerMove={move}
       onPointerEnter={() => setActive(true)}
       onPointerLeave={() => setActive(false)}
+      // גלילה אנכית מבטלת את המצביע. pointerleave אמור לרוץ אחריו,
+      // אבל זה זול מכדי לא לחגור
+      onPointerCancel={() => setActive(false)}
       style={{
         position: 'relative',
         height,
@@ -199,7 +218,11 @@ export default function NanoLoupe({
         border: '1px solid var(--line-strong)',
         background: `radial-gradient(120% 90% at 30% 0%, color-mix(in oklab, ${b.accent} 26%, ${back}), ${back})`,
         cursor: active ? 'none' : 'crosshair',
-        touchAction: 'none',
+        // pan-y ולא none. עם none הדפדפן לא מטפל בשום מחווה בתוך הקופסה,
+        // והלוח תופס 520 פיקסל מתוך 812 - כלומר אצבע שמתחילה להחליק
+        // באמצע העמוד פשוט לא גוללת אותו. אנכי חוזר לדפדפן, אופקי
+        // נשאר לזכוכית, וזה גם כיוון הסריקה הטבעי על שורות הטקסט
+        touchAction: 'pan-y',
         boxShadow: '0 30px 70px -46px rgb(20 15 5 / .8)',
       }}
     >
@@ -227,7 +250,10 @@ export default function NanoLoupe({
         style={{
           position: 'absolute',
           left: 'var(--mx, 50%)',
-          top: 'var(--my, 50%)',
+          // באצבע העדשה מוזזת מעל נקודת המגע: היא 68 פיקסל, ומשטח
+          // המגע של אצבע הוא 40-50 - כלומר היא הייתה מוסתרת בדיוק
+          // ע"י מה שמפעיל אותה. ה-max מונע חיתוך בשפה העליונה
+          top: coarse ? 'max(34px, calc(var(--my, 50%) - 78px))' : 'var(--my, 50%)',
           width: r * 2,
           height: r * 2,
           transform: 'translate(-50%, -50%)',
@@ -267,7 +293,7 @@ export default function NanoLoupe({
             textShadow: '0 2px 10px rgb(0 0 0 / .8)',
           }}
         >
-          העבירו את הסמן - הזכוכית המגדלת נפתחת
+          {coarse ? 'גררו את האצבע' : 'העבירו את הסמן'} - הזכוכית המגדלת נפתחת
         </div>
       )}
     </div>
