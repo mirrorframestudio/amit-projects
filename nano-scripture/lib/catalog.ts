@@ -687,3 +687,17 @@ const SCENE_FOCUS: Record<string, string> = {
 export function sceneFocus(src: string) {
   return SCENE_FOCUS[src] ?? '50% 50%';
 }
+
+/**
+ * המידה של הדגם, לשורת המטא בכרטיס.
+ *
+ * 42% מהקונים מנסים לשפוט גודל פיזי מהתמונה ו-37% מהאתרים לא נותנים
+ * שום רמז. בכרטיס שהצילום בו הוא חיתוך על לבן אין שום קנה מידה, ולכן
+ * המידה נשלפת מהמפרט - הערך הראשון שנקוב במילימטרים או בסנטימטרים.
+ * מוצג מקוצר: "29.2 מ״מ", בלי שרשראות ההארכה שמאריכות את השורה.
+ */
+export function sizeCue(product: Product): string | null {
+  const spec = product.specs.find((s) => /מ״מ|ס״מ/.test(s.value));
+  if (!spec) return null;
+  return spec.value.split(' + ')[0].trim();
+}

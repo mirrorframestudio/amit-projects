@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRef } from 'react';
-import { FINISHES, MATERIALS, formatPrice, photoFor, type Product } from '@/lib/catalog';
+import { FINISHES, MATERIALS, formatPrice, photoFor, sizeCue, type Product } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
 import { PROMO, saleOf } from '@/lib/promo';
 
@@ -56,45 +56,51 @@ export default function ProductCard({
               }}
             />
 
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
-              priority={priority}
-              className="object-contain p-[16%] transition-transform duration-[850ms] group-hover:scale-[1.07]"
-              style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
-            />
-
-            {/* הצילום נחשף מעל החיתוך. המגע אינו מפעיל hover, ולכן
-                המסמן למטה מודיע שיש צילום גם למי שלא יראה אותו כאן */}
-            {photo && (
+            {/* הצילום הוא שכבת הבסיס, לא ההיפוך.
+                קודם הוא רונדר ב-opacity-0 ונחשף ב-hover בלבד - ולמגע אין
+                hover. כלומר כל גולש נייד ראה חיתוך לבן בלבד, בדיוק בנקודה
+                שבה הוא פוגש מחיר, בזמן שהדפדפן כבר הוריד את הצילום ותגית
+                "על הגוף" הכריזה על תמונה שלא תוצג לעולם.
+                מוקדי החיתוך שנמדדו ב-worn.ts וב-catalog.ts שימשו עד עכשיו
+                רק את השכבה שאיש בנייד לא ראה. */}
+            {photo ? (
               <Image
                 src={photo.src}
-                alt=""
+                alt={product.name}
                 fill
                 sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                priority={priority}
                 style={{ objectPosition: photo.focus }}
-                className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+                className="object-cover transition-transform duration-[850ms] group-hover:scale-[1.05]"
+              />
+            ) : (
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                priority={priority}
+                className="object-contain p-[16%] transition-transform duration-[850ms] group-hover:scale-[1.07]"
+                style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
               />
             )}
 
+            {/* החיתוך עובר להיות החשיפה: בעכבר אפשר לראות את הפריט מבודד,
+                ובמגע פשוט לא רואים אותו - וזו האבידה הקטנה מהשתיים */}
             {photo && (
               <span
                 aria-hidden
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 transition-opacity duration-500 group-hover:opacity-0"
-                style={{
-                  insetInlineStart: 14,
-                  bottom: 14,
-                  fontSize: 'var(--fs-2xs)',
-                  letterSpacing: '.1em',
-                  borderRadius: 99,
-                  color: 'var(--ink-2)',
-                  background: 'color-mix(in oklab, var(--surface) 82%, transparent)',
-                  border: '1px solid var(--line)',
-                }}
+                className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                style={{ background: 'var(--surface)' }}
               >
-                {photo.kind === 'worn' ? 'על הגוף' : 'בסצנה'}
+                <Image
+                  src={product.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                  className="object-contain p-[16%]"
+                  style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
+                />
               </span>
             )}
 
@@ -192,8 +198,20 @@ export default function ProductCard({
               className="mt-5 flex items-center justify-between pt-4"
               style={{ borderTop: '1px solid var(--line)' }}
             >
-              <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-                {available.length === 1 ? available[0].plain : `${available.length} ברכות לבחירה`}
+              <span
+                className="flex items-baseline gap-2.5"
+                style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
+              >
+                <span>
+                  {available.length === 1 ? available[0].plain : `${available.length} ברכות לבחירה`}
+                </span>
+                {/* רמז קנה מידה: הכרטיס הוא ריבוע, ובלי מספר אין ממנו
+                    שום דרך לדעת אם המדליון בגודל מטבע או בגודל אגורה */}
+                {sizeCue(product) && (
+                  <span className="num shrink-0" style={{ opacity: 0.8 }}>
+                    · {sizeCue(product)}
+                  </span>
+                )}
               </span>
               <span
                 className="link-u"

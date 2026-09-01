@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getProduct } from './catalog';
 import { codeDiscount } from './promo';
+import { isBlessingId } from './blessings';
 import type { BlessingId } from './blessings';
 
 /** אותו תכשיט עם ברכה אחרת הוא שורה נפרדת בעגלה */
@@ -35,6 +36,20 @@ export const useCart = create<CartState>()(
       open: false,
       add: (slug, blessing, qty = 1) =>
         set((s) => {
+          // שער אחרון לפני העגלה.
+          //
+          // הפריט נעשה בהזמנה והנוסח נצרב - אין דרך חזרה. שני כפתורי
+          // קרוס־סל העבירו לכאן את p.blessings[0], כלומר את הברכה
+          // שסודרה ראשונה, על סמך כלום. הם תוקנו, אבל הבדיקה יושבת
+          // כאן ולא בהם: קורא חדש שייכתב מחר לא יידע להיזהר.
+          const product = getProduct(slug);
+          if (!product || !isBlessingId(blessing) || !product.blessings.includes(blessing)) {
+            if (process.env.NODE_ENV !== 'production') {
+              console.error(`[cart] סירוב: ${slug} אינו נושא את ${blessing}`);
+            }
+            return s;
+          }
+
           const key = lineKey(slug, blessing);
           const exists = s.lines.some((l) => lineKey(l.slug, l.blessing) === key);
           const lines = exists

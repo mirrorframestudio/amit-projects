@@ -76,13 +76,15 @@ export default function PairedWith({ slug, accent }: { slug: string; accent: str
                       </span>
                     </span>
 
-                    <button
-                      onClick={() => add(p.slug, p.blessings[0], 1)}
+                    {/* כאן זה חמור אף יותר מבעגלה: צימוד הוא בדרך כלל
+                        מתנה לאדם שני, שצריך נוסח אחר לגמרי */}
+                    <Link
+                      href={`/products/${p.slug}`}
                       className="btn shrink-0"
                       style={{ ['--pad' as string]: '.62rem 1.1rem', fontSize: 'var(--fs-xs)' }}
                     >
-                      הוספה
-                    </button>
+                      לבחירה
+                    </Link>
                   </li>
                 );
               })}

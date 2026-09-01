@@ -434,13 +434,20 @@ export default function CartDrawer() {
                         </span>
                       </span>
 
-                      <button
-                        onClick={() => add(p.slug, p.blessings[0])}
+                      {/* מפנה לדף המוצר ולא מוסיף ישירות.
+                          הוספה ישירה הייתה חורטת את p.blessings[0] - הברכה
+                          שסודרה ראשונה - על פריט שנעשה בהזמנה ואי אפשר
+                          לשנות אחריו. הלקוח לא ראה את חמשת הנוסחים ולא את
+                          שמם. קרוס־סל למוצר שמוגדר חייב למסור לקונפיגורטור,
+                          לא לעקוף אותו */}
+                      <Link
+                        href={`/products/${p.slug}`}
+                        onClick={() => setOpen(false)}
                         className="btn"
                         style={{ ['--pad' as string]: '.5rem 1rem', fontSize: 'var(--fs-xs)' }}
                       >
-                        הוספה
-                      </button>
+                        לבחירה
+                      </Link>
                     </div>
                   );
                 })}
