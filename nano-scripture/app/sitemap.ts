@@ -16,7 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url('', 1),
     url('/blessings', 0.9),
     url('/craft', 0.7),
-    url('/brand', 0.5),
     ...ACTIVE_CATEGORIES.map((c) => url(`/categories/${c}`, 0.8)),
     ...PRODUCTS.map((p) => url(`/products/${p.slug}`, 0.9)),
     ...BLESSINGS.map((b) => url(`/blessings/${b.id}`, 0.7)),

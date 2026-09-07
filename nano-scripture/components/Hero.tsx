@@ -1,7 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
 import { BRAND } from '@/lib/brand';
 import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
 
@@ -21,35 +18,44 @@ const SOURCES = BLESSINGS.map((b) => {
   return parts.find((x) => /[׳״]/.test(x)) ?? parts[parts.length - 1];
 });
 
-/** הירו: וידאו מלא־רוחב, וטקסט יושב על צעיף שמנת בצד ימין */
+/**
+ * הירו: צילום מלא־רוחב, וטקסט יושב על צעיף שמנת בצד ימין.
+ *
+ * ------------------------------------------------------------------
+ * כאן ישב סרטון, והוא הוחלף בצילום.
+ *
+ * הסרטון היה דחיפה אל תוך השבב, ומעבר לשנייה השלישית לא היה לו
+ * חומר: הצילומים נופחו פי 2 עד פי 39, והדבר היחיד שנשאר חד היה
+ * שכבת טקסט מסונתזת. צילום של שני אנשים שעונדים שלושה מוצרים
+ * אומר יותר, ונטען בשליש מהמשקל.
+ *
+ * שני קבצים ולא אחד שנחתך: 16:9 לרוחב ו-9:16 לטלפון. בקובץ יחיד
+ * object-cover זרק 70% מהפריים באייפון 14 - נמדד. source עם media
+ * מגיש לכל מסך את מה שנבנה בשבילו, והבחירה נעשית לפני ההורדה.
+ * ------------------------------------------------------------------
+ */
 export default function Hero() {
-  const video = useRef<HTMLVideoElement>(null);
-
-  // מי שביקש פחות תנועה מקבל את פריים הפוסטר בלבד
-  useEffect(() => {
-    const el = video.current;
-    if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.removeAttribute('autoplay');
-      el.pause();
-    }
-  }, []);
-
   return (
     <section className="relative overflow-hidden" style={{ minHeight: 'min(88vh, 780px)' }}>
-      <video
-        ref={video}
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{ objectPosition: '32% center' }}
-        src="/hero/hero.mp4"
-        poster="/hero/hero-poster.jpg"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden
-      />
+      {/* picture ולא Image של Next: המקור נבחר לפי media, כך שטלפון
+          לא מוריד את הקובץ הרחב בכלל. הדפדפן בוחר לפני ההורדה */}
+      <picture>
+        <source
+          media="(max-width: 767px)"
+          srcSet="/hero/hero-portrait.webp"
+          type="image/webp"
+        />
+        <source media="(max-width: 767px)" srcSet="/hero/hero-portrait.jpg" />
+        <source srcSet="/hero/hero-landscape.webp" type="image/webp" />
+        <img
+          src="/hero/hero-landscape.jpg"
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+          aria-hidden
+        />
+      </picture>
 
       {/* צעיף: אנכי במסך צר, אופקי מימין במסך רחב */}
       <div
@@ -57,12 +63,13 @@ export default function Hero() {
         className="absolute inset-0 md:hidden"
         style={{
           background:
-            // הצעיף הישן נגמר ב-40% אטימות, ובגובה שבו יושבת שורת
-            // המקורות הקרם היה שקוף ב-47% בלבד. מדידה על הפריים
-            // שמאחוריה נתנה 2.15:1 מול הזהב - כלומר השורה הראשונה
-            // בעמוד הייתה בלתי קריאה בטלפון. ההרמה ל-56% משאירה את
-            // השרשרת נראית ומביאה את היחס לכ-5.6:1
-            'linear-gradient(to top, var(--bg) 56%, color-mix(in oklab, var(--bg) 80%, transparent) 76%, transparent 92%)',
+            // 56% היו נכונים לסרטון, שבו התליון ישב גבוה בפריים.
+            // בצילום הזוג התכשיטים יושבים ב-44% עד 62% מהגובה, ומדדתי
+            // שהצעיף הישן בלע את שלושתם - בטלפון לא נראה ולו תכשיט
+            // אחד. 42% משאירים את שני התליונים גלויים ועדיין נותנים
+            // לטקסט 58% מהגובה. הצמיד נופל מתחת לצעיף, וזו הפשרה
+            // שאין ממנה מנוס בפריים 9:16 שנושא גם כותרת
+            'linear-gradient(to top, var(--bg) 42%, color-mix(in oklab, var(--bg) 80%, transparent) 62%, transparent 80%)',
         }}
       />
       <div

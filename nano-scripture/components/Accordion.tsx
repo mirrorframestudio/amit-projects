@@ -1,19 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
-export type QA = { q: string; a: string };
+export type { QA } from '@/lib/faq';
+import type { QA } from '@/lib/faq';
 
 export default function Accordion({ items }: { items: QA[] }) {
   const [open, setOpen] = useState<number | null>(0);
+  // מזהה יציב בין שרת ללקוח, כדי ש-aria-controls יצביע על אותו אלמנט
+  const uid = useId();
 
   return (
     <div>
       {items.map((item, i) => (
         <div key={item.q} style={{ borderTop: '1px solid var(--line)' }}>
           <button
+            id={`${uid}-q${i}`}
             onClick={() => setOpen(open === i ? null : i)}
             aria-expanded={open === i}
+            aria-controls={`${uid}-a${i}`}
             className="flex w-full items-start justify-between gap-6 py-6 text-start"
           >
             <span className="display" style={{ fontSize: 'var(--fs-md)', lineHeight: 1.5 }}>
@@ -35,7 +40,14 @@ export default function Accordion({ items }: { items: QA[] }) {
             </span>
           </button>
           {/* פתיחה חלקה בלי לדעת גובה מראש */}
+          {/* התשובה הסגורה בגובה אפס. היא נשארת ב-DOM בשביל המעבר,
+              ולכן צריך להסתיר אותה מקורא מסך - אחרת הוא מקריא את תשע
+              התשובות ברצף בזמן שהמסך מראה רק כותרות */}
           <div
+            id={`${uid}-a${i}`}
+            role="region"
+            aria-labelledby={`${uid}-q${i}`}
+            aria-hidden={open !== i}
             style={{
               display: 'grid',
               gridTemplateRows: open === i ? '1fr' : '0fr',

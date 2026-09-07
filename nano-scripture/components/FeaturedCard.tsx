@@ -16,8 +16,10 @@ export default function FeaturedCard({ product }: { product: Product }) {
   const photo = product.scenes?.[0];
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
 
+  // col-span-2 כבר במובייל: הכרטיס בנוי כפול, ודחיסה שלו לחצי
+  // עמודה שברה אותו - גבהים לא שווים וטקסט שנשבר באמצע
   return (
-    <article className="reveal sm:col-span-2">
+    <article className="reveal col-span-2">
       <Link
         href={`/products/${product.slug}`}
         className="card group grid h-full overflow-hidden sm:grid-cols-2"

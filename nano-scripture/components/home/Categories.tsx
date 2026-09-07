@@ -9,10 +9,21 @@ import {
 } from '@/lib/catalog';
 import SectionPhoto from '@/components/SectionPhoto';
 
-/** שתי הקטגוריות הפעילות — נקודת הכניסה לקטלוג */
+/**
+ * הקטגוריות הפעילות - נקודת הכניסה לקטלוג.
+ *
+ * במובייל הכרטיס הוא שורה אופקית ולא כרטיס אנכי. הגרסה האנכית
+ * נמדדה בכ-490 פיקסלים לכרטיס - תמונה ביחס 4:3 ברוחב מלא, ריפוד
+ * של 28 ותיאור בן שלוש שורות - כלומר במסך של 743 נכנסה קטגוריה
+ * אחת בכל פעם, וצריך היה לגלול כדי לדעת שיש עוד. בשורה אופקית
+ * הכרטיס יורד לכ-120 פיקסל ושלוש הקטגוריות נראות יחד.
+ *
+ * התיאור יורד במובייל. הוא השורה הכי יקרה בגובה והכי פחות נחוצה
+ * ברשימת בחירה - מי שרוצה לדעת עוד נכנס לקטגוריה.
+ */
 export default function Categories() {
   return (
-    <section className="on-photo relative py-24 md:py-32">
+    <section className="on-photo relative py-14 md:py-32">
       <SectionPhoto src="/worn/scene-doorway.jpg" mode="band" flip veil={0.22} />
 
       <div className="shell relative">
@@ -31,7 +42,7 @@ export default function Categories() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 grid gap-3 md:mt-14 md:grid-cols-2 md:gap-6">
           {ACTIVE_CATEGORIES.map((id, i) => {
             const cat = CATEGORIES[id];
             const products = productsByCategory(id);
@@ -42,22 +53,25 @@ export default function Categories() {
               <Link
                 key={id}
                 href={`/categories/${id}`}
-                className="card reveal group flex flex-col"
+                className="card reveal group flex flex-row items-stretch md:flex-col"
                 style={{ ['--d' as string]: `${i * 110}ms` }}
               >
-                <div className="tile relative" style={{ aspectRatio: '4 / 3' }}>
+                <div
+                  className="tile relative w-[112px] flex-shrink-0 md:w-auto"
+                  style={{ aspectRatio: '1 / 1' }}
+                >
                   {hero && (
                     <Image
                       src={hero.image}
                       alt={cat.title}
                       fill
-                      sizes="(max-width: 768px) 92vw, 46vw"
+                      sizes="(max-width: 768px) 112px, 46vw"
                       className="object-contain p-[7%] transition-transform duration-700 group-hover:scale-[1.05]"
                     />
                   )}
                 </div>
 
-                <div className="flex flex-1 flex-col p-7">
+                <div className="flex flex-1 flex-col justify-center p-4 md:justify-start md:p-7">
                   <div className="flex items-baseline justify-between">
                     <h3 className="display t-2">{cat.title}</h3>
                     <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
@@ -69,13 +83,16 @@ export default function Categories() {
                     {cat.subtitle}
                   </p>
 
-                  <p className="mt-4 flex-1" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+                  <p
+                    className="mt-4 hidden flex-1 md:block"
+                    style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}
+                  >
                     {cat.blurb}
                   </p>
 
                   <div
-                    className="mt-6 flex items-center justify-between pt-5"
-                    style={{ borderTop: '1px solid var(--line)' }}
+                    className="mt-3 flex items-center justify-between md:mt-6 md:pt-5"
+                    style={{ borderTop: '1px solid var(--line)', borderTopWidth: undefined }}
                   >
                     <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                       {formatPrice(range.min)} - {formatPrice(range.max)}
@@ -84,7 +101,7 @@ export default function Categories() {
                       className="link-u"
                       style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)', letterSpacing: '.03em' }}
                     >
-                      לצפייה ב{cat.title} ←
+                      לצפייה ←
                     </span>
                   </div>
                 </div>

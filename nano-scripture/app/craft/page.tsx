@@ -10,6 +10,7 @@ import Accordion, { type QA } from '@/components/Accordion';
 
 export const metadata: Metadata = {
   title: 'הטכנולוגיה',
+  alternates: { canonical: '/craft' },
   description:
     'כיצד נצרבת ברכה שלמה על שטח של חצי מילימטר: ליתוגרפיית קרן יונים, השוואה תו־אחר־תו לנוסח המקור, ושיבוץ בתכשיט.',
 };
@@ -213,7 +214,7 @@ export default function CraftPage() {
             </ol>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/categories/necklaces" className="btn btn-solid">לקטלוג</Link>
-              <Link href="/brand" className="btn">שפת המותג</Link>
+              <Link href="/blessings" className="btn">חמשת הנוסחים</Link>
             </div>
           </div>
         </div>

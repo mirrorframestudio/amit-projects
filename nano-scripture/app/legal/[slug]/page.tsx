@@ -16,7 +16,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const doc = getLegalDoc(slug);
   if (!doc) return {};
-  return { title: doc.title, description: doc.lede };
+  return {
+    title: doc.title,
+    description: doc.lede,
+    alternates: { canonical: `/legal/${doc.slug}` },
+  };
 }
 
 export default async function LegalPage({

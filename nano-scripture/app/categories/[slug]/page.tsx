@@ -17,6 +17,8 @@ import {
   type CategoryId,
 } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
+import JsonLd from '@/components/JsonLd';
+import { itemListSchema, breadcrumbSchema } from '@/lib/schema';
 
 export function generateStaticParams() {
   return ACTIVE_CATEGORIES.map((slug) => ({ slug }));
@@ -30,7 +32,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const cat = CATEGORIES[slug as CategoryId];
   if (!cat || !ACTIVE_CATEGORIES.includes(cat.id)) return {};
-  return { title: cat.title, description: cat.blurb };
+  // הבאנר של הקטגוריה ולא תמונת הבית: מי שמשתף "שרשראות" מצפה
+  // לראות שרשרת. og:title ירש עד כה את כותרת הבית הגנרית
+  const banner = categoryBanner(cat.id) ?? '/hero/hero-landscape.jpg';
+  return {
+    title: cat.title,
+    description: cat.blurb,
+    alternates: { canonical: `/categories/${cat.id}` },
+    openGraph: {
+      type: 'website',
+      url: `/categories/${cat.id}`,
+      title: `${cat.title} · מִקְרָא`,
+      description: cat.blurb,
+      images: [{ url: banner, alt: cat.title }],
+    },
+    twitter: { card: 'summary_large_image', images: [banner] },
+  };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -40,6 +57,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (!cat || !ACTIVE_CATEGORIES.includes(id)) notFound();
 
   const products = productsByCategory(id);
+  const schema = [
+    itemListSchema(products, `/categories/${id}`),
+    breadcrumbSchema([
+      { name: 'מִקְרָא', path: '/' },
+      { name: cat.title, path: `/categories/${id}` },
+    ]),
+  ];
   const range = priceRange(id);
   const photos = categoryPhotos(id);
   const banner = categoryBanner(id);
@@ -57,6 +81,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
+      <JsonLd data={schema} />
       {/* ---------- כותרת הקטגוריה, על צילום ---------- */}
       <section className="relative overflow-hidden pt-36 pb-14">
         {banner && <SectionPhoto src={banner} mode="band" ratio="16 / 7" veil={0.4} />}
@@ -95,7 +120,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {/* ---------- הדגם המוביל והשורה הראשונה ---------- */}
       <section className="pb-4">
         <div className="shell">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
             {featured && <FeaturedCard product={featured} />}
             {beforeBreak.map((p, i) => (
               <ProductCard key={p.slug} product={p} index={i} priority />
@@ -152,7 +177,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {afterBreak.length > 0 && (
         <section className="pb-32">
           <div className="shell">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
               {afterBreak.map((p, i) => (
                 <ProductCard key={p.slug} product={p} index={i} />
               ))}

@@ -199,6 +199,34 @@ export default function NanoLoupe({
     [paintLens],
   );
 
+  /**
+   * כיבוי הזכוכית בכל דרך שבה המצביע עוזב בלי pointerleave.
+   *
+   * pointerenter מדליק ו-pointerleave מכבה, וזה עובד כשהעכבר יוצא
+   * מהקופסה בתנועה. הוא לא עובד כשהעמוד נגלל מתחת למצביע עומד,
+   * כשהמיקוד עובר לחלון אחר, או כשהאצבע מרימה בלי לצאת - ואז
+   * העדשה נשארת תלויה במקום האחרון שלה מעל הטקסט, בזמן שהסמן
+   * כבר במקום אחר לגמרי.
+   */
+  useEffect(() => {
+    if (!active) return;
+    const off = () => setActive(false);
+    const outside = (e: PointerEvent) => {
+      const el = wrap.current;
+      if (el && !el.contains(e.target as Node)) setActive(false);
+    };
+    document.addEventListener('pointermove', outside, { passive: true });
+    window.addEventListener('scroll', off, { passive: true });
+    window.addEventListener('blur', off);
+    document.addEventListener('visibilitychange', off);
+    return () => {
+      document.removeEventListener('pointermove', outside);
+      window.removeEventListener('scroll', off);
+      window.removeEventListener('blur', off);
+      document.removeEventListener('visibilitychange', off);
+    };
+  }, [active]);
+
   useEffect(() => () => cancelAnimationFrame(frame.current), []);
 
   return (

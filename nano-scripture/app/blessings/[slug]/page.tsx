@@ -5,7 +5,7 @@ import NanoLoupe from '@/components/NanoLoupe';
 import ProductCard from '@/components/ProductCard';
 import BlessingCard from '@/components/BlessingCard';
 import { BLESSINGS, getBlessing, isBlessingId } from '@/lib/blessings';
-import { PRODUCTS } from '@/lib/catalog';
+import { PRODUCTS, blessingPhotos } from '@/lib/catalog';
 import ScriptureText from '@/components/ScriptureText';
 
 export function generateStaticParams() {
@@ -23,6 +23,22 @@ export async function generateMetadata({
   return {
     title: b.plain,
     description: `${b.blurb} ${b.sources}. ${b.words} מילים שנצרבות על שבב אחד.`,
+    alternates: { canonical: `/blessings/${b.id}` },
+    openGraph: {
+      type: 'article',
+      url: `/blessings/${b.id}`,
+      title: `${b.plain} · מִקְרָא`,
+      description: b.blurb,
+      // הכרזת openGraph דורסת את זו של ה-layout, ולכן בלי תמונה כאן
+      // העמוד היה משותף בלי תמונה בכלל. צילום הדגם שנושא את הנוסח,
+      // ואם אין - חזרה לתמונת המותג
+      images: [
+        {
+          url: blessingPhotos(BLESSINGS.map((x) => x.id))[b.id] ?? '/hero/hero-landscape.jpg',
+          alt: b.plain,
+        },
+      ],
+    },
   };
 }
 
@@ -142,7 +158,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
               </p>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
               {carriers.slice(0, 6).map((p, i) => (
                 <ProductCard key={p.slug} product={p} index={i} />
               ))}
@@ -155,7 +171,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       <section className="pb-32">
         <div className="shell">
           <h2 className="display t-2 mb-10">ברכות נוספות</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
             {others.map((o, i) => (
               <BlessingCard key={o.id} blessing={o} index={i} />
             ))}

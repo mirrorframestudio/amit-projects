@@ -4,8 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Logo from './Logo';
 import { BRAND } from '@/lib/brand';
+import { COMPANY, telHref, waHref } from '@/lib/company';
 import { CATEGORIES, ACTIVE_CATEGORIES } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
+
+const CONTACT = { fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' } as const;
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -28,12 +31,38 @@ export default function Footer() {
       </div>
 
       <div className="shell relative">
-        <div className="grid gap-14 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
+        <div className="grid gap-8 md:gap-14 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
           <div>
             <Logo size={34} />
             <p className="lede mt-6 max-w-xs" style={{ fontSize: 'var(--fs-base)' }}>
               {BRAND.tagline}
             </p>
+            {/* יצירת קשר. עד עכשיו לא הייתה באתר אף דרך להשיג בן אדם -
+                לא טלפון, לא וואטסאפ, לא כתובת - וזו גם חובה לפי חוק
+                הגנת הצרכן וגם מה שמותג לא מוכר הכי נמדד עליו */}
+            <div className="mt-7 flex flex-col gap-2">
+              {telHref && (
+                <a href={telHref} className="tap-row link-u" style={CONTACT}>
+                  <span className="ltr num">{COMPANY.phone}</span>
+                </a>
+              )}
+              {waHref && (
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tap-row link-u"
+                  style={CONTACT}
+                >
+                  וואטסאפ
+                </a>
+              )}
+              <a href={`mailto:${COMPANY.email}`} className="tap-row link-u ltr" style={CONTACT}>
+                {COMPANY.email}
+              </a>
+              <span style={{ ...CONTACT, color: 'var(--ink-3)' }}>{COMPANY.address}</span>
+            </div>
+
             <div className="mt-7 flex gap-4">
               {['Instagram', 'TikTok', 'Pinterest'].map((s) => (
                 <a
@@ -48,8 +77,8 @@ export default function Footer() {
             </div>
           </div>
 
-          <nav className="flex flex-col gap-3">
-            <p className="eyebrow mb-2">הקטלוג</p>
+          <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 md:flex md:flex-col md:gap-3">
+            <p className="eyebrow col-span-2 mb-0 md:mb-2">הקטלוג</p>
             {ACTIVE_CATEGORIES.map((id) => (
               <Link key={id} href={`/categories/${id}`} className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
                 {CATEGORIES[id].title}
@@ -60,8 +89,8 @@ export default function Footer() {
             </Link>
           </nav>
 
-          <nav className="flex flex-col gap-3">
-            <p className="eyebrow mb-2">הברכות</p>
+          <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 md:flex md:flex-col md:gap-3">
+            <p className="eyebrow col-span-2 mb-0 md:mb-2">הברכות</p>
             {BLESSINGS.map((b) => [`/blessings/${b.id}`, b.plain]).map(([href, label]) => (
               <Link key={label} href={href} className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
                 {label}

@@ -17,6 +17,12 @@ export default function CategoryNav({ current }: { current?: CategoryId }) {
             href={`/categories/${id}`}
             aria-current={active ? 'page' : undefined}
             style={{
+              // inline-flex עם gap ולא margin: הספרה והמילה העברית
+              // נדבקו זו לזו, כי מרווח לוגי בין טקסט דו-כיווני לא
+              // תמיד נופל היכן שמצפים
+              display: 'inline-flex',
+              alignItems: 'baseline',
+              gap: '.5rem',
               flexShrink: 0,
               padding: '.62rem 1.35rem',
               borderRadius: 99,
@@ -30,7 +36,7 @@ export default function CategoryNav({ current }: { current?: CategoryId }) {
             }}
           >
             {cat.title}
-            <span className="num" style={{ opacity: 0.6, marginInlineStart: '.5rem', fontSize: 'var(--fs-xs)' }}>
+            <span className="num" style={{ opacity: 0.6, fontSize: 'var(--fs-xs)' }}>
               {productsByCategory(id).length}
             </span>
           </Link>

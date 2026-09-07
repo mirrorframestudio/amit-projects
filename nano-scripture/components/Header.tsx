@@ -235,9 +235,6 @@ export default function Header() {
             <Link href="/craft" className="tap-row" style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-base)', padding: '.34rem 0' }}>
               הטכנולוגיה
             </Link>
-            <Link href="/brand" className="tap-row" style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-base)', padding: '.34rem 0' }}>
-              שפת המותג
-            </Link>
             <Link href="/legal/shipping-returns" className="tap-row" style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-base)', padding: '.34rem 0' }}>
               משלוחים והחזרות
             </Link>

@@ -91,7 +91,7 @@ function CodeField() {
       </div>
 
       <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: error ? 'var(--sale)' : 'var(--ink-3)' }}>
-        {error ? 'הקוד אינו מזוהה. בדקו את הכתיב ונסו שוב.' : PROMO.sub}
+        {error ? 'הקוד אינו מזוהה. בדקו את הכתיב ונסו שוב.' : 'חברי המועדון מקבלים קוד להזמנה הראשונה'}
       </p>
     </div>
   );

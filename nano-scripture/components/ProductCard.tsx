@@ -68,7 +68,7 @@ export default function ProductCard({
                 src={photo.src}
                 alt={product.name}
                 fill
-                sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 44vw, 28vw"
                 priority={priority}
                 style={{ objectPosition: photo.focus }}
                 className="object-cover transition-transform duration-[850ms] group-hover:scale-[1.05]"
@@ -78,7 +78,7 @@ export default function ProductCard({
                 src={product.image}
                 alt={product.name}
                 fill
-                sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 44vw, 28vw"
                 priority={priority}
                 className="object-contain p-[16%] transition-transform duration-[850ms] group-hover:scale-[1.07]"
                 style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
@@ -97,7 +97,7 @@ export default function ProductCard({
                   src={product.image}
                   alt=""
                   fill
-                  sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 28vw"
+                  sizes="(max-width: 640px) 46vw, (max-width: 1024px) 44vw, 28vw"
                   className="object-contain p-[16%]"
                   style={{ filter: 'drop-shadow(0 14px 18px rgb(70 55 20 / .16))' }}
                 />
@@ -157,9 +157,9 @@ export default function ProductCard({
             </span>
           </div>
 
-          <div className="card-body flex flex-1 flex-col px-6 pb-6 pt-5">
+          <div className="card-body flex flex-1 flex-col px-3.5 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-5">
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="display" style={{ fontSize: 'var(--fs-lg)' }}>
+              <h3 className="display text-[var(--fs-md)] sm:text-[var(--fs-lg)]">
                 {product.name}
               </h3>
               <span className="flex shrink-0 items-baseline gap-2">
@@ -190,7 +190,7 @@ export default function ProductCard({
               {MATERIALS[product.material].label} · {FINISHES[product.finish]}
             </p>
 
-            <p className="mt-3 flex-1" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', lineHeight: 1.65 }}>
+            <p className="mt-3 hidden flex-1 sm:block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', lineHeight: 1.65 }}>
               {product.short}
             </p>
 

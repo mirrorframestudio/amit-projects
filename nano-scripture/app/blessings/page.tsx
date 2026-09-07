@@ -6,6 +6,7 @@ import NanoLoupe from '@/components/NanoLoupe';
 
 export const metadata: Metadata = {
   title: 'חמש הברכות',
+  alternates: { canonical: '/blessings' },
   description:
     'חמישה נוסחים שנצרבים על השבב: ברכת התינוק, ברכת הפרנסה, הברכה שלך, שמירה והגנה, ואשת חיל. כל נוסח במלואו, ללא קיצור.',
 };
