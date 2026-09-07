@@ -26,8 +26,10 @@ import GiftTags from './GiftTags';
 import ProductStory from './ProductStory';
 import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
-import Accordion, { type QA } from './Accordion';
+import Accordion from './Accordion';
 import { POLICY, deliveryLine, shippingNote } from '@/lib/policy';
+import { productFaq } from '@/lib/faq';
+import { trackViewItem } from '@/lib/analytics';
 
 type View = 'jewel' | 'worn' | 'chip' | `scene-${number}`;
 
@@ -85,6 +87,24 @@ export default function ProductView({ product }: { product: Product }) {
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
 
   const [blessing, setBlessing] = useState<BlessingId>(available[0].id);
+  /**
+   * האם הברכה נבחרה בפועל, ולא רק ברירת המחדל.
+   *
+   * עשרה מתוך חמישה־עשר הדגמים נושאים יותר מנוסח אחד, וברירת המחדל
+   * היא הראשון ברשימה. הפס הדביק מופיע עכשיו גם לפני שמגיעים לבורר,
+   * ובלי הדגל הזה אפשר היה להוסיף לעגלה ולצרוב נוסח שאיש לא בחר.
+   */
+  const [picked, setPicked] = useState(false);
+  /**
+   * הבורר פתוח או מקופל.
+   *
+   * שלושת הנוסחים כקלפים פרושים תפסו כ-380 פיקסלים ודחפו את "הוספה
+   * לעגלה" אל מתחת לקיפול - הכפתור החשוב בעמוד היה הדבר שהכי קשה
+   * להגיע אליו. מקופל הוא תופס שורה אחת, והכפתור עולה איתה.
+   */
+  const [openChooser, setOpenChooser] = useState(false);
+  const chooserRef = useRef<HTMLDivElement>(null);
+  const mustChoose = available.length > 1 && !picked;
   const [view, setView] = useState<View>('jewel');
   const [qty, setQty] = useState(1);
   const [openSpec, setOpenSpec] = useState<number | null>(null);
@@ -108,6 +128,22 @@ export default function ProductView({ product }: { product: Product }) {
 
   const one = available.length === 1;
   const b = getBlessing(blessing);
+
+  /**
+   * צפייה בדגם. נורה גם כשמחליפים ברכה, כי זו בחירה אחרת של
+   * אותו פריט - ובלעדיה הדוח לא מראה איזה נוסח באמת נבחן.
+   *
+   * המפתח האחרון נשמר כדי שהרכבה חוזרת לא תיספר כצפייה שנייה:
+   * במצב פיתוח React מריץ כל אפקט פעמיים, וזה נמדד ונראה בבירור.
+   * החלפת ברכה משנה את המפתח, ולכן היא כן נספרת.
+   */
+  const seen = useRef('');
+  useEffect(() => {
+    const key = `${product.slug}::${blessing}`;
+    if (seen.current === key) return;
+    seen.current = key;
+    trackViewItem(product, blessing);
+  }, [product, blessing]);
   const cat = CATEGORIES[product.category];
   const sale = saleOf(product.price);
   // התצוגה הנוכחית כשהיא סצנה - האינדקס נגזר מהמזהה
@@ -119,16 +155,29 @@ export default function ProductView({ product }: { product: Product }) {
   const buyRef = useRef<HTMLDivElement>(null);
   const [stuck, setStuck] = useState(false);
 
-  // מדידה ישירה בגלילה ולא IntersectionObserver: המיקום הנדרש כאן הוא
-  // "הכפתור נשאר מאחור למעלה", וזו השוואה אחת. גם קל לאמת אותה.
+  /**
+   * הפס הדביק מופיע כשהכפתור האמיתי אינו על המסך - לא רק אחרי שעברנו
+   * אותו.
+   *
+   * קודם התנאי היה bottom < 0 בלבד, כלומר "הכפתור נשאר מאחור". אבל
+   * במובייל הכפתור יושב אחרי הגלריה, פירורי הלחם, הכותרת, המקור,
+   * המחיר, התשלומים, התיאור ובחירת הברכה - וכל הדרך הזאת נגללה בלי
+   * שום אפשרות לקנות. הפער הזה הוא בדיוק המקום שבו מבקר מתייאש.
+   *
+   * עכשיו הוא מופיע גם כשהכפתור עוד מתחת לקיפול, ונעלם רק כשהוא
+   * באמת על המסך - אז הוא מיותר. סף הגלילה מונע ממנו לקפוץ בראש
+   * העמוד, שם הגלריה עצמה עושה את העבודה.
+   */
   useEffect(() => {
     let ticking = false;
     const check = () => {
       ticking = false;
       const el = buyRef.current;
       if (!el) return;
-      // התחתית מעל קצה המסך = עברנו את הכפתור. מתחתיו - עוד לא הגענו
-      setStuck(el.getBoundingClientRect().bottom < 0);
+      const r = el.getBoundingClientRect();
+      const passed = r.bottom < 0;
+      const notReached = r.top > window.innerHeight;
+      setStuck((passed || notReached) && window.scrollY > 320);
     };
     const onScroll = () => {
       if (ticking) return;
@@ -144,28 +193,7 @@ export default function ProductView({ product }: { product: Product }) {
     };
   }, []);
 
-  const faq: QA[] = [
-    {
-      q: 'איך אני יודע שהנוסח באמת צרוב שם?',
-      a: `הנוסח המלא מוצג באתר לפני הרכישה ואפשר להשוות אותו למקור. אחרי הצריבה מושווה הכתב שעל השבב לקובץ המקור תו אחר תו, ושבב עם ולו סטייה אחת נפסל. את האותיות עצמן אי אפשר לראות בעין ולא בזכוכית מגדלת רגילה - הן בגובה תשעה מיקרון, ונדרשת הגדלה של פי 500 לפחות.`,
-    },
-    {
-      q: 'אפשר להחליף את הברכה אחרי שהזמנתי?',
-      a: `הנוסח נצרב לפי ההזמנה, ולכן שינוי אפשרי כל עוד ההזמנה לא נשלחה - כתבו לנו ונחליף. אחרי המשלוח חלה מדיניות ההחזרה הרגילה: ${POLICY.returnDays} יום, כל עוד הפריט לא נלבש ובאריזתו המקורית.`,
-    },
-    {
-      q: 'ומה אם התכשיט נשבר?',
-      a: `אחריות של שנה על פגמי ייצור בגוף התכשיט - הלחמות, חוליות, והשבב במשבצתו. הסוגר הוא חלק נע והאחריות עליו היא ${POLICY.claspMonths} חודשים. שבר או עיקום שנגרמו בשימוש אינם באחריות, אבל נשמח לתקן גם אותם - נודיע מראש על העלות ונבצע רק אחרי אישורכם.`,
-    },
-    {
-      q: 'אפשר להתקלח עם זה? ללכת לים?',
-      a: 'השבב עצמו אטום ואינו נפגע ממים. גוף התכשיט הוא סיפור אחר: מי ים, מי בריכה, סבון ותמרוקים פוגעים במתכת ובציפוי. מומלץ להסיר לפני מקלחת, רחצה ופעילות גופנית.',
-    },
-    {
-      q: 'כמה זמן לוקח המשלוח?',
-      a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים, מבוטחת. דמי המשלוח ${shippingNote === 'מחושב בתשלום' ? 'מוצגים בעת התשלום' : shippingNote}.`,
-    },
-  ];
+  const faq = productFaq(product, b);
 
   // המק״ט, החומר והברכה הנבחרת נגזרים מהנתונים ומצטרפים למפרט הדגם
   const productRows = [
@@ -460,8 +488,8 @@ export default function ProductView({ product }: { product: Product }) {
         <hr className="rule my-10" />
 
         {/* ---------- בחירת הברכה ---------- */}
-        <div>
-          <div className="mb-1 flex items-baseline justify-between gap-4">
+        <div ref={chooserRef} style={{ scrollMarginTop: 96 }}>
+          <div className="mb-3 flex items-baseline justify-between gap-4">
             <p className="eyebrow" style={{ color: b.accentInk }}>
               {one ? 'הברכה שנצרבת' : 'הברכה שתיצרב'}
             </p>
@@ -469,13 +497,52 @@ export default function ProductView({ product }: { product: Product }) {
               {one ? 'נוסח אחד' : `${available.length} נוסחים לבחירה`}
             </span>
           </div>
-          <p className="mb-5" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>
+
+          {/* השורה המקופלת: מה נבחר, וכפתור להחלפה. היא זו שנראית
+              כברירת מחדל, והרשימה נפתחת רק כשמבקשים */}
+          {!one && !openChooser && (
+            <button
+              onClick={() => setOpenChooser(true)}
+              aria-expanded={false}
+              className="flex w-full items-center gap-3 text-start"
+              style={{
+                padding: '.85rem 1rem',
+                borderRadius: 'var(--radius)',
+                border: `1px solid ${picked ? b.accent : 'var(--line-strong)'}`,
+                background: `color-mix(in oklab, ${b.accent} 8%, var(--surface))`,
+              }}
+            >
+              <span
+                aria-hidden
+                style={{ width: 22, height: 22, borderRadius: 6, background: b.accent, flexShrink: 0 }}
+              />
+              <span className="min-w-0 flex-1">
+                <span className="display block truncate" style={{ fontSize: 'var(--fs-base)' }}>
+                  {b.plain}
+                </span>
+                <span style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+                  {picked ? b.forWhom : 'ברירת מחדל - אפשר להחליף'}
+                </span>
+              </span>
+              <span
+                className="link-u flex-shrink-0"
+                style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
+              >
+                {picked ? 'החלפה' : 'לבחירה'}
+              </span>
+            </button>
+          )}
+
+          <p
+            className={`mb-4 ${one || openChooser ? '' : 'hidden'}`}
+            style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}
+          >
             {one
               ? 'בדגם הזה נצרב נוסח אחד, והוא נבחר לפי אופי התכשיט.'
               : 'אותו תכשיט, נוסח אחר. הבחירה משנה רק את מה שנצרב על השבב.'}
           </p>
 
-          <div className="flex flex-col gap-2.5">
+          <div className={`flex-col gap-2.5 ${one || openChooser ? 'flex' : 'hidden'}`}>
             {available.map((item) => {
               const on = item.id === blessing;
               const row = (
@@ -564,7 +631,11 @@ export default function ProductView({ product }: { product: Product }) {
               ) : (
                 <button
                   key={item.id}
-                  onClick={() => setBlessing(item.id)}
+                  onClick={() => {
+                    setBlessing(item.id);
+                    setPicked(true);
+                    setOpenChooser(false);
+                  }}
                   aria-pressed={on}
                   className="text-start"
                   style={skin}
@@ -795,7 +866,7 @@ export default function ProductView({ product }: { product: Product }) {
       {/* ---------- שאלות נפוצות ----------
           הסקיל מציב את השאלות כקו ההגנה האחרון לפני ההמרה, ומורה
           לבנות אותן סביב ההתנגדויות ולא סביב מה שנוח לענות עליו.
-          חמש השאלות כאן הן חמש ההתנגדויות של הקטגוריה הזאת */}
+          התשע כאן הן ההתנגדויות של הקטגוריה, בסדר שבו הן עולות */}
       <section className="pb-24 pt-4" style={{ borderTop: '1px solid var(--line)' }}>
         <div className="shell grid gap-10 pt-14 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
           <div className="lg:sticky lg:top-32 lg:self-start">
@@ -865,11 +936,20 @@ export default function ProductView({ product }: { product: Product }) {
           </span>
 
           <button
-            onClick={() => add(product.slug, blessing, qty)}
+            onClick={() => {
+              // בלי בחירה מודעת הפס לא קונה - הוא מגלגל אל הבורר.
+              // צריבה של נוסח שלא נבחר אינה שגיאה שאפשר לתקן אחרי
+              // המשלוח, כי התכשיט כבר נצרב
+              if (mustChoose) {
+                chooserRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+              }
+              add(product.slug, blessing, qty);
+            }}
             className="btn btn-solid flex-1 sm:max-w-xs"
             style={{ ['--pad' as string]: '.85rem 1.6rem', fontSize: 'var(--fs-sm)' }}
           >
-            הוספה לעגלה
+            {mustChoose ? 'בחירת הנוסח' : 'הוספה לעגלה'}
           </button>
         </div>
       </div>

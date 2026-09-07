@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart, cartTotals } from '@/lib/cart';
@@ -9,10 +9,12 @@ import { getBlessing } from '@/lib/blessings';
 import { GIFT_BOX } from '@/lib/extras';
 import { PROMO } from '@/lib/promo';
 import { SHIPPING, shippingMethod } from '@/lib/policy';
-import { COMPANY } from '@/lib/company';
+import { COMPANY, waHref } from '@/lib/company';
+import { trackBeginCheckout, trackPurchase } from '@/lib/analytics';
 import {
   EMPTY_CUSTOMER,
   FIELDS,
+  RECIPIENT_FIELDS,
   validate,
   type Customer,
   type FieldErrors,
@@ -45,6 +47,17 @@ export default function CheckoutForm() {
     setOpen(false);
   }, [setOpen]);
 
+  /**
+   * תחילת צ'קאאוט. נורה פעם אחת, ורק אחרי ההידרציה - לפניה העגלה
+   * עדיין ריקה, ואירוע בלי פריטים אינו שווה דבר לאופטימיזציה.
+   */
+  const begun = useRef(false);
+  useEffect(() => {
+    if (!ready || begun.current || !lines.length) return;
+    begun.current = true;
+    trackBeginCheckout(lines);
+  }, [ready, lines]);
+
   const totals = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
   const ship = shippingMethod(customer.shipping);
@@ -55,6 +68,45 @@ export default function CheckoutForm() {
     setCustomer(next);
     if (tried) setErrors(validate(next));
   };
+
+  /**
+   * שדה טקסט אחד. אותו רינדור לכתובת הקונה ולכתובת הנמען - שני
+   * העתקים של אותו קלט היו נפרדים ברגע שמשהו בו משתנה.
+   */
+  const field = (f: (typeof FIELDS)[number]) => (
+    <label key={f.key} className={f.half ? '' : 'sm:col-span-2'}>
+      <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
+        {f.label}
+        {f.optional && <span style={{ color: 'var(--ink-3)' }}> (לא חובה)</span>}
+      </span>
+      <input
+        type={f.type}
+        value={String(customer[f.key] ?? '')}
+        onChange={(e) => set(f.key, e.target.value)}
+        autoComplete={f.autoComplete}
+        aria-invalid={errors[f.key] ? 'true' : undefined}
+        aria-describedby={errors[f.key] ? `err-${f.key}` : undefined}
+        className="mt-1.5 w-full px-3.5"
+        style={{
+          height: 46,
+          fontSize: 'var(--fs-base)',
+          borderRadius: 'var(--radius)',
+          border: `1px solid ${errors[f.key] ? 'var(--sale)' : 'var(--line-strong)'}`,
+          background: 'var(--surface)',
+          color: 'var(--ink)',
+        }}
+      />
+      {errors[f.key] && (
+        <span
+          id={`err-${f.key}`}
+          className="mt-1 block"
+          style={{ fontSize: 'var(--fs-2xs)', color: 'var(--sale)' }}
+        >
+          {errors[f.key]}
+        </span>
+      )}
+    </label>
+  );
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -87,6 +139,9 @@ export default function CheckoutForm() {
         return;
       }
       setDone({ number: data.orderNumber, message: data.message });
+      // הסכום מהשרת, ולא זה שהטופס הציג: השרת מחשב אותו מחדש
+      // מהקטלוג, וזה מה שייגבה בפועל
+      trackPurchase(String(data.orderNumber), Number(data.total ?? total), lines);
     } catch {
       setFailed('אין חיבור לשרת. בדקו את האינטרנט ונסו שוב.');
     } finally {
@@ -119,7 +174,18 @@ export default function CheckoutForm() {
             {done.message}
           </p>
         )}
-        <Link href="/" className="btn btn-solid mt-8 inline-block">חזרה לחנות</Link>
+        {/* במסלול הידני הלקוח מחכה להודעה ממני. כפתור שמאפשר לו
+            לפתוח את השיחה בעצמו חוסך את החרטה שנולדת בהמתנה */}
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {waHref && (
+            <a href={waHref} target="_blank" rel="noopener noreferrer" className="btn btn-solid">
+              לפתיחת שיחה בוואטסאפ
+            </a>
+          )}
+          <Link href="/" className="btn">
+            חזרה לחנות
+          </Link>
+        </div>
       </div>
     );
   }
@@ -189,41 +255,48 @@ export default function CheckoutForm() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           {FIELDS.filter(
             (f) => customer.shipping !== 'pickup' || !['address', 'city', 'postcode'].includes(f.key),
-          ).map((f) => (
-            <label key={f.key} className={f.half ? '' : 'sm:col-span-2'}>
-              <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
-                {f.label}
-                {f.optional && <span style={{ color: 'var(--ink-3)' }}> (לא חובה)</span>}
-              </span>
-              <input
-                type={f.type}
-                value={String(customer[f.key] ?? '')}
-                onChange={(e) => set(f.key, e.target.value)}
-                autoComplete={f.autoComplete}
-                aria-invalid={errors[f.key] ? 'true' : undefined}
-                aria-describedby={errors[f.key] ? `err-${f.key}` : undefined}
-                className="mt-1.5 w-full px-3.5"
-                style={{
-                  height: 46,
-                  fontSize: 'var(--fs-base)',
-                  borderRadius: 'var(--radius)',
-                  border: `1px solid ${errors[f.key] ? 'var(--sale)' : 'var(--line-strong)'}`,
-                  background: 'var(--surface)',
-                  color: 'var(--ink)',
-                }}
-              />
-              {errors[f.key] && (
-                <span
-                  id={`err-${f.key}`}
-                  className="mt-1 block"
-                  style={{ fontSize: 'var(--fs-2xs)', color: 'var(--sale)' }}
-                >
-                  {errors[f.key]}
-                </span>
-              )}
-            </label>
-          ))}
+          ).map(field)}
         </div>
+
+        {/* ---------- משלוח לנמען אחר ---------- */}
+        {/* רק במשלוח. באיסוף עצמי אין חבילה שיוצאת לשום מקום, והצעה
+            לשלוח למישהו אחר שם היא רק שאלה מבלבלת */}
+        {customer.shipping !== 'pickup' && (
+          <div className="mt-8">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={customer.toRecipient}
+                onChange={(e) => set('toRecipient', e.target.checked)}
+                style={{ marginTop: 3, accentColor: 'var(--accent)' }}
+              />
+              <span>
+                <span className="block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink)' }}>
+                  זו מתנה — לשלוח היישר לנמען
+                </span>
+                <span
+                  className="mt-0.5 block"
+                  style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)', lineHeight: 1.6 }}
+                >
+                  החבילה תגיע לכתובת שלו, והחשבונית נשארת על שמך.
+                </span>
+              </span>
+            </label>
+
+            {customer.toRecipient && (
+              <div
+                className="mt-5 grid gap-5 p-5 sm:grid-cols-2 sm:p-6"
+                style={{
+                  borderRadius: 'var(--radius)',
+                  border: '1px solid var(--line)',
+                  background: 'var(--surface-2)',
+                }}
+              >
+                {RECIPIENT_FIELDS.map(field)}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* אישור התקנון: חובה, לא מסומן מראש, ועם קישור שנפתח בלשונית
             נפרדת כדי שהטופס לא יאבד. דיוור: רשות, ובנפרד - סעיף 30א
