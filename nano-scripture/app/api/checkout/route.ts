@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { validate, normalizePhone, type Customer } from '@/lib/checkout';
 import { createOrder, orderTotal, type OrderLine } from '@/lib/wcOrder';
 import { wcReady } from '@/lib/wc';
-import { tranzilaReady, paymentUrl } from '@/lib/tranzila';
+import { paymentReady, createPayment } from '@/lib/grow';
 import { isBlessingId } from '@/lib/blessings';
 import { getProduct } from '@/lib/catalog';
 import { SITE_URL } from '@/lib/site';
@@ -68,6 +68,10 @@ export async function POST(req: NextRequest) {
     terms: body.customer?.terms === true,
     marketing: body.customer?.marketing === true,
     shipping: body.customer?.shipping === 'pickup' ? ('pickup' as const) : ('delivery' as const),
+    // הבחירה לשלוח לנמען אחר עוברת את אותה כפייה: היא קובעת לאן
+    // החבילה נוסעת, ולכן "truthy" אינו מספיק טוב בשבילה
+    toRecipient: body.customer?.toRecipient === true,
+    toPhone: normalizePhone(body.customer?.toPhone ?? ''),
   };
   const errors = validate(customer);
   if (Object.keys(errors).length) {
@@ -87,16 +91,48 @@ export async function POST(req: NextRequest) {
       note: typeof body.note === 'string' ? body.note.slice(0, 500) : '',
     });
 
-    // הסליקה טרם הוגדרה: ההזמנה נשמרה ואפשר ליצור איתה קשר, אבל
-    // אין לאן להפנות. עדיף לומר את זה מפורשות מאשר להפיל את הלקוח
-    // על דף שבור
-    if (!tranzilaReady) {
+    /**
+     * מסלול תשלום ידני.
+     *
+     * אין כאן תקלה: גישת ה-API של הסולק היא שירות בתשלום חודשי,
+     * ובנפח נמוך היא לא משתלמת. ההזמנה נקלטת במלואה, ואנחנו שולחים
+     * קישור תשלום ידנית.
+     *
+     * הניסוח חשוב. "הסליקה טרם הופעלה" מספר ללקוח שמשהו אצלנו לא
+     * גמור, וזה בדיוק הרגע שבו הוא מתחרט. מה שהוא צריך לדעת זה מה
+     * קורה עכשיו ומתי.
+     */
+    if (!paymentReady) {
       return NextResponse.json({
         orderId: order.id,
         orderNumber: order.number,
         total: totals.total,
         payment: null,
-        message: 'ההזמנה נשמרה. הסליקה טרם הופעלה - ניצור איתך קשר להשלמת התשלום.',
+        message:
+          'נשלח אליך קישור מאובטח לתשלום בוואטסאפ, בדרך כלל תוך שעה בשעות הפעילות. הפריט נשמר עבורך עד אז.',
+      });
+    }
+
+    // הקישור נוצר מול Grow, ולכן זו קריאת רשת שיכולה להיכשל בנפרד
+    // מיצירת ההזמנה. ההזמנה כבר קיימת בשלב הזה, ולכן כישלון כאן
+    // מחזיר אותה עם הודעה במקום למחוק אותה
+    let payment: string | null = null;
+    try {
+      payment = await createPayment({
+        orderId: order.id,
+        orderNumber: order.number,
+        amount: totals.total,
+        customer,
+        siteUrl: SITE_URL,
+      });
+    } catch (e) {
+      console.error('grow createPayment failed', e);
+      return NextResponse.json({
+        orderId: order.id,
+        orderNumber: order.number,
+        total: totals.total,
+        payment: null,
+        message: 'ההזמנה נשמרה, אך פתיחת דף התשלום נכשלה. ניצור איתך קשר.',
       });
     }
 
@@ -104,13 +140,7 @@ export async function POST(req: NextRequest) {
       orderId: order.id,
       orderNumber: order.number,
       total: totals.total,
-      payment: paymentUrl({
-        orderId: order.id,
-        orderNumber: order.number,
-        amount: totals.total,
-        customer,
-        siteUrl: SITE_URL,
-      }),
+      payment,
     });
   } catch (e) {
     console.error('checkout failed', e);

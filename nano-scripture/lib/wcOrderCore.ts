@@ -43,6 +43,13 @@ export type OrderInput = {
     city: string;
     postcode?: string;
     shipping: 'delivery' | 'pickup';
+    /** משלוח לכתובת של מישהו אחר */
+    toRecipient?: boolean;
+    toName?: string;
+    toPhone?: string;
+    toAddress?: string;
+    toCity?: string;
+    toPostcode?: string;
     terms: boolean;
     marketing: boolean;
   };
@@ -108,16 +115,48 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     country: 'IL',
   };
 
+  /**
+   * לאן החבילה נוסעת.
+   *
+   * ------------------------------------------------------------------
+   * החיוב והמשלוח מפסיקים להיות אותו דבר.
+   *
+   * עד כאן `shipping` היה עותק של `billing`, ולכן מתנה תמיד הגיעה אל
+   * מי ששילם עליה. עכשיו, כשנבחר נמען, זו הכתובת שיוצאת לחברת
+   * המשלוחים - והחשבונית נשארת על שם הקונה.
+   * ------------------------------------------------------------------
+   *
+   * הטלפון הוא של הנמען, כי השליח מתקשר ליעד ולא למשלם. ובאיסוף
+   * עצמי אין נמען בכלל: אין משלוח שיוצא לשום מקום.
+   */
+  const toRecipient = c.shipping !== 'pickup' && c.toRecipient === true;
+
+  // שם מלא בשדה אחד: מי שממלא כתובת של מישהו אחר לא מפריד בין
+  // פרטי למשפחה, ומה שמודפס על המדבקה הוא ממילא השם כפי שנכתב
+  const [toFirst = '', ...toRest] = (c.toName ?? '').trim().split(/\s+/);
+
+  const shipping = toRecipient
+    ? {
+        first_name: toFirst,
+        last_name: toRest.join(' '),
+        address_1: c.toAddress ?? '',
+        city: c.toCity ?? '',
+        postcode: c.toPostcode ?? '',
+        country: 'IL',
+        phone: c.toPhone ?? '',
+      }
+    : { ...billing, email: undefined, phone: undefined };
+
   return {
-    payment_method: 'tranzila',
-    payment_method_title: 'כרטיס אשראי',
+    payment_method: 'grow',
+    payment_method_title: 'Grow · כרטיס אשראי',
     // ההזמנה נוצרת ממתינה לתשלום. רק הוובהוק של הסולק מעביר אותה
     // ל"בתהליך" - אחרת הזמנה שנטשה באמצע התשלום נראית כמשולמת
     set_paid: false,
     status: 'pending',
     currency: 'ILS',
     billing,
-    shipping: { ...billing, email: undefined, phone: undefined },
+    shipping,
     line_items,
     fee_lines,
     coupon_lines,
@@ -137,6 +176,12 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
       // ההסכמה לדיוור נשמרת גם כשהיא שלילית: "לא הסכים" הוא עובדה
       // שצריך לכבד, ולא היעדר מידע
       { key: 'הסכמה לדיוור', value: input.customer.marketing ? 'כן' : 'לא' },
+      // בפאנל, כתובת משלוח שונה מכתובת החיוב היא שתי עמודות שנראות
+      // דומה. שורה מפורשת היא ההפרש בין לשים לב לבין לשלוח מתנה
+      // בחזרה אל מי שקנה אותה
+      ...(toRecipient
+        ? [{ key: 'משלוח לנמען', value: `${c.toName} · ${c.toPhone}` }]
+        : []),
     ],
   };
 }

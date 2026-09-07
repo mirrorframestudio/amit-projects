@@ -3,6 +3,7 @@ import CheckoutForm from './CheckoutForm';
 
 export const metadata: Metadata = {
   title: 'תשלום',
+  alternates: { canonical: '/checkout' },
   // עמוד שנוצר בשביל הקונה, לא בשביל גוגל
   robots: { index: false, follow: false },
 };
