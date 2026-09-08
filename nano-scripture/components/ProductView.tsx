@@ -759,9 +759,17 @@ export default function ProductView({ product }: { product: Product }) {
           </span>
 
           <span className="flex-1">
-            <span className="display block" style={{ fontSize: 'var(--fs-base)' }}>
+            {/* flex עם gap, ולא marginInlineStart.
+                הכותרת עברית והמחיר מספר, וזה גבול דו-כיווני - שם
+                מרווח אינליין נבלע, והתוצאה הייתה "אריזת מתנה+₪49"
+                דבוק. gap נמדד בפריסה ולא בזרימת הטקסט, ולכן הוא
+                מחזיק בשני הכיוונים. */}
+            <span
+              className="display flex flex-wrap items-baseline gap-x-2"
+              style={{ fontSize: 'var(--fs-base)' }}
+            >
               {GIFT_BOX.title}
-              <span className="num" style={{ marginInlineStart: '.5rem', color: 'var(--accent)' }}>
+              <span className="num" style={{ color: 'var(--accent)' }}>
                 +{formatPrice(GIFT_BOX.price)}
               </span>
             </span>
