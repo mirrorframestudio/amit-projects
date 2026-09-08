@@ -8,7 +8,7 @@ import { getProduct, formatPrice, ACTIVE_CATEGORIES, PRODUCTS } from '@/lib/cata
 import { getBlessing } from '@/lib/blessings';
 import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
-import { POLICY, shippingNote } from '@/lib/policy';
+import { POLICY, shippingNote, freeShippingGap } from '@/lib/policy';
 
 /**
  * שדה קוד ההנחה.
@@ -142,11 +142,17 @@ export default function CartDrawer() {
   const { items, subtotal, listTotal, discount } = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
   const total = subtotal + giftFee;
-  // אין משלוח חינם. הסף נשאר בקוד כדי שהחזרתו תהיה שינוי ערך אחד
+  /**
+   * הסף נמדד על המחירון לפני ההנחה - listTotal ולא subtotal.
+   *
+   * כאן הוא נמדד אחרי ההנחה ובשרת לפניה, כלומר העגלה והשרת היו
+   * חלוקים על אותה הזמנה: העגלה אומרת "עוד ₪60" והשרת כבר נותן
+   * משלוח חינם. עכשיו שניהם קוראים לאותו חישוב.
+   */
   const threshold = POLICY.freeShippingOver;
-  const gap = threshold === null ? 0 : threshold - subtotal;
+  const gap = freeShippingGap(listTotal) ?? 0;
   const freeShip = threshold !== null && gap <= 0;
-  const progress = threshold === null ? 0 : Math.min(1, subtotal / threshold);
+  const progress = threshold === null ? 0 : Math.min(1, listTotal / threshold);
 
   // השלמה למשלוח חינם: הפריטים הזולים שאינם כבר בעגלה
   const inCart = new Set(lines.map((l) => l.slug));

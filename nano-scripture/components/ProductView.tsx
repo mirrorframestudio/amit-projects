@@ -793,6 +793,79 @@ export default function ProductView({ product }: { product: Product }) {
           ))}
         </ul>
 
+        {/* ---------- "איך אני יודע שזה באמת שם" ---------- */}
+        {/*
+          ההתנגדות הגדולה במוצר הזה היא שאי אפשר לראות את המוצר.
+          כל מתחרה שנבדק עונה עליה במפורש, ואנחנו לא ענינו בכלל.
+
+          היא יושבת כאן ולא בשאלות הנפוצות שבתחתית העמוד, כי זו
+          הנקודה שבה היא נולדת - מיד אחרי הכפתור, כשכבר החלטת לקנות
+          משהו שאתה לא יכול לבדוק בעין.
+
+          כל טענה כאן ניתנת לבדיקה ע"י הקונה, ואין בה מספר שטרם הוכרע.
+        */}
+        <div
+          className="mt-8 p-5 sm:p-6"
+          style={{
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--line-strong)',
+            background: 'var(--surface-2)',
+          }}
+        >
+          <p className="display" style={{ fontSize: 'var(--fs-md)' }}>
+            איך אפשר לדעת שהנוסח באמת שם?
+          </p>
+
+          <ul className="mt-4 flex flex-col gap-3.5">
+            {[
+              [
+                'קראו אותו לפני שאתם קונים',
+                `הנוסח המלא של ${b.plain} פתוח כאן באתר, מילה במילה. אנחנו לא מבקשים להאמין לנו - אפשר להשוות אותו למקור.`,
+              ],
+              [
+                'המקור נקוב בשם',
+                'Westminster Leningrad Codex, נחלת הכלל. לא נוסח שערכנו, ולא קיצור שנבחר כדי להיכנס לשטח.',
+              ],
+              [
+                'עם ניקוד',
+                'הניקוד נצרב יחד עם האותיות, ולא מושמט כדי לחסוך מקום. זה מה שנראה מתחת למיקרוסקופ.',
+              ],
+            ].map(([h, t]) => (
+              <li key={h} className="flex gap-3">
+                <span
+                  aria-hidden
+                  className="flex-shrink-0"
+                  style={{ width: 6, height: 6, borderRadius: 2, background: b.accent, marginTop: 8 }}
+                />
+                <span>
+                  <span className="display block" style={{ fontSize: 'var(--fs-sm)' }}>
+                    {h}
+                  </span>
+                  <span
+                    className="mt-0.5 block"
+                    style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}
+                  >
+                    {t}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 pt-4" style={{ borderTop: '1px solid var(--line)' }}>
+            <Link
+              href={`/blessings/${b.id}`}
+              className="link-u"
+              style={{ fontSize: 'var(--fs-sm)', color: b.accentInk }}
+            >
+              לקריאת הנוסח המלא ←
+            </Link>
+            <Link href="/craft" className="link-u" style={{ fontSize: 'var(--fs-sm)', color: b.accentInk }}>
+              איך זה נצרב ←
+            </Link>
+          </div>
+        </div>
+
         {/* ---------- מה נצרב בפועל ---------- */}
         <div
           className="mt-5 p-6"

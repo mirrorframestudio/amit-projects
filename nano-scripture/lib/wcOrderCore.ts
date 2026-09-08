@@ -2,7 +2,7 @@ import { wcPost, skuToId } from './wcClient';
 import { getProduct } from './catalog';
 import { getBlessing, isBlessingId, type BlessingId } from './blessings';
 import { GIFT_BOX } from './extras';
-import { POLICY, shippingMethod } from './policy';
+import { shippingMethod, shippingCost } from './policy';
 import { PROMO, isPromoCode, codeDiscount } from './promo';
 
 /**
@@ -97,9 +97,9 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     : [];
 
   const ship = shippingMethod(input.customer.shipping);
-  const shippingFree =
-    ship.price === 0 ||
-    (POLICY.freeShippingOver !== null && itemsTotal >= POLICY.freeShippingOver);
+  // הסף נמדד על המחירון לפני ההנחה, דרך אותה פונקציה שהעגלה
+  // והצ'קאאוט קוראים לה - אחרת השלושה חלוקים על אותה הזמנה
+  const shipTotal = shippingCost(input.customer.shipping, itemsTotal);
   const coupon_lines =
     input.code && isPromoCode(input.code) ? [{ code: PROMO.code.toLowerCase() }] : [];
 
@@ -164,7 +164,7 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
       {
         method_id: ship.wcMethod,
         method_title: ship.label,
-        total: String(ship.price),
+        total: String(shipTotal),
       },
     ],
     customer_note: input.note ?? '',
@@ -203,6 +203,6 @@ export function orderTotal(
   }, 0);
   const discount = codeDiscount(items, input.code);
   const gift = input.gift ? GIFT_BOX.price : 0;
-  const ship = shippingMethod(input.shipping ?? 'delivery').price;
+  const ship = shippingCost(input.shipping ?? 'delivery', items);
   return { items, discount, gift, shipping: ship, total: items - discount + gift + ship };
 }

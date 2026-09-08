@@ -8,7 +8,7 @@ import { getProduct, formatPrice } from '@/lib/catalog';
 import { getBlessing } from '@/lib/blessings';
 import { GIFT_BOX } from '@/lib/extras';
 import { PROMO } from '@/lib/promo';
-import { SHIPPING, shippingMethod } from '@/lib/policy';
+import { SHIPPING, shippingMethod, shippingCost } from '@/lib/policy';
 import { COMPANY, waHref } from '@/lib/company';
 import { trackBeginCheckout } from '@/lib/analytics';
 import { saveOrderDone } from '@/lib/orderDone';
@@ -61,7 +61,9 @@ export default function CheckoutForm() {
   const totals = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
   const ship = shippingMethod(customer.shipping);
-  const total = totals.subtotal + giftFee + ship.price;
+  // הסף נמדד על המחירון, כמו בשרת. listTotal ולא subtotal
+  const shipCost = shippingCost(customer.shipping, totals.listTotal);
+  const total = totals.subtotal + giftFee + shipCost;
 
   const set = (key: keyof Customer, value: string | boolean) => {
     const next = { ...customer, [key]: value };
@@ -425,8 +427,8 @@ export default function CheckoutForm() {
             )}
             <div className="mb-3 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               <span>{ship.label}</span>
-              <span className={ship.price ? 'num' : undefined} style={{ color: ship.price ? undefined : 'var(--accent-deep)' }}>
-                {ship.price ? formatPrice(ship.price) : 'חינם'}
+              <span className={shipCost ? 'num' : undefined} style={{ color: shipCost ? undefined : 'var(--accent-deep)' }}>
+                {shipCost ? formatPrice(shipCost) : 'חינם'}
               </span>
             </div>
             <div
