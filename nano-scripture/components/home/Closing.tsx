@@ -4,7 +4,7 @@ import { POLICY, deliveryLine } from '@/lib/policy';
 
 export default function Closing() {
   return (
-    <section className="relative overflow-hidden py-16 md:py-40" style={{ borderTop: '1px solid var(--line)' }}>
+    <section className="relative overflow-hidden py-10 md:py-40" style={{ borderTop: '1px solid var(--line)' }}>
       {/* תכשיט ענק, כמעט שקוף, חותך את החלק התחתון */}
       <div
         aria-hidden

@@ -23,7 +23,7 @@ import SectionPhoto from '@/components/SectionPhoto';
  */
 export default function Categories() {
   return (
-    <section className="on-photo relative py-14 md:py-32">
+    <section className="on-photo relative py-9 md:py-32">
       <SectionPhoto src="/worn/scene-doorway.jpg" mode="band" flip veil={0.22} />
 
       <div className="shell relative">
