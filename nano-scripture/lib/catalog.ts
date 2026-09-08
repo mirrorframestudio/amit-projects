@@ -1,4 +1,5 @@
 import { salePrice } from './promo';
+import { deliveryLine } from './policy';
 import { wornFor, wornFocus } from './worn';
 import type { BlessingId } from './blessings';
 
@@ -641,7 +642,7 @@ export const CHIP_SPEC: { label: string; value: string }[] = [
 export const BOX_SPEC: { label: string; value: string }[] = [
   { label: 'אריזה', value: 'קופסה מרופדת - כלולה. אריזת מתנה קשיחה בתוספת ₪49' },
   { label: 'כרטיס ברכה', value: 'שם הברכה, המקורות שלה והנוסח המלא' },
-  { label: 'משלוח', value: 'מבוטח · 1-4 ימי עסקים' },
+  { label: 'משלוח', value: `מבוטח · ${deliveryLine}` },
 ];
 
 export const CARE_SPEC: { label: string; value: string }[] = [

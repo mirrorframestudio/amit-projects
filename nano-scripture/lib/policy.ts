@@ -13,7 +13,7 @@ export const POLICY = {
   platingGoldMonths: 3,
   platingRhodiumMonths: 6,
 
-  deliveryMinDays: 1,
+  deliveryMinDays: 2,
   deliveryMaxDays: 4,
   returnDays: 30,
 
@@ -30,13 +30,13 @@ export const POLICY = {
   freeShippingOver: null as number | null,
 
   /** דמי משלוח קבועים. null = טרם נקבע, והעגלה תדחה את המספר לתשלום */
-  shippingFlat: 35 as number | null,
+  shippingFlat: 29 as number | null,
 };
 
 /**
  * שיטות המשלוח.
  *
- * האיסוף העצמי אינו רק חיסכון של 35 שקל - הוא גם ההזדמנות היחידה
+ * האיסוף העצמי אינו רק חיסכון של דמי המשלוח - הוא גם ההזדמנות היחידה
  * שבה לקוח מחזיק את התכשיט לפני שהוא משלם עליו במשלוח, ולכן הוא
  * מוצג כאפשרות שווה ולא כהערה קטנה.
  */
@@ -54,13 +54,13 @@ export const SHIPPING: {
     id: 'delivery',
     label: 'משלוח עד הבית',
     note: `מבוטח · ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים`,
-    price: 35,
+    price: 29,
     wcMethod: 'flat_rate',
   },
   {
     id: 'pickup',
     label: 'איסוף עצמי ממודיעין',
-    note: 'בתיאום מראש · ללא עלות',
+    note: 'בתיאום מראש בוואטסאפ · ללא עלות',
     price: 0,
     wcMethod: 'local_pickup',
   },

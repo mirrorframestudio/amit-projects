@@ -7,6 +7,7 @@ import { wornFor, wornFocus } from '@/lib/worn';
 import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
 import Counter from '@/components/Counter';
 import Accordion, { type QA } from '@/components/Accordion';
+import { deliveryLine } from '@/lib/policy';
 
 export const metadata: Metadata = {
   title: 'הטכנולוגיה',
@@ -44,7 +45,7 @@ const FAQ: QA[] = [
   },
   {
     q: 'כמה זמן לוקח לקבל את התכשיט?',
-    a: 'החבילה יוצאת תוך יום עסקים מרגע ההזמנה, ומגיעה תוך 1-4 ימי עסקים.',
+    a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה, ומגיעה תוך ${deliveryLine}.`,
   },
   {
     q: 'מה כוללת האחריות?',

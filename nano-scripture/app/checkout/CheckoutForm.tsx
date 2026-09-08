@@ -9,7 +9,7 @@ import { getBlessing } from '@/lib/blessings';
 import { GIFT_BOX } from '@/lib/extras';
 import { PROMO } from '@/lib/promo';
 import { SHIPPING, shippingMethod } from '@/lib/policy';
-import { COMPANY } from '@/lib/company';
+import { COMPANY, waHref } from '@/lib/company';
 import { trackBeginCheckout } from '@/lib/analytics';
 import { saveOrderDone } from '@/lib/orderDone';
 import {
@@ -229,7 +229,20 @@ export default function CheckoutForm() {
           </div>
           {customer.shipping === 'pickup' && (
             <p className="mt-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
-              האיסוף מ{COMPANY.address}. ניצור קשר לתיאום מועד לאחר ההזמנה.
+              האיסוף מ{COMPANY.address}, בתיאום מראש.{' '}
+              {/* קישור ולא "ניצור קשר": מי שבוחר איסוף רוצה לדעת מתי,
+                  והמתנה להודעה שתגיע מתישהו היא בדיוק מה שמצנן קנייה */}
+              {waHref && (
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-u"
+                  style={{ color: 'var(--accent-deep)' }}
+                >
+                  לתיאום המועד בוואטסאפ
+                </a>
+              )}
             </p>
           )}
         </fieldset>

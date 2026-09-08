@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { POLICY, deliveryLine } from '@/lib/policy';
 
 export default function Closing() {
   return (
@@ -45,7 +46,7 @@ export default function Closing() {
         </div>
 
         <p className="reveal mt-9" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}>
-          משלוח 1-4 ימי עסקים · החזרה חינם תוך 30 יום · תשלום מאובטח
+          משלוח {deliveryLine} · החזרה תוך {POLICY.returnDays} יום · תשלום מאובטח
         </p>
       </div>
     </section>
