@@ -63,6 +63,52 @@ const NAMES: Record<string, { ga: string; fb: string; custom?: boolean }> = {
 };
 
 /**
+ * תור המתנה לסקריפטים שטרם נטענו.
+ *
+ * ------------------------------------------------------------------
+ * בלי זה אירוע הרכישה אובד, וזה נמדד.
+ *
+ * הסקריפטים נטענים ב-afterInteractive, כלומר אחרי ההידרציה. אירוע
+ * שנורה מתוך אפקט שרץ בטעינת העמוד - וזה בדיוק מה שעמוד התודה
+ * עושה - מקדים אותם. `window.gtag?.()` על פונקציה שטרם קיימת אינו
+ * שגיאה: הוא פשוט לא עושה כלום, בשקט.
+ *
+ * התוצאה הייתה עמוד תודה שנטען, אירוע purchase שנורה, ו-dataLayer
+ * שבו יש js ו-config ואין רכישה.
+ * ------------------------------------------------------------------
+ *
+ * לכן קריאה שמגיעה מוקדם מדי ממתינה, ונשלחת ברגע שהסקריפט מוכן.
+ * החלון תחום: אחרי עשר שניות מוותרים, כי אירוע שמגיע באיחור כזה
+ * כבר לא ישויך לביקור הנכון ממילא.
+ */
+type Vendor = 'gtag' | 'fbq';
+const waiting: Record<Vendor, (() => void)[]> = { gtag: [], fbq: [] };
+let flusher: number | null = null;
+
+function enqueue(vendor: Vendor, fire: () => void) {
+  if (window[vendor]) {
+    fire();
+    return;
+  }
+  waiting[vendor].push(fire);
+
+  if (flusher !== null) return;
+  let waited = 0;
+  flusher = window.setInterval(() => {
+    waited += 200;
+    for (const v of ['gtag', 'fbq'] as const) {
+      if (window[v] && waiting[v].length) waiting[v].splice(0).forEach((f) => f());
+    }
+    if ((!waiting.gtag.length && !waiting.fbq.length) || waited >= 10_000) {
+      window.clearInterval(flusher!);
+      flusher = null;
+      waiting.gtag.length = 0;
+      waiting.fbq.length = 0;
+    }
+  }, 200);
+}
+
+/**
  * שדר אירוע לשתי המערכות.
  *
  * `eventId` נשלח למטא כ-eventID. הוא מה שמונע ספירה כפולה כשאותה
@@ -78,11 +124,13 @@ function send(
   if (!allowed()) return;
   const name = NAMES[key];
 
-  if (GA_ID) window.gtag?.('event', name.ga, ga);
+  if (GA_ID) enqueue('gtag', () => window.gtag!('event', name.ga, ga));
 
   if (PIXEL_ID) {
     const verb = name.custom ? 'trackCustom' : 'track';
-    window.fbq?.(verb, name.fb, fb, eventId ? { eventID: eventId } : undefined);
+    enqueue('fbq', () =>
+      window.fbq!(verb, name.fb, fb, eventId ? { eventID: eventId } : undefined),
+    );
   }
 }
 
@@ -131,10 +179,10 @@ const CURRENCY = 'ILS';
 
 export function trackPageView(path: string) {
   if (!allowed()) return;
-  if (GA_ID) window.gtag?.('event', 'page_view', { page_path: path });
+  if (GA_ID) enqueue('gtag', () => window.gtag!('event', 'page_view', { page_path: path }));
   // מטא סופרת PageView בנפרד, וללא זה כל ניווט פנימי נעלם ממנה:
   // האתר הוא אפליקציית עמוד יחיד, והסקריפט נטען פעם אחת בלבד
-  if (PIXEL_ID) window.fbq?.('track', 'PageView');
+  if (PIXEL_ID) enqueue('fbq', () => window.fbq!('track', 'PageView'));
 }
 
 export function trackViewItem(p: Product, blessing: BlessingId) {

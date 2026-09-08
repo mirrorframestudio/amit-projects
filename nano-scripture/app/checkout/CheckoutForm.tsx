@@ -9,8 +9,9 @@ import { getBlessing } from '@/lib/blessings';
 import { GIFT_BOX } from '@/lib/extras';
 import { PROMO } from '@/lib/promo';
 import { SHIPPING, shippingMethod } from '@/lib/policy';
-import { COMPANY, waHref } from '@/lib/company';
-import { trackBeginCheckout, trackPurchase } from '@/lib/analytics';
+import { COMPANY } from '@/lib/company';
+import { trackBeginCheckout } from '@/lib/analytics';
+import { saveOrderDone } from '@/lib/orderDone';
 import {
   EMPTY_CUSTOMER,
   FIELDS,
@@ -37,7 +38,6 @@ export default function CheckoutForm() {
   const [tried, setTried] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
-  const [done, setDone] = useState<{ number: string; message?: string } | null>(null);
   const [ready, setReady] = useState(false);
 
   // ההידרציה נדחית, אחרת השרת והלקוח מציירים עגלות שונות
@@ -134,14 +134,35 @@ export default function CheckoutForm() {
         setFailed(data.error ?? 'משהו השתבש');
         return;
       }
+      /**
+       * הסיכום נשמר לפני כל הפניה, ולשני המסלולים.
+       *
+       * גם מי שיוצא לדף התשלום של הסולק חוזר אחר כך לעמוד התודה,
+       * ובלי השמירה כאן הוא היה חוזר לעמוד שאינו יודע מה נקנה.
+       * הסכום נלקח מהשרת ולא מהטופס - השרת מחשב אותו מחדש מהקטלוג,
+       * וזה מה שייגבה בפועל.
+       */
+      saveOrderDone({
+        number: String(data.orderNumber),
+        id: String(data.orderId ?? data.orderNumber),
+        total: Number(data.total ?? total),
+        message: data.message,
+        lines,
+        gift,
+        code,
+        shipping: customer.shipping,
+        toName:
+          customer.toRecipient && customer.shipping !== 'pickup'
+            ? customer.toName.trim() || undefined
+            : undefined,
+      });
+
       if (data.payment) {
         window.location.href = data.payment;
         return;
       }
-      setDone({ number: data.orderNumber, message: data.message });
-      // הסכום מהשרת, ולא זה שהטופס הציג: השרת מחשב אותו מחדש
-      // מהקטלוג, וזה מה שייגבה בפועל
-      trackPurchase(String(data.orderNumber), Number(data.total ?? total), lines);
+      // עמוד תודה אחד לשני המסלולים, ולא מסך שמצויר בתוך הטופס
+      window.location.href = `/checkout/success?order=${encodeURIComponent(String(data.orderNumber))}`;
     } catch {
       setFailed('אין חיבור לשרת. בדקו את האינטרנט ונסו שוב.');
     } finally {
@@ -150,45 +171,6 @@ export default function CheckoutForm() {
   }
 
   if (!ready) return null;
-
-  if (done) {
-    return (
-      <div className="card mx-auto max-w-xl p-10 text-center">
-        <p className="eyebrow" style={{ color: 'var(--accent)' }}>ההזמנה נקלטה</p>
-        <h1 className="display t-2 mt-4">תודה.</h1>
-        <p className="mt-5" style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          מספר ההזמנה שלך הוא <span className="num" style={{ color: 'var(--ink)' }}>{done.number}</span>.
-        </p>
-        {done.message && (
-          <p
-            className="mt-5 p-4"
-            style={{
-              fontSize: 'var(--fs-sm)',
-              lineHeight: 1.8,
-              borderRadius: 'var(--radius)',
-              border: '1px solid var(--line)',
-              background: 'var(--surface-2)',
-              color: 'var(--ink-2)',
-            }}
-          >
-            {done.message}
-          </p>
-        )}
-        {/* במסלול הידני הלקוח מחכה להודעה ממני. כפתור שמאפשר לו
-            לפתוח את השיחה בעצמו חוסך את החרטה שנולדת בהמתנה */}
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          {waHref && (
-            <a href={waHref} target="_blank" rel="noopener noreferrer" className="btn btn-solid">
-              לפתיחת שיחה בוואטסאפ
-            </a>
-          )}
-          <Link href="/" className="btn">
-            חזרה לחנות
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   if (!lines.length) {
     return (

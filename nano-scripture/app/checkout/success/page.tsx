@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { POLICY, deliveryLine } from '@/lib/policy';
 import { COMPANY, telHref, waHref } from '@/lib/company';
-import ClearCart from './ClearCart';
+import OrderDone from './OrderDone';
 
 export const metadata: Metadata = {
   title: 'ההזמנה התקבלה',
-  // עמוד אישי שנוצר אחרי תשלום. אין לו מה לחפש בתוצאות החיפוש
+  // עמוד אישי שנוצר אחרי הזמנה. אין לו מה לחפש בתוצאות החיפוש
   robots: { index: false, follow: false },
 };
 
 /**
- * העמוד שאליו Grow מחזיר אחרי תשלום מוצלח.
+ * עמוד התודה — הסוף של המסע, לשני מסלולי התשלום.
  *
  * ------------------------------------------------------------------
  * הוא לא היה קיים, וזה היה 404 ברגע הכי גרוע שאפשר.
@@ -19,10 +19,14 @@ export const metadata: Metadata = {
  * ה-successUrl שנשלח לסולק הצביע על נתיב שלא נבנה. כלומר לקוח היה
  * מזין אשראי, משלם, ונוחת על דף שגיאה - בלי אישור, בלי מספר הזמנה,
  * ובלי לדעת אם הכסף ירד. זו החוויה שמייצרת פנייה לחברת האשראי.
+ *
+ * ואחר כך הוא כן היה קיים, אבל ידע להגיד מספר הזמנה בלבד. עכשיו
+ * הוא מציג גם את מה שנקנה - הדגם, הנוסח שנבחר והסכום - ואליו מגיעים
+ * גם מהמסלול הידני, כדי שיהיה עמוד תודה אחד ולא שניים שנבדלים זה מזה.
  * ------------------------------------------------------------------
  *
  * מה שכתוב כאן נזהר בניסוח: הדף מאשר שההזמנה התקבלה, ולא מצהיר
- * שהכסף נגבה. הגבייה מאושרת בשרת מול Grow, ולא בדפדפן של הלקוח.
+ * שהכסף נגבה. הגבייה מאושרת בשרת מול הסולק, ולא בדפדפן של הלקוח.
  */
 export default async function SuccessPage({
   searchParams,
@@ -30,29 +34,24 @@ export default async function SuccessPage({
   searchParams: Promise<{ order?: string; sum?: string }>;
 }) {
   const { order, sum } = await searchParams;
-  // הסכום מגיע מהסולק, ומשמש למדידת הרכישה בלבד
   const paid = Number(sum);
 
   return (
     <section className="pb-32 pt-40">
-      <ClearCart order={order} sum={Number.isFinite(paid) && paid > 0 ? paid : undefined} />
       <div className="shell max-w-2xl">
         <p className="eyebrow" style={{ color: 'var(--accent)' }}>
           תודה
         </p>
         <h1 className="display t-hero mt-4">ההזמנה התקבלה.</h1>
 
-        {order && (
-          <p className="mt-6" style={{ fontSize: 'var(--fs-md)', color: 'var(--ink-2)' }}>
-            מספר ההזמנה שלך: <span className="num" style={{ color: 'var(--ink)' }}>#{order}</span>
-          </p>
-        )}
+        <OrderDone order={order} sum={Number.isFinite(paid) && paid > 0 ? paid : undefined} />
 
-        <p className="lede mt-6">
-          אישור נשלח אליך בדוא״ל. אם הוא לא הגיע תוך כמה דקות, שווה להציץ בתיקיית הספאם.
-        </p>
+        {/* ---------- מה קורה עכשיו ---------- */}
+        <h2 className="display mt-14" style={{ fontSize: 'var(--fs-lg)' }}>
+          מה קורה עכשיו
+        </h2>
 
-        <ol className="mt-10 flex flex-col gap-5">
+        <ol className="mt-6 flex flex-col gap-5">
           {[
             ['הנוסח נצרב', 'השבב נצרב לפי ההזמנה ומושווה לקובץ המקור תו אחר תו לפני שהוא משובץ.'],
             ['הפריט נארז', 'בקופסה מרופדת, עם כרטיס שנושא את שם הנוסח, מקורותיו והנוסח המלא.'],
