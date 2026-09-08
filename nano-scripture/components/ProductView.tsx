@@ -489,13 +489,34 @@ export default function ProductView({ product }: { product: Product }) {
 
         {/* ---------- בחירת הברכה ---------- */}
         <div ref={chooserRef} style={{ scrollMarginTop: 96 }}>
-          <div className="mb-3 flex items-baseline justify-between gap-4">
-            <p className="eyebrow" style={{ color: b.accentInk }}>
-              {one ? 'הברכה שנצרבת' : 'הברכה שתיצרב'}
+          {/* כותרת שאומרת מה לעשות, ולא מה זה.
+              "הברכה שתיצרב" מתאר שדה; "בחרו את הנוסח" מזמין פעולה -
+              וזה ההבדל בין תווית לבין תפריט */}
+          <div className="mb-3 flex items-baseline justify-between gap-3">
+            <p
+              className="display"
+              style={{ fontSize: 'var(--fs-md)', color: 'var(--ink)', letterSpacing: 0 }}
+            >
+              {one ? 'הנוסח שנצרב על השבב' : 'בחרו את הנוסח שייצרב'}
             </p>
-            <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-              {one ? 'נוסח אחד' : `${available.length} נוסחים לבחירה`}
-            </span>
+            {!one && (
+              /* המונה היה אפור וזעיר, כלומר בלתי נראה. כגלולה בצבע
+                 הברכה הוא מודיע שיש כאן יותר מאפשרות אחת */
+              <span
+                className="flex-shrink-0"
+                style={{
+                  fontSize: 'var(--fs-2xs)',
+                  color: b.accentInk,
+                  border: `1px solid color-mix(in oklab, ${b.accent} 42%, transparent)`,
+                  background: `color-mix(in oklab, ${b.accent} 10%, transparent)`,
+                  borderRadius: 999,
+                  padding: '.22rem .62rem',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {available.length} נוסחים לבחירה
+              </span>
+            )}
           </div>
 
           {/* השורה המקופלת: מה נבחר, וכפתור להחלפה. היא זו שנראית
@@ -508,7 +529,7 @@ export default function ProductView({ product }: { product: Product }) {
               style={{
                 padding: '.85rem 1rem',
                 borderRadius: 'var(--radius)',
-                border: `1px solid ${picked ? b.accent : 'var(--line-strong)'}`,
+                border: `1.5px solid color-mix(in oklab, ${b.accent} ${picked ? 70 : 45}%, var(--line-strong))`,
                 background: `color-mix(in oklab, ${b.accent} 8%, var(--surface))`,
               }}
             >
@@ -521,14 +542,32 @@ export default function ProductView({ product }: { product: Product }) {
                   {b.plain}
                 </span>
                 <span style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
-                  {picked ? b.forWhom : 'ברירת מחדל - אפשר להחליף'}
+                  {picked ? b.forWhom : 'ברירת מחדל · לחצו להחלפה'}
                 </span>
               </span>
+              {/* חץ, ולא קישור טקסט. בלעדיו אין שום סימן שהשורה
+                  נפתחת, והיא נקראת כתצוגה של מה שכבר נבחר */}
               <span
-                className="link-u flex-shrink-0"
-                style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
+                className="flex flex-shrink-0 items-center gap-1.5"
+                style={{
+                  fontSize: 'var(--fs-xs)',
+                  color: b.accentInk,
+                  border: `1px solid color-mix(in oklab, ${b.accent} 40%, transparent)`,
+                  background: 'var(--surface)',
+                  borderRadius: 999,
+                  padding: '.3rem .6rem .3rem .5rem',
+                }}
               >
                 {picked ? 'החלפה' : 'לבחירה'}
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="m6 9 6 6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </span>
             </button>
           )}

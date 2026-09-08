@@ -1,5 +1,4 @@
 import Hero from '@/components/Hero';
-import Trust from '@/components/home/Trust';
 import Bestsellers from '@/components/home/Bestsellers';
 import Worn from '@/components/home/Worn';
 import Blessings from '@/components/home/Blessings';
@@ -13,7 +12,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Trust />
       <Bestsellers />
       <Worn />
       <Blessings />
