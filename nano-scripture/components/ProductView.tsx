@@ -797,7 +797,20 @@ export default function ProductView({ product }: { product: Product }) {
             background: `color-mix(in oklab, ${b.accentSoft} 26%, var(--surface))`,
           }}
         >
-          <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: '.22em', color: b.accentInk }}>
+          {/* מראי המקום, ולא תווית.
+              כאן ישב letterSpacing של .22em - ריווח שמתאים למילה אחת
+              באותיות קטנות. הרשימה הזאת היא חמישה מקורות עם נקודות
+              מפרידות, פסיקים ומקפים, והיא נשברת לשתי שורות: הריווח
+              פירק אותה לאותיות בודדות והפך אותה לקשה לקריאה דווקא
+              במקום שאמור לומר מאיפה הנוסח לקוח. */}
+          <p
+            style={{
+              fontSize: 'var(--fs-xs)',
+              letterSpacing: '.04em',
+              lineHeight: 1.75,
+              color: b.accentInk,
+            }}
+          >
             {b.sources}
           </p>
 
