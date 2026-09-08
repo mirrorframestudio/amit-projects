@@ -206,7 +206,7 @@ export default function ProductView({ product }: { product: Product }) {
 
   return (
     <>
-      <div className="shell grid gap-14 pt-32 lg:grid-cols-[1.06fr_.94fr] lg:gap-20 lg:pt-36">
+      <div className="shell grid gap-8 pt-32 sm:gap-14 lg:grid-cols-[1.06fr_.94fr] lg:gap-20 lg:pt-36">
       {/* ================= גלריה ================= */}
       {/* מתחת ל־lg הפריסה נערמת, ובלי תקרה התמונה מותחת לכל רוחב ה־shell
           ומגיעה ל־845px על חלון של 918 — ריבוע ענק שבולע את העמוד */}
@@ -332,7 +332,11 @@ export default function ProductView({ product }: { product: Product }) {
 
       {/* ================= מידע ורכישה ================= */}
       <div className="pb-16">
-        <nav className="mb-6 flex items-center gap-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
+        {/* לא במובייל. שורה שדוחפת את כל העמוד למטה כדי להודיע
+            "בית / שרשראות" - מי שהגיע ממודעה לא הגיע דרך הבית, והוא
+            משלם עליה בגובה דווקא במסך שבו כל פיקסל נחשב. בדסקטופ יש
+            מקום, והיא כן משרתת ניווט */}
+        <nav className="mb-6 hidden items-center gap-3 sm:flex" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
           <Link href="/" className="link-u">בית</Link>
           <span>/</span>
           <Link href={`/categories/${product.category}`} className="link-u">{cat.title}</Link>
@@ -483,9 +487,9 @@ export default function ProductView({ product }: { product: Product }) {
           </div>
         )}
 
-        <p className="lede mt-7">{product.story}</p>
-
-        <hr className="rule my-10" />
+        {/* my-10 הם 80 פיקסלים של הפרדה במסך שבו הכפתור נאבק על
+            כל פיקסל. בדסקטופ יש מקום, במובייל אין */}
+        <hr className="rule my-5 sm:my-10" />
 
         {/* ---------- בחירת הברכה ---------- */}
         <div ref={chooserRef} style={{ scrollMarginTop: 96 }}>
@@ -865,6 +869,18 @@ export default function ProductView({ product }: { product: Product }) {
             </Link>
           </div>
         </div>
+
+        {/* ---------- התיאור ---------- */}
+        {/*
+          הוא ישב בין המחיר לכפתור, וזו הייתה הסיבה העיקרית לכך
+          שכפתור ההוספה לעגלה נחת 901 פיקסלים מתחת לגלריה במובייל -
+          יותר ממסך שלם של קריאה לפני שאפשר בכלל לקנות.
+
+          כל האתרים בקטגוריה שנסקרו שמים את התוכן הארוך אחרי הכפתור.
+          מי שכבר יודע מה הוא רוצה לא צריך לקרוא כדי להגיע אליו, ומי
+          שכן רוצה לקרוא - התוכן ממתין לו בדיוק כאן.
+        */}
+        <p className="lede mt-8">{product.story}</p>
 
         {/* ---------- מה נצרב בפועל ---------- */}
         <div
