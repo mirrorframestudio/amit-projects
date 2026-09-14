@@ -7,7 +7,6 @@ import {
   priceRange,
   formatPrice,
 } from '@/lib/catalog';
-import SectionPhoto from '@/components/SectionPhoto';
 
 /**
  * הקטגוריות הפעילות - נקודת הכניסה לקטלוג.
@@ -23,10 +22,8 @@ import SectionPhoto from '@/components/SectionPhoto';
  */
 export default function Categories() {
   return (
-    <section className="on-photo relative py-9 md:py-24">
-      <SectionPhoto src="/worn/scene-doorway.jpg" mode="band" flip veil={0.22} />
-
-      <div className="shell relative">
+    <section className="py-9 md:py-24">
+      <div className="shell">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="display t-1">

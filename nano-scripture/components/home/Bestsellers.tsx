@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { PRODUCTS, ACTIVE_CATEGORIES, uniqueDesigns } from '@/lib/catalog';
-import SectionPhoto from '@/components/SectionPhoto';
 
 /**
  * שורת מוצרים מיד אחרי ההירו.
@@ -14,10 +13,8 @@ export default function Bestsellers() {
   ]).slice(0, 8);
 
   return (
-    <section className="on-photo relative py-9 md:py-16">
-      <SectionPhoto src="/worn/scene-window.jpg" mode="band" veil={0.22} />
-
-      <div className="shell relative">
+    <section className="py-9 md:py-16">
+      <div className="shell">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           {/* כאן הייתה תווית "הנמכרים ביותר". לחנות אין עדיין נתוני מכירה
               שמצדיקים אותה, והכותרת עצמה אומרת את מה שצריך */}

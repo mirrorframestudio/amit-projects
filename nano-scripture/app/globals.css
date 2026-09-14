@@ -558,51 +558,6 @@ section {
 }
 
 
-/* ---------- מקטע עם צילום ברקע ---------- */
-
-/* שני הקצוות נבדקו ונפסלו: כרטיס אטום הוא קופסה לבנה שבולעת את הצילום,
-   וכרטיס שקוף לגמרי מפסיק להיות כרטיס. האמצע הוא זכוכית חלבית —
-   הכרטיס נשאר צורה מוגדרת עם מסגרת, והצילום ממשיך להיראות דרכו.
-
-   שלוש הדרגות למטה הן הכוונון היחיד שנדרש: המשטח, בריכת האור מתחת
-   למוצר, ולוח הטקסט. */
-/* אין כאן טשטוש. backdrop-filter מכריח את הדפדפן לצלם ולטשטש את הרקע
-   מחדש בכל פריים שבו האלמנט זז, וגלילה מזיזה את כולם. שישה־עשר כרטיסים
-   בעמוד הפכו את זה לעשרים ואחת שכבות טשטוש חיות בו־זמנית.
-   האטימות הועלתה כדי לשמור על אותו מראה חלבי בלי המחיר. */
-.on-photo {
-  --glass: 60%;
-  --pool: 52%;
-  --panel: 76%;
-}
-
-.on-photo .card {
-  background: color-mix(in oklab, var(--surface) var(--glass), transparent);
-  border-color: color-mix(in oklab, var(--line) 80%, transparent);
-}
-
-.on-photo .card:hover {
-  background: color-mix(in oklab, var(--surface) 66%, transparent);
-  border-color: var(--line-strong);
-}
-
-/* בריכת אור מתחת למוצר — בלעדיה הכסף מאבד ניגודיות מול הצילום,
-   וריבוע מלא היה מחזיר בדיוק את הקופסה שרצינו להיפטר ממנה */
-.on-photo .tile {
-  background: radial-gradient(
-    58% 48% at 50% 42%,
-    color-mix(in oklab, var(--surface) var(--pool), transparent),
-    transparent 76%
-  );
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.on-photo .card-body {
-  background: color-mix(in oklab, var(--bg) var(--panel), transparent);
-}
-
-
 /* ---------- יעדי נגיעה ---------- */
 
 /* אייקון של 15px הוא יעד של 15px. האצבע צריכה 44 - התוספת היא בשטח
