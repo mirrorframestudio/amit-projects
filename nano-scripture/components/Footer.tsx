@@ -132,7 +132,7 @@ export default function Footer() {
                 className="link-u px-3"
                 style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
               >
-                {sent ? 'נרשמת ✦' : 'הרשמה'}
+                {sent ? 'נרשמת' : 'הרשמה'}
               </button>
             </form>
           </div>

@@ -238,7 +238,7 @@ export default function CartDrawer() {
           <div className="px-7 py-4" style={{ borderBottom: '1px solid var(--line)' }}>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               {gap <= 0 ? (
-                <span style={{ color: 'var(--accent-deep)', fontWeight: 500 }}>המשלוח עלינו ✦</span>
+                <span style={{ color: 'var(--accent-deep)', fontWeight: 500 }}>המשלוח עלינו</span>
               ) : (
                 <>
                   עוד <span className="num">{formatPrice(gap)}</span> למשלוח חינם

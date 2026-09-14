@@ -124,17 +124,21 @@ export default function Hero() {
             </Link>
           </div>
 
-          <ul
-            className="reveal load mt-9 flex flex-wrap gap-x-7 gap-y-2"
-            style={{ ['--d' as string]: '580ms', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
+          {/* המקורות בשורה אחת עם נקודות, ולא ברשימה עם כוכביות.
+              הכוכבית היא סימן היכר של עיצוב מיוצר, ורשימה של חמישה
+              פריטים בשתי עמודות תפסה גובה של פסקה כדי לומר משפט אחד */}
+          <p
+            className="reveal load mt-6"
+            style={{
+              ['--d' as string]: '580ms',
+              fontSize: 'var(--fs-xs)',
+              color: 'var(--ink-3)',
+              lineHeight: 1.9,
+              letterSpacing: '.02em',
+            }}
           >
-            {SOURCES.map((m) => (
-              <li key={m} className="flex items-center gap-2">
-                <span aria-hidden style={{ color: 'var(--accent)' }}>✦</span>
-                {m}
-              </li>
-            ))}
-          </ul>
+            {SOURCES.join(' · ')}
+          </p>
         </div>
       </div>
     </section>

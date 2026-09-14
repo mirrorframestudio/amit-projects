@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Blessing } from '@/lib/blessings';
+import { PRODUCTS } from '@/lib/catalog';
 
 /**
  * שורת ברכה - רשומה באינדקס, ולא כרטיס.
@@ -67,10 +69,13 @@ export default function BlessingCard({
     );
   }
 
+  // הדגמים שנושאים את הנוסח הזה. ברכה שאף דגם לא נושא לא מציגה שורה ריקה
+  const carriers = PRODUCTS.filter((p) => p.blessings.includes(b.id));
+  const href = `/blessings/${b.id}`;
+
   return (
-    <Link
-      href={`/blessings/${b.id}`}
-      className="reveal group grid gap-x-12 gap-y-6 py-12 md:grid-cols-[minmax(0,.9fr)_minmax(0,1.6fr)] md:py-16"
+    <article
+      className="reveal grid gap-x-12 gap-y-6 py-12 md:grid-cols-[minmax(0,.9fr)_minmax(0,1.6fr)] md:py-16"
       style={{ borderTop: '1px solid var(--line)', ['--d' as string]: `${index * 70}ms` }}
     >
       {/* ---------- ימין: מספור, שם, למי ---------- */}
@@ -90,17 +95,10 @@ export default function BlessingCard({
           {letter}
         </span>
         <div>
-          <h2
-            className="display"
-            style={{
-              fontSize: 'var(--ds-2)',
-              lineHeight: 1.15,
-              transition: 'color .3s var(--ease)',
-            }}
-          >
-            <span className="group-hover:[color:var(--accent-deep)]" style={{ transition: 'color .3s var(--ease)' }}>
+          <h2 className="display" style={{ fontSize: 'var(--ds-2)', lineHeight: 1.15 }}>
+            <Link href={href} className="hover:[color:var(--accent-deep)]" style={{ transition: 'color .3s var(--ease)' }}>
               {b.title}
-            </span>
+            </Link>
           </h2>
           <p className="mt-3" style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)' }}>
             {b.forWhom}
@@ -114,19 +112,14 @@ export default function BlessingCard({
         </div>
       </div>
 
-      {/* ---------- שמאל: הפסוק, ואז המילים ---------- */}
+      {/* ---------- שמאל: הפסוק, המילים, והתכשיטים ---------- */}
       <div>
         {/* פסוק הפתיחה בגודל של כותרת. זה מה שקוראים, וזה מה שבוחרים */}
-        <p
-          className="display"
-          style={{
-            fontSize: 'var(--ds-3)',
-            lineHeight: 1.55,
-            color: 'var(--ink)',
-          }}
-        >
-          {b.opening}
-        </p>
+        <Link href={href} className="block hover:[color:var(--accent-deep)]" style={{ transition: 'color .3s var(--ease)' }}>
+          <p className="display" style={{ fontSize: 'var(--ds-3)', lineHeight: 1.55 }}>
+            {b.opening}
+          </p>
+        </Link>
         <p className="mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
           {b.openingSource}
         </p>
@@ -138,21 +131,46 @@ export default function BlessingCard({
           {b.blurb}
         </p>
 
-        <p
-          className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-1"
-          style={{ fontSize: 'var(--fs-sm)' }}
-        >
+        <p className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-1" style={{ fontSize: 'var(--fs-sm)' }}>
           <span className="num" style={{ color: 'var(--ink-3)' }}>
             {b.words} מילים
           </span>
-          <span
-            className="link-u"
-            style={{ color: b.accentInk }}
-          >
+          <Link href={href} className="link-u" style={{ color: b.accentInk }}>
             לקריאת הנוסח המלא
-          </span>
+          </Link>
         </p>
+
+        {/* התכשיטים שנושאים את הנוסח. קטנים, בלי מסגרת ובלי מחיר -
+            זו הפניה, לא חנות. מי שרוצה את המחיר לוחץ */}
+        {carriers.length > 0 && (
+          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-3">
+            <span
+              className="me-1"
+              style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}
+            >
+              נענדת על
+            </span>
+            {carriers.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/products/${p.slug}`}
+                aria-label={p.name}
+                title={p.name}
+                className="tile relative block overflow-hidden"
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 'var(--radius)',
+                  border: '1px solid var(--line)',
+                  transition: 'border-color .25s var(--ease), transform .25s var(--ease)',
+                }}
+              >
+                <Image src={p.image} alt="" fill sizes="52px" className="object-cover" />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
-    </Link>
+    </article>
   );
 }

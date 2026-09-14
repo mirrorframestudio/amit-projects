@@ -30,8 +30,8 @@ function Row({ dim = false, hidden = false }: { dim?: boolean; hidden?: boolean 
     <div className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>
       {OFFERS.map((offer, i) => (
         <span key={`${i}-${offer}`} className="flex items-center">
-          <span aria-hidden style={{ opacity: 0.5, fontSize: 'var(--fs-2xs)', padding: '0 1.15rem' }}>
-            ✦
+          <span aria-hidden style={{ opacity: 0.45, padding: '0 1.15rem' }}>
+            ·
           </span>
           <span
             style={{
