@@ -87,7 +87,7 @@ export default function Hero() {
               ישבה כאן באותיות מרווחות, והכותרת אומרת את זה טוב יותר */}
           <h1
             className="display"
-            style={{ fontSize: 'var(--ds-hero)', fontWeight: 500, lineHeight: 1.08 }}
+            style={{ fontSize: 'var(--ds-hero)', fontWeight: 700, lineHeight: 1.05 }}
           >
             <span className="mask-line load">
               <span>כל הנוסח.</span>

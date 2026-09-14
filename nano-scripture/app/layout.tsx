@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { SITE_URL } from '@/lib/site';
-import { Assistant, Frank_Ruhl_Libre } from 'next/font/google';
+import { Heebo } from 'next/font/google';
 import './globals.css';
 
 import SmoothScroll from '@/components/SmoothScroll';
@@ -17,22 +17,14 @@ import SignupPopup from '@/components/SignupPopup';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 
-// Assistant תוכנן לעברית ולא נגזר מפונט לטיני, ולכן הוא נושא ניקוד
-// ומשקלים כבדים הרבה יותר טוב מ־Heebo בגדלים שהאתר משתמש בהם
-const assistant = Assistant({
+// Heebo לכל האתר - בחירת בעל החנות (14 בספטמבר 2026). לפניו היו
+// Assistant, ואחריו יום אחד של Frank Ruhl Libre לכותרות שהוחזר לבקשתו.
+// נבדק בקובץ הגופן: נושא את כל סימני הניקוד, דגש, שין ושמאלית, גרש
+// וגרשיים, ומיקום סימנים (GPOS) - שמות הדגמים המנוקדים יושבים נכון
+const heebo = Heebo({
   subsets: ['hebrew', 'latin'],
   weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-app',
-  display: 'swap',
-});
-
-// גופן הספר העברי, לכותרות ולנוסחים. נושא ניקוד מלא ומיקום סימנים
-// (נבדק בקובץ עצמו: כל סימני הניקוד, דגש, שין ושמאלית, גרש וגרשיים).
-// הסיבה מפורטת ב-globals.css ליד --font-display
-const frank = Frank_Ruhl_Libre({
-  subsets: ['hebrew', 'latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-serif',
   display: 'swap',
 });
 
@@ -78,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="he"
       dir="rtl"
-      className={`${assistant.variable} ${frank.variable}`}
+      className={heebo.variable}
       suppressHydrationWarning
     >
       <body>

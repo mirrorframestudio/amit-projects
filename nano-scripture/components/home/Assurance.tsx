@@ -29,7 +29,7 @@ export default function Assurance() {
         <figure className="reveal self-start">
           <blockquote
             className="display"
-            style={{ fontSize: 'var(--ds-2)', lineHeight: 1.55, fontWeight: 500 }}
+            style={{ fontSize: 'var(--ds-2)', lineHeight: 1.55 }}
           >
             הטקסט על השבב הוא הנוסח המלא, מילה במילה, בלי קיצור ובלי השמטה.
             אפשר לקרוא אותו כאן באתר לפני שקונים, ולהשוות למקור.
