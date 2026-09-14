@@ -146,7 +146,7 @@ export default function BlessingCard({
           <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-3">
             <span
               className="me-1"
-              style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}
+              style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}
             >
               נענדת על
             </span>

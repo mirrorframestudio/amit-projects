@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { SITE_URL } from '@/lib/site';
-import { Assistant } from 'next/font/google';
+import { Assistant, Frank_Ruhl_Libre } from 'next/font/google';
 import './globals.css';
 
 import SmoothScroll from '@/components/SmoothScroll';
@@ -23,6 +23,16 @@ const assistant = Assistant({
   subsets: ['hebrew', 'latin'],
   weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-app',
+  display: 'swap',
+});
+
+// גופן הספר העברי, לכותרות ולנוסחים. נושא ניקוד מלא ומיקום סימנים
+// (נבדק בקובץ עצמו: כל סימני הניקוד, דגש, שין ושמאלית, גרש וגרשיים).
+// הסיבה מפורטת ב-globals.css ליד --font-display
+const frank = Frank_Ruhl_Libre({
+  subsets: ['hebrew', 'latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-serif',
   display: 'swap',
 });
 
@@ -68,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="he"
       dir="rtl"
-      className={assistant.variable}
+      className={`${assistant.variable} ${frank.variable}`}
       suppressHydrationWarning
     >
       <body>

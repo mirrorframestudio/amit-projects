@@ -39,10 +39,7 @@ export default async function SuccessPage({
   return (
     <section className="pb-32 pt-40">
       <div className="shell max-w-2xl">
-        <p className="eyebrow" style={{ color: 'var(--accent)' }}>
-          תודה
-        </p>
-        <h1 className="display t-hero mt-4">ההזמנה התקבלה.</h1>
+        <h1 className="display t-hero">ההזמנה התקבלה.</h1>
 
         <OrderDone order={order} sum={Number.isFinite(paid) && paid > 0 ? paid : undefined} />
 
@@ -65,7 +62,7 @@ export default async function SuccessPage({
                   height: 30,
                   display: 'grid',
                   placeItems: 'center',
-                  borderRadius: 999,
+                  borderRadius: 'var(--radius)',
                   border: '1px solid var(--line-strong)',
                   fontSize: 'var(--fs-xs)',
                   color: 'var(--ink-3)',

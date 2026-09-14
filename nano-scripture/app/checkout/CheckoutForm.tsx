@@ -382,7 +382,9 @@ export default function CheckoutForm() {
       {/* ---------- סיכום ---------- */}
       <aside className="lg:sticky lg:top-32 lg:self-start">
         <div className="card p-7">
-          <p className="eyebrow">ההזמנה</p>
+          <p className="display" style={{ fontSize: 'var(--fs-lg)' }}>
+            ההזמנה
+          </p>
 
           <ul className="mt-5">
             {lines.map((l) => {

@@ -68,15 +68,17 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
             <span style={{ color: b.accentInk }}>{b.plain}</span>
           </nav>
 
-          <p className="eyebrow reveal load" style={{ color: b.accentInk }}>{b.forWhom}</p>
-
-          <h1 className="display mt-4" style={{ fontSize: 'var(--ds-hero)' }}>
+          <h1 className="display t-hero">
             <span className="mask-line load">
               <span style={{ color: b.accentInk }}>{b.title}</span>
             </span>
           </h1>
 
-          <p className="mt-4" style={{ fontSize: 'var(--fs-sm)', letterSpacing: '.14em', color: 'var(--ink-2)' }}>
+          {/* למי, ומאיפה - שתי שורות רגילות מתחת לכותרת, לא תווית מרווחת מעליה */}
+          <p className="reveal load mt-4" style={{ fontSize: 'var(--fs-md)', color: b.accentInk }}>
+            {b.forWhom}
+          </p>
+          <p className="reveal load mt-1" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>
             {b.sources}
           </p>
 
@@ -84,20 +86,15 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
             {b.blurb}
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-x-12 gap-y-6">
-            {[
-              { v: String(b.words), l: 'מילים' },
-              { v: b.chars.toLocaleString('he-IL'), l: 'תווים' },
-              { v: b.gift, l: 'מתאים ל' },
-            ].map((s, i) => (
-              <div key={s.l} className="reveal load" style={{ ['--d' as string]: `${320 + i * 70}ms` }}>
-                <p className="num display" style={{ fontSize: 'var(--fs-xl)', lineHeight: 1.3, color: 'var(--ink)' }}>
-                  {s.v}
-                </p>
-                <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>{s.l}</p>
-              </div>
-            ))}
-          </div>
+          {/* שורה אחת במקום שלושה מספרי ענק. "מתאים ל" בגודל של כותרת
+              היה רשימת אירועים באותיות של מחיר */}
+          <p
+            className="reveal load mt-6"
+            style={{ ['--d' as string]: '320ms', fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.8 }}
+          >
+            <span className="num">{b.words}</span> מילים · <span className="num">{b.chars.toLocaleString('he-IL')}</span> תווים
+            · מתאים ל{b.gift.replace(/ · /g, ', ')}
+          </p>
         </div>
       </section>
 
@@ -115,8 +112,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       <section className="py-24" style={{ background: 'var(--bg-2)', borderBlock: '1px solid var(--line)' }}>
         <div className="shell grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="eyebrow reveal" style={{ color: b.accentInk }}>הנוסח המלא</p>
-            <h2 className="display t-2 mt-4">
+            <h2 className="display t-2">
               <span className="mask-line">
                 <span>מילה במילה</span>
               </span>
@@ -146,8 +142,7 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
           <div className="shell">
             <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="eyebrow reveal">איפה לענוד אותה</p>
-                <h2 className="display t-1 mt-4">
+                <h2 className="display t-1">
                   <span className="mask-line">
                     <span>הברכה הזו על</span>
                   </span>

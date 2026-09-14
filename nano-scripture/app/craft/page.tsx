@@ -5,7 +5,6 @@ import NanoLoupe from '@/components/NanoLoupe';
 import ZoomLadder from '@/components/ZoomLadder';
 import { wornFor, wornFocus } from '@/lib/worn';
 import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
-import Counter from '@/components/Counter';
 import Accordion, { type QA } from '@/components/Accordion';
 import { deliveryLine } from '@/lib/policy';
 
@@ -69,13 +68,12 @@ export default function CraftPage() {
       {/* ---- כותרת ---- */}
       <section className="relative overflow-hidden pt-44 pb-14">
         <div className="shell">
-          <p className="eyebrow reveal">הטכנולוגיה</p>
-          <h1 className="display mt-6" style={{ fontSize: 'var(--ds-hero)' }}>
+          <h1 className="display t-hero">
             <span className="mask-line load">
               <span>איך מכניסים ברכה</span>
             </span>
             <span className="mask-line load">
-              <span className="gold-text" style={{ ['--d' as string]: '130ms' }}>
+              <span className="accent-text" style={{ ['--d' as string]: '130ms' }}>
                 לתוך גרגר?
               </span>
             </span>
@@ -101,8 +99,7 @@ export default function CraftPage() {
       <section className="py-24">
         <div className="shell grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
           <div>
-            <p className="eyebrow reveal">קנה מידה</p>
-            <h2 className="display t-1 mt-4">
+            <h2 className="display t-1">
               <span className="mask-line">
                 <span>כמה זה באמת קטן</span>
               </span>
@@ -129,14 +126,15 @@ export default function CraftPage() {
       {/* ---- מספרים ---- */}
       <section className="py-24">
         <div className="shell grid gap-10 border-y py-14 sm:grid-cols-3" style={{ borderColor: 'var(--line)' }}>
+          {/* מספרים עומדים, לא מונים רצים - ראה Scale בעמוד הבית */}
           {[
-            { v: LONGEST_BLESSING_CHARS, l: 'תווים בנוסח הארוך ביותר', s: '', d: 0 },
-            { v: 0.5, l: 'מ״מ רבוע - כל שטח הכתיבה', s: '', d: 1 },
-            { v: 500, l: 'הגדלה נדרשת כדי לקרוא', s: '', d: 0 },
+            { v: LONGEST_BLESSING_CHARS.toLocaleString('he-IL'), l: 'תווים בנוסח הארוך ביותר' },
+            { v: '0.5', l: 'מ״מ רבוע - כל שטח הכתיבה' },
+            { v: '500', l: 'הגדלה נדרשת כדי לקרוא' },
           ].map((s, i) => (
             <div key={s.l} className="reveal text-center" style={{ ['--d' as string]: `${i * 90}ms` }}>
-              <p className="display gold-text" style={{ fontSize: 'var(--ds-1)', lineHeight: 1 }}>
-                <Counter to={s.v} suffix={s.s} decimals={s.d} />
+              <p className="num display" style={{ fontSize: 'var(--ds-1)', lineHeight: 1, color: 'var(--accent-deep)' }}>
+                {s.v}
               </p>
               <p className="mt-3" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>{s.l}</p>
             </div>
@@ -150,8 +148,7 @@ export default function CraftPage() {
       <section className="py-24" style={{ background: 'var(--bg-2)', borderBlock: '1px solid var(--line)' }}>
         <div className="shell grid gap-14 lg:grid-cols-[.8fr_1.2fr]">
           <div>
-            <p className="eyebrow reveal">מפרט</p>
-            <h2 className="display t-1 mt-4">
+            <h2 className="display t-1">
               <span className="mask-line">
                 <span>המספרים היבשים</span>
               </span>
@@ -164,7 +161,7 @@ export default function CraftPage() {
                 className="reveal flex flex-col justify-between gap-1 py-5 sm:flex-row sm:items-baseline"
                 style={{ borderTop: '1px solid var(--line)', ['--d' as string]: `${i * 45}ms` }}
               >
-                <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)', letterSpacing: '.06em' }}>{k}</span>
+                <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>{k}</span>
                 <span className="num" style={{ fontSize: 'var(--fs-base)', textAlign: 'start' }}>{v}</span>
               </div>
             ))}
@@ -177,8 +174,7 @@ export default function CraftPage() {
       <section id="faq" className="py-32" style={{ scrollMarginTop: 120 }}>
         <div className="shell grid gap-14 lg:grid-cols-[.75fr_1.25fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="eyebrow reveal">שאלות נפוצות</p>
-            <h2 className="display t-1 mt-4">
+            <h2 className="display t-1">
               <span className="mask-line">
                 <span>מה ששואלים</span>
               </span>
@@ -201,13 +197,12 @@ export default function CraftPage() {
             className="reveal p-10 md:p-14"
             style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-lg)', background: 'var(--surface)' }}
           >
-            <p className="eyebrow">טיפוח ואחריות</p>
-            <h2 className="display t-2 mt-4">ארבעה כללים, וזהו</h2>
+            <h2 className="display t-2">ארבעה כללים, וזהו</h2>
             <ol className="mt-9 grid gap-6 sm:grid-cols-2">
               {CARE.map((c, i) => (
                 <li key={c} className="flex gap-4">
-                  <span className="num display" style={{ color: 'var(--accent)', fontSize: 'var(--fs-md)', lineHeight: 1.7 }}>
-                    {String(i + 1).padStart(2, '0')}
+                  <span className="display" style={{ color: 'var(--accent-deep)', fontSize: 'var(--fs-md)', lineHeight: 1.7 }}>
+                    {['א', 'ב', 'ג', 'ד'][i]}
                   </span>
                   <span style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)', lineHeight: 1.8 }}>{c}</span>
                 </li>

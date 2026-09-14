@@ -1,27 +1,29 @@
-import Counter from '@/components/Counter';
 import NanoLoupe from '@/components/NanoLoupe';
 import { BLESSINGS, TOTAL_BLESSING_WORDS } from '@/lib/blessings';
 
+/**
+ * המספרים עומדים. קודם הם נספרו מאפס בכניסה למסך, בגרדיאנט זהב
+ * מהבהב - מונה רץ הוא סימן היכר של עמוד מיוצר, ומספר שמתחלף לא נקרא
+ * עד שהוא נעצר. מספר עומד נקרא מיד.
+ */
 const STATS = [
-  { value: TOTAL_BLESSING_WORDS, label: 'מילים בחמשת הנוסחים', decimals: 0 },
-  { value: 0.5, label: 'מ״מ רוחב שטח הכתיבה', decimals: 1 },
-  { value: 9, label: 'מיקרון גובה האות', decimals: 0 },
-  { value: 500, label: 'הגדלה נדרשת לקריאה', decimals: 0 },
+  { value: TOTAL_BLESSING_WORDS.toLocaleString('he-IL'), label: 'מילים בחמשת הנוסחים' },
+  { value: '0.5', label: 'מ״מ רוחב שטח הכתיבה' },
+  { value: '9', label: 'מיקרון גובה האות' },
+  { value: '500', label: 'הגדלה נדרשת לקריאה' },
 ];
 
 export default function Scale() {
   return (
-    <section className="py-9 md:py-40">
+    <section className="py-9 md:py-28">
       <div className="shell grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-24">
         <div>
-          <p className="eyebrow reveal">קנה המידה</p>
-
-          <h2 className="display t-1 mt-5">
+          <h2 className="display t-1">
             <span className="mask-line">
               <span>גדול מכדי להכיל.</span>
             </span>
             <span className="mask-line">
-              <span className="gold-text" style={{ ['--d' as string]: '120ms' }}>
+              <span className="accent-text" style={{ ['--d' as string]: '120ms' }}>
                 קטן מכדי לראות.
               </span>
             </span>
@@ -33,21 +35,21 @@ export default function Scale() {
             מצופה: היא חלק מהחומר עצמו, ולכן לא תדהה ולא תימחק.
           </p>
 
-          <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-10">
+          <dl className="mt-12 grid grid-cols-2 gap-x-8 gap-y-8">
             {STATS.map((s, i) => (
               <div key={s.label} className="reveal" style={{ ['--d' as string]: `${i * 90}ms` }}>
-                <p
-                  className="display gold-text"
-                  style={{ fontSize: 'var(--ds-2)', lineHeight: 1 }}
+                <dd
+                  className="num display"
+                  style={{ fontSize: 'var(--ds-2)', lineHeight: 1, color: 'var(--accent-deep)' }}
                 >
-                  <Counter to={s.value} decimals={s.decimals} />
-                </p>
-                <p className="mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.04em' }}>
+                  {s.value}
+                </dd>
+                <dt className="mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                   {s.label}
-                </p>
+                </dt>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
 
         <div className="reveal-x">

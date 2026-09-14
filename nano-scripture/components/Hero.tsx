@@ -83,13 +83,11 @@ export default function Hero() {
 
       <div className="shell relative flex min-h-[inherit] items-end pb-14 md:items-center md:pb-0">
         <div className="w-full py-16 md:w-[46%] md:py-24">
-          <p className="eyebrow mask-line load" style={{ color: 'var(--accent-deep)' }}>
-            <span>כסף 925 · צריבת ננו · הנוסח המלא</span>
-          </p>
-
+          {/* בלי תווית מעל הכותרת. "כסף 925 · צריבת ננו · הנוסח המלא"
+              ישבה כאן באותיות מרווחות, והכותרת אומרת את זה טוב יותר */}
           <h1
-            className="display mt-4"
-            style={{ fontSize: 'var(--ds-hero)', fontWeight: 700, lineHeight: 1.05 }}
+            className="display"
+            style={{ fontSize: 'var(--ds-hero)', fontWeight: 500, lineHeight: 1.08 }}
           >
             <span className="mask-line load">
               <span>כל הנוסח.</span>

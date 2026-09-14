@@ -14,14 +14,15 @@ export default function Bestsellers() {
   ]).slice(0, 8);
 
   return (
-    <section className="on-photo relative py-9 md:py-24">
+    <section className="on-photo relative py-9 md:py-16">
       <SectionPhoto src="/worn/scene-window.jpg" mode="band" veil={0.22} />
 
       <div className="shell relative">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          {/* כאן הייתה תווית "הנמכרים ביותר". לחנות אין עדיין נתוני מכירה
+              שמצדיקים אותה, והכותרת עצמה אומרת את מה שצריך */}
           <div>
-            <p className="eyebrow reveal">הנמכרים ביותר</p>
-            <h2 className="display t-1 mt-3">
+            <h2 className="display t-1">
               <span className="mask-line">
                 <span>מאיפה מתחילים</span>
               </span>

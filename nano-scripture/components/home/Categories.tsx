@@ -23,14 +23,13 @@ import SectionPhoto from '@/components/SectionPhoto';
  */
 export default function Categories() {
   return (
-    <section className="on-photo relative py-9 md:py-32">
+    <section className="on-photo relative py-9 md:py-24">
       <SectionPhoto src="/worn/scene-doorway.jpg" mode="band" flip veil={0.22} />
 
       <div className="shell relative">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="eyebrow reveal">הקטלוג</p>
-            <h2 className="display t-1 mt-4">
+            <h2 className="display t-1">
               <span className="mask-line">
                 <span>איפה תרצו לענוד אותה</span>
               </span>
@@ -79,7 +78,7 @@ export default function Categories() {
                     </span>
                   </div>
 
-                  <p className="mt-1" style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.12em', color: 'var(--ink-3)' }}>
+                  <p className="mt-1" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                     {cat.subtitle}
                   </p>
 
@@ -99,7 +98,7 @@ export default function Categories() {
                     </span>
                     <span
                       className="link-u"
-                      style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)', letterSpacing: '.03em' }}
+                      style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
                     >
                       לצפייה ←
                     </span>

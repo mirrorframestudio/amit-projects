@@ -24,15 +24,26 @@ export async function POST(req: NextRequest) {
   if (!wcReady) {
     return NextResponse.json({ error: 'ההרשמה אינה זמינה כרגע' }, { status: 503 });
   }
-  if (!promoOn) {
-    return NextResponse.json({ error: 'המבצע אינו פעיל' }, { status: 410 });
-  }
 
-  let body: Partial<Lead>;
+  let body: Partial<Lead> & { source?: string };
   try {
-    body = (await req.json()) as Partial<Lead>;
+    body = (await req.json()) as Partial<Lead> & { source?: string };
   } catch {
     return NextResponse.json({ error: 'בקשה לא תקינה' }, { status: 400 });
+  }
+
+  /**
+   * שני מסלולים לאותו נתיב.
+   *
+   * הפופאפ: שם, טלפון, דוא"ל והסכמה - ומקבל את קוד ההנחה. הוא תלוי
+   * במבצע, כי בלי מבצע אין מה להבטיח.
+   *
+   * הפוטר: דוא"ל והסכמה בלבד, בלי קוד. הוא לא תלוי במבצע - רשימת
+   * דיוור היא דבר שיש לחנות גם כשאין הנחה.
+   */
+  const emailOnly = body.source === 'footer';
+  if (!emailOnly && !promoOn) {
+    return NextResponse.json({ error: 'המבצע אינו פעיל' }, { status: 410 });
   }
 
   const lead: Lead = {
@@ -44,7 +55,7 @@ export async function POST(req: NextRequest) {
     consent: body.consent === true,
   };
 
-  const errors = validateLead(lead);
+  const errors = validateLead(lead, { emailOnly });
   if (Object.keys(errors).length) {
     return NextResponse.json({ error: 'פרטים חסרים', fields: errors }, { status: 400 });
   }
@@ -55,10 +66,20 @@ export async function POST(req: NextRequest) {
     // בלי קו תחתון מוביל. ווקומרס מתייחס למפתחות שמתחילים ב-`_`
     // כמטא מוגן, בולע אותם בשקט ולא מחזיר אותם - הבדיקה הראשונה
     // יצרה לקוח שהמקור שלו נעלם
-    { key: 'מקור', value: 'פופאפ מועדון' },
+    { key: 'מקור', value: emailOnly ? 'מכתב הבית - פוטר' : 'פופאפ מועדון' },
     { key: 'הסכמה לדיוור', value: `כן · ${stamp}` },
-    { key: 'טלפון', value: lead.phone },
+    ...(emailOnly ? [] : [{ key: 'טלפון', value: lead.phone }]),
   ];
+  // בפוטר אין שם ואין טלפון. השדות האלה לא נשלחים בכלל, כדי שלקוח
+  // קיים שנרשם גם מהפוטר לא יאבד את השם שמילא בפופאפ
+  const person = emailOnly
+    ? {}
+    : {
+        first_name: first,
+        last_name: last,
+        billing: { first_name: first, last_name: last, phone: lead.phone, email: lead.email },
+      };
+  const reply = emailOnly ? { ok: true } : { code: PROMO.code, percent: PROMO.percent };
 
   try {
     const existing = await wcGet<WcCustomer[]>('/customers', {
@@ -70,29 +91,18 @@ export async function POST(req: NextRequest) {
     if (existing.length) {
       // כבר רשום. מעדכנים את מה שהוא מילא עכשיו ומחזירים את הקוד -
       // שגיאה כאן הייתה מענישה אותו על כך שנרשם פעמיים
-      await wcPut(`/customers/${existing[0].id}`, {
-        first_name: first,
-        last_name: last,
-        billing: { first_name: first, last_name: last, phone: lead.phone, email: lead.email },
-        meta_data: meta,
-      });
-      return NextResponse.json({ code: PROMO.code, percent: PROMO.percent, returning: true });
+      await wcPut(`/customers/${existing[0].id}`, { ...person, meta_data: meta });
+      return NextResponse.json({ ...reply, returning: true });
     }
 
-    await wcPost<WcCustomer>('/customers', {
-      email: lead.email,
-      first_name: first,
-      last_name: last,
-      billing: { first_name: first, last_name: last, phone: lead.phone, email: lead.email },
-      meta_data: meta,
-    });
+    await wcPost<WcCustomer>('/customers', { email: lead.email, ...person, meta_data: meta });
 
-    return NextResponse.json({ code: PROMO.code, percent: PROMO.percent, returning: false });
+    return NextResponse.json({ ...reply, returning: false });
   } catch (e) {
     const msg = e instanceof Error ? e.message : '';
     // ווקומרס מחזיר את זה כשהדוא"ל תפוס בין הבדיקה לבין הכתיבה
     if (/registered|exists/i.test(msg)) {
-      return NextResponse.json({ code: PROMO.code, percent: PROMO.percent, returning: true });
+      return NextResponse.json({ ...reply, returning: true });
     }
     console.error('subscribe failed', e);
     return NextResponse.json({ error: 'ההרשמה נכשלה. נסו שוב.' }, { status: 502 });

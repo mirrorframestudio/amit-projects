@@ -12,24 +12,34 @@ const CONTACT = { fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' } as const;
 
 export default function Footer() {
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<'idle' | 'busy' | 'sent' | 'failed'>('idle');
+
+  /**
+   * ההרשמה אמיתית. עד עכשיו הכפתור הציג "נרשמת" בלי לשלוח דבר -
+   * כתובת שהוקלדה כאן נעלמה. עכשיו היא נכנסת לרשימת הלקוחות בווקומרס
+   * דרך אותו נתיב שמשרת את הפופאפ, במסלול של דוא"ל בלבד ובלי קוד
+   * הנחה - כאן לא הובטח אחד.
+   */
+  async function subscribe(e: React.FormEvent) {
+    e.preventDefault();
+    if (state === 'busy') return;
+    setState('busy');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'footer', consent: true }),
+      });
+      setState(res.ok ? 'sent' : 'failed');
+    } catch {
+      setState('failed');
+    }
+  }
 
   return (
-    <footer className="hairline relative mt-32 overflow-hidden pt-24 pb-10">
-      {/* חתימת ענק ברקע — קו אחד של טיפוגרפיה שחותם את העמוד */}
-      <div
-        aria-hidden
-        className="display pointer-events-none absolute inset-x-0 bottom-0 select-none text-center leading-none"
-        style={{
-          fontSize: 'clamp(5rem, 22vw, 20rem)',
-          color: 'var(--ink)',
-          opacity: 0.06,
-          transform: 'translateY(24%)',
-        }}
-      >
-        {BRAND.name}
-      </div>
-
+    <footer className="hairline relative mt-32 pt-24 pb-10">
+      {/* כאן ישב שם המותג בגודל 22vw ובשקיפות 6% כסימן מים - הקישוט
+          שכל תבנית שמה בפוטר. הפוטר עומד על מה שכתוב בו */}
       <div className="shell relative">
         <div className="grid gap-8 md:gap-14 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
           <div>
@@ -63,18 +73,9 @@ export default function Footer() {
               <span style={{ ...CONTACT, color: 'var(--ink-3)' }}>{COMPANY.address}</span>
             </div>
 
-            <div className="mt-7 flex gap-4">
-              {['Instagram', 'TikTok', 'Pinterest'].map((s) => (
-                <a
-                  key={s}
-                  href="#"
-                  className="tap-row link-u ltr"
-                  style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.14em', color: 'var(--ink-3)' }}
-                >
-                  {s}
-                </a>
-              ))}
-            </div>
+            {/* אין כאן קישורים לרשתות. היו שלושה - אינסטגרם, טיקטוק,
+                פינטרסט - וכולם הובילו ל-#. לחנות אין עדיין חשבון באף אחת,
+                וקישור מת לרשת חברתית אומר לקונה בדיוק את זה */}
           </div>
 
           <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 md:flex md:flex-col md:gap-3">
@@ -103,18 +104,16 @@ export default function Footer() {
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               דגמים חדשים, סדרות מוגבלות, ומעט מאוד דואר.
             </p>
-            <form
-              className="mt-5 flex"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSent(true);
-              }}
-            >
+            <form className="mt-5 flex" onSubmit={subscribe}>
               <input
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (state !== 'busy') setState('idle');
+                }}
+                disabled={state === 'sent'}
                 placeholder="כתובת אימייל"
                 aria-label="כתובת אימייל"
                 style={{
@@ -130,11 +129,24 @@ export default function Footer() {
               <button
                 type="submit"
                 className="link-u px-3"
+                disabled={state === 'busy' || state === 'sent'}
                 style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent)' }}
               >
-                {sent ? 'נרשמת' : 'הרשמה'}
+                {state === 'sent' ? 'נרשמת' : state === 'busy' ? 'רגע…' : 'הרשמה'}
               </button>
             </form>
+            {/* סעיף 30א לחוק התקשורת: ההסכמה לדיוור נאמרת במפורש ליד הכפתור */}
+            <p
+              className="mt-2"
+              aria-live="polite"
+              style={{ fontSize: 'var(--fs-2xs)', color: state === 'failed' ? 'var(--sale)' : 'var(--ink-3)' }}
+            >
+              {state === 'failed'
+                ? 'לא הצלחנו לרשום. נסו שוב.'
+                : state === 'sent'
+                  ? 'הכתובת נשמרה.'
+                  : 'בלחיצה על הרשמה מאשרים קבלת דיוור מהחנות.'}
+            </p>
           </div>
         </div>
 

@@ -15,11 +15,10 @@ export default function Worn() {
   );
 
   return (
-    <section className="py-9 md:py-32" style={{ borderTop: '1px solid var(--line)' }}>
+    <section className="py-9 md:py-20" style={{ borderTop: '1px solid var(--line)' }}>
       <div className="shell flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="eyebrow reveal">על הגוף</p>
-          <h2 className="display t-2 mt-4">
+          <h2 className="display t-2">
             <span className="mask-line">
               <span>ככה זה נראה כשעונדים</span>
             </span>

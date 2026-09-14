@@ -321,7 +321,7 @@ export default function CartDrawer() {
                     style={{
                       fontSize: 'var(--fs-xs)',
                       padding: '.14rem .5rem',
-                      borderRadius: 99,
+                      borderRadius: 'var(--radius)',
                       color: b.accentInk,
                       background: `color-mix(in oklab, ${b.accent} 13%, transparent)`,
                       border: `1px solid color-mix(in oklab, ${b.accent} 22%, transparent)`,

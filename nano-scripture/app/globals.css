@@ -78,10 +78,21 @@
   /* דקורטיבי בלבד: ספרת 404 והחותם בפוטר */
   --ds-mega: clamp(4rem, 16vw, 11rem);
 
-  --font-display: var(--font-app), system-ui, sans-serif;
+  /* שני גופנים, לא אחד.
+
+     Assistant לכל מה שמשמש - גוף, כפתורים, מחירים, טפסים. הוא נבנה
+     לעברית, נושא ניקוד ומשקלים כבדים, ובממשק הוא שקוף.
+
+     Frank Ruhl Libre לכל מה שנקרא - כותרות, שמות הדגמים, פסוקי
+     הפתיחה והנוסחים עצמם. זה גופן הספר העברי: עיתון, סידור, תנ"ך.
+     מותג ששמו מִקְרָא ושכל מה שהוא מוכר הוא טקסט מקראי מנוקד, שהציג
+     את הטקסט הזה בסאנס-סריף בולד - נראה כמו מסך ולא כמו ספר. וזה
+     גם מה שמפריד אותו מהמתחרים, שכולם בסאנס.
+
+     הדק היוקרתי נבדק ונפסל בעבר, ובצדק - הוא הרג את הניגודיות. כאן
+     המשקל נשאר כבד; רק הצורה השתנתה. */
+  --font-display: var(--font-serif), 'Frank Ruhl Libre', 'David', serif;
   --font-body: var(--font-app), system-ui, sans-serif;
-  /* כותרות כבדות. הדק היוקרתי נבדק ונפסל — הוא מה שגרם לאתר להיקרא מת,
-     והכיוון שעובד בשוק הזה הוא כותרת בולד שאומרת מה המוצר */
   --weight-display: 700;
   --track-display: 0;
   --radius: 3px;
@@ -182,11 +193,15 @@ body::after {
   line-height: 1.12;
 }
 
+/* בגדלי ענק סריף במשקל 700 נהיה כתם. 500 נשאר כותרת ומחזיר את
+   הפרטים של האות */
 .t-hero {
   font-size: var(--ds-hero);
+  font-weight: 500;
 }
 .t-1 {
   font-size: var(--ds-1);
+  font-weight: 500;
 }
 .t-2 {
   font-size: var(--ds-2);
@@ -195,10 +210,14 @@ body::after {
   font-size: var(--ds-3);
 }
 
+/* תווית קטנה מעל כותרת. נשארה רק במקומות שבהם היא כותרת של רשימה -
+   עמודות הפוטר, מקטעי התפריט, המפרט - ולא כקישוט מעל כל h2 באתר.
+   הריווח ירד מ-0.34em: עברית לא נפתחת כמו לטינית, ואות שמרוחקת
+   מחברתה בשליש רוחבה נקראת כתבנית ולא כמילה */
 .eyebrow {
+  font-family: var(--font-body);
   font-size: var(--fs-xs);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--accent);
   font-weight: 600;
 }
@@ -209,28 +228,10 @@ body::after {
   color: var(--ink-2);
 }
 
-/* זהב על רקע בהיר צריך עצירות כהות, אחרת הוא נמוג */
-.gold-text {
-  background: linear-gradient(
-    100deg,
-    var(--accent) 0%,
-    var(--accent-deep) 22%,
-    var(--spark) 44%,
-    var(--accent-deep) 64%,
-    var(--accent) 86%,
-    var(--spark) 100%
-  );
-  background-size: 260% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: sheen 9s linear infinite;
-}
-
-@keyframes sheen {
-  to {
-    background-position: -260% 0;
-  }
+/* השורה השנייה של כותרת, בצבע. קודם היה כאן גרדיאנט זהב עם ברק
+   שרץ לנצח - הסימן המובהק ביותר של עמוד מיוצר. צבע אחד, בלי תנועה */
+.accent-text {
+  color: var(--accent-deep);
 }
 
 .num {
@@ -249,7 +250,7 @@ body::after {
 
 .rule {
   height: 1px;
-  background: linear-gradient(to left, transparent, var(--line-strong), transparent);
+  background: var(--line);
   border: 0;
 }
 
@@ -361,7 +362,7 @@ section {
   border-radius: var(--radius);
   font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.02em;
   border: 1px solid var(--line-strong);
   color: var(--ink);
   background: transparent;
@@ -380,7 +381,7 @@ section {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(105deg, var(--accent), var(--accent-deep));
+  background: var(--accent);
   transform: translateY(101%);
   transition: transform 0.45s var(--ease);
 }
@@ -404,7 +405,7 @@ section {
 }
 .btn-solid:hover::before {
   transform: none;
-  filter: brightness(1.15);
+  background: var(--accent-deep);
 }
 
 .btn-ghost {
@@ -453,39 +454,12 @@ section {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition:
-    border-color 0.4s var(--ease),
-    transform 0.5s var(--ease),
-    box-shadow 0.5s var(--ease);
+  transition: border-color 0.4s var(--ease);
 }
+/* בריחוף המסגרת מתכהה, וזהו. הכרטיס לא קופץ, לא מטיל צל ולא עובר
+   עליו ברק - שלושתם היו כאן, ושלושתם הם מה שכל תבנית עושה */
 .card:hover {
   border-color: var(--line-strong);
-  transform: translateY(-5px);
-  box-shadow: 0 26px 60px -34px rgb(60 45 15 / 0.45);
-}
-
-/* ברק שעובר על הכרטיס בריחוף */
-.card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to left,
-    transparent 30%,
-    color-mix(in oklab, var(--spark) 22%, transparent) 50%,
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  opacity: 0;
-  transition: none;
-}
-.card:hover::after {
-  opacity: 1;
-  transform: translateX(120%);
-  transition:
-    transform 0.9s var(--ease),
-    opacity 0.2s;
 }
 
 .hairline {
@@ -593,39 +567,6 @@ section {
   .mask-line > span {
     opacity: 1 !important;
     transform: none !important;
-  }
-}
-
-
-/* ---------- מבצע ---------- */
-
-/* ברק שחוצה את רצועת המבצע — התנועה היא מה שמושך את העין אליה */
-@keyframes promo-sheen {
-  from {
-    transform: translateX(-140%);
-  }
-  to {
-    transform: translateX(140%);
-  }
-}
-
-.promo-sheen::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    100deg,
-    transparent 38%,
-    rgb(255 255 255 / 0.3) 50%,
-    transparent 62%
-  );
-  animation: promo-sheen 5.5s var(--ease-in-out) infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .promo-sheen::after {
-    animation: none;
   }
 }
 

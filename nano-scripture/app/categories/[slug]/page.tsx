@@ -94,13 +94,19 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           </nav>
 
           <div className="max-w-2xl">
-            <p className="eyebrow reveal load">{cat.subtitle}</p>
-            <h1 className="display t-hero mt-4">
+            <h1 className="display t-hero">
               <span className="mask-line load">
                 <span>{cat.title}</span>
               </span>
             </h1>
-            <p className="lede reveal load mt-7 max-w-xl" style={{ ['--d' as string]: '220ms' }}>
+            {/* תת-הכותרת מתחת לכותרת ולא מעליה כתווית מרווחת */}
+            <p
+              className="reveal load mt-3"
+              style={{ ['--d' as string]: '160ms', fontSize: 'var(--fs-md)', color: 'var(--ink-3)' }}
+            >
+              {cat.subtitle}
+            </p>
+            <p className="lede reveal load mt-6 max-w-xl" style={{ ['--d' as string]: '220ms' }}>
               {cat.blurb}
             </p>
             <p className="reveal load mt-6" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
@@ -141,8 +147,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             </div>
 
             <div className="reveal text-center" style={{ ['--d' as string]: '120ms' }}>
-              <p className="eyebrow">אותו תכשיט</p>
-              <p className="display t-3 mt-4" style={{ lineHeight: 1.4 }}>
+              <p className="display t-3" style={{ lineHeight: 1.4 }}>
                 מה שמשתנה הוא הנוסח שנצרב, לא הדגם.
               </p>
               <div className="mt-6 flex items-center justify-center gap-2">

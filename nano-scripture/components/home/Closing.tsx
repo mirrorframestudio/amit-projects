@@ -1,28 +1,18 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { POLICY, deliveryLine } from '@/lib/policy';
 
 export default function Closing() {
   return (
-    <section className="relative overflow-hidden py-10 md:py-40" style={{ borderTop: '1px solid var(--line)' }}>
-      {/* תכשיט ענק, כמעט שקוף, חותך את החלק התחתון */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        style={{ opacity: 0.22 }}
-      >
-        <Image src="/products/YASNN004W.webp" alt="" width={900} height={900} className="h-[128%] w-auto object-contain" />
-      </div>
-
+    <section className="relative overflow-hidden py-10 md:py-28" style={{ borderTop: '1px solid var(--line)' }}>
+      {/* משפט סיום, וזהו. קודם ישב מאחוריו תליון ענק בשקיפות 22% ומעליו
+          תווית "מתנה שנשארת" - שני קישוטים שכל תבנית מוסיפה לסיום */}
       <div className="shell relative text-center">
-        <p className="eyebrow reveal">מתנה שנשארת</p>
-
-        <h2 className="display mt-6" style={{ fontSize: 'var(--ds-hero)' }}>
+        <h2 className="display t-hero">
           <span className="mask-line">
             <span>מה נותנים למי</span>
           </span>
           <span className="mask-line">
-            <span className="gold-text" style={{ ['--d' as string]: '130ms' }}>
+            <span className="accent-text" style={{ ['--d' as string]: '130ms' }}>
               שיש לו הכול?
             </span>
           </span>
@@ -45,7 +35,7 @@ export default function Closing() {
           </Link>
         </div>
 
-        <p className="reveal mt-9" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.08em' }}>
+        <p className="reveal mt-9" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
           משלוח {deliveryLine} · החזרה תוך {POLICY.returnDays} יום · תשלום מאובטח
         </p>
       </div>

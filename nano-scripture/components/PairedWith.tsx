@@ -17,7 +17,7 @@ import { useCart } from '@/lib/cart';
  * ההוספה היא ישירה מכאן, בלי לעזוב את העמוד, כי כל ניווט נוסף בדרך
  * לעגלה הוא מקום לנשור בו.
  */
-export default function PairedWith({ slug, accent }: { slug: string; accent: string }) {
+export default function PairedWith({ slug }: { slug: string }) {
   const pair = pairFor(slug);
   const add = useCart((s) => s.add);
   if (!pair) return null;
@@ -40,10 +40,7 @@ export default function PairedWith({ slug, accent }: { slug: string; accent: str
           </div>
 
           <div className="reveal" style={{ ['--d' as string]: '120ms' }}>
-            <p className="eyebrow" style={{ color: accent }}>
-              נענדים יחד
-            </p>
-            <h2 className="display mt-3" style={{ fontSize: 'var(--ds-3)', lineHeight: 1.35 }}>
+            <h2 className="display" style={{ fontSize: 'var(--ds-3)', lineHeight: 1.35 }}>
               {pair.title}
             </h2>
             <p className="mt-4" style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)', lineHeight: 1.85 }}>

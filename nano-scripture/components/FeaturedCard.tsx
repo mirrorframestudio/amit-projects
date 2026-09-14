@@ -46,12 +46,10 @@ export default function FeaturedCard({ product }: { product: Product }) {
                 top: 14,
                 fontSize: 'var(--fs-xs)',
                 fontWeight: 700,
-                letterSpacing: '.04em',
-                padding: '.32rem .62rem',
-                borderRadius: 99,
+                padding: '.3rem .6rem',
+                borderRadius: 'var(--radius)',
                 color: 'var(--on-sale)',
                 background: 'var(--sale)',
-                boxShadow: '0 4px 14px -4px rgb(216 31 42 / .55)',
               }}
             >
               <span className="num">{PROMO.badge}</span>
@@ -65,9 +63,9 @@ export default function FeaturedCard({ product }: { product: Product }) {
               className="mb-4 w-fit"
               style={{
                 fontSize: 'var(--fs-xs)',
-                letterSpacing: '.14em',
-                padding: '.34rem .72rem',
-                borderRadius: 99,
+                fontWeight: 600,
+                padding: '.3rem .6rem',
+                borderRadius: 'var(--radius)',
                 color: 'var(--on-accent)',
                 background: 'var(--accent)',
               }}

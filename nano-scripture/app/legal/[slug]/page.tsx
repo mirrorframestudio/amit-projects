@@ -35,8 +35,7 @@ export default async function LegalPage({
   return (
     <div className="shell pb-28 pt-36">
       <div className="mx-auto max-w-2xl">
-        <p className="eyebrow reveal">מסמכי החנות</p>
-        <h1 className="display t-1 mt-4">{doc.title}</h1>
+        <h1 className="display t-1">{doc.title}</h1>
         <p className="lede mt-5">{doc.lede}</p>
 
         <p className="mt-4" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>

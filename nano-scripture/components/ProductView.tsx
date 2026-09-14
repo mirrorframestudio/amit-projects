@@ -37,50 +37,9 @@ const BASE_VIEWS: { id: View; label: string }[] = [
   { id: 'chip', label: 'הברכה על השבב' },
 ];
 
-/* שורת הביטחון שמתחת לכפתור. אייקון נקרא לפני שהעין מגיעה למילה */
-const ASSURANCE = [
-  {
-    label: `משלוח מבוטח · ${deliveryLine}`,
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M3 7h11v9H3V7Zm11 3h4l3 3v3h-7v-6ZM7 19a1.6 1.6 0 1 0 0-3.2A1.6 1.6 0 0 0 7 19Zm10 0a1.6 1.6 0 1 0 0-3.2A1.6 1.6 0 0 0 17 19Z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    label: 'שנה אחריות',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 3.5 19 6v5.6c0 4-2.9 7.2-7 8.9-4.1-1.7-7-4.9-7-8.9V6l7-2.5Z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinejoin="round"
-        />
-        <path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    label: 'החזרה תוך 30 יום',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M4.5 12a7.5 7.5 0 1 1 2.3 5.4"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-        />
-        <path d="M4 7.5V12h4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-];
+/* שורת הביטחון שמתחת לכפתור. שורה אחת של טקסט, כמו שורת המקורות
+   בהירו. קודם שלוש עמודות עם אייקון קו מעל כל מילה - הרשת של תבנית */
+const ASSURANCE = [`משלוח מבוטח · ${deliveryLine}`, 'שנה אחריות', `החזרה תוך ${POLICY.returnDays} יום`];
 
 export default function ProductView({ product }: { product: Product }) {
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
@@ -340,9 +299,9 @@ export default function ProductView({ product }: { product: Product }) {
             className="mb-4 inline-block"
             style={{
               fontSize: 'var(--fs-xs)',
-              letterSpacing: '.14em',
-              padding: '.34rem .72rem',
-              borderRadius: 99,
+              fontWeight: 600,
+              padding: '.3rem .6rem',
+              borderRadius: 'var(--radius)',
               color: 'var(--on-accent)',
               background: 'var(--accent)',
             }}
@@ -378,7 +337,6 @@ export default function ProductView({ product }: { product: Product }) {
               className="mt-1.5"
               style={{
                 fontSize: 'var(--fs-xs)',
-                letterSpacing: '.14em',
                 color: 'var(--ink-3)',
                 paddingInlineStart: '.9rem',
               }}
@@ -413,27 +371,16 @@ export default function ProductView({ product }: { product: Product }) {
               style={{
                 fontSize: 'var(--fs-xs)',
                 fontWeight: 700,
-                letterSpacing: '.04em',
-                padding: '.3rem .72rem',
-                borderRadius: 99,
+                padding: '.3rem .6rem',
+                borderRadius: 'var(--radius)',
                 color: 'var(--on-sale)',
                 background: 'var(--sale)',
-                boxShadow: '0 4px 14px -4px rgb(216 31 42 / .5)',
               }}
             >
               {PROMO.pill} · חיסכון {formatPrice(sale.saved)}
             </span>
           )}
-          <span
-            style={{
-              fontSize: 'var(--fs-xs)',
-              letterSpacing: '.06em',
-              color: 'var(--ink-2)',
-              border: '1px solid var(--line)',
-              borderRadius: 99,
-              padding: '.28rem .7rem',
-            }}
-          >
+          <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>
             {MATERIALS[product.material].label} · {FINISHES[product.finish]}
           </span>
         </div>
@@ -691,18 +638,12 @@ export default function ProductView({ product }: { product: Product }) {
         </button>
 
         {/* ---------- שורת ביטחון ---------- */}
-        <ul className="mt-7 grid grid-cols-3 gap-3 text-center">
-          {ASSURANCE.map((a) => (
-            <li key={a.label} className="flex flex-col items-center gap-2">
-              <span aria-hidden style={{ color: 'var(--accent)' }}>
-                {a.icon}
-              </span>
-              <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.5 }}>
-                {a.label}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <p
+          className="mt-6 text-center"
+          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}
+        >
+          {ASSURANCE.join(' · ')}
+        </p>
 
         {/* ---------- "איך אני יודע שזה באמת שם" ---------- */}
         {/*
@@ -727,7 +668,7 @@ export default function ProductView({ product }: { product: Product }) {
             איך אפשר לדעת שהנוסח באמת שם?
           </p>
 
-          <ul className="mt-4 flex flex-col gap-3.5">
+          <ul className="mt-4 flex flex-col gap-3">
             {[
               [
                 'קראו אותו לפני שאתם קונים',
@@ -742,23 +683,10 @@ export default function ProductView({ product }: { product: Product }) {
                 'הניקוד נצרב יחד עם האותיות, ולא מושמט כדי לחסוך מקום. זה מה שנראה מתחת למיקרוסקופ.',
               ],
             ].map(([h, t]) => (
-              <li key={h} className="flex gap-3">
-                <span
-                  aria-hidden
-                  className="flex-shrink-0"
-                  style={{ width: 6, height: 6, borderRadius: 2, background: b.accent, marginTop: 8 }}
-                />
-                <span>
-                  <span className="display block" style={{ fontSize: 'var(--fs-sm)' }}>
-                    {h}
-                  </span>
-                  <span
-                    className="mt-0.5 block"
-                    style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}
-                  >
-                    {t}
-                  </span>
-                </span>
+              // כותרת רצה לתוך הפסקה, כמו בטקסט ערוך - ולא ריבוע צבעוני
+              // לפני כל שורה
+              <li key={h} style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+                <strong style={{ color: 'var(--ink)', fontWeight: 600 }}>{h}.</strong> {t}
               </li>
             ))}
           </ul>
@@ -864,7 +792,7 @@ export default function ProductView({ product }: { product: Product }) {
       <ProductStory product={product} blessing={b} />
 
       {/* ---------- נענדים יחד ---------- */}
-      <PairedWith slug={product.slug} accent={b.accentInk} />
+      <PairedWith slug={product.slug} />
 
       {/* ---------- שאלות נפוצות ----------
           הסקיל מציב את השאלות כקו ההגנה האחרון לפני ההמרה, ומורה
@@ -873,8 +801,7 @@ export default function ProductView({ product }: { product: Product }) {
       <section className="pb-24 pt-4" style={{ borderTop: '1px solid var(--line)' }}>
         <div className="shell grid gap-10 pt-14 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="eyebrow" style={{ color: b.accentInk }}>לפני שקונים</p>
-            <h2 className="display t-2 mt-4">שאלות שחוזרות</h2>
+            <h2 className="display t-2">שאלות שחוזרות</h2>
           </div>
           <Accordion items={faq} />
         </div>

@@ -53,7 +53,6 @@ export default function PromoBar({ spacer = false }: { spacer?: boolean }) {
   return (
     <div
       aria-hidden={spacer || undefined}
-      className={spacer ? undefined : 'promo-sheen'}
       style={{
         ...(spacer ? { visibility: 'hidden' as const, pointerEvents: 'none' as const } : null),
         position: 'relative',

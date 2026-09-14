@@ -47,7 +47,6 @@ export default function ProductStory({
 
   const BLOCKS = [
     {
-      eyebrow: 'מה נצרב',
       title: 'הנוסח השלם, לא שורה ממנו',
       body: [
         `על השבב שבתוך ${product.name} נצרב הנוסח המלא של ${b.plain} - ${b.chars.toLocaleString('he-IL')} תווים, ${b.words} מילים - בלי קיצור ובלי השמטה.`,
@@ -56,7 +55,6 @@ export default function ProductStory({
       ],
     },
     {
-      eyebrow: 'למי זה מתאים',
       title: b.forWhom,
       body: [
         b.blurb,
@@ -65,7 +63,6 @@ export default function ProductStory({
       ],
     },
     {
-      eyebrow: 'קנה מידה',
       title: 'חצי מילימטר רבוע',
       body: [
         `השבב עצמו הוא ${CHIP_SPEC[0].value.split(' · ')[0]}, ושטח הכתיבה בפועל הוא כחצי מילימטר רבוע - כשליש מראש סיכה.`,
@@ -73,7 +70,6 @@ export default function ProductStory({
       ],
     },
     {
-      eyebrow: 'איך יודעים',
       title: 'הטקסט שם גם כשלא רואים אותו',
       body: [
         'את האותיות אי אפשר לראות בעין, וגם לא בזכוכית מגדלת רגילה. בגובה תשעה מיקרון נדרשת הגדלה של פי 500 לפחות - כלומר מיקרוסקופ.',
@@ -82,7 +78,6 @@ export default function ProductStory({
       ],
     },
     {
-      eyebrow: 'החומר',
       title: mat.label,
       body: [
         mat.note,
@@ -96,7 +91,6 @@ export default function ProductStory({
       ].filter(Boolean),
     },
     {
-      eyebrow: 'ביומיום',
       title: 'איך זה נלבש',
       body: [
         [spec('אורך השרשרת') && `אורך השרשרת ${spec('אורך השרשרת')}.`, spec('היקף הצמיד') && `היקף הצמיד ${spec('היקף הצמיד')}.`]
@@ -107,7 +101,6 @@ export default function ProductStory({
       ],
     },
     {
-      eyebrow: 'מה מגיע',
       title: 'הקופסה והכרטיס',
       body: [
         'התכשיט מגיע בקופסה מרופדת שמגנה עליו בדרך, לצד כרטיס שנושא את שם הנוסח, את המקורות שממנו הוא לקוח, ואת הנוסח המלא.',
@@ -144,10 +137,7 @@ export default function ProductStory({
               }}
             >
               <div>
-                <p className="eyebrow" style={{ color: b.accentInk }}>
-                  {block.eyebrow}
-                </p>
-                <h2 className="display mt-3" style={{ fontSize: 'var(--ds-3)', lineHeight: 1.35 }}>
+                <h2 className="display" style={{ fontSize: 'var(--ds-3)', lineHeight: 1.35 }}>
                   {block.title}
                 </h2>
                 {block.body.map((line) => (
