@@ -561,11 +561,18 @@ export type Banner = {
  *
  * לתינוק אין צילום של הסיכה, ולכן הרקע שלה הוא צילום הבית - הזוג
  * בפתח הדלת, הפוך כדי שהקיר הריק ינחת מתחת לכותרת.
+ *
+ * מיקום החיתוך נקבע לפי איפה התכשיט יושב בצילום, ולא לפי המרכז:
+ * הרצועה היא 16:7 והשליש התחתון שלה דוהה לקרם, ובכל שלושת הצילומים
+ * התכשיט יושב בשני השלישים התחתונים של הפריים. חיתוך למרכז הראה
+ * שרשרת בלי תליון. y=100% מצמיד את החיתוך לתחתית, והתכשיט עולה אל
+ * החלק הנקי של הרצועה: החמסה בשורה 46% שלה, הלב והשבב של הצמיד
+ * ב-34% ו-46%. וההיפוך בשרשראות מזיז את החמסה שמאלה, אל מחוץ לטקסט.
  */
 const CATEGORY_BANNERS: Partial<Record<CategoryId, Banner>> = {
-  necklaces: { src: '/scene/al-kapayim-1.jpg' },
-  bracelets: { src: '/scene/libi-er-tray.jpg', position: '50% 55%' },
-  pins: { src: '/worn/scene-doorway.jpg', position: '50% 40%', flip: true },
+  necklaces: { src: '/scene/al-kapayim-1.jpg', position: '50% 100%', flip: true },
+  bracelets: { src: '/scene/libi-er-tray.jpg', position: '50% 90%' },
+  pins: { src: '/worn/scene-doorway.jpg', position: '50% 100%', flip: true },
 };
 
 export function categoryBanner(id: CategoryId): Banner | null {
