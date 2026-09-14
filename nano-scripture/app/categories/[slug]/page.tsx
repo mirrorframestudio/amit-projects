@@ -84,15 +84,20 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <JsonLd data={schema} />
       {/* ---------- כותרת הקטגוריה, על צילום ---------- */}
       <section className="relative overflow-hidden pt-36 pb-14">
+        {/* הרצועה מאחורי הכותרת - במסך רחב בלבד. בטלפון רצועת 16:7 ברוחב
+            375 היא 164 פיקסל, ורובה מתחת לכותרת הקבועה: נשאר ממנה פס של
+            שלושה סנטימטר עם חצי שבב. שם הצילום עובר אחרי הטקסט, למטה */}
         {banner && (
-          <SectionPhoto
-            src={banner.src}
-            position={banner.position}
-            flip={banner.flip}
-            mode="band"
-            ratio="16 / 7"
-            veil={0.4}
-          />
+          <div className="hidden md:block">
+            <SectionPhoto
+              src={banner.src}
+              position={banner.position}
+              flip={banner.flip}
+              mode="band"
+              ratio="16 / 7"
+              veil={0.4}
+            />
+          </div>
         )}
 
         <div className="shell relative">
@@ -124,6 +129,27 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               <span className="num">{formatPrice(range.max)}</span> · כל דגם עם כל אחת מ־
               <span className="num">{BLESSINGS.length}</span> הברכות
             </p>
+
+            {/* בטלפון: הצילום עצמו, ברוחב המסך ובלי צעיף, אחרי הטקסט.
+                אותו חיתוך ואותו היפוך כמו ברצועה, כדי שהתכשיט יופיע */}
+            {banner && (
+              <div
+                className="relative -mx-[4vw] mt-8 overflow-hidden md:hidden"
+                style={{ aspectRatio: '4 / 3' }}
+              >
+                <Image
+                  src={banner.src}
+                  alt={cat.title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  style={{
+                    objectPosition: banner.position,
+                    transform: banner.flip ? 'scaleX(-1)' : undefined,
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div className="mt-12">
