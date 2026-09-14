@@ -171,9 +171,9 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
       <section className="pb-32">
         <div className="shell">
           <h2 className="display t-2 mb-10">ברכות נוספות</h2>
-          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
-            {others.map((o, i) => (
-              <BlessingCard key={o.id} blessing={o} index={i} />
+          <div style={{ borderBottom: '1px solid var(--line)' }}>
+            {others.map((o) => (
+              <BlessingCard key={o.id} blessing={o} index={BLESSINGS.findIndex((x) => x.id === o.id)} compact />
             ))}
           </div>
         </div>

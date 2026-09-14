@@ -1,112 +1,158 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Blessing } from '@/lib/blessings';
-import GiftTags from './GiftTags';
 
 /**
- * כרטיס ברכה.
+ * שורת ברכה - רשומה באינדקס, ולא כרטיס.
  *
- * הצבע היה ריבוע של 34 פיקסל בפינה, וזה כל מה שהוא עשה - חמישה
- * כרטיסים בקרם שנבדלים בנקודה. כאן הוא כותרת: פס בגוון הברכה נושא את
- * השם, וכל השאר יושב מתחתיו. מהמרחק שממנו סורקים רשת, הצבע הוא
- * הדבר היחיד שנקרא.
+ * ------------------------------------------------------------------
+ * הגרסה הקודמת הייתה כרטיס: כותרת צבעונית עם צילום דהוי, מונה מילים
+ * בפינה, גלולות של "מתאים ל", חץ, ורשת של שלושה ואז שניים ממורכזים.
+ * כל אחד מהם לבדו סביר; יחד הם התבנית שכל אתר מיוצר מקבל, והעין
+ * מזהה אותה לפני שהיא קוראת מילה.
+ *
+ * וזה היה חבל דווקא כאן, כי בעמוד הזה המילים עצמן הן הדבר היפה
+ * ביותר - פסוקים מנוקדים, שכל אחד מהם נבחר - והעיצוב קבר אותן מתחת
+ * לקופסאות.
+ * ------------------------------------------------------------------
+ *
+ * עכשיו: אות עברית כמספור, השם, ומתחתיו פסוק הפתיחה בגודל של כותרת.
+ * אין קופסה, אין צבע רקע, אין גלולות. הצבע של הברכה מופיע פעם אחת,
+ * באות המספור - די בזה. הכל יושב על קו אחד דק, כמו תוכן עניינים.
  */
+
+const LETTERS = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י'];
+
 export default function BlessingCard({
   blessing: b,
   index = 0,
-  photo = null,
+  compact = false,
 }: {
   blessing: Blessing;
   index?: number;
-  /** תכשיט שנושא את הנוסח. הצבע נשאר מעליו כדי שהכותרת תישאר קריאה */
-  photo?: string | null;
+  /** לרשימת "ברכות נוספות" בעמוד ברכה - בלי הפסוק ובלי התיאור */
+  compact?: boolean;
 }) {
-  return (
-    <Link
-      href={`/blessings/${b.id}`}
-      className="card reveal group flex flex-col overflow-hidden"
-      style={{ ['--d' as string]: `${(index % 3) * 90}ms` }}
-    >
-      {/* הכותרת על גוון הברכה */}
-      <span
-        className="relative block overflow-hidden px-6 pb-5 pt-6"
-        style={{ color: '#fff' }}
-      >
-        {photo && (
-          <Image
-            src={photo}
-            alt=""
-            fill
-            sizes="(max-width: 1024px) 92vw, 32vw"
-            className="object-cover transition-transform duration-[900ms] group-hover:scale-[1.06]"
-          />
-        )}
+  const letter = LETTERS[index] ?? String(index + 1);
 
-        {/* גוון הברכה מעל הצילום.
-            נמדד מול הפיקסל הבהיר ביותר בכל פס: עם הגוון הבהיר ב־96%
-            "הברכה שלך" עדיין נפלה ל־4.38:1, מתחת לתקן לטקסט הקטן.
-            הגוון הכהה ב־90% מרים אותה ל־5.88 והגרוע ביותר בסט ל־5.68. */}
+  if (compact) {
+    return (
+      <Link
+        href={`/blessings/${b.id}`}
+        className="group flex items-baseline gap-4 py-5"
+        style={{ borderTop: '1px solid var(--line)' }}
+      >
         <span
           aria-hidden
-          className="absolute inset-0"
-          style={{
-            background: photo
-              ? `linear-gradient(150deg, color-mix(in oklab, ${b.accentInk} 90%, transparent), color-mix(in oklab, ${b.accentInk} 96%, transparent))`
-              : `linear-gradient(150deg, ${b.accent}, ${b.accentInk})`,
-          }}
-        />
-
-        <span className="relative block">
-        <span className="flex items-start justify-between gap-3">
+          className="display flex-shrink-0"
+          style={{ fontSize: 'var(--fs-sm)', color: b.accentInk, width: '1.2em' }}
+        >
+          {letter}
+        </span>
+        <span className="min-w-0 flex-1">
           <span className="display block" style={{ fontSize: 'var(--fs-lg)', lineHeight: 1.3 }}>
             {b.title}
           </span>
-          <span
-            className="num shrink-0"
-            style={{ fontSize: 'var(--fs-xs)', letterSpacing: '.08em', opacity: 0.9, marginTop: '.3rem' }}
-          >
-            {b.words} מילים
+          <span className="mt-1 block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}>
+            {b.forWhom}
           </span>
         </span>
-
-        <span className="mt-1.5 block" style={{ fontSize: 'var(--fs-sm)', opacity: 0.94 }}>
-          {b.forWhom}
-        </span>
-        </span>
-      </span>
-
-      <span className="flex flex-1 flex-col px-6 pb-6 pt-5">
-        <span className="block" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
-          {b.blurb}
-        </span>
-
-        <span className="mt-4 block">
-          <GiftTags blessing={b} />
-        </span>
-
         <span
-          className="display mt-5 block"
-          style={{ fontSize: 'var(--fs-base)', lineHeight: 1.7, color: b.accentInk }}
+          aria-hidden
+          className="num flex-shrink-0"
+          style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
+        >
+          {b.words} מילים
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href={`/blessings/${b.id}`}
+      className="reveal group grid gap-x-12 gap-y-6 py-12 md:grid-cols-[minmax(0,.9fr)_minmax(0,1.6fr)] md:py-16"
+      style={{ borderTop: '1px solid var(--line)', ['--d' as string]: `${index * 70}ms` }}
+    >
+      {/* ---------- ימין: מספור, שם, למי ---------- */}
+      <div className="flex items-start gap-5">
+        <span
+          aria-hidden
+          className="display flex-shrink-0"
+          style={{
+            fontSize: 'var(--fs-md)',
+            lineHeight: 1,
+            color: b.accentInk,
+            marginTop: '.55em',
+            width: '1.1em',
+            textAlign: 'center',
+          }}
+        >
+          {letter}
+        </span>
+        <div>
+          <h2
+            className="display"
+            style={{
+              fontSize: 'var(--ds-2)',
+              lineHeight: 1.15,
+              transition: 'color .3s var(--ease)',
+            }}
+          >
+            <span className="group-hover:[color:var(--accent-deep)]" style={{ transition: 'color .3s var(--ease)' }}>
+              {b.title}
+            </span>
+          </h2>
+          <p className="mt-3" style={{ fontSize: 'var(--fs-base)', color: 'var(--ink-2)' }}>
+            {b.forWhom}
+          </p>
+          <p
+            className="mt-6"
+            style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', letterSpacing: '.02em', lineHeight: 1.7 }}
+          >
+            {b.sources}
+          </p>
+        </div>
+      </div>
+
+      {/* ---------- שמאל: הפסוק, ואז המילים ---------- */}
+      <div>
+        {/* פסוק הפתיחה בגודל של כותרת. זה מה שקוראים, וזה מה שבוחרים */}
+        <p
+          className="display"
+          style={{
+            fontSize: 'var(--ds-3)',
+            lineHeight: 1.55,
+            color: 'var(--ink)',
+          }}
         >
           {b.opening}
-        </span>
+        </p>
+        <p className="mt-2" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
+          {b.openingSource}
+        </p>
 
-        <span
-          className="mt-auto flex items-center justify-between gap-3 pt-5"
-          style={{ borderTop: '1px solid var(--line)' }}
+        <p
+          className="mt-7 max-w-prose"
+          style={{ fontSize: 'var(--fs-base)', lineHeight: 1.85, color: 'var(--ink-2)' }}
         >
-          <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.5 }}>
-            {b.sources}
+          {b.blurb}
+        </p>
+
+        <p
+          className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-1"
+          style={{ fontSize: 'var(--fs-sm)' }}
+        >
+          <span className="num" style={{ color: 'var(--ink-3)' }}>
+            {b.words} מילים
           </span>
           <span
-            aria-hidden
-            className="shrink-0"
-            style={{ fontSize: 'var(--fs-base)', color: b.accentInk }}
+            className="link-u"
+            style={{ color: b.accentInk }}
           >
-            ←
+            לקריאת הנוסח המלא
           </span>
-        </span>
-      </span>
+        </p>
+      </div>
     </Link>
   );
 }

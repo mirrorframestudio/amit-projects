@@ -10,14 +10,55 @@ import { CATEGORIES, ACTIVE_CATEGORIES } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
 
 // הניווט נגזר מהקטגוריות הפעילות — קטגוריה ריקה נעלמת מכאן מאליה
-const NAV = [
-  ...ACTIVE_CATEGORIES.map((id) => ({
-    href: `/categories/${id}`,
-    label: CATEGORIES[id].title,
-  })),
+const CAT_NAV = ACTIVE_CATEGORIES.map((id) => ({
+  href: `/categories/${id}`,
+  label: CATEGORIES[id].title,
+}));
+const PAGE_NAV = [
   { href: '/blessings', label: 'הברכות' },
   { href: '/craft', label: 'הטכנולוגיה' },
 ];
+const NAV = [...CAT_NAV, ...PAGE_NAV];
+
+/**
+ * קישור בניווט העליון.
+ *
+ * האותיות היו קטנות ואפורות, והעמוד הנוכחי נצבע אך לא סומן. עכשיו
+ * הן בגודל טקסט, במשקל בינוני, והעמוד הנוכחי נושא קו בצבע המבטא -
+ * כך שרואים איפה נמצאים גם בלי לקרוא.
+ */
+function navLink(n: { href: string; label: string }, active: boolean) {
+  return (
+    <Link
+      key={n.href}
+      href={n.href}
+      aria-current={active ? 'page' : undefined}
+      className="relative py-1"
+      style={{
+        fontSize: 'var(--fs-base)',
+        fontWeight: 500,
+        letterSpacing: '.04em',
+        color: active ? 'var(--ink)' : 'var(--ink-2)',
+        transition: 'color .25s var(--ease)',
+      }}
+    >
+      {n.label}
+      <span
+        aria-hidden
+        style={{
+          position: 'absolute',
+          insetInline: 0,
+          bottom: -2,
+          height: 1.5,
+          background: 'var(--accent)',
+          transform: active ? 'scaleX(1)' : 'scaleX(0)',
+          transformOrigin: 'center',
+          transition: 'transform .3s var(--ease)',
+        }}
+      />
+    </Link>
+  );
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -70,58 +111,69 @@ export default function Header() {
       >
         <PromoBar />
 
-        <div
-          className="shell flex items-center justify-between"
-          style={{ height: scrolled ? 68 : 92, transition: 'height .45s var(--ease)' }}
-        >
-          {/* בעברית האגודל נח בצד ימין, ושם צריך לשבת מה שפותחים הכי
-              הרבה. ההמבורגר ראשון בשורה - כלומר ימין - והלוגו אחריו */}
-          <button
-            className="tap lg:hidden"
-            onClick={() => setMenu((m) => !m)}
-            aria-label={menu ? 'סגירת התפריט' : 'תפריט'}
-            aria-expanded={menu}
-            style={{ color: 'var(--ink)', marginInlineStart: -10 }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path
-                d={menu ? 'M6 6l12 12M18 6L6 18' : 'M4 8h16M4 16h16'}
-                stroke="currentColor"
-                strokeWidth="1.3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+        {/*
+          לוגו במרכז, וניווט משני צדדיו.
 
-          <Link href="/" aria-label="דף הבית" className="lg:me-auto">
-            <Logo size={scrolled ? 26 : 32} />
+          קודם הלוגו ישב בקצה הימני, הניווט צף באמצע-שמאל באותיות קטנות,
+          והעגלה בקצה השמאלי - שלושה דברים בשלושה משקלים, בלי ציר. זה
+          מה שנקרא "לא מסודר".
+
+          עכשיו יש ציר: הלוגו באמצע, הקטגוריות מימינו, עמודי התוכן
+          והעגלה משמאלו. במובייל אותה רשת - המבורגר, לוגו, עגלה.
+        */}
+        <div
+          className="shell grid grid-cols-[auto_1fr_auto] items-center lg:grid-cols-[1fr_auto_1fr]"
+          style={{ height: scrolled ? 68 : 96, transition: 'height .45s var(--ease)' }}
+        >
+          {/* ימין: המבורגר במובייל, קטגוריות בדסקטופ. בעברית האגודל
+              נח בצד ימין, ושם צריך לשבת מה שפותחים הכי הרבה */}
+          <div className="flex items-center justify-start">
+            {/* העטיפה היא זו שנעלמת בדסקטופ, ולא הכפתור.
+                `.tap` קובע display: inline-grid ודורס את lg:hidden -
+                שני כללי display על אותו אלמנט, והמאוחר מנצח. על עטיפה
+                בלי .tap אין התנגשות. זו הסיבה שההמבורגר הופיע ליד
+                ניווט מלא במסך רחב */}
+            <span className="lg:hidden">
+              <button
+                className="tap"
+                onClick={() => setMenu((m) => !m)}
+                aria-label={menu ? 'סגירת התפריט' : 'תפריט'}
+                aria-expanded={menu}
+                style={{ color: 'var(--ink)', marginInlineStart: -10 }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d={menu ? 'M6 6l12 12M18 6L6 18' : 'M4 8h16M4 16h16'}
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </span>
+            <nav className="hidden items-center gap-9 lg:flex" aria-label="קטגוריות">
+              {CAT_NAV.map((n) => navLink(n, pathname === n.href))}
+            </nav>
+          </div>
+
+          {/* מרכז */}
+          <Link href="/" aria-label="דף הבית" className="justify-self-center">
+            <Logo size={scrolled ? 26 : 34} />
           </Link>
 
-          <nav className="hidden items-center gap-9 lg:flex">
-            {NAV.map((n) => (
-              <Link
-                key={n.href}
-                href={n.href}
-                className="link-u"
-                style={{
-                  fontSize: 'var(--fs-sm)',
-                  letterSpacing: '.03em',
-                  color: pathname === n.href ? 'var(--accent)' : 'var(--ink-2)',
-                }}
-              >
-                {n.label}
-              </Link>
-            ))}
-          </nav>
+          {/* שמאל: עמודי התוכן, ואז העגלה בקצה */}
+          <div className="flex items-center justify-end gap-9">
+            <nav className="hidden items-center gap-9 lg:flex" aria-label="עמודים">
+              {PAGE_NAV.map((n) => navLink(n, pathname === n.href))}
+            </nav>
 
-          <div className="flex items-center gap-5">
             <button
               onClick={() => setOpen(true)}
               className="tap relative flex items-center gap-2"
               style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}
               aria-label={`עגלת קניות, ${items} פריטים`}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path
                   d="M6 8h12l-1 12H7L6 8Zm3 0V6a3 3 0 0 1 6 0v2"
                   stroke="currentColor"
@@ -145,7 +197,6 @@ export default function Header() {
                 />
               )}
             </button>
-
           </div>
         </div>
       </header>
