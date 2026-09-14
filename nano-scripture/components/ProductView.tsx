@@ -22,7 +22,6 @@ import {
 import { useCart } from '@/lib/cart';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { wornFor, wornFocus } from '@/lib/worn';
-import GiftTags from './GiftTags';
 import ProductStory from './ProductStory';
 import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
@@ -95,14 +94,6 @@ export default function ProductView({ product }: { product: Product }) {
    * ובלי הדגל הזה אפשר היה להוסיף לעגלה ולצרוב נוסח שאיש לא בחר.
    */
   const [picked, setPicked] = useState(false);
-  /**
-   * הבורר פתוח או מקופל.
-   *
-   * שלושת הנוסחים כקלפים פרושים תפסו כ-380 פיקסלים ודחפו את "הוספה
-   * לעגלה" אל מתחת לקיפול - הכפתור החשוב בעמוד היה הדבר שהכי קשה
-   * להגיע אליו. מקופל הוא תופס שורה אחת, והכפתור עולה איתה.
-   */
-  const [openChooser, setOpenChooser] = useState(false);
   const chooserRef = useRef<HTMLDivElement>(null);
   const mustChoose = available.length > 1 && !picked;
   const [view, setView] = useState<View>('jewel');
@@ -492,201 +483,117 @@ export default function ProductView({ product }: { product: Product }) {
         <hr className="rule my-5 sm:my-10" />
 
         {/* ---------- בחירת הברכה ---------- */}
+        {/*
+          מקום אחד לבחור, מקום אחד לקרוא.
+
+          הברכה הופיעה בעמוד הזה שלוש פעמים: בבורר מתקפל, בקופסת "מה
+          נצרב" עם מקורות ומונים, ובמקטע ההוכחה. שלוש גרסאות של אותו
+          דבר אינן הסבר - הן רעש. עכשיו יש כאן כרטיסים לבחירה, שורת
+          הפתיחה של הנוסח שנבחר, וקישור אחד לעמוד שבו קוראים אותו במלואו.
+
+          הכרטיסים גלויים תמיד. הבורר המתקפל חסך גובה, אבל הסתיר את
+          העובדה שיש בכלל מה לבחור - וזה בדיוק מה שנקרא "מבולגן".
+        */}
         <div ref={chooserRef} style={{ scrollMarginTop: 96 }}>
-          {/* כותרת שאומרת מה לעשות, ולא מה זה.
-              "הברכה שתיצרב" מתאר שדה; "בחרו את הנוסח" מזמין פעולה -
-              וזה ההבדל בין תווית לבין תפריט */}
           <div className="mb-3 flex items-baseline justify-between gap-3">
-            <p
-              className="display"
-              style={{ fontSize: 'var(--fs-md)', color: 'var(--ink)', letterSpacing: 0 }}
-            >
-              {one ? 'הנוסח שנצרב על השבב' : 'בחרו את הנוסח שייצרב'}
+            <p className="display" style={{ fontSize: 'var(--fs-md)', letterSpacing: 0 }}>
+              {one ? 'הברכה שנצרבת על השבב' : 'איזו ברכה תיצרב על השבב?'}
             </p>
-            {!one && (
-              /* המונה היה אפור וזעיר, כלומר בלתי נראה. כגלולה בצבע
-                 הברכה הוא מודיע שיש כאן יותר מאפשרות אחת */
-              <span
-                className="flex-shrink-0"
-                style={{
-                  fontSize: 'var(--fs-2xs)',
-                  color: b.accentInk,
-                  border: `1px solid color-mix(in oklab, ${b.accent} 42%, transparent)`,
-                  background: `color-mix(in oklab, ${b.accent} 10%, transparent)`,
-                  borderRadius: 999,
-                  padding: '.22rem .62rem',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {available.length} נוסחים לבחירה
-              </span>
-            )}
+            <Link
+              href="/blessings"
+              className="link-u flex-shrink-0"
+              style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
+            >
+              לכל הנוסחים ←
+            </Link>
           </div>
 
-          {/* השורה המקופלת: מה נבחר, וכפתור להחלפה. היא זו שנראית
-              כברירת מחדל, והרשימה נפתחת רק כשמבקשים */}
-          {!one && !openChooser && (
-            <button
-              onClick={() => setOpenChooser(true)}
-              aria-expanded={false}
-              className="flex w-full items-center gap-3 text-start"
-              style={{
-                padding: '.85rem 1rem',
-                borderRadius: 'var(--radius)',
-                border: `1.5px solid color-mix(in oklab, ${b.accent} ${picked ? 70 : 45}%, var(--line-strong))`,
-                background: `color-mix(in oklab, ${b.accent} 8%, var(--surface))`,
-              }}
-            >
-              <span
-                aria-hidden
-                style={{ width: 22, height: 22, borderRadius: 6, background: b.accent, flexShrink: 0 }}
-              />
-              <span className="min-w-0 flex-1">
-                <span className="display block truncate" style={{ fontSize: 'var(--fs-base)' }}>
-                  {b.plain}
-                </span>
-                <span style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
-                  {picked ? b.forWhom : 'ברירת מחדל · לחצו להחלפה'}
-                </span>
-              </span>
-              {/* חץ, ולא קישור טקסט. בלעדיו אין שום סימן שהשורה
-                  נפתחת, והיא נקראת כתצוגה של מה שכבר נבחר */}
-              <span
-                className="flex flex-shrink-0 items-center gap-1.5"
-                style={{
-                  fontSize: 'var(--fs-xs)',
-                  color: b.accentInk,
-                  border: `1px solid color-mix(in oklab, ${b.accent} 40%, transparent)`,
-                  background: 'var(--surface)',
-                  borderRadius: 999,
-                  padding: '.3rem .6rem .3rem .5rem',
-                }}
-              >
-                {picked ? 'החלפה' : 'לבחירה'}
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path
-                    d="m6 9 6 6 6-6"
-                    stroke="currentColor"
-                    strokeWidth="1.9"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </button>
-          )}
-
-          <p
-            className={`mb-4 ${one || openChooser ? '' : 'hidden'}`}
-            style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-3)' }}
+          <div
+            className={`grid gap-2.5 grid-cols-2 ${available.length >= 3 ? 'sm:grid-cols-3' : ''}`}
+            role={one ? undefined : 'radiogroup'}
+            aria-label="הברכה שתיצרב"
           >
-            {one
-              ? 'בדגם הזה נצרב נוסח אחד, והוא נבחר לפי אופי התכשיט.'
-              : 'אותו תכשיט, נוסח אחר. הבחירה משנה רק את מה שנצרב על השבב.'}
-          </p>
-
-          <div className={`flex-col gap-2.5 ${one || openChooser ? 'flex' : 'hidden'}`}>
             {available.map((item) => {
               const on = item.id === blessing;
-              const row = (
-                <>
-                  {/* שדרה בצבע הברכה — הצבע הוא הסימן הראשון, לא הטקסט */}
-                  <span
-                    aria-hidden
-                    style={{
-                      position: 'absolute',
-                      insetBlock: 0,
-                      insetInlineStart: 0,
-                      width: on ? 6 : 3,
-                      background: item.accent,
-                      transition: 'width .3s var(--ease)',
-                    }}
-                  />
-
-                  <span
-                    aria-hidden
-                    style={{
-                      width: 34,
-                      height: 34,
-                      flexShrink: 0,
-                      borderRadius: 4,
-                      background: `linear-gradient(145deg, ${item.accentSoft}, ${item.accent} 58%, ${item.accentInk})`,
-                      boxShadow: on
-                        ? `0 0 0 3px color-mix(in oklab, ${item.accent} 24%, transparent)`
-                        : 'inset 0 0 0 1px rgb(0 0 0 / .08)',
-                      transition: 'box-shadow .3s var(--ease)',
-                    }}
-                  />
-
-                  <span className="flex-1">
-                    <span className="flex items-baseline justify-between gap-3">
-                      <span
-                        className="display"
-                        style={{ fontSize: 'var(--fs-md)', color: on ? item.accentInk : 'var(--ink)' }}
-                      >
-                        {item.title}
-                      </span>
-                      <span
-                        className="num"
-                        style={{
-                          fontSize: 'var(--fs-xs)',
-                          color: on ? item.accentInk : 'var(--ink-3)',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {item.words} מילים
-                      </span>
-                    </span>
-
-                    <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-                      {item.forWhom}
-                    </span>
-
-                    {/* מתאים ל — כאן ההחלטה נופלת, ולא בעמוד הברכה הפנימי */}
-                    <span className="mt-2 block">
-                      <GiftTags blessing={item} muted={!on && !one} />
-                    </span>
-                  </span>
-                </>
-              );
-
-              const skin: React.CSSProperties = {
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '.95rem',
-                overflow: 'hidden',
-                padding: '.95rem 1.15rem .95rem 1.4rem',
-                paddingInlineStart: '1.5rem',
-                borderRadius: 'var(--radius)',
-                border: `1px solid ${on ? item.accent : 'var(--line)'}`,
-                background: on
-                  ? `color-mix(in oklab, ${item.accent} 9%, var(--surface))`
-                  : 'var(--surface)',
-                transition: 'border-color .3s var(--ease), background-color .3s var(--ease)',
-              };
-
-              // נוסח יחיד אינו בחירה — כפתור שאי אפשר לשנות בו כלום מטעה
-              return one ? (
-                <div key={item.id} style={skin}>
-                  {row}
-                </div>
-              ) : (
+              return (
                 <button
                   key={item.id}
+                  type="button"
+                  role={one ? undefined : 'radio'}
+                  aria-checked={one ? undefined : on}
+                  disabled={one}
                   onClick={() => {
                     setBlessing(item.id);
                     setPicked(true);
-                    setOpenChooser(false);
                   }}
-                  aria-pressed={on}
-                  className="text-start"
-                  style={skin}
+                  className="relative flex items-start gap-2.5 p-3 text-start"
+                  style={{
+                    borderRadius: 'var(--radius)',
+                    border: `1.5px solid ${on ? item.accent : 'var(--line)'}`,
+                    background: on
+                      ? `color-mix(in oklab, ${item.accentSoft} 55%, var(--surface))`
+                      : 'var(--surface)',
+                    boxShadow: on ? `0 0 0 3px color-mix(in oklab, ${item.accent} 18%, transparent)` : 'none',
+                    transition:
+                      'border-color .25s var(--ease), background-color .25s var(--ease), box-shadow .25s var(--ease)',
+                    cursor: one ? 'default' : 'pointer',
+                  }}
                 >
-                  {row}
+                  {/* הצבע הוא הסימן הראשון, לפני המילה. הוא יושב לצד
+                      השם ולא מעליו - שורה אחת פחות בכל כרטיס */}
+                  <span
+                    aria-hidden
+                    className="flex-shrink-0"
+                    style={{
+                      width: 20,
+                      height: 20,
+                      marginTop: 1,
+                      borderRadius: 5,
+                      background: `linear-gradient(145deg, ${item.accentSoft}, ${item.accent} 58%, ${item.accentInk})`,
+                    }}
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span
+                      className="display block"
+                      style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.3, color: on ? item.accentInk : 'var(--ink)' }}
+                    >
+                      {item.plain}
+                    </span>
+                    <span
+                      className="mt-0.5 block"
+                      style={{ fontSize: 'var(--fs-2xs)', lineHeight: 1.45, color: 'var(--ink-3)' }}
+                    >
+                      {item.forWhom}
+                    </span>
+                  </span>
+                  {on && !one && (
+                    <span aria-hidden className="absolute" style={{ top: 8, insetInlineEnd: 8, color: item.accentInk }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="m5 12 4.5 4.5L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  )}
                 </button>
               );
             })}
+          </div>
+
+          {/* שורת הפתיחה של הנוסח שנבחר. הטעימה שנשארת, במקום קופסה
+              שלמה עם מקורות, מונים ושלושה קישורים */}
+          <div className="mt-4 flex flex-col gap-1.5 px-1">
+            <p className="display" style={{ fontSize: 'var(--fs-md)', lineHeight: 1.6, color: 'var(--ink)' }}>
+              {b.opening}
+            </p>
+            <p
+              className="flex flex-wrap items-center gap-x-3 gap-y-1"
+              style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
+            >
+              <span>{b.openingSource}</span>
+              <span className="num">{b.words} מילים</span>
+              <Link href={`/blessings/${b.id}`} className="link-u" style={{ color: b.accentInk }}>
+                לקריאת הנוסח המלא ←
+              </Link>
+            </p>
           </div>
         </div>
 
@@ -881,59 +788,6 @@ export default function ProductView({ product }: { product: Product }) {
           שכן רוצה לקרוא - התוכן ממתין לו בדיוק כאן.
         */}
         <p className="lede mt-8">{product.story}</p>
-
-        {/* ---------- מה נצרב בפועל ---------- */}
-        <div
-          className="mt-5 p-6"
-          style={{
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--line)',
-            borderColor: `color-mix(in oklab, ${b.accent} 26%, var(--line))`,
-            borderInlineStartWidth: 4,
-            borderInlineStartColor: b.accent,
-            background: `color-mix(in oklab, ${b.accentSoft} 26%, var(--surface))`,
-          }}
-        >
-          {/* מראי המקום, ולא תווית.
-              כאן ישב letterSpacing של .22em - ריווח שמתאים למילה אחת
-              באותיות קטנות. הרשימה הזאת היא חמישה מקורות עם נקודות
-              מפרידות, פסיקים ומקפים, והיא נשברת לשתי שורות: הריווח
-              פירק אותה לאותיות בודדות והפך אותה לקשה לקריאה דווקא
-              במקום שאמור לומר מאיפה הנוסח לקוח. */}
-          <p
-            style={{
-              fontSize: 'var(--fs-xs)',
-              letterSpacing: '.04em',
-              lineHeight: 1.75,
-              color: b.accentInk,
-            }}
-          >
-            {b.sources}
-          </p>
-
-          <p className="display mt-4" style={{ fontSize: 'var(--fs-lg)', lineHeight: 1.7, color: 'var(--ink)' }}>
-            {b.opening}
-          </p>
-          <p className="mt-1.5" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>{b.openingSource}</p>
-
-          <p className="mt-4" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)', lineHeight: 1.8 }}>
-            {b.blurb}
-          </p>
-
-          <div
-            className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 pt-4"
-            style={{ borderTop: '1px solid var(--line)', fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
-          >
-            <span className="num">{b.words} מילים</span>
-            <span className="num">{b.chars.toLocaleString('he-IL')} תווים</span>
-            <button onClick={() => setView('chip')} className="link-u" style={{ color: b.accentInk }}>
-              להביט בשבב
-            </button>
-            <Link href={`/blessings/${b.id}`} className="link-u" style={{ color: b.accentInk }}>
-              לנוסח המלא ←
-            </Link>
-          </div>
-        </div>
 
         {/* ---------- מפרט ---------- */}
         <div className="mt-14">
