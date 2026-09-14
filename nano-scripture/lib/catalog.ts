@@ -534,11 +534,6 @@ export function categoryPhotos(id: CategoryId) {
     .filter((src): src is string => Boolean(src));
 }
 
-/** כל הצילומים בקטגוריה, בלי סינון - לבחירת הבאנר */
-function allCategoryPhotos(id: CategoryId) {
-  return PRODUCTS.filter((p) => p.category === id).flatMap((p) => p.scenes ?? []);
-}
-
 /**
  * הצילום שמותר להניח מתחת לכותרת הקטגוריה.
  *
@@ -548,15 +543,33 @@ function allCategoryPhotos(id: CategoryId) {
  * וקטגוריה בלי צילום מאושר מקבלת כותרת על קרם - שזה עדיף על כותרת
  * שאי אפשר לקרוא.
  */
-const APPROVED_BANNERS = [
-  '/scene/beseter-2.jpg',
-  '/scene/al-kapayim-1.jpg',
-  '/scene/al-kapayim-2.jpg',
-  '/scene/lo-yanum-2.jpg',
-];
+export type Banner = {
+  src: string;
+  /** object-position - איפה החיתוך לרצועת 16:7 יושב על הצילום */
+  position?: string;
+  /** היפוך אופקי, כשהשטח הריק של הצילום יושב בצד הלא נכון לטקסט */
+  flip?: boolean;
+};
 
-export function categoryBanner(id: CategoryId) {
-  return allCategoryPhotos(id).find((src) => APPROVED_BANNERS.includes(src)) ?? null;
+/**
+ * הבאנר של כל קטגוריה, במפורש.
+ *
+ * הרשימה המאושרת הקודמת סיננה רק צילומי מוצר מתוך הקטגוריה, ולכן
+ * לצמידים ולתינוק לא היה באנר בכלל - כותרת על קרם ריק. שלושת אלה
+ * נמדדו באותה שיטה (צעיף 40%, אחוזון 5 של הניגודיות באזור הטקסט,
+ * בשלושה רוחבי מסך): שרשראות 10.0:1, צמידים 12.0:1, לתינוק 11.0:1.
+ *
+ * לתינוק אין צילום של הסיכה, ולכן הרקע שלה הוא צילום הבית - הזוג
+ * בפתח הדלת, הפוך כדי שהקיר הריק ינחת מתחת לכותרת.
+ */
+const CATEGORY_BANNERS: Partial<Record<CategoryId, Banner>> = {
+  necklaces: { src: '/scene/al-kapayim-1.jpg' },
+  bracelets: { src: '/scene/libi-er-tray.jpg', position: '50% 55%' },
+  pins: { src: '/worn/scene-doorway.jpg', position: '50% 40%', flip: true },
+};
+
+export function categoryBanner(id: CategoryId): Banner | null {
+  return CATEGORY_BANNERS[id] ?? null;
 }
 
 /**

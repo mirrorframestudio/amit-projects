@@ -34,7 +34,7 @@ export async function generateMetadata({
   if (!cat || !ACTIVE_CATEGORIES.includes(cat.id)) return {};
   // הבאנר של הקטגוריה ולא תמונת הבית: מי שמשתף "שרשראות" מצפה
   // לראות שרשרת. og:title ירש עד כה את כותרת הבית הגנרית
-  const banner = categoryBanner(cat.id) ?? '/hero/hero-landscape.jpg';
+  const banner = categoryBanner(cat.id)?.src ?? '/hero/hero-landscape.jpg';
   return {
     title: cat.title,
     description: cat.blurb,
@@ -68,7 +68,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const photos = categoryPhotos(id);
   const banner = categoryBanner(id);
   // הבאנר כבר מוצג למעלה; פס השבירה לוקח צילומים אחרים
-  const breakPhotos = photos.filter((src) => src !== banner);
+  const breakPhotos = photos.filter((src) => src !== banner?.src);
 
   // הדגם המוביל יוצא מהרשת ומקבל כרטיס כפול. השאר נשארים אחידים.
   const featured = products.find((p) => p.featured) ?? products[0];
@@ -84,7 +84,16 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <JsonLd data={schema} />
       {/* ---------- כותרת הקטגוריה, על צילום ---------- */}
       <section className="relative overflow-hidden pt-36 pb-14">
-        {banner && <SectionPhoto src={banner} mode="band" ratio="16 / 7" veil={0.4} />}
+        {banner && (
+          <SectionPhoto
+            src={banner.src}
+            position={banner.position}
+            flip={banner.flip}
+            mode="band"
+            ratio="16 / 7"
+            veil={0.4}
+          />
+        )}
 
         <div className="shell relative">
           <nav className="mb-8 flex items-center gap-3" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
