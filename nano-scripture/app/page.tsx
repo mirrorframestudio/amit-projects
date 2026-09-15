@@ -10,16 +10,15 @@ import Interlude from '@/components/home/Interlude';
 import { INTERLUDES } from '@/lib/interludes';
 
 /**
- * צילום בין כל שני נושאים. הסדר והבחירה ב-lib/interludes.ts.
- * הרצועה הראשונה נטענת מיד - היא עלולה להיות בתוך המסך הראשון.
+ * צילום בין הנושאים. הסדר והבחירה ב-lib/interludes.ts.
+ * אחרי ההירו אין רצועה - צילום על צילום.
  */
-const [j1, j2, j3, j4, j5, j6, j7] = INTERLUDES;
+const [j2, j3, j4, j5, j6, j7] = INTERLUDES;
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <Interlude shot={j1} eager />
       <Bestsellers />
       <Interlude shot={j2} />
       <Worn />
