@@ -89,6 +89,8 @@ export async function POST(req: NextRequest) {
       code,
       customer,
       note: typeof body.note === 'string' ? body.note.slice(0, 500) : '',
+      // במסלול הידני ההזמנה נולדת on-hold - כך ווקומרס מודיע למנהל
+      status: paymentReady ? 'pending' : 'on-hold',
     });
 
     /**

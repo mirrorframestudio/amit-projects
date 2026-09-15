@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { FINISHES, formatPrice } from '@/lib/catalog';
+import { FINISHES, formatPrice, getProduct } from '@/lib/catalog';
 import { pairFor } from '@/lib/pairs';
+import { POLICY } from '@/lib/policy';
 import { saleOf } from '@/lib/promo';
 import { useCart } from '@/lib/cart';
 
@@ -20,7 +21,17 @@ import { useCart } from '@/lib/cart';
 export default function PairedWith({ slug }: { slug: string }) {
   const pair = pairFor(slug);
   const add = useCart((s) => s.add);
-  if (!pair) return null;
+  const me = getProduct(slug);
+  if (!pair || !me) return null;
+
+  /**
+   * הסף הוא "כל שני פריטים" (lib/policy.ts), אז כמעט כל צימוד חוצה
+   * אותו. הסכום מחושב ממחירי המחירון - כך הסף נמדד בשרת - ולא נכתב.
+   */
+  const together = (price: number) =>
+    POLICY.freeShippingOver !== null && me.price + price >= POLICY.freeShippingOver
+      ? ` · יחד ${formatPrice(me.price + price)}, המשלוח חינם`
+      : '';
 
   return (
     <section className="pb-20 pt-4" style={{ borderTop: '1px solid var(--line)' }}>
@@ -70,6 +81,7 @@ export default function PairedWith({ slug }: { slug: string }) {
                       </Link>
                       <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
                         {FINISHES[p.finish]} · <span className="num">{formatPrice(sale.now)}</span>
+                        {together(p.price)}
                       </span>
                     </span>
 

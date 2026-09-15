@@ -155,12 +155,12 @@ export default async function BlessingPage({ params }: { params: Promise<{ slug:
                 </h2>
               </div>
               <p className="lede reveal max-w-sm" style={{ fontSize: 'var(--fs-base)' }}>
-                כל דגם בקטלוג יכול לשאת את {b.plain} - בוחרים את התכשיט, ואז את הנוסח.
+                {carriers.length} דגמים בקטלוג נושאים את {b.plain} - בוחרים את התכשיט, ואז את הנוסח.
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
-              {carriers.slice(0, 6).map((p, i) => (
+              {carriers.map((p, i) => (
                 <ProductCard key={p.slug} product={p} index={i} />
               ))}
             </div>

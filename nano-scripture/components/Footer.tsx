@@ -106,7 +106,7 @@ export default function Footer() {
           <div>
             <p className="eyebrow mb-3">מכתב הבית</p>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
-              דגמים חדשים, סדרות מוגבלות, ומעט מאוד דואר.
+              דגמים חדשים, ומעט מאוד דואר.
             </p>
             <form className="mt-5 flex" onSubmit={subscribe}>
               <input
@@ -170,6 +170,8 @@ export default function Footer() {
             <Link href="/legal/privacy" className="tap-row link-u">פרטיות</Link>
             <Link href="/legal/accessibility" className="tap-row link-u">נגישות</Link>
             <Link href="/legal/shipping-returns" className="tap-row link-u">משלוחים והחזרות</Link>
+            {/* המילים "ביטול עסקה" בדיוק, וקישור משלו - דרישת סעיף 14ט */}
+            <Link href="/legal/cancel" className="tap-row link-u" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>ביטול עסקה</Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { salePrice } from './promo';
-import { deliveryLine } from './policy';
+import { POLICY, deliveryLine } from './policy';
 import { wornFor, wornFocus } from './worn';
 import type { BlessingId } from './blessings';
 
@@ -140,7 +140,6 @@ export const PRODUCTS: Product[] = [
       { label: 'סוגר', value: 'קרבינה עם טבעת כוונון' },
       { label: 'גימור', value: 'כסף 925 בציפוי רודיום, מלוטש' },
     ],
-    badge: 'הדגם המוביל',
     featured: true,
   },
   {
@@ -680,7 +679,7 @@ export const CARE_SPEC: { label: string; value: string }[] = [
   { label: 'ניקוי', value: 'בד מיקרופייבר יבש, בלי חומרי ניקוי אגרסיביים' },
   { label: 'אחסון', value: 'בקופסה המקורית, בנפרד מתכשיטים אחרים' },
   { label: 'אחריות', value: 'שנה על פגמי ייצור והלחמות. אינה חלה על שבר משימוש' },
-  { label: 'החזרה', value: '30 יום, ללא תנאי' },
+  { label: 'החזרה', value: `${POLICY.returnDays} יום מקבלת החבילה, באריזה המקורית` },
 ];
 
 /**

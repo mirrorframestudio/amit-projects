@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LEGAL, getLegalDoc } from '@/lib/legal';
 import { COMPANY, MISSING } from '@/lib/company';
+import CancelForm from '@/components/CancelForm';
 
 export function generateStaticParams() {
   return LEGAL.map((d) => ({ slug: d.slug }));
@@ -80,8 +81,10 @@ export default async function LegalPage({
           ))}
         </div>
 
+        {doc.slug === 'cancel' && <CancelForm />}
+
         <nav
-          className="flex flex-wrap gap-x-7 gap-y-3 pt-8"
+          className="mt-14 flex flex-wrap gap-x-7 gap-y-3 pt-8"
           style={{ borderTop: '1px solid var(--line)' }}
         >
           {LEGAL.filter((d) => d.slug !== doc.slug).map((d) => (

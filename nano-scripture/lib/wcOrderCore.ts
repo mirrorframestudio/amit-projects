@@ -55,6 +55,15 @@ export type OrderInput = {
   };
   /** הערת לקוח, אם נמסרה */
   note?: string;
+  /**
+   * הסטטוס שההזמנה נוצרת בו.
+   *
+   * `pending` כשהסולק מחובר - הוובהוק שלו מעביר ל"בתהליך". במסלול
+   * הידני אין וובהוק ואין מי שידע שנכנסה הזמנה: ווקומרס שולח "הזמנה
+   * חדשה" למנהל על on-hold, ולא על pending. זה ההבדל בין "קישור תוך
+   * שעה" שמתקיים לבין כזה שמתגלה בפתיחת הפאנל למחרת.
+   */
+  status?: 'pending' | 'on-hold';
 };
 
 export type WcOrder = { id: number; number: string; total: string };
@@ -153,7 +162,7 @@ export function buildOrderPayload(input: OrderInput, ids: Map<string, number>) {
     // ההזמנה נוצרת ממתינה לתשלום. רק הוובהוק של הסולק מעביר אותה
     // ל"בתהליך" - אחרת הזמנה שנטשה באמצע התשלום נראית כמשולמת
     set_paid: false,
-    status: 'pending',
+    status: input.status ?? 'pending',
     currency: 'ILS',
     billing,
     shipping,

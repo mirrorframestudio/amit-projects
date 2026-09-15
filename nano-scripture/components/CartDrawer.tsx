@@ -8,7 +8,7 @@ import { getProduct, formatPrice, ACTIVE_CATEGORIES, PRODUCTS } from '@/lib/cata
 import { getBlessing } from '@/lib/blessings';
 import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
-import { POLICY, shippingNote, freeShippingGap } from '@/lib/policy';
+import { POLICY, shippingNote, freeShippingGap, shippingCost } from '@/lib/policy';
 import PaymentMarks from '@/components/PaymentMarks';
 
 /**
@@ -142,7 +142,16 @@ export default function CartDrawer() {
   const { lines, open, setOpen, setQty, remove, add, gift, setGift, code } = useCart();
   const { items, subtotal, listTotal, discount } = cartTotals(lines, code);
   const giftFee = gift ? GIFT_BOX.price : 0;
-  const total = subtotal + giftFee;
+  /**
+   * הסכום כולל משלוח, לא "ביניים".
+   *
+   * המספר בעגלה גדל בצ'קאאוט ב-₪29, וזה בדיוק המנגנון של הסיבה
+   * הראשונה לנטישה בכל סקר של Baymard: עלות שמופיעה מאוחר. אותה
+   * פונקציה שהשרת גובה בה, עם ברירת המחדל שלו - משלוח עד הבית. מי
+   * שיבחר איסוף בצ'קאאוט יראה את הסכום יורד, לא עולה.
+   */
+  const shipCost = POLICY.shippingFlat === null ? 0 : shippingCost('delivery', listTotal);
+  const total = subtotal + giftFee + shipCost;
   /**
    * הסף נמדד על המחירון לפני ההנחה - listTotal ולא subtotal.
    *
@@ -515,11 +524,18 @@ export default function CartDrawer() {
               className="flex items-baseline justify-between pt-3"
               style={{ borderTop: '1px solid var(--line)' }}
             >
-              <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>סה״כ ביניים</span>
+              <span style={{ color: 'var(--ink-2)', fontSize: 'var(--fs-sm)' }}>
+                {POLICY.shippingFlat === null ? 'סה״כ ביניים' : 'סה״כ כולל משלוח'}
+              </span>
               <span className="num display" style={{ fontSize: 'var(--fs-xl)' }}>
                 {formatPrice(total)}
               </span>
             </div>
+            {shipCost > 0 && (
+              <p className="mt-1 text-end" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+                באיסוף עצמי ממודיעין: <span className="num">{formatPrice(total - shipCost)}</span>
+              </p>
+            )}
 
             <p className="mb-4 mt-1 text-end" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
               או עד {INSTALLMENTS} תשלומים של כ־

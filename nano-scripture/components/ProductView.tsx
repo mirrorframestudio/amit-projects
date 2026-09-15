@@ -26,7 +26,9 @@ import ProductStory from './ProductStory';
 import PairedWith from './PairedWith';
 import DeliveryEstimate from './DeliveryEstimate';
 import Accordion from './Accordion';
-import { POLICY, deliveryLine, shippingNote } from '@/lib/policy';
+import { POLICY, SHIPPING, deliveryLine, shippingNote } from '@/lib/policy';
+import { waHref } from '@/lib/company';
+import { SITE_URL } from '@/lib/site';
 import { productFaq } from '@/lib/faq';
 import { trackViewItem } from '@/lib/analytics';
 import PaymentMarks from '@/components/PaymentMarks';
@@ -41,6 +43,21 @@ const BASE_VIEWS: { id: View; label: string }[] = [
 /* שורת הביטחון שמתחת לכפתור. שורה אחת של טקסט, כמו שורת המקורות
    בהירו. קודם שלוש עמודות עם אייקון קו מעל כל מילה - הרשת של תבנית */
 const ASSURANCE = [`משלוח מבוטח · ${deliveryLine}`, 'שנה אחריות', `החזרה תוך ${POLICY.returnDays} יום`];
+
+/**
+ * כמה עולה להגיע, ליד מתי מגיע.
+ *
+ * דמי המשלוח והסף ישבו רק בתוך שאלה מקופלת בתחתית העמוד, ומחקר
+ * השימושיות של Baymard מוצא שרוב הקונים מחפשים אותם בעמוד המוצר לפני
+ * ההוספה לעגלה, ושעלות שמתגלה בצ'קאאוט היא הסיבה הראשונה לנטישה.
+ * הכול מ-POLICY: משתנה שם - משתנה כאן.
+ */
+const pickup = SHIPPING.find((m) => m.id === 'pickup');
+const SHIPPING_LINE = [
+  POLICY.shippingFlat === null ? 'דמי המשלוח מוצגים בתשלום' : `משלוח ${shippingNote}`,
+  ...(POLICY.freeShippingOver !== null ? [`חינם מ־₪${POLICY.freeShippingOver}`] : []),
+  ...(pickup ? [`או ${pickup.label} ללא עלות`] : []),
+].join(' · ');
 
 export default function ProductView({ product }: { product: Product }) {
   const available = BLESSINGS.filter((b) => product.blessings.includes(b.id));
@@ -542,6 +559,43 @@ export default function ProductView({ product }: { product: Product }) {
                 לקריאת הנוסח המלא ←
               </Link>
             </p>
+
+            {/* הבחירה הפיכה, ויש למי לשאול.
+
+                מחקר המתנות (Gino & Flynn; Flynn & Adams) מוצא שהחשש הגדול
+                של מי שקונה מתנה הוא לבחור לא נכון - וכאן הבחירה היא מילים.
+                שני הדברים שמורידים את החשש: לדעת שאפשר לשנות, ודרך לשאול
+                את מי שמקבל. שניהם היו קיימים ולא נאמרו כאן. העובדות
+                מ-lib/faq.ts; מוצג רק כשיש באמת מבין מה לבחור */}
+            {!one && (
+              <p className="mt-1" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)', lineHeight: 1.8 }}>
+                אפשר לשנות את הנוסח בוואטסאפ עד שהחבילה יוצאת.{' '}
+                {waHref && (
+                  <>
+                    לא בטוחים מה מתאים?{' '}
+                    <a
+                      href={`${waHref}?text=${encodeURIComponent(`שלום, אני מתלבט/ת איזה נוסח לבחור ל${product.name}. המתנה ל…`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-u"
+                      style={{ color: 'var(--accent-deep)' }}
+                    >
+                      כתבו לנו ←
+                    </a>
+                    {' · '}
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent(`איזה נוסח היית רוצה על התכשיט? אפשר לקרוא את כולם כאן: ${SITE_URL}/blessings`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-u"
+                      style={{ color: 'var(--accent-deep)' }}
+                    >
+                      לשלוח למי שמקבל, שיבחר ←
+                    </a>
+                  </>
+                )}
+              </p>
+            )}
           </div>
         </div>
 
@@ -578,6 +632,9 @@ export default function ProductView({ product }: { product: Product }) {
         </div>
 
         <DeliveryEstimate color={b.accentInk} />
+        <p className="mt-1.5 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
+          {SHIPPING_LINE}
+        </p>
 
         {/* ---------- שדרוג אריזה ---------- */}
         <button

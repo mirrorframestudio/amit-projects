@@ -13,6 +13,7 @@ import { COMPANY, waHref } from '@/lib/company';
 import { trackBeginCheckout } from '@/lib/analytics';
 import { saveOrderDone } from '@/lib/orderDone';
 import PaymentMarks from '@/components/PaymentMarks';
+import { deliveryWindow, formatWindow } from '@/lib/delivery';
 import {
   EMPTY_CUSTOMER,
   FIELDS,
@@ -32,7 +33,14 @@ import {
  * השגיאות מוצגות רק אחרי הניסיון הראשון לשלוח. שדה שנצבע באדום לפני
  * שהספיקו להקליד בו הוא נזיפה, לא עזרה.
  */
-export default function CheckoutForm() {
+/** הפרטים שנשמרים בין רענון לחזרה מדף הסולק. לא ההסכמות - אותן מסמנים מחדש */
+const DRAFT_KEY = 'mikra:checkout-draft';
+
+/**
+ * @param paymentReady האם הסולק מחובר. מגיע מהשרת (lib/grow.ts הוא
+ * server-only), וקובע מה כתוב על הכפתור: מה שבאמת קורה בלחיצה.
+ */
+export default function CheckoutForm({ paymentReady = false }: { paymentReady?: boolean }) {
   const { lines, gift, code, setOpen } = useCart();
   const [customer, setCustomer] = useState<Customer>(EMPTY_CUSTOMER);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -40,13 +48,54 @@ export default function CheckoutForm() {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  /** הקדשה לכרטיס שבקופסה. נשלחת כהערת ההזמנה */
+  const [note, setNote] = useState('');
+  const [noteOpen, setNoteOpen] = useState(false);
+  /** מספר ההזמנה כשחוזרים מדף הסולק בלי לשלם */
+  const [cancelled, setCancelled] = useState<string | null>(null);
 
   // ההידרציה נדחית, אחרת השרת והלקוח מציירים עגלות שונות
   useEffect(() => {
     useCart.persist.rehydrate();
     setReady(true);
     setOpen(false);
+
+    /**
+     * טיוטת הפרטים חוזרת אחרי רענון או חזרה מדף התשלום.
+     *
+     * מי שמילא שבעה שדות, יצא לדף הסולק וחזר בלי לשלם, מצא טופס ריק -
+     * וזה הרגע שבו סוגרים את הלשונית. sessionStorage כמו סיכום ההזמנה:
+     * נמחק עם הלשונית, לא נשלח לשום מקום.
+     */
+    try {
+      const raw = sessionStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as Partial<Customer> & { note?: string };
+        const { note: savedNote, ...rest } = draft;
+        setCustomer((c) => ({ ...c, ...rest, terms: false, marketing: false }));
+        if (savedNote) {
+          setNote(savedNote);
+          setNoteOpen(true);
+        }
+      }
+    } catch {
+      /* אחסון חסום - הטופס פשוט מתחיל ריק */
+    }
+
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('cancelled') === '1') setCancelled(q.get('order'));
   }, [setOpen]);
+
+  // שמירת הטיוטה בכל שינוי. ההסכמות לא נשמרות בכוונה
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      // undefined נופל ב-JSON, וכך ההסכמות לא נשמרות
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ ...customer, terms: undefined, marketing: undefined, note }));
+    } catch {
+      /* אין אחסון - אין טיוטה */
+    }
+  }, [customer, note, ready]);
 
   /**
    * תחילת צ'קאאוט. נורה פעם אחת, ורק אחרי ההידרציה - לפניה העגלה
@@ -80,15 +129,23 @@ export default function CheckoutForm() {
     <label key={f.key} className={f.half ? '' : 'sm:col-span-2'}>
       <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
         {f.label}
-        {f.optional && <span style={{ color: 'var(--ink-3)' }}> (לא חובה)</span>}
+        {/* חובה מסומן, ולא רק "לא חובה": Baymard מודד שכשרק הרשות מסומנת,
+            שליש מהמשתמשים נתקלים בשגיאת אימות על שדה שדילגו עליו */}
+        {f.optional ? (
+          <span style={{ color: 'var(--ink-3)' }}> (לא חובה)</span>
+        ) : (
+          <span aria-hidden style={{ color: 'var(--ink-3)' }}> *</span>
+        )}
       </span>
       <input
         type={f.type}
+        inputMode={f.inputMode}
+        required={!f.optional}
         value={String(customer[f.key] ?? '')}
         onChange={(e) => set(f.key, e.target.value)}
         autoComplete={f.autoComplete}
         aria-invalid={errors[f.key] ? 'true' : undefined}
-        aria-describedby={errors[f.key] ? `err-${f.key}` : undefined}
+        aria-describedby={errors[f.key] ? `err-${f.key}` : f.hint ? `hint-${f.key}` : undefined}
         className="mt-1.5 w-full px-3.5"
         style={{
           height: 46,
@@ -99,7 +156,7 @@ export default function CheckoutForm() {
           color: 'var(--ink)',
         }}
       />
-      {errors[f.key] && (
+      {errors[f.key] ? (
         <span
           id={`err-${f.key}`}
           className="mt-1 block"
@@ -107,6 +164,12 @@ export default function CheckoutForm() {
         >
           {errors[f.key]}
         </span>
+      ) : (
+        f.hint && (
+          <span id={`hint-${f.key}`} className="mt-1 block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+            {f.hint}
+          </span>
+        )
       )}
     </label>
   );
@@ -128,7 +191,7 @@ export default function CheckoutForm() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer, lines, gift, code }),
+        body: JSON.stringify({ customer, lines, gift, code, note: note.trim().slice(0, 500) }),
       });
       const data = await res.json();
 
@@ -160,6 +223,12 @@ export default function CheckoutForm() {
             : undefined,
       });
 
+      try {
+        sessionStorage.removeItem(DRAFT_KEY);
+      } catch {
+        /* אין אחסון */
+      }
+
       if (data.payment) {
         window.location.href = data.payment;
         return;
@@ -190,6 +259,36 @@ export default function CheckoutForm() {
       {/* ---------- הפרטים ---------- */}
       <div>
         <h1 className="display t-2">פרטי המשלוח</h1>
+        <p className="mt-2" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>* שדה חובה</p>
+
+        {cancelled && (
+          <p
+            role="status"
+            className="mt-6 p-4"
+            style={{
+              fontSize: 'var(--fs-sm)',
+              lineHeight: 1.7,
+              borderRadius: 'var(--radius)',
+              border: '1px solid var(--line-strong)',
+              background: 'var(--surface-2)',
+              color: 'var(--ink-2)',
+            }}
+          >
+            התשלום לא הושלם. ההזמנה <span className="num">#{cancelled}</span> נשמרה, והפרטים כאן.
+            אפשר לשלוח שוב{waHref ? ', או ' : '.'}
+            {waHref && (
+              <a
+                href={`${waHref}?text=${encodeURIComponent(`שלום, לא הצלחתי להשלים את התשלום להזמנה #${cancelled}. אפשר קישור?`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-u"
+                style={{ color: 'var(--accent-deep)' }}
+              >
+                לבקש קישור לתשלום בוואטסאפ
+              </a>
+            )}
+          </p>
+        )}
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           {FIELDS.filter(
@@ -233,7 +332,9 @@ export default function CheckoutForm() {
                       </span>
                     </span>
                     <span className="mt-0.5 block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
-                      {m.note}
+                      {/* התאריך עצמו, כמו בעמוד המוצר. הטופס מצויר רק אחרי
+                          ההידרציה, אז החישוב כאן הוא של הדפדפן */}
+                      {m.id === 'delivery' ? `מבוטח · מגיע ${formatWindow(deliveryWindow())}` : m.note}
                     </span>
                   </span>
                 </label>
@@ -299,6 +400,49 @@ export default function CheckoutForm() {
               </div>
             )}
           </div>
+        )}
+
+        {/* ---------- הקדשה ---------- */}
+        {/*
+          מה שהמקבל קורא ראשון הוא לא הנוסח - זה מי שלח. הקדשה קצרה
+          עונה על "יבינו שזה ממני?", השאלה השנייה של מי שקונה מתנה
+          מרחוק. נשלחת כהערת ההזמנה (customer_note) ונכתבת ביד בכרטיס.
+          פתוחה כשזו מתנה; אחרת קישור אחד.
+        */}
+        {(gift || customer.toRecipient || noteOpen) ? (
+          <label className="mt-8 block">
+            <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
+              הקדשה לכרטיס שבקופסה <span style={{ color: 'var(--ink-3)' }}>(לא חובה)</span>
+            </span>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value.slice(0, 500))}
+              rows={3}
+              maxLength={500}
+              className="mt-1.5 w-full px-3.5 py-3"
+              style={{
+                fontSize: 'var(--fs-base)',
+                lineHeight: 1.6,
+                borderRadius: 'var(--radius)',
+                border: '1px solid var(--line-strong)',
+                background: 'var(--surface)',
+                color: 'var(--ink)',
+                resize: 'vertical',
+              }}
+            />
+            <span className="mt-1 block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+              נכתבת ביד על כרטיס הנוסח שבקופסה. עד 500 תווים.
+            </span>
+          </label>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setNoteOpen(true)}
+            className="link-u mt-8 block"
+            style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent-deep)' }}
+          >
+            להוסיף הקדשה לכרטיס שבקופסה ←
+          </button>
         )}
 
         {/* אישור התקנון: חובה, לא מסומן מראש, ועם קישור שנפתח בלשונית
@@ -371,13 +515,25 @@ export default function CheckoutForm() {
           </p>
         )}
 
+        {/*
+          הכפתור אומר מה קורה בלחיצה.
+
+          "לתשלום" הבטיח דף תשלום, ובמסלול הידני הלחיצה שולחת הזמנה
+          ומחכה לקישור בוואטסאפ - הפער הזה התגלה רק בעמוד התודה.
+          המשפט שמעל מגיע מ-app/api/checkout/route.ts, אותו מסלול.
+        */}
+        <p className="mt-8" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)', lineHeight: 1.7 }}>
+          {paymentReady
+            ? 'התשלום מתבצע בדף המאובטח של Grow. פרטי הכרטיס לא עוברים דרך האתר, ופריסה לתשלומים נבחרת שם.'
+            : 'לא נגבה עכשיו דבר. אחרי שליחת ההזמנה נשלח לך בוואטסאפ, למספר שמילאת, קישור מאובטח לתשלום - בדרך כלל תוך שעה בשעות הפעילות.'}
+        </p>
         <button
           type="submit"
           disabled={busy}
-          className="btn btn-solid mt-8 w-full"
+          className="btn btn-solid mt-3 w-full"
           style={{ ['--pad' as string]: '1.15rem 2rem', fontSize: 'var(--fs-base)', opacity: busy ? 0.6 : 1 }}
         >
-          {busy ? 'רגע…' : `לתשלום · ${formatPrice(total)}`}
+          {busy ? 'רגע…' : paymentReady ? `המשך לתשלום המאובטח · ${formatPrice(total)}` : `שליחת ההזמנה · ${formatPrice(total)}`}
         </button>
 
         {/* הסימנים בצבעי המותגים, כאן בלבד: זה הרגע שבו שואלים

@@ -19,7 +19,7 @@ const OFFERS = [
   ...(promoOn ? [`${PROMO.percent}% הנחה על ההזמנה הראשונה · להצטרפות למועדון`] : []),
   `עד ${INSTALLMENTS} תשלומים ללא ריבית`,
   `החזרה תוך ${POLICY.returnDays} יום`,
-  `משלוח מבוטח · ${deliveryLine}`,
+  `משלוח מבוטח · ${deliveryLine}${POLICY.freeShippingOver !== null ? ` · חינם מעל ₪${POLICY.freeShippingOver}` : ''}`,
   'קופסה מרופדת וכרטיס ברכה בכל הזמנה',
   `אריזת מתנה ב־₪${GIFT_BOX.price}`,
   'שנה אחריות על גוף התכשיט',

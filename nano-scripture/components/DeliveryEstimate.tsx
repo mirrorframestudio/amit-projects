@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { POLICY, deliveryLine } from '@/lib/policy';
+import { deliveryLine } from '@/lib/policy';
+import { deliveryWindow, formatWindow } from '@/lib/delivery';
 
 /**
  * חלון ההגעה, כתאריכים ולא כמספר ימים.
@@ -13,33 +14,16 @@ import { POLICY, deliveryLine } from '@/lib/policy';
  * התאריך מחושב אחרי ההרכבה בלבד: השרת מרנדר סטטית ולא יודע מתי הדף
  * ייצפה, וחישוב בזמן הרינדור היה נותן תאריך שגוי לכל מבקר אחרי היום
  * שבו נבנה האתר. עד שהוא מחושב מוצג נוסח הימים, כך שאין קפיצה ריקה.
+ *
+ * החישוב עצמו ב-lib/delivery.ts - אותו חישוב משמש גם את הצ'קאאוט,
+ * והוא מדלג על חגים וערבי חג ולא רק על שישי ושבת.
  */
-function addBusinessDays(from: Date, days: number) {
-  const d = new Date(from);
-  let left = days;
-  while (left > 0) {
-    d.setDate(d.getDate() + 1);
-    // שישי ושבת אינם ימי עסקים בישראל
-    const day = d.getDay();
-    if (day !== 5 && day !== 6) left--;
-  }
-  return d;
-}
 
 export default function DeliveryEstimate({ color }: { color?: string }) {
   const [window, setWindow] = useState<string | null>(null);
 
   useEffect(() => {
-    const now = new Date();
-    const from = addBusinessDays(now, POLICY.deliveryMinDays);
-    const to = addBusinessDays(now, POLICY.deliveryMaxDays);
-    const fmt = new Intl.DateTimeFormat('he-IL', { day: 'numeric', month: 'long' });
-    const sameMonth = from.getMonth() === to.getMonth();
-    setWindow(
-      sameMonth
-        ? `${from.getDate()}-${fmt.format(to)}`
-        : `${fmt.format(from)} - ${fmt.format(to)}`,
-    );
+    setWindow(formatWindow(deliveryWindow()));
   }, []);
 
   return (

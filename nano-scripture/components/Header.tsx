@@ -16,6 +16,8 @@ const CAT_NAV = ACTIVE_CATEGORIES.map((id) => ({
 }));
 const PAGE_NAV = [
   { href: '/blessings', label: 'הברכות' },
+  // המדריכים ישבו רק בפוטר. מי שקונה מתנה מתחיל מ"למי", לא מ"מה"
+  { href: '/guides', label: 'מתנה ל…' },
   { href: '/craft', label: 'הטכנולוגיה' },
 ];
 const NAV = [...CAT_NAV, ...PAGE_NAV];

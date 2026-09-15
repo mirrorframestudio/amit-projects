@@ -102,10 +102,10 @@ export function validate(c: Customer): FieldErrors {
 
   // לא regex מחמיר: כתובות אמיתיות שוברות כל דפוס, ובדיקה קפדנית
   // מדי חוסמת לקוחות אמיתיים יותר משהיא מונעת שגיאות
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(t(c.email))) e.email = 'כתובת דוא״ל לא תקינה';
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(t(c.email))) e.email = 'חסר @ או סיומת אחרי הנקודה';
 
   const phone = normalizePhone(c.phone);
-  if (!IL_PHONE.test(phone)) e.phone = 'מספר טלפון ישראלי לא תקין';
+  if (!IL_PHONE.test(phone)) e.phone = '10 ספרות שמתחילות ב-05 (או קו קווי), אפשר גם +972';
 
   // באיסוף עצמי אין למה לשלוח, ולכן הכתובת אינה נדרשת
   if (c.shipping !== 'pickup') {
@@ -151,14 +151,25 @@ export const FIELDS: {
   autoComplete: string;
   half?: boolean;
   optional?: boolean;
+  /** למה מבקשים. שדה בלי סיבה הוא שדה שמדלגים עליו או ממלאים בזהירות */
+  hint?: string;
+  /** מקלדת מספרית בטלפון, בלי type=number - מיקוד יכול להתחיל באפס */
+  inputMode?: 'numeric' | 'tel';
 }[] = [
   { key: 'firstName', label: 'שם פרטי', type: 'text', autoComplete: 'given-name', half: true },
   { key: 'lastName', label: 'שם משפחה', type: 'text', autoComplete: 'family-name', half: true },
+  {
+    key: 'phone',
+    label: 'טלפון',
+    type: 'tel',
+    autoComplete: 'tel',
+    inputMode: 'tel',
+    hint: 'אם תהיה שאלה על ההזמנה או על המשלוח, נכתוב לך בוואטסאפ',
+  },
   { key: 'email', label: 'דוא״ל', type: 'email', autoComplete: 'email' },
-  { key: 'phone', label: 'טלפון', type: 'tel', autoComplete: 'tel' },
   { key: 'address', label: 'רחוב ומספר', type: 'text', autoComplete: 'street-address' },
   { key: 'city', label: 'עיר', type: 'text', autoComplete: 'address-level2', half: true },
-  { key: 'postcode', label: 'מיקוד', type: 'text', autoComplete: 'postal-code', half: true, optional: true },
+  { key: 'postcode', label: 'מיקוד', type: 'text', autoComplete: 'postal-code', half: true, optional: true, inputMode: 'numeric' },
 ];
 
 /**
@@ -171,8 +182,8 @@ export const FIELDS: {
  */
 export const RECIPIENT_FIELDS: typeof FIELDS = [
   { key: 'toName', label: 'שם הנמען', type: 'text', autoComplete: 'off' },
-  { key: 'toPhone', label: 'טלפון הנמען', type: 'tel', autoComplete: 'off' },
+  { key: 'toPhone', label: 'טלפון הנמען', type: 'tel', autoComplete: 'off', inputMode: 'tel', hint: 'השליח מתקשר לנמען לפני המסירה' },
   { key: 'toAddress', label: 'רחוב ומספר', type: 'text', autoComplete: 'off' },
   { key: 'toCity', label: 'עיר', type: 'text', autoComplete: 'off', half: true },
-  { key: 'toPostcode', label: 'מיקוד', type: 'text', autoComplete: 'off', half: true, optional: true },
+  { key: 'toPostcode', label: 'מיקוד', type: 'text', autoComplete: 'off', half: true, optional: true, inputMode: 'numeric' },
 ];

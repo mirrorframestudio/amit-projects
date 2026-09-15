@@ -18,7 +18,7 @@ const UPDATED = {
   catalog: '2026-09-15',
   blessings: '2026-09-08',
   craft: '2026-09-14',
-  legal: '2026-09-03',
+  legal: '2026-09-15',
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
