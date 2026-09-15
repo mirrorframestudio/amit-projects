@@ -139,6 +139,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'YASNN010W',
     slug: 'tipat-or',
+    scenes: ['/scene/tipat-or-sweater.jpg'],
     name: 'טִפַּת אוֹר',
     nameLatin: 'TIPAT OR',
     category: 'necklaces',
@@ -271,7 +272,7 @@ export const PRODUCTS: Product[] = [
   {
     sku: 'OYANN011S',
     slug: 'lo-yanum',
-    scenes: ['/scene/lo-yanum-stone.jpg', '/scene/lo-yanum-wood.jpg', '/scene/lo-yanum-marble.jpg', '/scene/lo-yanum-1.jpg', '/scene/lo-yanum-2.jpg', '/scene/lo-yanum-3.jpg'],
+    scenes: ['/scene/lo-yanum-stone.jpg', '/scene/lo-yanum-hand.jpg', '/scene/lo-yanum-wood.jpg', '/scene/lo-yanum-marble.jpg', '/scene/lo-yanum-1.jpg', '/scene/lo-yanum-2.jpg', '/scene/lo-yanum-3.jpg'],
     name: 'לֹא יָנוּם',
     nameLatin: 'LO YANUM',
     source: { phrase: 'הִנֵּה לֹא־יָנוּם וְלֹא יִישָׁן שׁוֹמֵר יִשְׂרָאֵל', ref: 'תהילים קכ״א, ד׳' },

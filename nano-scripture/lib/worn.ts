@@ -23,6 +23,13 @@ export type WornShot = {
 
 export const WORN: WornShot[] = [
   {
+    file: '/worn/lo-yanum.jpg',
+    width: 1254,
+    height: 1254,
+    alt: 'שרשרת לא ינום בכסף על צוואר אישה בחולצה לבנה, תליון העין והשבב הכחול במרכזו',
+    products: ['lo-yanum'],
+  },
+  {
     file: '/worn/avot.jpg',
     width: 1254,
     height: 1254,
