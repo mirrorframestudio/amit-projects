@@ -38,7 +38,8 @@ export function distinctName(p: Product) {
 
 /** כותרת עמוד מוצר: שם · מה זה. המותג מתווסף בתבנית של ה-layout */
 export function productTitle(p: Product) {
-  return `${distinctName(p)} · ${CATEGORIES[p.category].singular} ${MATERIALS[p.material].label} עם ברכה על שבב`;
+  const cat = CATEGORIES[p.category];
+  return `${distinctName(p)} · ${cat.construct ?? cat.singular} ${MATERIALS[p.material].label} עם ברכה על שבב`;
 }
 
 export function productDescription(p: Product) {

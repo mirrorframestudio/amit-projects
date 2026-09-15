@@ -24,7 +24,7 @@
  */
 import { BRAND } from './brand';
 import { SITE_URL } from './site';
-import { POLICY, SHIPPING } from './policy';
+import { POLICY, shippingCost } from './policy';
 import { MATERIALS, FINISHES, CATEGORIES, type Product } from './catalog';
 import { COMPANY } from './company';
 import { distinctName } from './seo';
@@ -97,13 +97,13 @@ function returnPolicy() {
   };
 }
 
-function shippingDetails() {
-  const delivery = SHIPPING.find((m) => m.id === 'delivery');
+/** דמי המשלוח להזמנה של הפריט לבדו - כמו בעגלה, ולא התעריף הקבוע לכולם */
+function shippingDetails(product: Product) {
   return {
     '@type': 'OfferShippingDetails',
     shippingRate: {
       '@type': 'MonetaryAmount',
-      value: delivery?.price ?? POLICY.shippingFlat ?? 0,
+      value: shippingCost('delivery', product.price),
       currency: 'ILS',
     },
     shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IL' },
@@ -152,7 +152,7 @@ export function productSchema(product: Product, photos: string[] = []) {
       itemCondition: 'https://schema.org/NewCondition',
       seller: { '@id': ORG_ID },
       hasMerchantReturnPolicy: returnPolicy(),
-      shippingDetails: shippingDetails(),
+      shippingDetails: shippingDetails(product),
     },
   };
 }

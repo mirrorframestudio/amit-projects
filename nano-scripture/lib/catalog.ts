@@ -12,6 +12,8 @@ export type CategoryId = 'necklaces' | 'bracelets' | 'rings' | 'pins';
 export type Material = 'silver925' | 'steel';
 export type Finish = 'silver' | 'gold' | 'black' | 'retro';
 export type Audience = 'women' | 'men' | 'unisex';
+/** קבוצות הגיל של גוגל. לפיד בלבד */
+export type AgeGroup = 'newborn' | 'infant' | 'toddler' | 'kids' | 'adult';
 
 export const MATERIALS: Record<Material, { label: string; note: string }> = {
   silver925: {
@@ -35,6 +37,8 @@ export type Category = {
   id: CategoryId;
   title: string;
   singular: string;
+  /** צורת הסמיכות לפני חומר - "סיכת כסף", לא "סיכה כסף". חסר = כמו singular */
+  construct?: string;
   subtitle: string;
   blurb: string;
 };
@@ -69,6 +73,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     // כי הוא כתובת חיה שיושבת ב-sitemap
     title: 'לתינוק',
     singular: 'סיכה',
+    construct: 'סיכת',
     subtitle: 'לעגלה ולחדר התינוק',
     blurb:
       'סיכה נצמדת לעגלה, לשמיכה או לכיסא, ונשארת שם בשנים שבהן עוד אי אפשר לענוד כלום. הברכה נוסעת עם התינוק במקום לחכות במגירה.',
@@ -87,6 +92,8 @@ export type Product = {
   material: Material;
   finish: Finish;
   audience: Audience;
+  /** למי הפריט מיועד לפי גיל. חסר = מבוגרים. לפיד של גוגל, שדורש זאת לתכשיטים */
+  ageGroup?: AgeGroup;
   /** מחיר לצרכן בשקלים, כולל מע״מ */
   price: number;
   compareAt?: number;
@@ -486,6 +493,8 @@ export const PRODUCTS: Product[] = [
     material: 'silver925',
     finish: 'silver',
     audience: 'unisex',
+    // מתנת לידה - נצמדת לעגלה מהיום הראשון
+    ageGroup: 'newborn',
     price: 749,
     image: '/products/BABYPIN01.webp',
     blessings: ['tinok'],
