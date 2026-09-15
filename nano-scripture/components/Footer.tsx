@@ -88,6 +88,9 @@ export default function Footer() {
             <Link href="/blessings" className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               כל הברכות
             </Link>
+            <Link href="/guides" className="tap-row link-u" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
+              מדריכי מתנה
+            </Link>
           </nav>
 
           <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 md:flex md:flex-col md:gap-3">

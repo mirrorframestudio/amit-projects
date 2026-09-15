@@ -7,6 +7,7 @@ import { getBlessing } from '@/lib/blessings';
 import { productFaq } from '@/lib/faq';
 import JsonLd from '@/components/JsonLd';
 import { productSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
+import { productTitle, productDescription, distinctName } from '@/lib/seo';
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -21,19 +22,19 @@ export async function generateMetadata({
   const p = getProduct(slug);
   if (!p) return {};
   return {
-    title: p.name,
-    description: `${p.short}. ${p.story.slice(0, 120)}`,
+    title: productTitle(p),
+    description: productDescription(p),
     // `?b=` בוחר נוסח ואינו משנה את הדגם, את המחיר או את התיאור.
     // בלי קנוניקל כל בחירת נוסח היא כתובת נוספת עם אותו תוכן
     alternates: { canonical: `/products/${p.slug}` },
     openGraph: {
       type: 'website',
       url: `/products/${p.slug}`,
-      title: p.name,
+      title: `${distinctName(p)} · מִקְרָא`,
       description: p.short,
       images: [{ url: p.image, alt: p.name }],
     },
-    twitter: { card: 'summary_large_image', images: [p.image] },
+    twitter: { card: 'summary_large_image', title: `${distinctName(p)} · מִקְרָא`, images: [p.image] },
   };
 }
 

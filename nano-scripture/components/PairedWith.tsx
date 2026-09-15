@@ -32,7 +32,7 @@ export default function PairedWith({ slug }: { slug: string }) {
           >
             <Image
               src={pair.photo}
-              alt=""
+              alt={pair.title}
               fill
               sizes="(max-width: 768px) 92vw, 46vw"
               className="object-cover"

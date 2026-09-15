@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   alternates: { canonical: '/blessings' },
   description:
     'חמישה נוסחים שנצרבים על השבב: ברכת התינוק, ברכת הפרנסה, הברכה שלך, שמירה והגנה, ואשת חיל. כל נוסח במלואו, ללא קיצור.',
+  openGraph: {
+    type: 'website',
+    url: '/blessings',
+    title: 'חמש הברכות · מִקְרָא',
+    description: 'חמישה נוסחים שנצרבים על השבב, כל אחד במלואו. הבחירה נעשית בעמוד המוצר.',
+    images: [{ url: '/scene/pair-trio.jpg', alt: 'שלושה תליונים של מִקְרָא' }],
+  },
 };
 
 export default function BlessingsPage() {

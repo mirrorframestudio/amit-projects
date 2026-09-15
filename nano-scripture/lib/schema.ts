@@ -14,8 +14,8 @@
  * הפרה מפורשת של הנחיות גוגל, והעונש עליה הוא הסרת כל התוצאות
  * העשירות של האתר, לא רק של השדה השקרי.
  *
- * גם contactPoint אינו כאן: לאתר אין עדיין טלפון או דוא"ל פומבי,
- * וסימון ערוץ קשר שאינו קיים גרוע מלא לסמן כלום.
+ * contactPoint נכנס רק כשיש טלפון ב-lib/company.ts - סימון ערוץ קשר
+ * שאינו קיים גרוע מלא לסמן כלום.
  * ------------------------------------------------------------------
  *
  * כל מספר כאן נגזר מ-POLICY ומהקטלוג, ולכן שינוי מדיניות מעדכן גם
@@ -26,9 +26,13 @@ import { BRAND } from './brand';
 import { SITE_URL } from './site';
 import { POLICY, SHIPPING } from './policy';
 import { MATERIALS, FINISHES, CATEGORIES, type Product } from './catalog';
+import { COMPANY } from './company';
+import { distinctName } from './seo';
 import type { QA } from './faq';
 
-const abs = (path: string) => (path.startsWith('http') ? path : `${SITE_URL}${path}`);
+// '/' הופך ל-SITE_URL בלי סלאש, כדי שהבית יופיע בצורה אחת בלבד - כמו
+// בקנוניקל ובמפת האתר
+const abs = (path: string) => (path.startsWith('http') ? path : path === '/' ? SITE_URL : `${SITE_URL}${path}`);
 
 /** מזהי הגראף, כדי שהישויות יצביעו זו על זו ולא ישוכפלו בכל עמוד */
 const ORG_ID = `${SITE_URL}/#organization`;
@@ -42,10 +46,24 @@ export function organizationSchema() {
     name: BRAND.name,
     alternateName: [BRAND.plain, BRAND.nameLatin],
     url: SITE_URL,
-    logo: abs('/hero/hero-landscape.jpg'),
+    // הסמל, לא צילום הירו: לוגו לפאנל הידע צריך להיות סימן המותג
+    logo: abs('/icon.svg'),
     description: BRAND.manifesto,
     slogan: BRAND.tagline,
     areaServed: { '@type': 'Country', name: 'IL' },
+    // יש עכשיו טלפון ודוא"ל פומביים (lib/company.ts), אז מסמנים אותם
+    ...(COMPANY.phone
+      ? {
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: `+972-${COMPANY.phone.replace(/\D/g, '').replace(/^0/, '')}`,
+            email: COMPANY.email,
+            contactType: 'customer service',
+            availableLanguage: 'he',
+            areaServed: 'IL',
+          },
+        }
+      : {}),
   };
 }
 
@@ -110,7 +128,7 @@ export function productSchema(product: Product, photos: string[] = []) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     '@id': `${SITE_URL}/products/${product.slug}#product`,
-    name: product.name,
+    name: distinctName(product),
     alternateName: product.nameLatin,
     sku: product.sku,
     description: `${product.short}. ${product.story}`,
@@ -176,5 +194,31 @@ export function itemListSchema(products: Product[], path: string) {
       url: `${SITE_URL}/products/${p.slug}`,
       name: p.name,
     })),
+  };
+}
+
+/**
+ * מדריך = מאמר. Article ולא BlogPosting: אין כאן מחבר בשם ואין תגובות,
+ * יש עמוד תוכן של החנות. datePublished נדרש כדי שגוגל יציג תאריך.
+ */
+export function articleSchema(g: {
+  slug: string;
+  title: string;
+  metaDescription: string;
+  published: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${SITE_URL}/guides/${g.slug}#article`,
+    headline: g.title,
+    description: g.metaDescription,
+    inLanguage: 'he-IL',
+    datePublished: g.published,
+    dateModified: g.published,
+    author: { '@id': ORG_ID },
+    publisher: { '@id': ORG_ID },
+    mainEntityOfPage: `${SITE_URL}/guides/${g.slug}`,
+    image: abs('/hero/hero-landscape.jpg'),
   };
 }

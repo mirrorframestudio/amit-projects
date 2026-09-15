@@ -12,8 +12,9 @@ export default function robots(): MetadataRoute.Robots {
   if (!IS_LIVE_DOMAIN) {
     return { rules: [{ userAgent: '*', disallow: '/' }] };
   }
+  // הצ'קאאוט וה-API אינם עמודים. הם כבר noindex, אבל אין סיבה לזחול בהם
   return {
-    rules: [{ userAgent: '*', allow: '/' }],
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/api/', '/checkout'] }],
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

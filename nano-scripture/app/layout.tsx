@@ -57,6 +57,9 @@ export const metadata: Metadata = {
     title: 'מִקְרָא · כל הכתוב. בגודל של גרגר.',
     images: ['/hero/hero-landscape.jpg'],
   },
+  // אימות Search Console: הטוקן יושב בוורסל (NEXT_PUBLIC_GSC_TOKEN),
+  // לא בקוד. בלי הטוקן התג פשוט לא מרונדר
+  verification: process.env.NEXT_PUBLIC_GSC_TOKEN ? { google: process.env.NEXT_PUBLIC_GSC_TOKEN } : undefined,
 };
 
 export const viewport: Viewport = {

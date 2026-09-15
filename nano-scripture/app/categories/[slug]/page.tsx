@@ -36,7 +36,7 @@ export async function generateMetadata({
   // לראות שרשרת. og:title ירש עד כה את כותרת הבית הגנרית
   const banner = categoryBanner(cat.id)?.src ?? '/hero/hero-landscape.jpg';
   return {
-    title: cat.title,
+    title: `${cat.title} עם ברכה צרובה על שבב`,
     description: cat.blurb,
     alternates: { canonical: `/categories/${cat.id}` },
     openGraph: {
@@ -126,8 +126,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <p className="reveal load mt-6" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
               <span className="num">{products.length}</span> דגמים · מ־
               <span className="num">{formatPrice(range.min)}</span> עד{' '}
-              <span className="num">{formatPrice(range.max)}</span> · כל דגם עם כל אחת מ־
-              <span className="num">{BLESSINGS.length}</span> הברכות
+              <span className="num">{formatPrice(range.max)}</span> · הנוסח נבחר בעמוד הדגם
             </p>
 
             {/* בטלפון: הצילום עצמו, ברוחב המסך ובלי צעיף, אחרי הטקסט.
@@ -178,7 +177,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               className="reveal relative overflow-hidden"
               style={{ aspectRatio: '4/5', borderRadius: 'var(--radius-lg)' }}
             >
-              <Image src={breakPhotos[0]} alt="" fill sizes="30vw" className="object-cover" />
+              <Image src={breakPhotos[0]} alt={`${cat.singular} של מִקְרָא בצילום סצנה`} fill sizes="30vw" className="object-cover" />
             </div>
 
             <div className="reveal text-center" style={{ ['--d' as string]: '120ms' }}>
@@ -207,7 +206,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               className="reveal relative hidden overflow-hidden md:block"
               style={{ aspectRatio: '4/5', borderRadius: 'var(--radius-lg)', ['--d' as string]: '240ms' }}
             >
-              <Image src={breakPhotos[1]} alt="" fill sizes="30vw" className="object-cover" />
+              <Image src={breakPhotos[1]} alt={`${cat.singular} של מִקְרָא בצילום סצנה`} fill sizes="30vw" className="object-cover" />
             </div>
           </div>
         </section>

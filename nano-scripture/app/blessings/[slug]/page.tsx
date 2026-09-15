@@ -7,6 +7,7 @@ import BlessingCard from '@/components/BlessingCard';
 import { BLESSINGS, getBlessing, isBlessingId } from '@/lib/blessings';
 import { PRODUCTS, blessingPhotos } from '@/lib/catalog';
 import ScriptureText from '@/components/ScriptureText';
+import { clampWords } from '@/lib/seo';
 
 export function generateStaticParams() {
   return BLESSINGS.map((b) => ({ slug: b.id }));
@@ -21,8 +22,8 @@ export async function generateMetadata({
   if (!isBlessingId(slug)) return {};
   const b = getBlessing(slug);
   return {
-    title: b.plain,
-    description: `${b.blurb} ${b.sources}. ${b.words} מילים שנצרבות על שבב אחד.`,
+    title: `${b.plain} · הנוסח המלא שנצרב על השבב`,
+    description: clampWords(`${b.blurb} ${b.sources}.`),
     alternates: { canonical: `/blessings/${b.id}` },
     openGraph: {
       type: 'article',
@@ -38,6 +39,11 @@ export async function generateMetadata({
           alt: b.plain,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${b.plain} · מִקְרָא`,
+      images: [blessingPhotos(BLESSINGS.map((x) => x.id))[b.id] ?? '/hero/hero-landscape.jpg'],
     },
   };
 }

@@ -158,7 +158,7 @@ export default function ProductStory({
                 >
                   <Image
                     src={photo.src}
-                    alt=""
+                    alt={`${product.name} - ${block.title}`}
                     fill
                     sizes="(max-width: 768px) 92vw, 46vw"
                     style={{ objectPosition: photo.focus }}

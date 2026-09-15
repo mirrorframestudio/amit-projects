@@ -13,6 +13,13 @@ export const metadata: Metadata = {
   alternates: { canonical: '/craft' },
   description:
     'כיצד נצרבת ברכה שלמה על שטח של חצי מילימטר: ליתוגרפיית קרן יונים, השוואה תו־אחר־תו לנוסח המקור, ושיבוץ בתכשיט.',
+  openGraph: {
+    type: 'website',
+    url: '/craft',
+    title: 'הטכנולוגיה · מִקְרָא',
+    description: 'איך נצרבת ברכה שלמה על שבב, ואיך מוודאים שהנוסח מדויק.',
+    images: [{ url: '/scene/lo-yanum-hand.jpg', alt: 'השבב בין האצבעות' }],
+  },
 };
 
 const SPECS = [
