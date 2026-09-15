@@ -28,3 +28,5 @@ Thumbs.db
 daily_run_log.txt
 
 .vercel
+# Word lock files
+~$*
