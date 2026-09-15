@@ -12,6 +12,7 @@ import { SHIPPING, shippingMethod, shippingCost } from '@/lib/policy';
 import { COMPANY, waHref } from '@/lib/company';
 import { trackBeginCheckout } from '@/lib/analytics';
 import { saveOrderDone } from '@/lib/orderDone';
+import PaymentMarks from '@/components/PaymentMarks';
 import {
   EMPTY_CUSTOMER,
   FIELDS,
@@ -190,9 +191,19 @@ export default function CheckoutForm() {
       <div>
         <h1 className="display t-2">פרטי המשלוח</h1>
 
-        {/* בחירת המשלוח מוצגת לפני הכתובת, כי היא קובעת אם הכתובת
-            בכלל נדרשת - ומיותר לבקש שדות שמיד יימחקו */}
-        <fieldset className="mt-8">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2">
+          {FIELDS.filter(
+            (f) => customer.shipping !== 'pickup' || !['address', 'city', 'postcode'].includes(f.key),
+          ).map(field)}
+        </div>
+
+        {/* המשלוח אחרי הפרטים, לא לפניהם.
+
+            הוא ישב למעלה כי הבחירה קובעת אם שדות הכתובת נדרשים. עמית
+            ביקש להפוך: קודם ממלאים מי ומאיפה, ואז איך מקבלים - הסדר
+            שמכירים מכל חנות. מי שבוחר איסוף אחרי שמילא כתובת רואה את
+            שדות הכתובת נסגרים, וזה בסדר - השרת ממילא מתעלם מהם */}
+        <fieldset className="mt-10">
           <legend style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>איך לקבל</legend>
           <div className="mt-2 grid gap-3 sm:grid-cols-2">
             {SHIPPING.map((m) => {
@@ -249,11 +260,6 @@ export default function CheckoutForm() {
           )}
         </fieldset>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2">
-          {FIELDS.filter(
-            (f) => customer.shipping !== 'pickup' || !['address', 'city', 'postcode'].includes(f.key),
-          ).map(field)}
-        </div>
 
         {/* ---------- משלוח לנמען אחר ---------- */}
         {/* רק במשלוח. באיסוף עצמי אין חבילה שיוצאת לשום מקום, והצעה
@@ -374,6 +380,9 @@ export default function CheckoutForm() {
           {busy ? 'רגע…' : `לתשלום · ${formatPrice(total)}`}
         </button>
 
+        {/* הסימנים בצבעי המותגים, כאן בלבד: זה הרגע שבו שואלים
+            "במה אפשר לשלם", והתשובה צריכה להיות מזוהה בעין */}
+        <PaymentMarks tone="brand" size={32} className="mt-5 justify-center" />
         <p className="mt-3 text-center" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
           הפרטים נשלחים מוצפנים. פרטי האשראי נמסרים ישירות לחברת הסליקה ואינם נשמרים אצלנו.
         </p>

@@ -7,6 +7,7 @@ import { BRAND } from '@/lib/brand';
 import { COMPANY, telHref, waHref } from '@/lib/company';
 import { CATEGORIES, ACTIVE_CATEGORIES } from '@/lib/catalog';
 import { BLESSINGS } from '@/lib/blessings';
+import PaymentMarks from '@/components/PaymentMarks';
 
 const CONTACT = { fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' } as const;
 
@@ -155,8 +156,10 @@ export default function Footer() {
 
         <hr className="rule mt-16" />
 
+        <PaymentMarks size={26} className="pt-6" />
+
         <div
-          className="flex flex-col gap-3 pt-6 md:flex-row md:items-center md:justify-between"
+          className="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
           style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}
         >
           <p>

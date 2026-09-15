@@ -29,6 +29,7 @@ import Accordion from './Accordion';
 import { POLICY, deliveryLine, shippingNote } from '@/lib/policy';
 import { productFaq } from '@/lib/faq';
 import { trackViewItem } from '@/lib/analytics';
+import PaymentMarks from '@/components/PaymentMarks';
 
 type View = 'jewel' | 'worn' | 'chip' | `scene-${number}`;
 
@@ -644,6 +645,7 @@ export default function ProductView({ product }: { product: Product }) {
         >
           {ASSURANCE.join(' · ')}
         </p>
+        <PaymentMarks size={26} className="mt-3 justify-center" />
 
         {/* ---------- "איך אני יודע שזה באמת שם" ---------- */}
         {/*

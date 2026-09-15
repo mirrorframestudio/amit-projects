@@ -32,57 +32,65 @@ const SOURCES = BLESSINGS.map((b) => {
  * שני קבצים ולא אחד שנחתך: 16:9 לרוחב ו-9:16 לטלפון. בקובץ יחיד
  * object-cover זרק 70% מהפריים באייפון 14 - נמדד. source עם media
  * מגיש לכל מסך את מה שנבנה בשבילו, והבחירה נעשית לפני ההורדה.
+ *
+ * בטלפון הצילום והטקסט לא יושבים זה על זה.
+ *
+ * הגרסה הקודמת הניחה את הטקסט על החלק התחתון של הצילום מאחורי צעיף
+ * שמנת. עמית ואחיו ראו בשני טלפונים שונים שלא רואים את הפנים של
+ * הגבר ואת התכשיטים - ומדידה אישרה: התליונים יושבים ב-44% מגובה
+ * הפריים, בדיוק איפה שהצעיף כבר אטום ב-90%. אין נקודה שבה גם הטקסט
+ * קריא וגם התכשיטים גלויים בפריים 9:16 שנושא כותרת.
+ *
+ * לכן בטלפון הצילום הוא ריבוע - חתך שמראה את שני הפנים, שני
+ * התליונים והצמיד (נמדד ב-360, 375, 390 ו-430 פיקסלים) - והטקסט
+ * מתחתיו על הרקע, בלי צעיף. הכפתור יושב על קו הקיפול ב-375×812
+ * ומעליו בטלפונים גדולים יותר; זה המחיר של צילום שרואים.
  * ------------------------------------------------------------------
  */
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: 'min(88vh, 780px)' }}>
-      {/* picture ולא Image של Next: המקור נבחר לפי media, כך שטלפון
-          לא מוריד את הקובץ הרחב בכלל. הדפדפן בוחר לפני ההורדה */}
-      <picture>
-        <source
-          media="(max-width: 767px)"
-          srcSet="/hero/hero-portrait.webp"
-          type="image/webp"
-        />
-        <source media="(max-width: 767px)" srcSet="/hero/hero-portrait.jpg" />
-        <source srcSet="/hero/hero-landscape.webp" type="image/webp" />
-        <img
-          src="/hero/hero-landscape.jpg"
-          alt=""
-          fetchPriority="high"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover"
+    <section
+      // pt-24 בטלפון: הכותרת הקבועה (96px) יושבת מעל התוכן, ובלי הריווח
+      // היא מכסה בדיוק את הפנים. במסך רחב הצילום ממלא הכול וזה רצוי
+      className="relative overflow-hidden pt-24 md:min-h-[var(--hero-h)] md:pt-0"
+      style={{ ['--hero-h' as string]: 'min(88vh, 780px)' }}
+    >
+      {/* בטלפון: ריבוע בזרימה. במסך רחב: ממלא את המקטע מאחורי הטקסט */}
+      <div className="relative aspect-square w-full md:absolute md:inset-0 md:aspect-auto">
+        {/* picture ולא Image של Next: המקור נבחר לפי media, כך שטלפון
+            לא מוריד את הקובץ הרחב בכלל. הדפדפן בוחר לפני ההורדה */}
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            srcSet="/hero/hero-portrait.webp"
+            type="image/webp"
+          />
+          <source media="(max-width: 767px)" srcSet="/hero/hero-portrait.jpg" />
+          <source srcSet="/hero/hero-landscape.webp" type="image/webp" />
+          <img
+            src="/hero/hero-landscape.jpg"
+            alt="זוג עונד שרשרת עץ החיים, שרשרת מגן דוד וצמיד - כולם עם השבב הכחול"
+            fetchPriority="high"
+            decoding="async"
+            // 18%: הפנים בשליש העליון של הפריים, הצמיד ב-62%. החתך
+            // מתחיל מעט מתחת לקצה כדי ששניהם ייכנסו
+            className="absolute inset-0 h-full w-full object-cover object-[50%_18%] md:object-center"
+          />
+        </picture>
+
+        {/* צעיף אופקי מימין, רק במסך רחב */}
+        <div
           aria-hidden
+          className="absolute inset-0 hidden md:block"
+          style={{
+            background:
+              'linear-gradient(to left, var(--bg) 40%, color-mix(in oklab, var(--bg) 78%, transparent) 58%, transparent 78%)',
+          }}
         />
-      </picture>
+      </div>
 
-      {/* צעיף: אנכי במסך צר, אופקי מימין במסך רחב */}
-      <div
-        aria-hidden
-        className="absolute inset-0 md:hidden"
-        style={{
-          background:
-            // 56% היו נכונים לסרטון, שבו התליון ישב גבוה בפריים.
-            // בצילום הזוג התכשיטים יושבים ב-44% עד 62% מהגובה, ומדדתי
-            // שהצעיף הישן בלע את שלושתם - בטלפון לא נראה ולו תכשיט
-            // אחד. 42% משאירים את שני התליונים גלויים ועדיין נותנים
-            // לטקסט 58% מהגובה. הצמיד נופל מתחת לצעיף, וזו הפשרה
-            // שאין ממנה מנוס בפריים 9:16 שנושא גם כותרת
-            'linear-gradient(to top, var(--bg) 42%, color-mix(in oklab, var(--bg) 80%, transparent) 62%, transparent 80%)',
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 hidden md:block"
-        style={{
-          background:
-            'linear-gradient(to left, var(--bg) 40%, color-mix(in oklab, var(--bg) 78%, transparent) 58%, transparent 78%)',
-        }}
-      />
-
-      <div className="shell relative flex min-h-[inherit] items-end pb-14 md:items-center md:pb-0">
-        <div className="w-full py-16 md:w-[46%] md:py-24">
+      <div className="shell relative md:flex md:min-h-[inherit] md:items-center">
+        <div className="w-full pb-14 pt-7 md:w-[46%] md:py-24">
           {/* בלי תווית מעל הכותרת. "כסף 925 · צריבת ננו · הנוסח המלא"
               ישבה כאן באותיות מרווחות, והכותרת אומרת את זה טוב יותר */}
           <h1

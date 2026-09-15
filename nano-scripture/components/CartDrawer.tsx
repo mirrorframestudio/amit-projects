@@ -9,6 +9,7 @@ import { getBlessing } from '@/lib/blessings';
 import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { POLICY, shippingNote, freeShippingGap } from '@/lib/policy';
+import PaymentMarks from '@/components/PaymentMarks';
 
 /**
  * שדה קוד ההנחה.
@@ -538,6 +539,7 @@ export default function CartDrawer() {
             <p className="mt-3 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
               קופסה מרופדת וכרטיס ברכה - כלולים בכל הזמנה
             </p>
+            <PaymentMarks size={22} gap={10} className="mt-3 justify-center" />
           </div>
         )}
       </aside>
