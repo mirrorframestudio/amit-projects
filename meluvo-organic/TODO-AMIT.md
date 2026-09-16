@@ -2,6 +2,18 @@
 
 הכול דברים שדורשים גישה/חשבון/החלטה שלך ואי אפשר לעשות דרך ה-API.
 
+## קודם כל — 5 דקות שהופכות את המאמר השבועי לאוטומטי לגמרי
+
+### 0. טוקן Shopify לסוכן השבועי
+רוטינה בענן כותבת מאמר כל שבוע (ראה README → "מאמר שבועי"). בלי טוקן היא רק פותחת PR
+עם המאמר; עם טוקן היא מפרסמת לבד.
+1. Shopify Admin → Settings → **Apps and sales channels** → **Develop apps** → Create an app →
+   שם: `Blog publisher`.
+2. Configuration → Admin API integration → סמן **`write_content`** ו-**`read_content`** בלבד → Save.
+3. Install app → **Reveal token once** → העתק את ה-`shpat_...`.
+4. https://claude.ai/code/environments → הסביבה **Amit** → Environment variables → הוסף
+   `SHOPIFY_ADMIN_TOKEN` = הטוקן. (רק שם. לא לשלוח לי בצ'אט.)
+
 ## השבוע — 30 דקות סה"כ, הכי משפיע
 
 ### 1. Google Search Console (10 דק')
@@ -47,8 +59,9 @@ Online Store → Navigation → Main menu → הוסף "המגזין" → `/blog
 
 ## מתמשך
 
-### 9. מאמר אחד בשבוע
-רשימת נושאים ב-README. תגיד "מאמר על X" ואני כותב + מעלה. גוגל אוהב עקביות יותר מכמות.
+### 9. מאמר אחד בשבוע — אוטומטי
+רוטינה בענן רצה כל יום ראשון בבוקר, לוקחת את הנושא הבא מ-`TOPICS.md`, כותבת לפי `BRIEF.md`
+ומפרסמת (או פותחת PR אם אין טוקן — סעיף 0). לשנות נושאים/סדר: לערוך את `TOPICS.md`.
 
 ### 10. סושיאל אורגני — `SOCIAL-CALENDAR.md`
 הסושיאל הוא המקור מס' 1 שלכם כבר עכשיו (1,234 סשנים). הלוח שם הוא 4 שבועות של
