@@ -1,0 +1,16 @@
+{
+  "_readme": "Featured images for blog articles. Key = image file (images/<key>.jpg). 'topics' = which TOPICS.md queue lines it fits (match by meaning). URL for articleUpdate: https://raw.githubusercontent.com/mirrorframestudio/amit-projects/<branch>/meluvo-organic/images/<key>.jpg — use the branch you are on (main after the merge). Each image should be used once; mark 'used_by' with the article handle.",
+  "melatonin-natural":       {"topics": ["מלטונין טבעי"], "alt": "אישה מכבה מנורת לילה חמה בחדר שינה עמום, הטלפון הפוך על השידה", "used_by": null},
+  "screen-headache":         {"topics": ["כאב ראש ממסך"], "alt": "גבר במשרד לוחץ על הרקות מול מסך בהיר", "used_by": null},
+  "hrv-recovery":            {"topics": ["HRV", "התאוששות"], "alt": "רץ בודק צמיד כושר בלי מסך על ספסל בפארק עם שחר", "used_by": null},
+  "night-shift-vs-glasses":  {"topics": ["Night Shift", "מצב לילה"], "alt": "טלפון במצב לילה כתום לצד עדשה אדומה על שולחן עץ", "used_by": null},
+  "resting-heart-rate":      {"topics": ["דופק במנוחה"], "alt": "אישה מתעוררת בבוקר ובודקת צמיד כושר על היד", "used_by": null},
+  "athlete-evening-routine": {"topics": ["שגרת ערב", "שחקן כדורגל"], "alt": "ספורטאי בבית בערב מעמעם את האורות, הטלפון נטען רחוק", "used_by": null},
+  "pre-game-sleep":          {"topics": ["שינה לפני משחק", "תחרות"], "alt": "שחקן כדורגל שוכב ער במיטה בלילה שלפני משחק, חולצת המשחק תלויה ברקע", "used_by": null},
+  "scrolling-in-bed":        {"topics": ["גלילה במיטה", "גלילה לפני השינה"], "alt": "זוג במיטה בלילה, הפנים מוארות מהטלפונים", "used_by": null},
+  "digital-eye-strain":      {"topics": ["עייפות עיניים"], "alt": "תקריב של עין עייפה שמשתקף בה מסך מחשב", "used_by": null},
+  "deep-sleep-vs-rem":       {"topics": ["שינה עמוקה", "REM"], "alt": "גבר ישן עמוק בחדר חשוך וקריר, צמיד כושר על היד", "used_by": null},
+  "tv-before-bed":           {"topics": ["טלוויזיה לפני השינה"], "alt": "זוג על הספה בלילה, אור כחול מהטלוויזיה שוטף את הסלון", "used_by": null},
+  "caffeine-and-sleep":      {"topics": ["קפאין"], "alt": "אספרסו על שולחן בית קפה באור שקיעה, שעון יד מראה 17:10", "used_by": null},
+  "jet-lag-athletes":        {"topics": ["ג'ט לג", "חופשה", "אזור זמן"], "alt": "ספורטאי בטרנינג בשער בשדה תעופה בלילה, אורות המסלול ברקע", "used_by": null}
+}
