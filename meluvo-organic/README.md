@@ -82,9 +82,14 @@ Night Shift מול משקפיים — השוואה עם מדידה.
 רוטינת ענן (claude.ai/code/routines) רצה כל יום ראשון 09:00 שעון ישראל:
 1. קוראת `BRIEF.md` + `TOPICS.md`, לוקחת את הנושא הראשון ב"בתור".
 2. כותבת `blog/NN-<handle>.html` + `.json`.
-3. `python meluvo-organic/publish_article.py blog/NN-<handle>.json` — מפרסם דרך Admin API
-   (צריך `SHOPIFY_ADMIN_TOKEN` בסביבת הענן; בלעדיו → exit 2 → הסוכן פותח PR במקום).
-4. מעדכנת `TOPICS.md` ודוחפת ל-main.
+3. `publish_article.py --dry-run` כ-lint, ואז מפרסמת דרך **מחבר Shopify של claude.ai**
+   (אותן מוטציות שבסקריפט). הסקריפט עצמו עם `SHOPIFY_ADMIN_TOKEN` הוא רק גיבוי.
+4. לפני הבחירה בנושא היא שואלת את Shopify אילו מאמרים כבר קיימים — כך גם אם `TOPICS.md`
+   מאחור (למשל push שנכשל), לא ייכתב נושא כפול.
+5. מעדכנת `TOPICS.md` ודוחפת לענף שממנו עבדה (main אחרי המיזוג).
+
+ריצת בדיקה 2026-09-16: פרסום עבד (`shift-workers-sleep`), ה-push ל-GitHub נחסם — ראה TODO סעיף 0.
+ניהול: https://claude.ai/code/routines/trig_01QRxWXoSnT8n8Lzf8V72Fw2
 
 ## TODO של אמית — ראה `TODO-AMIT.md`
 ## לוח סושיאל — ראה `SOCIAL-CALENDAR.md`

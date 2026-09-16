@@ -2,17 +2,19 @@
 
 הכול דברים שדורשים גישה/חשבון/החלטה שלך ואי אפשר לעשות דרך ה-API.
 
-## קודם כל — 5 דקות שהופכות את המאמר השבועי לאוטומטי לגמרי
+## קודם כל — 2 דקות, אחרת המאמר השבועי לא נשמר בריפו
 
-### 0. טוקן Shopify לסוכן השבועי
-רוטינה בענן כותבת מאמר כל שבוע (ראה README → "מאמר שבועי"). בלי טוקן היא רק פותחת PR
-עם המאמר; עם טוקן היא מפרסמת לבד.
-1. Shopify Admin → Settings → **Apps and sales channels** → **Develop apps** → Create an app →
-   שם: `Blog publisher`.
-2. Configuration → Admin API integration → סמן **`write_content`** ו-**`read_content`** בלבד → Save.
-3. Install app → **Reveal token once** → העתק את ה-`shpat_...`.
-4. https://claude.ai/code/environments → הסביבה **Amit** → Environment variables → הוסף
-   `SHOPIFY_ADMIN_TOKEN` = הטוקן. (רק שם. לא לשלוח לי בצ'אט.)
+### 0. הרשאת כתיבה ל-GitHub לרוטינה
+הרוטינה השבועית כבר מפרסמת לבד ל-Shopify (דרך מחבר Shopify של claude.ai — ריצת הבדיקה
+ב-2026-09-16 פרסמה את `shift-workers-sleep`). אבל ה-push שלה ל-GitHub נחסם (403): לאפליקציית
+Claude ב-GitHub אין גישה ל-`mirrorframestudio/amit-projects`. בלי זה התור ב-`TOPICS.md`
+לא מתעדכן והעותקים של המאמרים לא נשמרים (הרוטינה מגנה מכפילויות דרך Shopify, אז זה לא
+ישבור כלום — אבל הריפו יישאר מאחור).
+1. https://github.com/apps/claude/installations/select_target → בחר את הארגון **mirrorframestudio**
+   → Repository access → הוסף `amit-projects` (או All repositories) → Save.
+2. אם זה כבר מותקן: https://claude.ai/customize/connectors?auth_start=github&auth_start_force=1
+   → Reconnect GitHub.
+3. תגיד לי ואני מריץ את הרוטינה שוב לבדיקה.
 
 ## השבוע — 30 דקות סה"כ, הכי משפיע
 
