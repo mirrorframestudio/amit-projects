@@ -404,10 +404,11 @@ export default function ProductView({ product }: { product: Product }) {
         </div>
 
         <p className="mt-2" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
-          או עד {INSTALLMENTS} תשלומים של כ־
+          או עד {INSTALLMENTS} תשלומים ללא ריבית, כ־
           <span className="num" style={{ color: 'var(--ink)' }}>
             {formatPrice(perInstallment(sale.now))}
-          </span>
+          </span>{' '}
+          לחודש
         </p>
 
         {siblings.length > 1 && (

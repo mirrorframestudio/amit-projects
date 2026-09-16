@@ -71,7 +71,7 @@ export default function Categories() {
                   <div className="flex items-baseline justify-between">
                     <h3 className="display t-2">{cat.title}</h3>
                     <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-                      {products.length} דגמים
+                      {products.length === 1 ? 'דגם אחד' : `${products.length} דגמים`}
                     </span>
                   </div>
 
@@ -91,7 +91,7 @@ export default function Categories() {
                     style={{ borderTop: '1px solid var(--line)', borderTopWidth: undefined }}
                   >
                     <span className="num" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-                      {formatPrice(range.min)} - {formatPrice(range.max)}
+                      {range.min === range.max ? formatPrice(range.min) : `${formatPrice(range.min)} - ${formatPrice(range.max)}`}
                     </span>
                     <span
                       className="link-u"

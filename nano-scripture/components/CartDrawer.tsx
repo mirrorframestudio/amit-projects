@@ -10,6 +10,7 @@ import { PROMO, saleOf, isPromoCode, normalizeCode } from '@/lib/promo';
 import { GIFT_BOX, INSTALLMENTS, perInstallment } from '@/lib/extras';
 import { POLICY, shippingNote, freeShippingGap, shippingCost } from '@/lib/policy';
 import PaymentMarks from '@/components/PaymentMarks';
+import { distinctName } from '@/lib/seo';
 
 /**
  * שדה קוד ההנחה.
@@ -311,7 +312,8 @@ export default function CartDrawer() {
                       className="display link-u"
                       style={{ fontSize: 'var(--fs-md)' }}
                     >
-                      {p.name}
+                      {/* בְּסֵתֶר בכסף ובְּסֵתֶר בזהב היו שתי שורות באותו שם */}
+                      {distinctName(p)}
                     </Link>
                     <button
                       onClick={() => remove(key)}
@@ -538,8 +540,8 @@ export default function CartDrawer() {
             )}
 
             <p className="mb-4 mt-1 text-end" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
-              או עד {INSTALLMENTS} תשלומים של כ־
-              <span className="num">{formatPrice(perInstallment(total))}</span>
+              או עד {INSTALLMENTS} תשלומים ללא ריבית, כ־
+              <span className="num">{formatPrice(perInstallment(total))}</span> לחודש
             </p>
 
             <Link
