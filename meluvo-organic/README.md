@@ -62,6 +62,11 @@ product type / vendor / tags, 13 עמודי מדיניות באנגלית (Avada
 - **descriptionHtml של המוצרים** ריק (התוכן חי ב-sections של הת'ים). לא מילאתי כדי לא
   לשנות layout; משפיע על פיד Google Shopping — ראה TODO.
 
+## תמונות (2026-09-16)
+כל 7 המאמרים קיבלו תמונה ראשית (og:image לשיתוף + עמוד הבלוג). סגנון אחיד: צילום מגזיני, אור
+זמין, אמבר/כחול-לילה, בלי טקסט ובלי מוצר ממותג. `images/build_images.py` + `prompts.json` +
+`manifest.json` (job ids). 20 תמונות ≈ 40 קרדיט Higgsfield.
+
 ## מילות מפתח (עברית) — מפת יעד
 
 **ראשיות (עמוד מוצר):** משקפיים לחסימת אור כחול · משקפי אור כחול · משקפיים נגד אור כחול ·
@@ -86,7 +91,10 @@ Night Shift מול משקפיים — השוואה עם מדידה.
    (אותן מוטציות שבסקריפט). הסקריפט עצמו עם `SHOPIFY_ADMIN_TOKEN` הוא רק גיבוי.
 4. לפני הבחירה בנושא היא שואלת את Shopify אילו מאמרים כבר קיימים — כך גם אם `TOPICS.md`
    מאחור (למשל push שנכשל), לא ייכתב נושא כפול.
-5. מעדכנת `TOPICS.md` ודוחפת לענף שממנו עבדה (main אחרי המיזוג).
+5. מצרפת תמונה ראשית מ-`images/pool.json` (13 תמונות מוכנות לנושאים שבתור; Shopify מושך
+   מ-raw.githubusercontent.com ושומר עותק ב-CDN שלו). כשהמאגר נגמר — להריץ
+   `python images/build_images.py images/prompts.json` אחרי הוספת פרומפטים (Higgsfield nano_banana_2, ~2cr/תמונה).
+6. מעדכנת `TOPICS.md` ודוחפת לענף שממנו עבדה (main אחרי המיזוג).
 
 ריצת בדיקה 2026-09-16: פרסום עבד (`shift-workers-sleep`); ה-push ל-GitHub נכשל בהתחלה (הרשאות) ותוקן באותו יום — שניהם עובדים.
 ניהול: https://claude.ai/code/routines/trig_01QRxWXoSnT8n8Lzf8V72Fw2
