@@ -2,19 +2,10 @@
 
 הכול דברים שדורשים גישה/חשבון/החלטה שלך ואי אפשר לעשות דרך ה-API.
 
-## קודם כל — 2 דקות, אחרת המאמר השבועי לא נשמר בריפו
-
-### 0. הרשאת כתיבה ל-GitHub לרוטינה
-הרוטינה השבועית כבר מפרסמת לבד ל-Shopify (דרך מחבר Shopify של claude.ai — ריצת הבדיקה
-ב-2026-09-16 פרסמה את `shift-workers-sleep`). אבל ה-push שלה ל-GitHub נחסם (403): לאפליקציית
-Claude ב-GitHub אין גישה ל-`mirrorframestudio/amit-projects`. בלי זה התור ב-`TOPICS.md`
-לא מתעדכן והעותקים של המאמרים לא נשמרים (הרוטינה מגנה מכפילויות דרך Shopify, אז זה לא
-ישבור כלום — אבל הריפו יישאר מאחור).
-1. https://github.com/apps/claude/installations/select_target → בחר את הארגון **mirrorframestudio**
-   → Repository access → הוסף `amit-projects` (או All repositories) → Save.
-2. אם זה כבר מותקן: https://claude.ai/customize/connectors?auth_start=github&auth_start_force=1
-   → Reconnect GitHub.
-3. תגיד לי ואני מריץ את הרוטינה שוב לבדיקה.
+## ✅ סעיף 0 סגור (2026-09-16)
+הרוטינה השבועית מפרסמת ל-Shopify דרך מחבר Shopify של claude.ai ודוחפת לגיט — שניהם נבדקו
+ועובדים. (GitHub: אפליקציית Claude מותקנת על החשבון mirrorframestudio + חיבור GitHub ב-claude.ai.)
+אפשר למחוק את רוטינת הבדיקה "git push access test" ב-https://claude.ai/code/routines.
 
 ## השבוע — 30 דקות סה"כ, הכי משפיע
 

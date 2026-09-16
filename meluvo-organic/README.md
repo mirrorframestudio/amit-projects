@@ -88,7 +88,7 @@ Night Shift מול משקפיים — השוואה עם מדידה.
    מאחור (למשל push שנכשל), לא ייכתב נושא כפול.
 5. מעדכנת `TOPICS.md` ודוחפת לענף שממנו עבדה (main אחרי המיזוג).
 
-ריצת בדיקה 2026-09-16: פרסום עבד (`shift-workers-sleep`), ה-push ל-GitHub נחסם — ראה TODO סעיף 0.
+ריצת בדיקה 2026-09-16: פרסום עבד (`shift-workers-sleep`); ה-push ל-GitHub נכשל בהתחלה (הרשאות) ותוקן באותו יום — שניהם עובדים.
 ניהול: https://claude.ai/code/routines/trig_01QRxWXoSnT8n8Lzf8V72Fw2
 
 ## TODO של אמית — ראה `TODO-AMIT.md`
