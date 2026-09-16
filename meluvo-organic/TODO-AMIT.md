@@ -16,12 +16,10 @@
 
 ## השבוע — 30 דקות סה"כ, הכי משפיע
 
-### 1. Google Search Console (10 דק')
-בלי זה גוגל לא יודע שהאתר השתנה, ואין לנו נתונים על מה מדורג.
-1. https://search.google.com/search-console → Add property → **Domain** → `mymeluvo.com`
-2. אימות דרך DNS (TXT record) אצל רשם הדומיין.
-3. אחרי האימות: Sitemaps → הוסף `https://mymeluvo.com/sitemap.xml`.
-4. URL Inspection → הדבק את עמוד המשקפיים ואת `/blogs/news` → **Request Indexing**.
+### 1. Google Search Console — ✅ מאומת (2026-09-16), נשאר 2 דק'
+1. Sitemaps (תפריט שמאל) → הדבק `sitemap.xml` → Submit.
+2. URL inspection (למעלה) → הדבק את כתובת עמוד המשקפיים → **Request Indexing**. אותו דבר ל-`/blogs/news`.
+הנתונים ב-Performance מתחילים להופיע אחרי יום-יומיים.
 
 ### 2. כותרת + תיאור דף הבית (3 דק')
 Shopify Admin → Online Store → Preferences → **Title and meta description**:
