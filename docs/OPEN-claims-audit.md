@@ -132,3 +132,7 @@ magnification level, it is entirely up to your own visual preference." כלומ�
 **שאלה 7 (טכנולוגיה):** "laser". "ליתוגרפיית קרן יונים ממוקדת (FIB)" ירד מכל האתר
 (הטכנולוגיה, תהליך הייצור בבית, מפרט השבב, תיאור המטא) והוחלף ב"חריטת לייזר". "בחדר
 נקי בוואקום מלא" ירד - ואקום הוא של FIB, וחדר נקי לא אושר. אם יאשרו - להחזיר רק "חדר נקי".
+
+**שאלה 8 (בקרת איכות):** "every chip compared will character-by-character to the source
+file after engraving. We will ensure that the content of every chip is complete." מאשר את
+מה שהאתר אומר (השוואה תו-אחר-תו, שבב עם סטייה לא נשלח). "מהמעבדה" → "נשלח" - אין מעבדה.
