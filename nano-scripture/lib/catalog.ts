@@ -681,7 +681,8 @@ export const BOX_SPEC: { label: string; value: string }[] = [
 
 export const CARE_SPEC: { label: string; value: string }[] = [
   { label: 'שימוש יומיומי', value: 'להסיר לפני מקלחת, ים ובריכה' },
-  { label: 'ניקוי', value: 'בד מיקרופייבר יבש, בלי חומרי ניקוי אגרסיביים' },
+  // המפעל (17.9.2026): "Ultrasonic cleaning is not recommended, as vibration may affect the chip"
+  { label: 'ניקוי', value: 'בד מיקרופייבר יבש, בלי חומרי ניקוי אגרסיביים ובלי ניקוי אולטרסוני' },
   { label: 'אחסון', value: 'בקופסה המקורית, בנפרד מתכשיטים אחרים' },
   { label: 'אחריות', value: 'שנה על פגמי ייצור והלחמות. אינה חלה על שבר משימוש' },
   { label: 'החזרה', value: `${POLICY.returnDays} יום מקבלת החבילה, באריזה המקורית. משלוח ההחזרה על הלקוח; בפגם - עלינו` },

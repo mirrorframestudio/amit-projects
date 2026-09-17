@@ -147,3 +147,9 @@ from us, you will be able to examine them closely at any magnification level." �
 **שאלה 10 (מספר סידורי / תעודה):** "Every chip is identical and bears no labels." אין
 מספר סידורי, אין סימון אצווה, אין תעודה. "כל פריט יוצא עם מספר סידורי ותעודה" ירד מהבית
 ב-16.9 - ועכשיו יש לזה מקור. לא להחזיר בשום ניסוח.
+
+**שאלה 11 (חלון ואטימה):** "The protective window is glass. The chip is hermetically
+sealed. It should perform well under normal wear, including exposure to water, sweat and
+daily cosmetics. Ultrasonic cleaning is not recommended, as vibration may affect the chip."
+"ספיר סינתטי, קשיות 9 מוס" ירד (הטכנולוגיה, תהליך הייצור) → "זכוכית". האטימה והעמידות
+למים/זיעה/תמרוקים - מאושרות. חדש: לא ניקוי אולטרסוני - במפרט הטיפול ובעמוד הטכנולוגיה.
