@@ -18,13 +18,15 @@ export const AUTO_DISCOUNT = false;
 
 export const PROMO = {
   active: true,
-  percent: 20,
+  // 20% → 15% ב-17.9.2026 (עמית). הקופון MIKRA20 בווקומרס תקף עד 17.10 למי
+  // שכבר קיבל אותו; האתר עצמו מכיר רק את הקוד הנוכחי
+  percent: 15,
   /** מוזן בעגלה. באנגלית כדי שלא יידרש מעבר שפה בשדה */
-  code: 'MIKRA20',
-  headline: '20% הנחה על ההזמנה הראשונה',
-  sub: 'עם הקוד MIKRA20 בעגלה',
-  badge: '20%-',
-  pill: '20% הנחה',
+  code: 'MIKRA15',
+  headline: '15% הנחה על ההזמנה הראשונה',
+  sub: 'עם הקוד MIKRA15 בעגלה',
+  badge: '15%-',
+  pill: '15% הנחה',
 } as const;
 
 export const promoOn = PROMO.active && PROMO.percent > 0;

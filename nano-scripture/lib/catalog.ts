@@ -103,7 +103,11 @@ export type Product = {
   short: string;
   story: string;
   specs: { label: string; value: string }[];
-  /** הברכות שאפשר לצרוב על הדגם, לפי קובץ ההתאמה */
+  /**
+   * הברכות שאפשר לצרוב על הדגם, לפי קובץ ההזמנה הסופי של עמית
+   * (mikra new order.xlsx, 17.9.2026): גרסה 1 פרנסה, 2 הברכה שלך, 3 שמירה,
+   * 4 אשת חיל, 5 תינוק. הראשון ברשימה הוא ברירת המחדל בבורר.
+   */
   blessings: BlessingId[];
   /** הפסוק שממנו נגזר שם הדגם. מוצג לצד השם. */
   source?: { phrase: string; ref: string };
@@ -129,7 +133,7 @@ export const PRODUCTS: Product[] = [
     price: 749,
     cost: 31.9,
     image: '/products/YASNN004W.webp',
-    blessings: ['bracha', 'parnasa', 'eshet-chayil'],
+    blessings: ['bracha', 'eshet-chayil', 'shmira'],
     short: 'מדליון עץ החיים בכסף 925, השבב משובץ בין הענפים',
     story:
       'הדגם הגדול והמושקע בקטלוג. מדליון בקוטר 29.2 מ״מ, עץ חיים מגולף בכסף סטרלינג, ובנקודה שבה הענפים נפגשים - השבב, בתוך מסגרת זירקוניה.',
@@ -211,7 +215,7 @@ export const PRODUCTS: Product[] = [
     price: 299,
     cost: 6.0,
     image: '/products/OYANN012S.webp',
-    blessings: ['eshet-chayil'],
+    blessings: ['eshet-chayil', 'shmira'],
     short: 'חמסה בקו נקי, השבב משובץ בכף היד',
     story:
       'חמסה בצללית פתוחה, בלי עומס דקורטיבי. השבב יושב בדיוק במרכז כף היד, במסגרת משובצת - הפרשנות המודרנית ביותר לקמע הישן ביותר.',
@@ -238,7 +242,7 @@ export const PRODUCTS: Product[] = [
     price: 299,
     cost: 5.6,
     image: '/products/OYANN003S.webp',
-    blessings: ['shmira'],
+    blessings: ['shmira', 'parnasa'],
     short: 'מגן דוד בקווים חדים, השבב במרכז המשושה',
     story:
       'מגן דוד בגזרה גיאומטרית ונקייה, בלי עיטורים. השבב ממוקם בדיוק במרכז - בנקודה שבה שני המשולשים נפגשים.',
@@ -289,7 +293,7 @@ export const PRODUCTS: Product[] = [
     price: 299,
     cost: 6.0,
     image: '/products/OYANN011S.webp',
-    blessings: ['eshet-chayil'],
+    blessings: ['eshet-chayil', 'shmira'],
     short: 'תליון עין אופקי, השבב הוא האישון',
     story:
       'תליון עין שמונח לרוחב השרשרת ולא תלוי ממנה - גזרה שנחה שטוח על עצם הבריח. השבב, במסגרת משובצת, הוא האישון עצמו.',
@@ -314,7 +318,7 @@ export const PRODUCTS: Product[] = [
     price: 279,
     cost: 5.6,
     image: '/products/OYANN006S.webp',
-    blessings: ['shmira'],
+    blessings: ['shmira', 'parnasa'],
     short: 'תליון מלבני אנכי, מינימלי לחלוטין',
     story:
       'מלבן אנכי חלק, בלי סמל ובלי קישוט. השבב יושב בקצה התחתון כמו חותמת. הדגם הנקי ביותר בקטלוג - אין בו קו אחד שאינו נחוץ.',
@@ -339,7 +343,7 @@ export const PRODUCTS: Product[] = [
     price: 329,
     cost: 6.8,
     image: '/products/OYANN001G.webp',
-    blessings: ['shmira', 'eshet-chayil'],
+    blessings: ['shmira', 'eshet-chayil', 'bracha'],
     short: 'שרשרת זהב אסימטרית - לב תלוי, והשבב גבוה ממנו',
     story:
       'שני אלמנטים על שרשרת אחת: לב מלא בגימור זהב שתלוי במרכז, והשבב שיושב גבוה יותר על הצד. האסימטריה מכוונת - היא מה שהופך אותה למעניינת.',
@@ -394,7 +398,7 @@ export const PRODUCTS: Product[] = [
     price: 349,
     cost: 7.5,
     image: '/products/OYANB007B.webp',
-    blessings: ['bracha', 'parnasa'],
+    blessings: ['bracha', 'parnasa', 'shmira'],
     short: 'אותו צמיד קלוע, בגימור שחור מלא',
     story:
       'הגרסה השחורה. ציפוי PVD שחור על כל הצמיד, כך שהשבב הכחול הוא הצבע היחיד עליו. הבחירה הפחות שגרתית, ובעינינו החזקה יותר.',
@@ -420,7 +424,7 @@ export const PRODUCTS: Product[] = [
     price: 289,
     cost: 6.0,
     image: '/products/OYANB002S.webp',
-    blessings: ['shmira', 'eshet-chayil'],
+    blessings: ['shmira', 'eshet-chayil', 'bracha'],
     short: 'צמיד שרשרת עדין עם לב חלק והשבב לצידו',
     story:
       'צמיד יומיומי: לב חלק בקצה אחד, השבב במסגרת משובצת בקצה השני. עדין מספיק לענידה בשכבות עם צמידים נוספים.',
