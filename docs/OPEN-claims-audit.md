@@ -136,3 +136,10 @@ magnification level, it is entirely up to your own visual preference." כלומ�
 **שאלה 8 (בקרת איכות):** "every chip compared will character-by-character to the source
 file after engraving. We will ensure that the content of every chip is complete." מאשר את
 מה שהאתר אומר (השוואה תו-אחר-תו, שבב עם סטייה לא נשלח). "מעבדה" נשאר - עמית: "זה מעבדה". מה שאסור הוא מעבדה *בשם*.
+
+**שאלה 9 (צילומי מיקרוסקופ):** "Once all the chips have been mounted onto the jewelry, we
+can take photos for you before shipping. Of course, since you also ordered two microscopes
+from us, you will be able to examine them closely at any magnification level." כלומר:
+צילומים אמיתיים מגיעים עם המשלוח הבא, ולעמית יהיו שני מיקרוסקופים - אפשר לצלם, למדוד
+את גובה האות (0.035) ולצלם וידאו. כשיש צילום: עמוד המוצר (קופסת "איך אפשר לדעת"),
+הטכנולוגיה, ו-Google Business Profile - עם ציון ההגדלה, ובלי להחליף את ההדמיה בלי לומר.
