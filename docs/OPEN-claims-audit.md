@@ -106,3 +106,17 @@ app/blessings/page.tsx:42,57
 
 כשהמספר האמיתי ייקבע, כדאי שיישב ב-`lib/` כקבוע יחיד ושכל השאר ייגזר
 ממנו — בדיוק כמו `LONGEST_BLESSING_CHARS`, שכבר בנוי כך.
+
+
+---
+
+## עדכון 17.9.2026 - תשובת המפעל על גובה האות
+
+> They can't be seen by the naked eye. Proportionally, each regular letter is
+> about 0.035 mm in height, and even the larger title letters are no bigger
+> than 0.1 mm.
+
+סעיפים 2-3 נסגרו: האתר עודכן ל-0.035 מ״מ (35 מיקרון) לאות רגילה, עד 0.1 מ״מ
+לאותיות כותרת, ו"פי 500" ירד. "שטח כתיבה 0.5 מ״מ²" ירד מהאתר עד שהמפעל יענה
+על מידות השבב ושטח הכתיבה (שאלות 5-6 בהודעה ששלחנו). `nano-engrave/src/texts.py`
+(15 מיקרון) לא שונה - הוא מייצר את קבצי הצריבה, ושינוי שם הוא שינוי במוצר.

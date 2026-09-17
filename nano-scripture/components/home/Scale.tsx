@@ -8,9 +8,9 @@ import { BLESSINGS, TOTAL_BLESSING_WORDS } from '@/lib/blessings';
  */
 const STATS = [
   { value: TOTAL_BLESSING_WORDS.toLocaleString('he-IL'), label: 'מילים בחמשת הנוסחים' },
-  { value: '0.5', label: 'מ״מ רוחב שטח הכתיבה' },
-  { value: '9', label: 'מיקרון גובה האות' },
-  { value: '500', label: 'הגדלה נדרשת לקריאה' },
+  { value: '5', label: 'מ״מ - חלון הצריבה' },
+  { value: '0.035', label: 'מ״מ - גובה האות' },
+  { value: '0.1', label: 'מ״מ - האות הגדולה ביותר, בכותרות' },
 ];
 
 export default function Scale() {
@@ -30,9 +30,10 @@ export default function Scale() {
           </h2>
 
           <p className="lede reveal mt-7 max-w-lg" style={{ ['--d' as string]: '160ms' }}>
-            שבב הסיליקון שבליבת כל תכשיט קטן מראש סיכה. עליו נצרבות שורות הכתב
-            בגובה של תשעה מיקרון - כשמינית מעובי שערת אדם. האות אינה מודפסת ואינה
-            מצופה: היא חלק מהחומר עצמו, ולכן לא תדהה ולא תימחק.
+            שבב הסיליקון שבליבת כל תכשיט יושב בחלון של חמישה מילימטרים. עליו
+            נצרבות שורות הכתב בגובה של 0.035 מילימטר - כמחצית מעובי שערת אדם.
+            האות אינה מודפסת ואינה מצופה: היא חלק מהחומר עצמו, ולכן לא תדהה
+            ולא תימחק.
           </p>
 
           <dl className="mt-12 grid grid-cols-2 gap-x-8 gap-y-8">

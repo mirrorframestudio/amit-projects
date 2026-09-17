@@ -14,7 +14,8 @@ import Image from 'next/image';
  * לכך, והתוצאה נראתה כתמונה מטושטשת ולא כחלון כתיבה. עדיף שלושה
  * שלבים אמיתיים מארבעה שאחד מהם מזייף.
  *
- * המידות אמיתיות: התכשיט כ־20 מ״מ, השבב 5 מ״מ, האות 0.009 מ״מ.
+ * המידות: התכשיט כ־20 מ״מ, חלון הצריבה 5 מ״מ, האות 0.035 מ״מ (תשובת
+ * המפעל, 17.9.2026).
  */
 const STEPS = [
   { label: 'התכשיט', size: 'כ־20 מ״מ', scale: 1, x: '50%', y: '50%' },
@@ -42,7 +43,7 @@ export function ZoomTile({ photo, accent }: { photo: string; accent: string }) {
       >
         <span style={{ fontSize: 'var(--fs-sm)' }}>השבב במשבצת</span>
         <span className="num" style={{ fontSize: 'var(--fs-xs)', opacity: 0.85 }}>
-          5 מ״מ · הכתב על 0.7 מ״מ ממנו
+          5 מ״מ · חלון הצריבה
         </span>
       </figcaption>
       <span
@@ -153,7 +154,7 @@ export default function ZoomLadder({
         >
           <span style={{ fontSize: 'var(--fs-xs)' }}>הכתב</span>
           <span className="num" style={{ fontSize: 'var(--fs-2xs)', opacity: 0.85 }}>
-            0.009 מ״מ
+            0.035 מ״מ
           </span>
         </figcaption>
       </figure>

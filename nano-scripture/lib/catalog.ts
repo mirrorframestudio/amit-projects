@@ -660,9 +660,13 @@ export function priceRange(id: CategoryId) {
 
 /** מודול הננו — זהה בכל הפריטים */
 export const CHIP_SPEC: { label: string; value: string }[] = [
-  { label: 'חלון הצריבה', value: '5 × 5 מ״מ · שטח כתיבה כ־0.5 מ״מ²' },
+  // "שטח כתיבה 0.5 מ״מ²" ישב כאן בלי מקור, ועם 4,937 תווים באות של
+  // 0.035 מ״מ הוא גם בלתי אפשרי חשבונית. ירד עד שהמפעל יענה על השטח
+  { label: 'חלון הצריבה', value: '5 × 5 מ״מ' },
   { label: 'טכנולוגיה', value: 'ליתוגרפיית קרן יונים ממוקדת' },
-  { label: 'גובה האות', value: 'כ־9 מיקרון' },
+  // תשובת המפעל (17.9.2026): "each regular letter is about 0.035 mm in
+  // height, and even the larger title letters are no bigger than 0.1 mm"
+  { label: 'גובה האות', value: 'כ־0.035 מ״מ · אותיות הכותרת עד 0.1 מ״מ' },
   { label: 'מצע', value: 'סיליקון מונו־קריסטלי' },
   { label: 'הגנה', value: 'חלון אטום, עמיד למים, לזיעה ולתמרוקים' },
   { label: 'בקרה', value: 'השוואה לנוסח המקור לפני השיבוץ' },

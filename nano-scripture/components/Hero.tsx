@@ -115,7 +115,7 @@ export default function Hero() {
             }}
           >
             עד <span className="num">{LONGEST_BLESSING_CHARS.toLocaleString('he-IL')}</span> תווים
-            נצרבים על שטח של חצי מילימטר רבוע. חמישה נוסחים - אחד שלכם.
+            נצרבים באותיות של 0.035 מילימטר. חמישה נוסחים - אחד שלכם.
           </p>
 
           <div
