@@ -153,3 +153,12 @@ sealed. It should perform well under normal wear, including exposure to water, s
 daily cosmetics. Ultrasonic cleaning is not recommended, as vibration may affect the chip."
 "ספיר סינתטי, קשיות 9 מוס" ירד (הטכנולוגיה, תהליך הייצור) → "זכוכית". האטימה והעמידות
 למים/זיעה/תמרוקים - מאושרות. חדש: לא ניקוי אולטרסוני - במפרט הטיפול ובעמוד הטכנולוגיה.
+
+**שאלה 12 (עמידות):** "The pattern is etched onto the glass surface and will not easily fade
+or oxidize over time under normal use. We do not have a dedicated, independent test report
+for this product." שלושה דברים: (1) הכתב חרוט על **זכוכית** - "שבב סיליקון" / "סיליקון
+מונו-קריסטלי" / "פרוסת סיליקון מלוטשת... מצופה זהב" ירדו מכל מקום (אתר, מדריכים, תקנון,
+ביו, דף אמת) → "שבב זכוכית"; (2) "לא תדהה ולא תימחק" → "בשימוש רגיל לא תדהה ולא תתחמצן" -
+זה מה שאמרו; (3) אין דוח בדיקה עצמאי - לא לטעון "נבדק", "תקן", "מעבדה חיצונית".
+**שאלת המשך למפעל:** האם השבב עצמו הוא זכוכית (והכתב חרוט על פניו), או שבב אחר מתחת
+לחלון זכוכית? ומה נותן את הצבע הכחול?

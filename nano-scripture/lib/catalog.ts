@@ -668,7 +668,7 @@ export const CHIP_SPEC: { label: string; value: string }[] = [
   // תשובת המפעל (17.9.2026): "each regular letter is about 0.035 mm in
   // height, and even the larger title letters are no bigger than 0.1 mm"
   { label: 'גובה האות', value: 'כ־0.035 מ״מ · אותיות הכותרת עד 0.1 מ״מ' },
-  { label: 'מצע', value: 'סיליקון מונו־קריסטלי' },
+  { label: 'מצע', value: 'זכוכית' },
   { label: 'הגנה', value: 'חלון אטום, עמיד למים, לזיעה ולתמרוקים' },
   { label: 'בקרה', value: 'השוואה לנוסח המקור לפני השיבוץ' },
 ];
