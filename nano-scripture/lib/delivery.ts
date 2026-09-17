@@ -59,13 +59,12 @@ export function addBusinessDays(from: Date, days: number) {
 }
 
 /**
- * מתי חבילה שמוזמנת עכשיו יוצאת: ביום העסקים הבא, ואם ההזמנה נכנסה
- * אחרי שעת הסגירה - היא של מחר, ויוצאת ביום העסקים שאחריו.
+ * מתי חבילה שמוזמנת עכשיו יוצאת: היום, אם זה יום עסקים והשעה לפני
+ * הסגירה; אחרת ביום העסקים הבא.
  */
 export function dispatchDate(from: Date = new Date()) {
-  const base = new Date(from);
-  if (base.getHours() >= POLICY.orderCutoffHour) base.setDate(base.getDate() + 1);
-  return addBusinessDays(base, 1);
+  if (isBusinessDay(from) && from.getHours() < POLICY.orderCutoffHour) return new Date(from);
+  return addBusinessDays(from, 1);
 }
 
 /** מתי חבילה שמוזמנת עכשיו מגיעה: ימי המשלוח נספרים מהיציאה */

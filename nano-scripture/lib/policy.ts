@@ -14,9 +14,9 @@ export const POLICY = {
   platingRhodiumMonths: 6,
 
   /**
-   * שעת הסגירה להזמנות. עמית (17.9.2026): "אין זמן אריזה - הזמנה עד
-   * 18:00 יוצאת למשלוח למחרת". אחרי השעה הזו ההזמנה נחשבת של יום
-   * העסקים הבא. ימי המשלוח נספרים מהיציאה, לא מההזמנה.
+   * שעת הסגירה להזמנות. עמית (17.9.2026): "הזמנה עד 18:00 תצא היום".
+   * אחרי השעה הזו - ביום העסקים הבא. ימי המשלוח נספרים מהיציאה, לא
+   * מההזמנה.
    */
   orderCutoffHour: 18,
   deliveryMinDays: 2,
@@ -121,7 +121,7 @@ export const deliveryDays = `${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays}
 export const deliveryLine = `${deliveryDays} ימי עסקים`;
 
 /** מתי החבילה יוצאת - המשפט היחיד. "עד 18:00" נגזר מהמדיניות */
-export const dispatchLine = `הזמנה עד ${POLICY.orderCutoffHour}:00 יוצאת למשלוח ביום העסקים הבא`;
+export const dispatchLine = `הזמנה עד ${POLICY.orderCutoffHour}:00 יוצאת למשלוח באותו יום`;
 
 /** מה שהעגלה ודף המוצר אומרים על המשלוח, ממקום אחד */
 export const shippingNote =
