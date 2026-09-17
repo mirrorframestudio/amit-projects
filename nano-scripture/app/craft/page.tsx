@@ -6,7 +6,7 @@ import ZoomLadder from '@/components/ZoomLadder';
 import { wornFor, wornFocus } from '@/lib/worn';
 import { BLESSINGS, LONGEST_BLESSING_CHARS } from '@/lib/blessings';
 import Accordion, { type QA } from '@/components/Accordion';
-import { deliveryLine } from '@/lib/policy';
+import { deliveryLine, dispatchLine } from '@/lib/policy';
 
 export const metadata: Metadata = {
   title: 'הטכנולוגיה',
@@ -51,7 +51,7 @@ const FAQ: QA[] = [
   },
   {
     q: 'כמה זמן לוקח לקבל את התכשיט?',
-    a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה, ומגיעה תוך ${deliveryLine}.`,
+    a: `${dispatchLine}, ומגיעה תוך ${deliveryLine} מהיציאה.`,
   },
   {
     q: 'מה כוללת האחריות?',

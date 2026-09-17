@@ -109,8 +109,8 @@ function shippingDetails(product: Product) {
     shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IL' },
     deliveryTime: {
       '@type': 'ShippingDeliveryTime',
-      // יום עסקים אחד להוצאת החבילה, ואז חלון המשלוח עצמו
-      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+      // יוצא ביום העסקים הבא; אחרי שעת הסגירה - יום נוסף
+      handlingTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 2, unitCode: 'DAY' },
       transitTime: {
         '@type': 'QuantitativeValue',
         minValue: POLICY.deliveryMinDays,

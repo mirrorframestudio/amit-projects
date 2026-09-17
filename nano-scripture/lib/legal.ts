@@ -5,7 +5,7 @@ const whatsapp = COMPANY.whatsapp
   : 'בוואטסאפ';
 import { BRAND } from './brand';
 import { PROMO } from './promo';
-import { POLICY, deliveryLine, shippingNote } from './policy';
+import { POLICY, deliveryLine, dispatchLine, shippingNote } from './policy';
 import { GIFT_BOX } from './extras';
 import { analyticsOn } from './analytics';
 
@@ -281,7 +281,7 @@ export const LEGAL: LegalDoc[] = [
       {
         h: 'זמני אספקה',
         p: [
-          'הזמנות נארזות ויוצאות למשלוח תוך יום עסקים מרגע ההזמנה.',
+          `${dispatchLine}. הזמנה שמתקבלת אחרי השעה הזו נחשבת להזמנה של יום העסקים הבא.`,
           `משלוח עד הבית מגיע תוך ${deliveryLine}, מבוטח. איסוף עצמי ממודיעין בתיאום מראש.`,
           'ימי עסקים אינם כוללים שבתות, חגים וערבי חג.',
         ],

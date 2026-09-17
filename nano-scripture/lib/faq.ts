@@ -13,7 +13,7 @@
 import type { Product } from './catalog';
 import { formatPrice } from './catalog';
 import { getBlessing, type Blessing } from './blessings';
-import { POLICY, SHIPPING, shippingNote } from './policy';
+import { POLICY, dispatchLine, SHIPPING, shippingNote } from './policy';
 import { GIFT_BOX } from './extras';
 
 export type QA = { q: string; a: string };
@@ -40,7 +40,7 @@ export function productFaq(product: Product, b: Blessing): QA[] {
     },
     {
       q: 'כמה זמן לוקח המשלוח?',
-      a: `החבילה יוצאת תוך יום עסקים מרגע ההזמנה ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים, מבוטחת. דמי המשלוח ${shippingNote === 'מחושב בתשלום' ? 'מוצגים בעת התשלום' : shippingNote}.`,
+      a: `${dispatchLine}, ומגיעה תוך ${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays} ימי עסקים מהיציאה, מבוטחת. דמי המשלוח ${shippingNote === 'מחושב בתשלום' ? 'מוצגים בעת התשלום' : shippingNote}.`,
     },
     {
       q: 'אפשר לאסוף במקום לקבל משלוח?',

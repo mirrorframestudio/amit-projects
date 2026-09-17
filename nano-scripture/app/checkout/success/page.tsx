@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { POLICY, deliveryLine } from '@/lib/policy';
+import { POLICY, deliveryLine, dispatchLine } from '@/lib/policy';
 import { COMPANY, telHref, waHref } from '@/lib/company';
 import OrderDone from './OrderDone';
 
@@ -52,7 +52,7 @@ export default async function SuccessPage({
           {[
             ['הנוסח נצרב', 'השבב נצרב לפי ההזמנה ומושווה לקובץ המקור תו אחר תו לפני שהוא משובץ.'],
             ['הפריט נארז', 'בקופסה מרופדת, עם כרטיס שנושא את שם הנוסח, מקורותיו והנוסח המלא.'],
-            ['יוצא למשלוח', `החבילה יוצאת תוך יום עסקים ומגיעה תוך ${deliveryLine}, מבוטחת.`],
+            ['יוצא למשלוח', `${dispatchLine}, ומגיעה תוך ${deliveryLine} מהיציאה, מבוטחת.`],
           ].map(([h, p], i) => (
             <li key={h} className="flex gap-4">
               <span

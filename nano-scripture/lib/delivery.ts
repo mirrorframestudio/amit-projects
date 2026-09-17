@@ -58,11 +58,22 @@ export function addBusinessDays(from: Date, days: number) {
   return d;
 }
 
-/** מתי חבילה שמוזמנת עכשיו מגיעה, לפי המדיניות */
+/**
+ * מתי חבילה שמוזמנת עכשיו יוצאת: ביום העסקים הבא, ואם ההזמנה נכנסה
+ * אחרי שעת הסגירה - היא של מחר, ויוצאת ביום העסקים שאחריו.
+ */
+export function dispatchDate(from: Date = new Date()) {
+  const base = new Date(from);
+  if (base.getHours() >= POLICY.orderCutoffHour) base.setDate(base.getDate() + 1);
+  return addBusinessDays(base, 1);
+}
+
+/** מתי חבילה שמוזמנת עכשיו מגיעה: ימי המשלוח נספרים מהיציאה */
 export function deliveryWindow(from: Date = new Date()) {
+  const out = dispatchDate(from);
   return {
-    from: addBusinessDays(from, POLICY.deliveryMinDays),
-    to: addBusinessDays(from, POLICY.deliveryMaxDays),
+    from: addBusinessDays(out, POLICY.deliveryMinDays),
+    to: addBusinessDays(out, POLICY.deliveryMaxDays),
   };
 }
 

@@ -8,22 +8,36 @@ import { validateLead, EMPTY_LEAD, type Lead, type LeadErrors } from '@/lib/subs
 import { trackLead } from '@/lib/analytics';
 
 const SEEN = 'mikra:club';
-const DELAY_MS = 18_000;
-const SCROLL_TRIGGER = 0.35;
+/** כמה עמודים נצפו בביקור הזה. sessionStorage - נמחק עם הלשונית */
+const VIEWS = 'mikra:views';
+/** מהעמוד השני והלאה: בעמוד הראשון עוד לא נבנה שום אמון */
+const MIN_VIEWS = 2;
+/** ובעמוד הזה עצמו - אחרי שקראו בו, לא ברגע שנחתו */
+const DELAY_MS = 25_000;
+const SCROLL_TRIGGER = 0.4;
+/** ולא בשניות הראשונות, גם אם גללו מהר - זה נראה כמו מארב */
+const MIN_ON_PAGE_MS = 8_000;
 
 /**
  * הצטרפות למועדון, בתמורה לקוד ההנחה.
  *
  * ------------------------------------------------------------------
- * הפופאפ נפתח פעם אחת בחיי המבקר, ולא פעם אחת בכל ביקור.
+ * מתי הוא נפתח - לפי המחקר, לא לפי תחושה.
  *
- * localStorage שורד סגירת לשונית, ולכן מי שסירב לא ייתקל בזה שוב.
- * פופאפ שחוזר הוא הסיבה מספר אחת לכך שמבקרים חוסמים אותם, ומאז
- * 2017 גוגל גם מוריד בדירוג עמודי מובייל שחוסמים תוכן בכניסה - ולכן
- * הוא גם ממתין 18 שניות או שליש גלילה, ולא קופץ מיד.
+ * NN/g (2017, 452 נשאלים, 23 פורמטים): חלון קופץ הוא הפורמט השנוא
+ * ביותר, בדסקטופ ובמובייל - ובמיוחד כשהוא מקדים את התוכן. NN/g
+ * (מדרג המחויבות, 2016): לא מבקשים מידע אישי לפני שענו על צורכי
+ * האמון הבסיסיים - רלוונטיות ואמינות באות קודם. מכאן שני התנאים:
  *
- * הוא גם לא נפתח בצ'קאאוט. לחסום טופס תשלום בפופאפ הנחה זה לשלם
- * בהמרה בשביל ליד.
+ * 1. לא בעמוד הראשון של הביקור. מי שרואה עמוד שני כבר החליט
+ *    שהמקום מעניין אותו, וזה הרגע הראשון שבו בקשה אינה מארב.
+ * 2. בעמוד הזה עצמו - אחרי 40% גלילה או 25 שניות, ואף פעם לא
+ *    בשמונה השניות הראשונות.
+ *
+ * ופעם אחת בחיי המבקר (localStorage), לא בצ'קאאוט, ולא כשהעגלה
+ * פתוחה - שם כבר יש כוונת קנייה, ופופאפ הנחה קוטע אותה בשביל ליד.
+ * גוגל מוריד בדירוג עמודי מובייל שחוסמים תוכן בכניסה; התנאי הראשון
+ * פותר גם את זה.
  * ------------------------------------------------------------------
  */
 export default function SignupPopup() {
@@ -57,16 +71,22 @@ export default function SignupPopup() {
 
   /* ---------- מתי להיפתח ---------- */
   useEffect(() => {
-    if (!promoOn || pathname?.startsWith('/checkout')) return;
+    if (!promoOn || !pathname || pathname.startsWith('/checkout') || pathname.startsWith('/legal')) return;
+
+    let views = 0;
     try {
       if (localStorage.getItem(SEEN)) return;
+      views = Number(sessionStorage.getItem(VIEWS) ?? 0) + 1;
+      sessionStorage.setItem(VIEWS, String(views));
     } catch {
       return;
     }
+    if (views < MIN_VIEWS) return;
 
+    const landed = Date.now();
     let done = false;
     const fire = () => {
-      if (done) return;
+      if (done || Date.now() - landed < MIN_ON_PAGE_MS) return;
       // מי שכבר בעגלה נמצא צעד לפני התשלום. פופאפ הנחה שם קוטע
       // כוונת קנייה בשביל ליד, וזו עסקה גרועה
       if (useCart.getState().open) return;

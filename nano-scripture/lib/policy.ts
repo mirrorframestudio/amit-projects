@@ -13,6 +13,12 @@ export const POLICY = {
   platingGoldMonths: 3,
   platingRhodiumMonths: 6,
 
+  /**
+   * שעת הסגירה להזמנות. עמית (17.9.2026): "אין זמן אריזה - הזמנה עד
+   * 18:00 יוצאת למשלוח למחרת". אחרי השעה הזו ההזמנה נחשבת של יום
+   * העסקים הבא. ימי המשלוח נספרים מהיציאה, לא מההזמנה.
+   */
+  orderCutoffHour: 18,
   deliveryMinDays: 2,
   deliveryMaxDays: 4,
   returnDays: 30,
@@ -113,6 +119,9 @@ export function freeShippingGap(itemsListTotal: number) {
 /** "1-4 ימי עסקים" - הניסוח היחיד. ה־num עוטף במקומות שצריך LTR */
 export const deliveryDays = `${POLICY.deliveryMinDays}-${POLICY.deliveryMaxDays}`;
 export const deliveryLine = `${deliveryDays} ימי עסקים`;
+
+/** מתי החבילה יוצאת - המשפט היחיד. "עד 18:00" נגזר מהמדיניות */
+export const dispatchLine = `הזמנה עד ${POLICY.orderCutoffHour}:00 יוצאת למשלוח ביום העסקים הבא`;
 
 /** מה שהעגלה ודף המוצר אומרים על המשלוח, ממקום אחד */
 export const shippingNote =

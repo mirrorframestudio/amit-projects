@@ -48,9 +48,6 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-  /** הקדשה לכרטיס שבקופסה. נשלחת כהערת ההזמנה */
-  const [note, setNote] = useState('');
-  const [noteOpen, setNoteOpen] = useState(false);
   /** מספר ההזמנה כשחוזרים מדף הסולק בלי לשלם */
   const [cancelled, setCancelled] = useState<string | null>(null);
 
@@ -70,13 +67,8 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
     try {
       const raw = sessionStorage.getItem(DRAFT_KEY);
       if (raw) {
-        const draft = JSON.parse(raw) as Partial<Customer> & { note?: string };
-        const { note: savedNote, ...rest } = draft;
-        setCustomer((c) => ({ ...c, ...rest, terms: false, marketing: false }));
-        if (savedNote) {
-          setNote(savedNote);
-          setNoteOpen(true);
-        }
+        const draft = JSON.parse(raw) as Partial<Customer>;
+        setCustomer((c) => ({ ...c, ...draft, terms: false, marketing: false }));
       }
     } catch {
       /* אחסון חסום - הטופס פשוט מתחיל ריק */
@@ -91,11 +83,11 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
     if (!ready) return;
     try {
       // undefined נופל ב-JSON, וכך ההסכמות לא נשמרות
-      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ ...customer, terms: undefined, marketing: undefined, note }));
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ ...customer, terms: undefined, marketing: undefined }));
     } catch {
       /* אין אחסון - אין טיוטה */
     }
-  }, [customer, note, ready]);
+  }, [customer, ready]);
 
   /**
    * תחילת צ'קאאוט. נורה פעם אחת, ורק אחרי ההידרציה - לפניה העגלה
@@ -114,6 +106,7 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
   // הסף נמדד על המחירון, כמו בשרת. listTotal ולא subtotal
   const shipCost = shippingCost(customer.shipping, totals.listTotal);
   const total = totals.subtotal + giftFee + shipCost;
+  const count = lines.reduce((n, l) => n + l.qty, 0);
 
   const set = (key: keyof Customer, value: string | boolean) => {
     const next = { ...customer, [key]: value };
@@ -191,7 +184,7 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer, lines, gift, code, note: note.trim().slice(0, 500) }),
+        body: JSON.stringify({ customer, lines, gift, code }),
       });
       const data = await res.json();
 
@@ -253,6 +246,67 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
       </div>
     );
   }
+
+  /* ---------- הרשימה והסכומים, פעם אחת לשני המקומות ---------- */
+  const summary = (
+    <>
+            <ul className="mt-5">
+              {lines.map((l) => {
+                const p = getProduct(l.slug);
+                const b = getBlessing(l.blessing);
+                if (!p) return null;
+                return (
+                  <li
+                    key={`${l.slug}-${l.blessing}`}
+                    className="flex gap-3.5 py-4"
+                    style={{ borderTop: '1px solid var(--line)' }}
+                  >
+                    <span className="tile relative shrink-0" style={{ width: 54, height: 54, borderRadius: 'var(--radius)' }}>
+                      <Image src={p.image} alt="" fill sizes="54px" className="object-contain p-1" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="display block" style={{ fontSize: 'var(--fs-sm)' }}>{p.name}</span>
+                      <span className="block" style={{ fontSize: 'var(--fs-2xs)', color: b.accentInk }}>
+                        {b.plain}
+                      </span>
+                      <span className="num block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
+                        {l.qty} × {formatPrice(p.price)}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div style={{ borderTop: '1px solid var(--line)' }} className="pt-4">
+              {totals.discount > 0 && (
+                <div className="mb-2 flex justify-between" style={{ fontSize: 'var(--fs-sm)' }}>
+                  <span style={{ color: 'var(--sale)' }}>{PROMO.pill} · {PROMO.code}</span>
+                  <span className="num" style={{ color: 'var(--sale)' }}>−{formatPrice(totals.discount)}</span>
+                </div>
+              )}
+              {giftFee > 0 && (
+                <div className="mb-2 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
+                  <span>{GIFT_BOX.title}</span>
+                  <span className="num">{formatPrice(giftFee)}</span>
+                </div>
+              )}
+              <div className="mb-3 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
+                <span>{ship.label}</span>
+                <span className={shipCost ? 'num' : undefined} style={{ color: shipCost ? undefined : 'var(--accent-deep)' }}>
+                  {shipCost ? formatPrice(shipCost) : 'חינם'}
+                </span>
+              </div>
+              <div
+                className="flex items-baseline justify-between pt-3"
+                style={{ borderTop: '1px solid var(--line)' }}
+              >
+                <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>סה״כ</span>
+                <span className="num display" style={{ fontSize: 'var(--fs-xl)' }}>{formatPrice(total)}</span>
+              </div>
+            </div>
+    </>
+  );
 
   return (
     <form onSubmit={submit} className="grid gap-12 lg:grid-cols-[1.15fr_.85fr] lg:gap-20" noValidate>
@@ -402,49 +456,6 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
           </div>
         )}
 
-        {/* ---------- הקדשה ---------- */}
-        {/*
-          מה שהמקבל קורא ראשון הוא לא הנוסח - זה מי שלח. הקדשה קצרה
-          עונה על "יבינו שזה ממני?", השאלה השנייה של מי שקונה מתנה
-          מרחוק. נשלחת כהערת ההזמנה (customer_note) ונכתבת ביד בכרטיס.
-          פתוחה כשזו מתנה; אחרת קישור אחד.
-        */}
-        {(gift || customer.toRecipient || noteOpen) ? (
-          <label className="mt-8 block">
-            <span className="block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
-              הקדשה לכרטיס שבקופסה <span style={{ color: 'var(--ink-3)' }}>(לא חובה)</span>
-            </span>
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value.slice(0, 500))}
-              rows={3}
-              maxLength={500}
-              className="mt-1.5 w-full px-3.5 py-3"
-              style={{
-                fontSize: 'var(--fs-base)',
-                lineHeight: 1.6,
-                borderRadius: 'var(--radius)',
-                border: '1px solid var(--line-strong)',
-                background: 'var(--surface)',
-                color: 'var(--ink)',
-                resize: 'vertical',
-              }}
-            />
-            <span className="mt-1 block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
-              נכתבת ביד על כרטיס הנוסח שבקופסה. עד 500 תווים.
-            </span>
-          </label>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setNoteOpen(true)}
-            className="link-u mt-8 block"
-            style={{ fontSize: 'var(--fs-sm)', color: 'var(--accent-deep)' }}
-          >
-            להוסיף הקדשה לכרטיס שבקופסה ←
-          </button>
-        )}
-
         {/* אישור התקנון: חובה, לא מסומן מראש, ועם קישור שנפתח בלשונית
             נפרדת כדי שהטופס לא יאבד. דיוור: רשות, ובנפרד - סעיף 30א
             דורש הסכמה מפורשת ונפרדת, לא כרוכה באישור התנאים */}
@@ -545,67 +556,34 @@ export default function CheckoutForm({ paymentReady = false }: { paymentReady?: 
       </div>
 
       {/* ---------- סיכום ---------- */}
-      <aside className="lg:sticky lg:top-32 lg:self-start">
+      {/*
+        בטלפון הסיכום ישב מתחת לכפתור: ממלאים שבעה שדות ומגיעים ל"₪328"
+        בלי לראות ממה הוא מורכב. עכשיו בטלפון הוא שורה מקופלת מעל
+        הטופס - פריטים וסכום - שנפתחת לאותו כרטיס; במסך רחב הכרטיס
+        עומד ליד הטופס כמו קודם.
+      */}
+      <details className="order-first lg:hidden" style={{ borderBottom: '1px solid var(--line)' }}>
+        <summary
+          className="flex cursor-pointer list-none items-baseline justify-between py-4"
+          style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}
+        >
+          <span>
+            ההזמנה · {count === 1 ? 'פריט אחד' : `${count} פריטים`}
+            <span style={{ color: 'var(--ink-3)' }}> · לפרטים</span>
+          </span>
+          <span className="num display" style={{ fontSize: 'var(--fs-lg)', color: 'var(--ink)' }}>
+            {formatPrice(total)}
+          </span>
+        </summary>
+        <div className="pb-6">{summary}</div>
+      </details>
+
+      <aside className="hidden lg:sticky lg:top-32 lg:block lg:self-start">
         <div className="card p-7">
           <p className="display" style={{ fontSize: 'var(--fs-lg)' }}>
             ההזמנה
           </p>
-
-          <ul className="mt-5">
-            {lines.map((l) => {
-              const p = getProduct(l.slug);
-              const b = getBlessing(l.blessing);
-              if (!p) return null;
-              return (
-                <li
-                  key={`${l.slug}-${l.blessing}`}
-                  className="flex gap-3.5 py-4"
-                  style={{ borderTop: '1px solid var(--line)' }}
-                >
-                  <span className="tile relative shrink-0" style={{ width: 54, height: 54, borderRadius: 'var(--radius)' }}>
-                    <Image src={p.image} alt="" fill sizes="54px" className="object-contain p-1" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="display block" style={{ fontSize: 'var(--fs-sm)' }}>{p.name}</span>
-                    <span className="block" style={{ fontSize: 'var(--fs-2xs)', color: b.accentInk }}>
-                      {b.plain}
-                    </span>
-                    <span className="num block" style={{ fontSize: 'var(--fs-2xs)', color: 'var(--ink-3)' }}>
-                      {l.qty} × {formatPrice(p.price)}
-                    </span>
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div style={{ borderTop: '1px solid var(--line)' }} className="pt-4">
-            {totals.discount > 0 && (
-              <div className="mb-2 flex justify-between" style={{ fontSize: 'var(--fs-sm)' }}>
-                <span style={{ color: 'var(--sale)' }}>{PROMO.pill} · {PROMO.code}</span>
-                <span className="num" style={{ color: 'var(--sale)' }}>−{formatPrice(totals.discount)}</span>
-              </div>
-            )}
-            {giftFee > 0 && (
-              <div className="mb-2 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
-                <span>{GIFT_BOX.title}</span>
-                <span className="num">{formatPrice(giftFee)}</span>
-              </div>
-            )}
-            <div className="mb-3 flex justify-between" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
-              <span>{ship.label}</span>
-              <span className={shipCost ? 'num' : undefined} style={{ color: shipCost ? undefined : 'var(--accent-deep)' }}>
-                {shipCost ? formatPrice(shipCost) : 'חינם'}
-              </span>
-            </div>
-            <div
-              className="flex items-baseline justify-between pt-3"
-              style={{ borderTop: '1px solid var(--line)' }}
-            >
-              <span style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>סה״כ</span>
-              <span className="num display" style={{ fontSize: 'var(--fs-xl)' }}>{formatPrice(total)}</span>
-            </div>
-          </div>
+          {summary}
         </div>
 
         <Link href="/" className="link-u mt-5 inline-block" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
