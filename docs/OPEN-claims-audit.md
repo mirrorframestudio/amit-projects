@@ -123,3 +123,8 @@ app/blessings/page.tsx:42,57
 
 **שאלה 5 נענתה באותו יום:** "The slots for the chips are uniformly sized at 5x5 mm."
 "קטן מראש סיכה" הוחלף ב"שבב של 5 מ״מ" בכל מקום (אתר, ביו, תסריטים, דף אמת).
+
+**שאלה 6 (הגדלה נדרשת לקריאה):** "There are no specific requirements regarding the
+magnification level, it is entirely up to your own visual preference." כלומר אין מספר -
+"פי 500" שירד מהאתר לא יחזור בשום צורה. האתר אומר "נקראת במיקרוסקופ" בלי מספר;
+"פי 200" במדריכים מתייחס לצילומי המיקרוסקופ שהמפעל שולח, לא לדרישה.
