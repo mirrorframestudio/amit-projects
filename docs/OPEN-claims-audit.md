@@ -135,4 +135,4 @@ magnification level, it is entirely up to your own visual preference." כלומ�
 
 **שאלה 8 (בקרת איכות):** "every chip compared will character-by-character to the source
 file after engraving. We will ensure that the content of every chip is complete." מאשר את
-מה שהאתר אומר (השוואה תו-אחר-תו, שבב עם סטייה לא נשלח). "מהמעבדה" → "נשלח" - אין מעבדה.
+מה שהאתר אומר (השוואה תו-אחר-תו, שבב עם סטייה לא נשלח). "מעבדה" נשאר - עמית: "זה מעבדה". מה שאסור הוא מעבדה *בשם*.

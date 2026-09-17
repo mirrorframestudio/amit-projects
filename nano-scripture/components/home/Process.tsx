@@ -46,7 +46,7 @@ export default function Process() {
             </span>
           </h2>
           <p className="lede reveal mt-7 max-w-sm" style={{ ['--d' as string]: '180ms' }}>
-            ארבעה שלבים, אף אחד מהם לא ממוכן במלואו. השבב נולד במפעל - התכשיט
+            ארבעה שלבים, אף אחד מהם לא ממוכן במלואו. השבב נולד במעבדה - התכשיט
             נולד על שולחן הצורף.
           </p>
         </div>
