@@ -45,7 +45,11 @@ export default function Footer() {
         <div className="grid gap-8 md:gap-14 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
           <div>
             <Logo size={34} />
-            <p className="lede mt-6 max-w-xs" style={{ fontSize: 'var(--fs-base)' }}>
+            {/* אותה שורה שמודפסת על תיק המתנה - האריזה והאתר אומרים דבר אחד */}
+            <p className="mt-3" style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-2)' }}>
+              {BRAND.slogan}
+            </p>
+            <p className="lede mt-5 max-w-xs" style={{ fontSize: 'var(--fs-base)' }}>
               {BRAND.tagline}
             </p>
             {/* יצירת קשר. עד עכשיו לא הייתה באתר אף דרך להשיג בן אדם -
