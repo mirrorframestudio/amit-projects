@@ -886,13 +886,13 @@ export default function ProductView({ product }: { product: Product }) {
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >
-        <div className="shell flex items-center gap-4 py-3">
+        {/* התמונה, שם הדגם והנוסח נראים גם בטלפון. עמית (20.9.2026): "הכפתור
+            הוסף לעגלה לא מראה את המוצר, את השם שלו או משהו" - קודם הם היו
+            hidden sm:block, ובטלפון נשארו רק מחיר וכפתור */}
+        <div className="shell flex items-center gap-3 py-2.5 sm:gap-4 sm:py-3">
           <span
-            className="tile relative hidden sm:block"
+            className="tile relative block h-11 w-11 shrink-0 sm:h-[52px] sm:w-[52px]"
             style={{
-              width: 52,
-              height: 52,
-              flexShrink: 0,
               borderRadius: 'var(--radius)',
               border: '1px solid var(--line)',
               overflow: 'hidden',
@@ -901,14 +901,17 @@ export default function ProductView({ product }: { product: Product }) {
             <Image src={product.image} alt="" fill sizes="52px" className="object-contain p-1.5" />
           </span>
 
-          <span className="hidden min-w-0 flex-1 sm:block">
+          <span className="block min-w-0 flex-1">
             <span className="display block truncate" style={{ fontSize: 'var(--fs-base)' }}>
               {product.name}
             </span>
-            <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>{b.plain}</span>
+            {/* בלי בחירה אין מה להציג כנוסח - הכפתור שולח לבורר */}
+            <span className="block truncate" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-2)' }}>
+              {mustChoose ? 'הנוסח עוד לא נבחר' : b.plain}
+            </span>
           </span>
 
-          <span className="flex items-baseline gap-2 sm:flex-shrink-0">
+          <span className="flex shrink-0 items-baseline gap-2">
             {sale.discounted && (
               <span
                 className="num"
@@ -918,8 +921,8 @@ export default function ProductView({ product }: { product: Product }) {
               </span>
             )}
             <span
-              className="num display"
-              style={{ fontSize: 'var(--fs-lg)', color: sale.discounted ? 'var(--sale)' : undefined }}
+              className="num display text-[length:var(--fs-base)] sm:text-[length:var(--fs-lg)]"
+              style={{ color: sale.discounted ? 'var(--sale)' : undefined }}
             >
               {formatPrice(sale.now)}
             </span>
@@ -936,8 +939,8 @@ export default function ProductView({ product }: { product: Product }) {
               }
               add(product.slug, blessing, qty);
             }}
-            className="btn btn-solid flex-1 sm:max-w-xs"
-            style={{ ['--pad' as string]: '.85rem 1.6rem', fontSize: 'var(--fs-sm)' }}
+            className="btn btn-solid shrink-0 sm:max-w-xs sm:flex-1"
+            style={{ ['--pad' as string]: '.85rem 1.1rem', fontSize: 'var(--fs-sm)' }}
           >
             {mustChoose ? 'בחירת הנוסח' : 'הוספה לעגלה'}
           </button>
