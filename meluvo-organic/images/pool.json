@@ -1,6 +1,6 @@
 {
   "_readme": "Featured images for blog articles. Key = image file (images/<key>.jpg). 'topics' = which TOPICS.md queue lines it fits (match by meaning). URL for articleUpdate: https://raw.githubusercontent.com/mirrorframestudio/amit-projects/<branch>/meluvo-organic/images/<key>.jpg — use the branch you are on (main after the merge). Each image should be used once; mark 'used_by' with the article handle.",
-  "melatonin-natural":       {"topics": ["מלטונין טבעי"], "alt": "אישה מכבה מנורת לילה חמה בחדר שינה עמום, הטלפון הפוך על השידה", "used_by": null},
+  "melatonin-natural":       {"topics": ["מלטונין טבעי"], "alt": "אישה מכבה מנורת לילה חמה בחדר שינה עמום, הטלפון הפוך על השידה", "used_by": "natural-melatonin"},
   "screen-headache":         {"topics": ["כאב ראש ממסך"], "alt": "גבר במשרד לוחץ על הרקות מול מסך בהיר", "used_by": null},
   "hrv-recovery":            {"topics": ["HRV", "התאוששות"], "alt": "רץ בודק צמיד כושר בלי מסך על ספסל בפארק עם שחר", "used_by": null},
   "night-shift-vs-glasses":  {"topics": ["Night Shift", "מצב לילה"], "alt": "טלפון במצב לילה כתום לצד עדשה אדומה על שולחן עץ", "used_by": null},
