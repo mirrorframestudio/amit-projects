@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getBlessing, type BlessingId } from '@/lib/blessings';
-import { blessingText, layoutNano, nanoFont, paintNano, type NanoLayout } from '@/lib/nanoText';
+import { blessingText, layoutNano, nanoFont, paintLine, paintNano, type NanoLayout } from '@/lib/nanoText';
 
 /**
  * לוח ננו אינטראקטיבי — הדמיה של פני השבב.
@@ -166,20 +166,14 @@ export default function NanoLoupe({
     const span = r / zoom;
     const first = Math.max(0, Math.floor((y - span - layout.top) / layout.lineHeight) - 1);
     const last = Math.min(
-      layout.lines.length - 1,
+      layout.rows.length - 1,
       Math.ceil((y + span - layout.top) / layout.lineHeight) + 1,
     );
 
-    // השורה מצוירת במלואה. אחרי השבירה למילים אורכי השורות אינם אחידים,
-    // וחיתוך לפי רוחב תו ממוצע היה מזיז את הטקסט. הנוסח מופיע פעם אחת,
-    // ולכן שורה שלמה היא כמה עשרות גליפים - זול לצייר.
-    for (let i = first; i <= last; i++) {
-      ctx.fillText(
-        layout.lines[i],
-        layout.right,
-        layout.top + layout.fontSize + i * layout.lineHeight,
-      );
-    }
+    // השורה מצוירת במלואה, מילה-מילה, באותם רווחים כמו שכבת הבסיס -
+    // ולכן העדשה מראה בדיוק את מה שמתחתיה. הנוסח מופיע פעם אחת, ולכן
+    // שורה שלמה היא כמה עשרות גליפים - זול לצייר.
+    for (let i = first; i <= last; i++) paintLine(ctx, layout, i);
     ctx.restore();
   }, [back, ink, r, readPx]);
 
