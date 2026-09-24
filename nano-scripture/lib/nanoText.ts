@@ -32,6 +32,12 @@ export function nanoFont(size: number) {
 }
 
 const LINE_RATIO = 1.46;
+/**
+ * גוש הטקסט הוא תמיד ריבוע - כמו השבב עצמו - בצלע של הצד הקצר של הלוח,
+ * ממורכז. על לוח ריבועי (עמוד המוצר) זה כל הלוח; על לוח רחב (עמוד הברכות
+ * בשולחני, 1480×360) זה ריבוע במרכז, ולא רצועה של שורות ארוכות באות של
+ * 13 פיקסל. עמית (24.9.2026): "תקטין את זה - תעשה את זה בהתאם"
+ */
 
 /**
  * שבירה למילים שלמות לפי רוחב מדוד. בעדשה קוראים את הטקסט, ומילה חתוכה
@@ -75,8 +81,10 @@ function wrap(ww: number[], sp: number, fs: number, usableW: number, limit: numb
  * עמית (24.9.2026): "תמרכז את הכתב לאמצע ותגדיל אותו שיתפוס את כל
  * המשבצת". קודם השבירה נאמדה לפי רוחב תו ממוצע, הטקסט נצמד לפינה
  * הימנית-עליונה והשוליים השמאלי והתחתון נשארו ריקים. עכשיו: רוחב כל
- * מילה נמדד, כל שורה נמתחת עד הקצה (יישור לשני הצדדים), והגוש ממורכז
- * אנכית.
+ * מילה נמדד, כל שורה נמתחת עד הקצה (יישור לשני הצדדים), והגוש ממורכז.
+ *
+ * הגוש הוא ריבוע בצלע של הצד הקצר, ממורכז (ראו למעלה). על לוח ריבועי
+ * זה כל הלוח.
  */
 export function layoutNano(
   ctx: CanvasRenderingContext2D,
@@ -88,6 +96,7 @@ export function layoutNano(
 ): NanoLayout {
   const usableW = width - pad * 2;
   const usableH = height - pad * 2;
+  const side = Math.min(usableW, usableH);
   const words = source.split(/\s+/).filter(Boolean);
 
   // רוחב המילים ליניארי בגודל הגופן, ולכן נמדד פעם אחת בגודל דגימה
@@ -97,11 +106,12 @@ export function layoutNano(
   const sp = ctx.measureText(' ').width / probe || 0.25;
 
   const fit = (fs: number) => {
-    const limit = Math.floor(usableH / (fs * LINE_RATIO));
+    const limit = Math.floor(side / (fs * LINE_RATIO));
     if (limit < 1) return null;
-    return wrap(ww, sp, fs, usableW, limit);
+    return wrap(ww, sp, fs, side, limit);
   };
 
+  // הגופן הגדול ביותר שבו הכול נכנס בריבוע
   let lo = 0.4;
   let hi = 64;
   let best = fit(lo);
@@ -115,20 +125,21 @@ export function layoutNano(
       hi = mid;
     }
   }
-
   const fontSize = lo;
   const lineHeight = fontSize * LINE_RATIO;
+  const blockW = side;
+
   const idx = best ?? [words.map((_, i) => i)];
   const rows = idx.map((line, li) => {
     const widths = line.map((i) => ww[i] * fontSize);
     const sum = widths.reduce((a, b) => a + b, 0);
     const natural = sp * fontSize;
     const last = li === idx.length - 1;
-    // מתיחה עד הקצה, אבל לא יותר מפי 3 מרווח טבעי - שורה של שתי מילים
+    // מתיחה עד הקצה, אבל לא יותר מפי 2 מרווח טבעי - שורה של שתי מילים
     // לא צריכה להיראות כמו שני איים
     const gap =
       line.length > 1 && !last
-        ? Math.min(natural * 3, (usableW - sum) / (line.length - 1))
+        ? Math.min(natural * 2, (blockW - sum) / (line.length - 1))
         : natural;
     return { words: line.map((i) => words[i]), widths, gap };
   });
@@ -138,7 +149,7 @@ export function layoutNano(
     fontSize,
     lineHeight,
     pad,
-    right: width - pad,
+    right: width - pad - (usableW - blockW) / 2,
     top: pad + Math.max(0, (usableH - rows.length * lineHeight) / 2),
   };
 }
@@ -157,6 +168,10 @@ export function paintLine(ctx: CanvasRenderingContext2D, layout: NanoLayout, i: 
 
 /** מצייר את שכבת הבסיס — הכתב הזעיר שממלא את כל הלוח */
 export function paintNano(ctx: CanvasRenderingContext2D, layout: NanoLayout, color: string) {
+  // הפריסה משאירה את הקנבס בגופן הדגימה (10px). בלי השורה הזאת הגליפים
+  // מצוירים ב-10px בזמן שהמיקום מחושב לגודל אחר - וזה מה שנראה כמילים
+  // מפוזרות ברווחים ענקיים על הלוח הרחב
+  ctx.font = nanoFont(layout.fontSize);
   ctx.fillStyle = color;
   ctx.textAlign = 'right';
   ctx.textBaseline = 'alphabetic';
