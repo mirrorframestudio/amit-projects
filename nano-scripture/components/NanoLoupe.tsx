@@ -10,6 +10,9 @@ import { blessingText, layoutNano, nanoFont, paintLine, paintNano, type NanoLayo
  * שכבת הבסיס והעדשה מצוירות שתיהן ל־canvas מאותה פריסת שורות, ולכן
  * ההגדלה מציגה בדיוק את הטקסט שמתחתיה, והלוח מתמלא עד הקצה.
  */
+/** גובה הרצועה שנשמרת לרמז בתחתית הלוח */
+const HINT_STRIP = 26;
+
 export default function NanoLoupe({
   blessing,
   height = 420,
@@ -79,10 +82,12 @@ export default function NanoLoupe({
     ctx.font = nanoFont(fontSize);
     ctx.direction = 'rtl';
 
-    const layout = layoutNano(ctx, source, w, h, fontSize, Math.max(8, w * 0.018));
+    // הרמז שבתחתית יושב בתוך הלוח; בלי לשמור לו רצועה הוא נחת על השורה
+    // האחרונה ברגע שהטקסט התחיל למלא את הריבוע
+    const layout = layoutNano(ctx, source, w, hint ? h - HINT_STRIP : h, fontSize, Math.max(8, w * 0.018));
     layoutRef.current = layout;
     paintNano(ctx, layout, ink);
-  }, [fontSize, ink, source]);
+  }, [fontSize, hint, ink, source]);
 
   useEffect(() => {
     const m = window.matchMedia('(pointer: coarse)');
@@ -304,7 +309,7 @@ export default function NanoLoupe({
           style={{
             position: 'absolute',
             insetInline: 0,
-            bottom: 16,
+            bottom: 8,
             textAlign: 'center',
             fontSize: 'var(--fs-xs)',
             letterSpacing: '.22em',

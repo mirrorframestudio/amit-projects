@@ -99,7 +99,10 @@ export default function CraftPage() {
       {/* ---- לוח ננו ענק ---- */}
       <section className="pb-10">
         <div className="shell">
-          <NanoLoupe blessing={BLESSINGS[0].id} height={480} radius={70} />
+          {/* ריבועי כמו השבב, לא רצועה ברוחב מלא - ראו עמוד הברכות */}
+          <div className="mx-auto w-full" style={{ maxWidth: 560, aspectRatio: '1' }}>
+            <NanoLoupe blessing={BLESSINGS[0].id} height="100%" radius={70} />
+          </div>
         </div>
       </section>
 

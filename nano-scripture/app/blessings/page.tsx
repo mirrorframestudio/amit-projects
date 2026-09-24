@@ -44,9 +44,15 @@ export default function BlessingsPage() {
 
       <section className="pb-20">
         <div className="shell">
-          <NanoLoupe blessing={BLESSINGS[0].id} height={360} />
+          {/* הלוח ריבועי כמו השבב. עמית (24.9.2026): "תקטין את המסגרת בהתאם" -
+              לוח ברוחב מלא השאיר ריבוע טקסט קטן במרכז של רצועה כהה ריקה.
+              "הגדלה פי 9" ירד מהכיתוב: מקדם ההגדלה של העדשה נגזר בזמן ריצה
+              מגודל האות, ואינו 9 */}
+          <div className="mx-auto w-full" style={{ maxWidth: 520, aspectRatio: '1' }}>
+            <NanoLoupe blessing={BLESSINGS[0].id} height="100%" />
+          </div>
           <p className="mt-4 text-center" style={{ fontSize: 'var(--fs-xs)', color: 'var(--ink-3)' }}>
-            הדמיית פני השבב · {BLESSINGS[0].plain} · הגדלה פי 9
+            הדמיית פני השבב · {BLESSINGS[0].plain}
           </p>
         </div>
       </section>

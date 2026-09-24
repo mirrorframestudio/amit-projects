@@ -33,8 +33,8 @@ export function nanoFont(size: number) {
 
 const LINE_RATIO = 1.46;
 /**
- * גוש הטקסט הוא תמיד ריבוע - כמו השבב עצמו - בצלע של הצד הקצר של הלוח,
- * ממורכז. על לוח ריבועי (עמוד המוצר) זה כל הלוח; על לוח רחב (עמוד הברכות
+ * גוש הטקסט הוא (כמעט) ריבוע - כמו השבב עצמו - בגובה הלוח וברוחב שאינו
+ * עולה על הגובה, ממורכז. על לוח ריבועי (עמוד המוצר) זה כל הלוח; על לוח רחב (עמוד הברכות
  * בשולחני, 1480×360) זה ריבוע במרכז, ולא רצועה של שורות ארוכות באות של
  * 13 פיקסל. עמית (24.9.2026): "תקטין את זה - תעשה את זה בהתאם"
  */
@@ -83,7 +83,7 @@ function wrap(ww: number[], sp: number, fs: number, usableW: number, limit: numb
  * הימנית-עליונה והשוליים השמאלי והתחתון נשארו ריקים. עכשיו: רוחב כל
  * מילה נמדד, כל שורה נמתחת עד הקצה (יישור לשני הצדדים), והגוש ממורכז.
  *
- * הגוש הוא ריבוע בצלע של הצד הקצר, ממורכז (ראו למעלה). על לוח ריבועי
+ * הגוש הוא כמעט-ריבוע בגובה הלוח, ממורכז (ראו למעלה). על לוח ריבועי
  * זה כל הלוח.
  */
 export function layoutNano(
@@ -96,7 +96,10 @@ export function layoutNano(
 ): NanoLayout {
   const usableW = width - pad * 2;
   const usableH = height - pad * 2;
-  const side = Math.min(usableW, usableH);
+  // הגוש: כל הגובה, והרוחב לא יותר מהגובה (ועוד 10% - ריבוע של 341 עם
+  // רצועת הרמז נשאר ברוחב מלא, ולא מתכווץ לריבוע קטן יותר עם שוליים)
+  const bh = usableH;
+  const bw = Math.min(usableW, usableH * 1.1);
   const words = source.split(/\s+/).filter(Boolean);
 
   // רוחב המילים ליניארי בגודל הגופן, ולכן נמדד פעם אחת בגודל דגימה
@@ -106,9 +109,9 @@ export function layoutNano(
   const sp = ctx.measureText(' ').width / probe || 0.25;
 
   const fit = (fs: number) => {
-    const limit = Math.floor(side / (fs * LINE_RATIO));
+    const limit = Math.floor(bh / (fs * LINE_RATIO));
     if (limit < 1) return null;
-    return wrap(ww, sp, fs, side, limit);
+    return wrap(ww, sp, fs, bw, limit);
   };
 
   // הגופן הגדול ביותר שבו הכול נכנס בריבוע
@@ -127,7 +130,7 @@ export function layoutNano(
   }
   const fontSize = lo;
   const lineHeight = fontSize * LINE_RATIO;
-  const blockW = side;
+  const blockW = bw;
 
   const idx = best ?? [words.map((_, i) => i)];
   const rows = idx.map((line, li) => {
