@@ -283,6 +283,18 @@ section {
   will-change: auto;
 }
 
+/* רצועה אופקית בנייד: כרטיס שנגלל לתוך המסך לא אמור להופיע מהשקיפות
+   ולעלות 26px - זו תמונה רגילה. עמית (24.9.2026): "כשאני בא להחליק למוצר
+   הבא בעמוד הבית התמונה זזה כאילו זה סטיקי". בשולחני, ברשת, החשיפה נשארת */
+@media (max-width: 767px) {
+  .strip-plain .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}
+
 .reveal-x {
   opacity: 0;
   transform: translateX(30px);

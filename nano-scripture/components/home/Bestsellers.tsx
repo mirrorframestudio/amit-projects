@@ -36,7 +36,7 @@ export default function Bestsellers() {
 
         {/* במסך צר זו רצועה נגללת, בשולחני זו רשת */}
         <div
-          className="no-scrollbar -mx-[4vw] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[4vw] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:grid-cols-4"
+          className="strip-plain no-scrollbar -mx-[4vw] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[4vw] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:grid-cols-4"
         >
           {picks.map((p, i) => (
             <div key={p.slug} className="w-[76vw] flex-shrink-0 snap-start sm:w-[46vw] md:w-auto">
