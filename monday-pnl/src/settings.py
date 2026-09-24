@@ -32,6 +32,15 @@ MONDAY_API_URL: str = "https://api.monday.com/v2"
 COST_SHIRT: float = _float("COST_SHIRT", 11.0)
 COST_RETRO: float = _float("COST_RETRO", 13.0)
 COST_PLAYER_VERSION: float = _float("COST_PLAYER_VERSION", 13.0)
+# Boots are a different order of cost from a shirt — five times it. Without
+# this they fell through to COST_SHIRT and every pair understated cost by $47.
+COST_BOOTS: float = _float("COST_BOOTS", 58.0)
+# Accessories are whole products, not shirts. Costed as shirts, a $1 keychain
+# booked $11 and showed a loss on every sale. Merchant-reported 2026-08-23.
+COST_GRIP_SOCKS: float = _float("COST_GRIP_SOCKS", 4.0)
+COST_BALL: float = _float("COST_BALL", 23.0)
+COST_SCARF: float = _float("COST_SCARF", 4.0)
+COST_KEYCHAIN: float = _float("COST_KEYCHAIN", 1.0)
 COST_NAME_NUMBER: float = _float("COST_NAME_NUMBER", 2.0)
 COST_PANTS: float = _float("COST_PANTS", 5.0)
 COST_LONG_SHIRT: float = _float("COST_LONG_SHIRT", 2.0)
@@ -76,6 +85,11 @@ def as_dict() -> dict:
         "COST_SHIRT": COST_SHIRT,
         "COST_RETRO": COST_RETRO,
         "COST_PLAYER_VERSION": COST_PLAYER_VERSION,
+        "COST_BOOTS": COST_BOOTS,
+        "COST_GRIP_SOCKS": COST_GRIP_SOCKS,
+        "COST_BALL": COST_BALL,
+        "COST_SCARF": COST_SCARF,
+        "COST_KEYCHAIN": COST_KEYCHAIN,
         "COST_NAME_NUMBER": COST_NAME_NUMBER,
         "COST_PANTS": COST_PANTS,
         "COST_LONG_SHIRT": COST_LONG_SHIRT,
