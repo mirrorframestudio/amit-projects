@@ -14,5 +14,12 @@
     "start":    "2026-07-25",
     "end":      "2026-09-20",
     "note":     "Back on from Fri 2026-07-25 (merchant-reported 2026-08-23). This window used to read 2026-07-13 to 2026-08-12, stale on both ends: it counted 12 days that never ran, then stopped counting a campaign still live. Closed at 20/09 — TikTok has not run since 21/09 (merchant-reported 22/09 and again 23/09). There is deliberately NO entry covering 21/09 onward: entries here STACK, so an outage is the ABSENCE of a window, never a zero row. Add a new window starting the day the campaigns actually resume, and do not pre-date it — guessing a restart date is what put phantom spend in the P&L before."
+  },
+  {
+    "channel":  "TikTok",
+    "daily":    120,
+    "currency": "USD",
+    "start":    "2026-09-24",
+    "note":     "Back on 24/09 after the 21-23/09 outage (merchant-reported 24/09). Same ~$120/day as before; no new budget was reported. Open-ended: add an `end` the day the campaigns stop."
   }
 ]
