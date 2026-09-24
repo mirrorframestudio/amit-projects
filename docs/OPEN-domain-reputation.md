@@ -74,6 +74,30 @@ Please re-evaluate and remove the phishing/malicious classification.
 Contact: <המייל של החנות>
 ```
 
+## עדכון 24.9.2026 - צילום המסך של החבר: `NET::ERR_CERT_AUTHORITY_INVALID`
+
+Brave באנדרואיד, על 5G, "Your connection is not private / NET::ERR_CERT_AUTHORITY_INVALID"
+(גם בכרום על אותו מכשיר). זו שגיאת אמון בתעודה - הטלפון קיבל תעודה שאינה
+התעודה שלנו.
+
+מה נבדק מהצד שלנו באותו יום:
+- השרשור שהשרת שולח: `mikra.shop` ← `Let's Encrypt YR1` ← `ISRG Root YR`
+  (חתום צולב על ידי `ISRG Root X1`). RSA, TLS 1.2 ו-1.3, תקף עד 28.11.2026.
+- SSL Labs: **A+**, chain issues 0, נאמן במאגרי Mozilla / Apple / Android / Java.
+  סימולציות: אנדרואיד 4.4 עד 9 - תקין; iOS 9+ - תקין; Chrome/Firefox - תקין.
+  (`scratchpad/ssllabs.json` בסשן; להריץ שוב: https://www.ssllabs.com/ssltest/analyze.html?d=mikra.shop)
+
+מסקנה: השגיאה נוצרת בדרך לטלפון, לא בשרת. התרחיש הסביר - **סינון ברשת
+הסלולרית** (גלישה בטוחה של הספק, או סים כשר רימון/נטפרי בלי תעודת המסנן
+במכשיר): המסנן חוסם את הקטגוריה "phishing" שהדומיין ירש, ומציג דף חסימה עם
+תעודה משלו, שהטלפון דוחה. כלומר הפתרון הוא אותו פתרון - ניקוי הסיווג - ובנוסף
+בקשת סיווג אצל המסננים הישראליים.
+
+לבדוק אצל החבר: (1) אותו קישור ב-Wi-Fi - אם נפתח, זה הספק הסלולרי; איזה ספק /
+סים כשר? (2) Advanced → Proceed - צילום של דף החסימה שמאחורי השגיאה (שם המסנן).
+(3) אם גם ב-Wi-Fi נכשל - ללחוץ על סמל התעודה ולצלם את המנפיק (VPN / אנטי-וירוס
+עם סריקת HTTPS במכשיר).
+
 ## סטטוס
 
 - [x] 24.9.2026 - Reanalyze ב-VirusTotal הופעל. תוצאה: עדיין 13/89, קטגוריות
