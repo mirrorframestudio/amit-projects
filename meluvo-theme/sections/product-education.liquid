@@ -86,21 +86,21 @@
 }
 
 .edu-highlight--warning {
-  background: rgba(239, 68, 68, 0.05);
-  border-color: #ef4444;
+  background: rgba(200, 113, 105, 0.06);
+  border-color: var(--color-error);
 }
 
 .edu-highlight--warning p {
-  color: #fca5a5;
+  color: #d98a82;
 }
 
 .edu-highlight--success {
-  background: rgba(16, 185, 129, 0.05);
+  background: rgba(127, 166, 125, 0.06);
   border-color: var(--color-success);
 }
 
 .edu-highlight--success p {
-  color: #6ee7b7;
+  color: #a3c4a1;
 }
 
 .edu-visual {
@@ -126,7 +126,7 @@
   gap: var(--space-md);
   padding: var(--space-md);
   border-radius: var(--radius-lg);
-  background: rgba(255,255,255,0.03);
+  background: var(--bg-glass);
   border: 1px solid var(--border-glass);
 }
 
@@ -136,7 +136,7 @@
   flex-shrink: 0;
 }
 
-.edu-icon-item--bad svg { color: #f87171; }
+.edu-icon-item--bad svg { color: #d98a82; }
 .edu-icon-item--good svg { color: var(--color-success); }
 
 .edu-icon-item__text {
@@ -260,16 +260,18 @@
   justify-content: center;
   font-size: var(--text-lg);
   font-weight: 700;
-  color: white;
+  color: var(--text-dark);
   overflow: hidden;
 }
 
 .edu-athlete:nth-child(odd) .edu-athlete__avatar {
-  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+  background: var(--color-primary);
+  color: var(--text-dark);
 }
 
 .edu-athlete:nth-child(even) .edu-athlete__avatar {
-  background: linear-gradient(135deg, var(--color-secondary), #0891b2);
+  background: var(--color-secondary);
+  color: var(--text-dark);
 }
 
 .edu-athlete__avatar img {
